@@ -38,7 +38,6 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 		}
 	}
 	
-	server.DB.Debug().AutoMigrate(&models.User{}, &models.Post{}) //database migration
 
 }
 
@@ -56,7 +55,7 @@ func (server *Server) Run() {
 	httpServer.Handler = h
 
 	validation.CreateValidator()
-
+	log.Println("Listening to port 8080")
 	log.Fatal(httpServer.ListenAndServe())
 
 }

@@ -20,16 +20,16 @@ type Usuario struct {
 }
 
 type Modulo struct {
-	Cod_modulo  uint32 `gorm:"primary_key;not null;size:11" json:"cod_modulo"`
-	Categoria_1 string `gorm:"size:45;default:null" json:"cat_1"`
-	Categoria_2 string `gorm:"size:45;default:null" json:"cat_2"`
-	Categoria_3 string `gorm:"size:45;default:null" json:"cat_3"`
-	Descricao   string `gorm:"size:200;default:null" json:"descricao"`
+	Cod_modulo  uint32   `gorm:"primary_key;not null;size:11" json:"cod_modulo"`
+	Categoria_1 string   `gorm:"size:45;default:null" json:"cat_1"`
+	Categoria_2 string   `gorm:"size:45;default:null" json:"cat_2"`
+	Categoria_3 string   `gorm:"size:45;default:null" json:"cat_3"`
+	Descricao   string   `gorm:"size:200;default:null" json:"descricao"`
 }
 
 type Usuario_modulo struct {
-	Cod_usuario Usuario `gorm:"foreingkey:Cod_usuario" `
-	Cod_Modulo  Modulo  `gorm:"foreingkey:Cod_modulo"`
+	Cod_usuario Usuario  `gorm:"foreingkey:Cod_usuario" `
+	Cod_Modulo  Modulo `gorm:"foreingkey:Cod_modulo"`
 }
 
 func Hash(senha string) ([]byte, error) {
@@ -71,7 +71,7 @@ func (u *Usuario) SaveUser(db *gorm.DB) (*Usuario, error) {
 
 func (u *Usuario) FindUserByID(db *gorm.DB, uId uint32) (*Usuario, error) {
 
-	err := db.Debug().Model(Usuario{}).Where("id = ?", uId).Take(&u).Error
+	err := db.Debug().Model(Usuario{}).Where("cod_usuario = ?", uId).Take(&u).Error
 	if err != nil {
 		return &Usuario{}, log.Printf("[ERROR] cannot find user by ID, because, %v\n", err)
 	}
@@ -80,7 +80,6 @@ func (u *Usuario) FindUserByID(db *gorm.DB, uId uint32) (*Usuario, error) {
 	}
 	return u, err
 }
-
 
 func (u *Usuario) FindAllUsers(db *gorm.DB) (*[]Usuario, error) {
 
@@ -91,7 +90,6 @@ func (u *Usuario) FindAllUsers(db *gorm.DB) (*[]Usuario, error) {
 	}
 	return &usuarios, err
 }
-
 
 func (u *Usuario) UpdateAUser(db *gorm.DB, uId uint32) (*Usuario, error) {
 
@@ -106,29 +104,29 @@ func (u *Usuario) UpdateAUser(db *gorm.DB, uId uint32) (*Usuario, error) {
 			"senha": u.Senha,
 			"nome":  u.Nome,
 			"email": u.Email,
-		},			
+		},
 	)
 	if db.Error != nil {
 		return &Usuario{}, log.Printf("[ERROR] cannot update, %v\n", db.Error)
 	}
 
 	// This is the display the updated user
-	err = db.Debug().Model(&Usuario{}).Where("id = ?", uId).Take(&u).Error
+	err = db.Debug().Model(&Usuario{}).Where("cod_usuario = ?", uId).Take(&u).Error
 	if err != nil {
 		return &Usuario{}, log.Printf("[ERROR] cannot display updated user, %v\n", err)
 	}
-	
+
 	return u, nil
 
 }
 
 func (u *Usuario) DeleteAUser(db *gorm.DB, uId uint32) (int64, error) {
 
-	db = db.Debug().Model(&Usuario{}).Where("id = ?", uId).Take(&Usuario{}).Delete(&Usuario{})
+	db = db.Debug().Model(&Usuario{}).Where("cod_usuario = ?", uId).Take(&Usuario{}).Delete(&Usuario{})
 
 	if db.Error != nil {
 		return 0, log.Printf("[ERROR] cannot delete, %v\n", db.Error)
 	}
-	
+
 	return db.RowsAffected, nil
 }

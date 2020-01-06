@@ -1,8 +1,8 @@
-package service
+package control
 
 import (
-	"CidadesDigitais/config"
-	"CidadesDigitais/control"
+	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/control"
 	"net/http"
 
 	"github.com/gorilla/mux"

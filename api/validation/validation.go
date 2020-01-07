@@ -1,4 +1,4 @@
-package validator
+package validation
 
 import (
 	val "gopkg.in/go-playground/validator.v9"

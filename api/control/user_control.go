@@ -8,11 +8,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
+	"CidadesDigitaisV2/api/Models"
 	"CidadesDigitaisV2/api/auth"
-	"CidadesDigitaisV2/api/models"
-	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/responses"
+
+	"github.com/gorilla/mux"
 )
 
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
@@ -21,18 +22,14 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 	}
-	user := models.Usuario{}
+	user := Models.Usuario{}
 	err = json.Unmarshal(body, &user)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	user.Prepare()
-	err = user.Validate("")
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
-		return
-	}
+	user.Ready()
+
 	userCreated, err := user.SaveUser(server.DB)
 
 	if err != nil {
@@ -42,13 +39,13 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, userCreated.ID))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, userCreated.Cod_usuario))
 	responses.JSON(w, http.StatusCreated, userCreated)
 }
 
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
-	user := models.Usuario{}
+	user := Models.Usuario{}
 
 	users, err := user.FindAllUsers(server.DB)
 	if err != nil {
@@ -66,7 +63,7 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-	user := models.Usuario{}
+	user := Models.Usuario{}
 	userGotten, err := user.FindUserByID(server.DB, uint32(uId))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -88,7 +85,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	user := models.Usuario{}
+	user := Models.Usuario{}
 	err = json.Unmarshal(body, &user)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -103,8 +100,8 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	user.Prepare()
-	
+	user.Ready()
+
 	updatedUser, err := user.UpdateAUser(server.DB, uint32(uid))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
@@ -118,7 +115,7 @@ func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	user := models.Usuario{}
+	user := Models.Usuario{}
 
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {

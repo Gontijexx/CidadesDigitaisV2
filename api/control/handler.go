@@ -2,21 +2,34 @@ package control
 
 import (
 	"CidadesDigitaisV2/api/config"
-	"CidadesDigitaisV2/api/control"
+	"CidadesDigitaisV2/api/middlewares"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-func CreateHandler() (r *mux.Router) {
+func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//cria um roteador
-	r = mux.NewRouter()
 
-	r.HandleFunc(config.USER_PATH, control.ListaUsuarios).Methods(http.MethodGet)
-	r.HandleFunc(config.USER_PATH_LOGIN, control.Login).Methods(http.MethodPost)
-	r.HandleFunc(config.USER_PATH_CREATEUSER, control.CreateUser).Methods(http.MethodPost)
-	r.HandleFunc(config.USER_PATH_DELETEUSER, control.DeleteUser).Methods(http.MethodDelete)
+	r = s.Router
+	//Home
+	r.HandleFunc("/", middlewares.SetMiddleJSON(s.Home)).Methods(http.MethodGet)
+
+	//**********Login Route
+	r.HandleFunc(config.USER_PATH_LOGIN, middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
+
+	//**********Rotas em Usuario
+
+	r.HandleFunc(config.USER_PATH, middlewares.SetMiddleJSON(s.GetUsers)).Methods(http.MethodGet)
+
+	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(s.GetUser)).Methods(http.MethodGet)
+
+	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUser))).Methods(http.MethodPut)
+
+	r.HandleFunc(config.USER_PATH_CREATEUSER, middlewares.SetMiddleJSON(s.CreateUser)).Methods(http.MethodPost)
+
+	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleAuth(s.DeleteUser)).Methods(http.MethodDelete)
 
 	/*
 		//**********Rotas em Usuario

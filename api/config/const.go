@@ -15,7 +15,7 @@ const (
 
 const (
 	USER_PATH            = "/read/usuario"
-	USER_ID_PATH         = "/read/usuario/:id"
+	USER_ID_PATH         = "/read/usuario/{id}"
 	USER_PATH_LOGIN      = "/read/usuario/login"
 	USER_PATH_CREATEUSER = "/read/usuario/createuser"
 	USER_PATH_DELETEUSER = "/read/usuario/deleteuser"

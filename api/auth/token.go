@@ -13,7 +13,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func CreateToken(userID uint32, userMod interface{}) (string, error) {
+func CreateToken(userID uint32, userMod []int64) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["userID"] = userID
@@ -77,7 +77,7 @@ func ExtractTokenID(r *http.Request) (uint32, error) {
 	return 0, nil
 }
 
-func ExtractTokenMod(r *http.Request) (uint32, error) {
+func ExtractTokenMod(r *http.Request) (interface{}, error) {
 
 	tokenString := ExtractToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -91,11 +91,9 @@ func ExtractTokenMod(r *http.Request) (uint32, error) {
 	}
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if ok && token.Valid {
-		uMod, err := strconv.ParseUint(fmt.Sprintf("%.0f", claims["userMod"]), 10, 32)
-		if err != nil {
-			return 0, err
-		}
-		return uint32(uMod), nil
+		uMod, _ := claims["userMod"]
+
+		return uMod, nil
 	}
 	return 0, nil
 }

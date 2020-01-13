@@ -13,39 +13,28 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//cria um roteador
 
 	r = s.Router
-	//Home
-	r.HandleFunc("/", middlewares.SetMiddleJSON(s.Home)).Methods(http.MethodGet)
+		//Home
+			r.HandleFunc("/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.Home))).Methods(http.MethodGet)
 
-	//**********Login Route
-	r.HandleFunc(config.USER_PATH_LOGIN, middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
+		//**********Login Route
+			r.HandleFunc(config.USER_PATH_LOGIN, middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
+		
 
-	//**********Rotas em Usuario
-
-	r.HandleFunc(config.USER_PATH, middlewares.SetMiddleJSON(s.GetUsers)).Methods(http.MethodGet)
-
-	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(s.GetUser)).Methods(http.MethodGet)
-
-	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUser))).Methods(http.MethodPut)
-
-	r.HandleFunc(config.USER_PATH_CREATEUSER, middlewares.SetMiddleJSON(s.CreateUser)).Methods(http.MethodPost)
-
-	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleAuth(s.DeleteUser)).Methods(http.MethodDelete)
-
-	/*
+	
 		//**********Rotas em Usuario
-					//Rotas em USER_PATH
-						//LISTA USUARIO
-						r.HandleFunc().Methods(http.MethodGet)
-						//SALVA USUARIO
-							r.HandleFunc().Methods(http.MethodPut)
-						//EDITA O USUARIO
-							r.HandleFunc().Methods(http.MethodPost)
-					//Rotas em USER_ID_PATH
-						//LISTA USUÁRIO POR ID
-							r.HandleFunc().Methods(http.MethodGet)
-						//APAGA O USUARIO
-							r.HandleFunc().Methods(http.MethodDelete)
-	*/
+			
+			//LISTA USUARIOS
+				r.HandleFunc(config.USER_PATH, middlewares.SetMiddleJSON(s.GetUsers)).Methods(http.MethodGet)
+			//LISTA USUARIO
+				r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(s.GetUser)).Methods(http.MethodGet)
+			//SALVA USUARIO
+				r.HandleFunc(config.USER_PATH_CREATEUSER, middlewares.SetMiddleJSON(s.CreateUser)).Methods(http.MethodPost)
+			//EDITA O USUARIO
+				r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUser))).Methods(http.MethodPut)
+			//APAGA O USUARIO
+				//	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleAuth(s.DeleteUser)).Methods(http.MethodDelete)
+
+	
 
 	/*
 		//**********Rotas em Assunto

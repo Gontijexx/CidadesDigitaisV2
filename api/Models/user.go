@@ -20,7 +20,7 @@ type Usuario struct {
 }
 
 type Modulo struct {
-	Cod_modulo  []int  `gorm:"primary_key;not null;size:11" json:"cod_modulo"`
+	Cod_modulo  uint   `gorm:"primary_key;not null;size:11" json:"cod_modulo"`
 	Categoria_1 string `gorm:"size:45;default:null" json:"cat_1"`
 	Categoria_2 string `gorm:"size:45;default:null" json:"cat_2"`
 	Categoria_3 string `gorm:"size:45;default:null" json:"cat_3"`
@@ -28,8 +28,8 @@ type Modulo struct {
 }
 
 type Usuario_modulo struct {
-	Cod_usuario Usuario  `gorm:"foreingkey:Cod_usuario" `
-	Cod_modulo  []Modulo `gorm:"foreingkey:Cod_modulo"`
+	Cod_usuario uint32 `gorm:"foreingkey:Cod_usuario" `
+	Cod_modulo  int64  `gorm:"foreingkey:Cod_modulo"`
 }
 
 func Hash(senha string) ([]byte, error) {
@@ -55,6 +55,7 @@ func (u *Usuario) BeforeSave() error {
 func (u *Usuario) Ready() {
 
 	u.Cod_usuario = 0
+	u.Status = true
 	u.Nome = html.EscapeString(strings.TrimSpace(u.Nome))
 	u.Email = html.EscapeString(strings.TrimSpace(u.Email))
 	u.Login = html.EscapeString(strings.TrimSpace(u.Login))
@@ -100,11 +101,12 @@ func (u *Usuario) UpdateAUser(db *gorm.DB, uId uint32) (*Usuario, error) {
 		log.Printf("[FATAL] cannot HASH password, %v\n", err)
 	}
 
-	db = db.Debug().Model(&Usuario{}).Where("id = ?", uId).Take(&Usuario{}).UpdateColumns(
+	db = db.Debug().Model(&Usuario{}).Where("cod_usuario= ?", uId).Take(&Usuario{}).UpdateColumns(
 		map[string]interface{}{
-			"senha": u.Senha,
-			"nome":  u.Nome,
-			"email": u.Email,
+			"senha":  u.Senha,
+			"nome":   u.Nome,
+			"email":  u.Email,
+			"status": u.Status,
 		},
 	)
 	if db.Error != nil {

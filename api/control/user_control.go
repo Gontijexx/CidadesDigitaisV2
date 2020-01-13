@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -12,6 +13,7 @@ import (
 	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/responses"
+	"CidadesDigitaisV2/api/validation"
 
 	"github.com/gorilla/mux"
 )
@@ -28,6 +30,12 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
+	if err = validation.Validator.Struct(user); err != nil {
+		log.Printf("[WARN] invalid user information, because, %v\n", err)
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
 	user.Ready()
 
 	userCreated, err := user.SaveUser(server.DB)
@@ -89,6 +97,11 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &user)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	if err = validation.Validator.Struct(user); err != nil {
+		log.Printf("[WARN] invalid user information, because, %v\n", err)
+		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 	tokenID, err := auth.ExtractTokenID(r)

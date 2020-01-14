@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"CidadesDigitaisV2/api/Models"
 	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/models"
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 
@@ -24,20 +24,30 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 	}
-	user := Models.Usuario{}
+
+	user := models.Usuario{}
+
 	err = json.Unmarshal(body, &user)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
+
 	if err = validation.Validator.Struct(user); err != nil {
 		log.Printf("[WARN] invalid user information, because, %v\n", err)
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	user.Ready()
+	NewUser := user.Login
+	err = server.DB.Debug().Model(user).Where("login = ?", NewUser).Take(&user).Error
+	if err == nil {
+		w.WriteHeader(http.StatusConflict)
+		w.Write([]byte(`{"Error": "Existent Login"}`))
+		return
+	}
 
+	user.Ready()
 	userCreated, err := user.SaveUser(server.DB)
 
 	if err != nil {
@@ -49,11 +59,12 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, userCreated.Cod_usuario))
 	responses.JSON(w, http.StatusCreated, userCreated)
+
 }
 
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
-	user := Models.Usuario{}
+	user := models.Usuario{}
 
 	users, err := user.FindAllUsers(server.DB)
 	if err != nil {
@@ -71,7 +82,7 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-	user := Models.Usuario{}
+	user := models.Usuario{}
 	userGotten, err := user.FindUserByID(server.DB, uint32(uId))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -93,7 +104,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	user := Models.Usuario{}
+	user := models.Usuario{}
 	err = json.Unmarshal(body, &user)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -128,7 +139,7 @@ func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	user := Models.Usuario{}
+	user := models.Usuario{}
 
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {

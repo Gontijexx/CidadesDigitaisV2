@@ -13,28 +13,49 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//cria um roteador
 
 	r = s.Router
-		//Home
-			r.HandleFunc("/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.Home))).Methods(http.MethodGet)
+	//Home
+	r.HandleFunc("/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.Home))).Methods(http.MethodGet)
 
-		//**********Login Route
-			r.HandleFunc(config.USER_PATH_LOGIN, middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
-		
+	//**********Login Route
+	r.HandleFunc(config.USER_PATH_LOGIN, middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
 
-	
-		//**********Rotas em Usuario
-			
-			//LISTA USUARIOS
-				r.HandleFunc(config.USER_PATH, middlewares.SetMiddleJSON(s.GetUsers)).Methods(http.MethodGet)
-			//LISTA USUARIO
-				r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(s.GetUser)).Methods(http.MethodGet)
-			//SALVA USUARIO
-				r.HandleFunc(config.USER_PATH_CREATEUSER, middlewares.SetMiddleJSON(s.CreateUser)).Methods(http.MethodPost)
-			//EDITA O USUARIO
-				r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUser))).Methods(http.MethodPut)
-			//APAGA O USUARIO
-				//	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleAuth(s.DeleteUser)).Methods(http.MethodDelete)
+	//**********Rotas em Usuario
 
-	
+	//LISTA USUARIOS
+	r.HandleFunc(config.USER_PATH, middlewares.SetMiddleJSON(s.GetUsers)).Methods(http.MethodGet)
+
+	//LISTA USUARIO
+	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(s.GetUser)).Methods(http.MethodGet)
+
+	//SALVA USUARIO
+	r.HandleFunc(config.USER_PATH_CREATEUSER, middlewares.SetMiddleJSON(s.CreateUser)).Methods(http.MethodPost)
+
+	//EDITA O USUARIO
+	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUser))).Methods(http.MethodPut)
+
+	//APAGA O USUARIO
+	//	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleAuth(s.DeleteUser)).Methods(http.MethodDelete)
+
+	//**********Rotas em Entidade
+
+	//ROTAS EM ENTIDADE_PATH
+
+	//LISTA ENTIDADE
+	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(s.GetEntidade)).Methods(http.MethodGet)
+
+	//SALVA ENTIDADE
+	r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(s.CreateEntidade)).Methods(http.MethodPost)
+
+	//edita entidade
+	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(s.UpdateEntidade)).Methods(http.MethodPut)
+
+	//ROTAS EM ENTIDADE_ID_PATH
+
+	//lista entidade por ID
+	//r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(s.GetEntidades)).Methods(http.MethodGet)
+
+	//apaga entidade ID
+	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.DeleteEntidades)).Methods(http.MethodDelete)
 
 	/*
 		//**********Rotas em Assunto
@@ -150,26 +171,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 					//lista empenho itens ID
 						r.HandleFunc().Methods(http.MethodGet)
 
-		//*****************Rotas em Entidade******************
-			//----------Rotas de Entidade
-				//ROTAS EM ENTIDADE_PATH
-
-					//lista entidade
-						r.HandleFunc().Methods(http.MethodGet)
-
-					//salva entidade
-						r.HandleFunc().Methods(http.MethodPost)
-
-					//edita entidade
-						r.HandleFunc().Methods(http.MethodPut)
-
-				//ROTAS EM ENTIDADE_ID_PATH
-
-					//lista entidade por ID
-						r.HandleFunc().Methods(http.MethodGet)
-
-					//apaga entidade ID
-						r.HandleFunc().Methods(http.MethodDelete)
 
 		//**********Rotas em Etapa
 		//----------Rotas de Etapa

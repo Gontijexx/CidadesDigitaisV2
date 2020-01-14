@@ -151,8 +151,8 @@ const (
 =========================  */
 
 const (
-	ENTIDADE_PATH    = "/read/entidades"
-	ENTIDADE_ID_PATH = "/read/entidades/:id"
+	ENTIDADE_PATH    = "/read/entidade"
+	ENTIDADE_ID_PATH = "/read/entidade/{id}"
 )
 
 /*  =========================

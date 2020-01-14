@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"strings"
 
-	"CidadesDigitaisV2/api/Models"
 	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/models"
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 
@@ -23,7 +23,7 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	user := Models.Usuario{}
+	user := models.Usuario{}
 	err = json.Unmarshal(body, &user)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -54,14 +54,14 @@ func (server *Server) SignIn(login, password string) (string, error) {
 
 	var err error
 	var CodMod []int64
-	user := Models.Usuario{}
-	mods := Models.Usuario_modulo{}
+	user := models.Usuario{}
+	mods := models.Usuario_modulo{}
 
 	err = server.DB.Debug().Model(user).Where("login = ?", login).Take(&user).Error
 	if err != nil {
 		return "", err
 	}
-	err = Models.VerifyPassword(user.Senha, password)
+	err = models.VerifyPassword(user.Senha, password)
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
 	}

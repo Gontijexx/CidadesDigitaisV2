@@ -45,7 +45,7 @@ func SetMiddleAuthMod(next http.HandlerFunc) http.HandlerFunc {
 			if v == PagMod {
 				next(w, r)
 				return
-			}else {
+			} else {
 				responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL Unauthorized"))
 				return
 			}
@@ -66,6 +66,7 @@ func SetMiddleAuth(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// conversão de interface
 func InterfaceSlice(slice interface{}) []interface{} {
 	s := reflect.ValueOf(slice)
 	if s.Kind() != reflect.Slice {

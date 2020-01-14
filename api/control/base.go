@@ -42,7 +42,7 @@ func (server *Server) Run() {
 
 		IdleTimeout:  200 * time.Millisecond,
 		ReadTimeout:  100 * time.Millisecond,
-		WriteTimeout: 100 * time.Millisecond,
+		WriteTimeout: 300 * time.Millisecond,
 	}
 
 	h := server.CreateHandler()

@@ -10,6 +10,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
@@ -48,11 +51,30 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (server *Server) GetEntidade() {
+func (server *Server) GetEntidade(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	entidadeID, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	entidade := models.Entidade{}
+
+	entidadeGotten, err := entidade.FindEntidadeByID(server.DB, uint64(entidadeID))
+
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, entidadeGotten)
 
 }
 
-func (server *Server) GetEntidades() {
+func (server *Server) GetEntidadeByID() {
 
 }
 

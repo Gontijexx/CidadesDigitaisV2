@@ -41,7 +41,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//ROTAS EM ENTIDADE_PATH
 
 	//LISTA ENTIDADE
-	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(s.GetEntidade)).Methods(http.MethodGet)
+	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.GetEntidade)).Methods(http.MethodGet)
 
 	//SALVA ENTIDADE
 	r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(s.CreateEntidade)).Methods(http.MethodPost)

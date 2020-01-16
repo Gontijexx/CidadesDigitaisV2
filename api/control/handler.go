@@ -40,21 +40,21 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//ROTAS EM ENTIDADE_PATH
 
-	//LISTA ENTIDADE
-	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.GetEntidade)).Methods(http.MethodGet)
+	//LISTA ENTIDADES
+	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(s.GetUser)).Methods(http.MethodGet)
 
-	//SALVA ENTIDADE
-	r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(s.CreateEntidade)).Methods(http.MethodPost)
-
-	//edita entidade
-	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(s.UpdateEntidade)).Methods(http.MethodPut)
+	//CRIA/SALVA ENTIDADE
+	r.HandleFunc(config.ENTIDADE_PATH_CREATEENTIDADE, middlewares.SetMiddleJSON(s.CreateEntidade)).Methods(http.MethodPost)
 
 	//ROTAS EM ENTIDADE_ID_PATH
 
-	//lista entidade por ID
-	//r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(s.GetEntidades)).Methods(http.MethodGet)
+	//LISTA ENTIDADE POR ID
+	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.GetEntidadeByID)).Methods(http.MethodGet)
 
-	//apaga entidade ID
+	//EDITA ENTIDADE
+	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.UpdateEntidade)).Methods(http.MethodPut)
+
+	//APAGA ENTIDADE
 	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.DeleteEntidades)).Methods(http.MethodDelete)
 
 	/*

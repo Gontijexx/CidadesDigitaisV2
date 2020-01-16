@@ -22,6 +22,16 @@ const (
 )
 
 /*  =========================
+	ENTIDADE PATHS HTTP
+=========================  */
+
+const (
+	ENTIDADE_PATH        = "/read/entidade"
+	ENTIDADE_ID_PATH     = "/read/entidade/{id}"
+	ENTIDADE_PATH_CREATEENTIDADE = "/read/entidade/createEntidade"
+)
+
+/*  =========================
 	TIPOLOGIA PATHS HTTP
 =========================  */
 
@@ -144,15 +154,6 @@ const (
 const (
 	ETAPA_PATH    = "/read/etapa"
 	ETAPA_ID_PATH = "/read/etapa/:cod_etapa"
-)
-
-/*  =========================
-	ENTIDADE PATHS HTTP
-=========================  */
-
-const (
-	ENTIDADE_PATH    = "/read/entidade"
-	ENTIDADE_ID_PATH = "/read/entidade/{id}"
 )
 
 /*  =========================

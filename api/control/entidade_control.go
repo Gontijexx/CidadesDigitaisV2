@@ -51,7 +51,7 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (server *Server) GetEntidade(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -74,14 +74,48 @@ func (server *Server) GetEntidade(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (server *Server) GetEntidadeByID() {
+func (server *Server) GetEntidades() {
 
 }
 
-func (server *Server) UpdateEntidades() {
+func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 
+	vars := mux.Vars(r)
+	entidadeID, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	entidade := models.Entidade{}
+	err = json.Unmarshal(body, &user)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	if err = validation.Validator.Struct(entidade); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", err)
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	updateEntidade, err := entidade.UpdadeEntidade(server.DB, uint64(entidadeID))
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, updateEntidade)
 }
 
-func (server *Server) DeleteEntidades() {
+func (server *Server) DeleteEntidade() {
 
 }

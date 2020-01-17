@@ -41,7 +41,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//ROTAS EM ENTIDADE_PATH
 
 	//LISTA ENTIDADE
-	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.GetEntidade)).Methods(http.MethodGet)
+	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.GetEntidade)).Methods(http.MethodGet)
 
 	//SALVA ENTIDADE
 	r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(s.CreateEntidade)).Methods(http.MethodPost)
@@ -84,16 +84,16 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.REAJUSTE_PATH, middlewares.SetMiddleJSON(s.GetReajuste)).Methods(http.MethodGet)
 
 	//salva reajuste
-	r.HandleFunc(config.REAJUSTE_PATH_CREATELOTE, middlewares.SetMiddleJSON(s.CreateReajuste)).Methods(http.MethodPost)
+	r.HandleFunc(config.REAJUSTE_PATH_CREATEREAJUSTE, middlewares.SetMiddleJSON(s.CreateReajuste)).Methods(http.MethodPost)
 
 	//ROTAS EM REAJUSTES_ID_PATH
 
 	//lista reajuste por ID
-	r.HandleFunc(config.Reajuste_ID_PATH, middlewares.SetMiddleJSON(s.GetReajusteByID)).Methods(http.MethodGet)
+	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(s.GetReajusteByID)).Methods(http.MethodGet)
 
 	//ROTAS EM REAJUSTE_DEL
 	//apaga reajuste (lote_cod_lote, ano_ref)
-	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleAuth(s.DeleteReajuste)).Methods(http.MethodDelete)
+	//r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteReajuste)).Methods(http.MethodDelete)
 
 	//**********Rotas em Cd
 

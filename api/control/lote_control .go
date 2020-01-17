@@ -85,7 +85,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	lote := models.Lote{}
-	loteGotten, err := lote.FindLoteByID(server.DB, uint32(lId))
+	loteGotten, err := lote.FindLoteByID(server.DB, uint64(lId))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -126,9 +126,8 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	lote.Ready()
 
-	updatedLote, err := lote.UpdateALote(server.DB, uint32(lid))
+	updatedLote, err := lote.UpdateLote(server.DB, uint64(lid))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)

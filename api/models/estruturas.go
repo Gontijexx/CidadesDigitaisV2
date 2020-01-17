@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type Entidade struct {
 	Cnpj           float64 `gorm:"primary_key;not null;size:14" json:"cnpj"`
 	Nome           string  `gorm:"size:50;default:null" json:"nome" validate: "alphanum":`
@@ -15,12 +13,12 @@ type Entidade struct {
 }
 
 type Lote struct {
-	Cod_lote      uint32    `gorm:"primary_key;not null;size:11" json:"cod_lote" validate: "required":`
-	Cnpj          string    `gorm:"foreing_key;not null;size:14" json:"cnpj" validate: "required":`
-	Contrato      string    `gorm:"size:10;default:null" json:"contrato" validate: "alphanum":`
-	Dt_inicio_vig time.Date `gorm:"size:10;default:null" json:"dt_inicio_vig" validate: "alphanum":`
-	Dt_final_vig  time.Date `gorm:"size:10;default:null" json:"dt_final_vig" validate: "alphanum":`
-	Dt_reajuste   time.Date `gorm:"size:10;default:null" json:"dt_reajuste" validate: "alphanum":`
+	Cod_lote      uint32 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate: "required":`
+	Cnpj          string `gorm:"foreing_key;not null;size:14" json:"cnpj" validate: "required":`
+	Contrato      string `gorm:"size:10;default:null" json:"contrato" validate: "alphanum":`
+	Dt_inicio_vig string `gorm:"size:10;default:null" json:"dt_inicio_vig" validate: "alphanum":`
+	Dt_final_vig  string `gorm:"size:10;default:null" json:"dt_final_vig" validate: "alphanum":`
+	Dt_reajuste   string `gorm:"size:10;default:null" json:"dt_reajuste" validate: "alphanum":`
 }
 
 type Reajuste struct {
@@ -30,10 +28,10 @@ type Reajuste struct {
 }
 
 type Cd struct {
-	Cod_ibge uint32    `gorm:"primary_key;not null;size:7" json:"cod_ibge" validate: "required":`
-	Cod_lote uint32    `gorm:"foreing_key;not null;size:11" json:"cod_lote" validate: "required":`
-	Os_pe    string    `gorm:"size:10;default:null" json:"os_pe" validate: "alphanum":`
-	Data_pe  time.Date `gorm:"default:null" json:"data_pe" validate: "alphanum":`
-	Os_imp   time.Date `gorm:"size:10;default:null" json:"os_imp" validate: "alphanum":`
-	Data_imp time.Date `gorm:"sdefault:null" json:"data_imp" validate: "alphanum":`
+	Cod_ibge uint32 `gorm:"primary_key;not null;size:7" json:"cod_ibge" validate: "required":`
+	Cod_lote uint32 `gorm:"foreing_key;not null;size:11" json:"cod_lote" validate: "required":`
+	Os_pe    string `gorm:"size:10;default:null" json:"os_pe" validate: "alphanum":`
+	Data_pe  string `gorm:"default:null" json:"data_pe" validate: "alphanum":`
+	Os_imp   string `gorm:"size:10;default:null" json:"os_imp" validate: "alphanum":`
+	Data_imp string `gorm:"sdefault:null" json:"data_imp" validate: "alphanum":`
 }

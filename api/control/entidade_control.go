@@ -94,7 +94,7 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	}
 
 	entidade := models.Entidade{}
-	err = json.Unmarshal(body, &user)
+	err = json.Unmarshal(body, &entidade)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -106,7 +106,7 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updateEntidade, err := entidade.UpdadeEntidade(server.DB, uint64(entidadeID))
+	updateEntidade, err := entidade.UpdateEntidade(server.DB, uint64(entidadeID))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)

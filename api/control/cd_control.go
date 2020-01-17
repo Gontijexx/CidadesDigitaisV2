@@ -48,7 +48,7 @@ func (server *Server) CreateCd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, cdCreated.Cnpj))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, cdCreated.Cod_ibge))
 	responses.JSON(w, http.StatusCreated, cdCreated)
 
 }
@@ -85,7 +85,7 @@ func (server *Server) GetCdByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cd := models.Cd{}
-	cdGotten, err := cd.FindCdByID(server.DB, uint32(cId))
+	cdGotten, err := cd.FindCdByID(server.DB, uint64(cId))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -126,9 +126,8 @@ func (server *Server) UpdateCd(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	cd.Ready()
 
-	updatedCd, err := cd.UpdateACd(server.DB, uint32(cid))
+	updatedCd, err := cd.UpdateCd(server.DB, uint64(cid))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)

@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"log"
 
 	"github.com/jinzhu/gorm"
 )
@@ -31,33 +30,26 @@ func (cd *Cd) FindCdByID(db *gorm.DB, cdID uint64) (*Cd, error) {
 	return cd, err
 }
 
-func (c *Cd) UpdateACd(db *gorm.DB, cId uint32) (*Cd, error) {
+func (cd *Cd) UpdateCd(db *gorm.DB, cdID uint64) (*Cd, error) {
 
-	// To hash the password
-	err := c.BeforeSave()
-	if err != nil {
-		log.Printf("[FATAL] cannot HASH password, %v\n", err)
-	}
-
-	db = db.Debug().Model(&Cd{}).Where("cod_ibge= ?", cId).Take(&Cd{}).UpdateColumns(
+	db = db.Debug().Model(&Cd{}).Where("cod_ibge = ?", cdID).Take(&cd).UpdateColumns(
 		map[string]interface{}{
-			"cod_lote": c.Cod_lote,
-			"os_pe":    c.Os_pe,
-			"data_pe":  c.Data_pe,
-			"os_imp":   c.Os_imp,
-			"data_imp": c.Data_imp,
+			"cod_lote": cd.Cod_lote,
+			"os_pe":    cd.Os_pe,
+			"data_pe":  cd.Data_pe,
+			"os_imp":   cd.Os_imp,
+			"data_imp": cd.Data_imp,
 		},
 	)
+
 	if db.Error != nil {
 		return &Cd{}, db.Error
 	}
 
-	// This is the display the updated user
-	err = db.Debug().Model(&Cd{}).Where("cod_ibge = ?", cId).Take(&c).Error
+	err := db.Debug().Model(&Cd{}).Where("cod_ibge = ?", cdID).Take(&cd).Error
 	if err != nil {
 		return &Cd{}, err
 	}
 
-	return c, nil
-
+	return cd, err
 }

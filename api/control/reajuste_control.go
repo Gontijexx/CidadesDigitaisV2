@@ -48,7 +48,7 @@ func (server *Server) CreateReajuste(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, reajusteCreated.Cnpj))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, reajusteCreated.Ano_ref))
 	responses.JSON(w, http.StatusCreated, reajusteCreated)
 
 }
@@ -85,7 +85,7 @@ func (server *Server) GetReajusteByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	reajuste := models.Reajuste{}
-	reajusteGotten, err := reajuste.FindReajusteByID(server.DB, uint32(rId))
+	reajusteGotten, err := reajuste.FindReajusteByID(server.DB, uint64(rId))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -126,9 +126,8 @@ func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	reajuste.Ready()
 
-	updatedReajuste, err := reajuste.UpdateAReajuste(server.DB, uint32(rid))
+	updatedReajuste, err := reajuste.UpdateReajuste(server.DB, uint32(rid))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
@@ -137,13 +136,14 @@ func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, updatedReajuste)
 }
 
+/*
 func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
 	reajuste := models.Reajuste{}
 
-	rid, err := strconv.ParseUint(vars["id"], 10, 32)
+	rId, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -153,15 +153,16 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	if tokenID != 0 && tokenID != uint32(rid) {
+	if tokenID != 0 && tokenID != uint32(rId) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	_, err = reajuste.DeleteAReajuste(server.DB, uint32(rid))
+	_, err = reajuste.DeleteReajuste(server.DB, uint32(rId), uint32(rFk))
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	w.Header().Set("Entity", fmt.Sprintf("%d", rid))
+	w.Header().Set("Entity", fmt.Sprintf("%d", rId))
 	responses.JSON(w, http.StatusNoContent, "")
 }
+*/

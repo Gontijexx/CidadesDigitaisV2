@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"log"
 
 	"github.com/jinzhu/gorm"
 )
@@ -31,33 +30,26 @@ func (lote *Lote) FindLoteByID(db *gorm.DB, loteID uint64) (*Lote, error) {
 	return lote, err
 }
 
-func (l *Lote) UpdateALote(db *gorm.DB, lId uint32) (*Lote, error) {
+func (lote *Lote) UpdateLote(db *gorm.DB, loteID uint64) (*Lote, error) {
 
-	// To hash the password
-	err := l.BeforeSave()
-	if err != nil {
-		log.Printf("[FATAL] cannot HASH password, %v\n", err)
-	}
-
-	db = db.Debug().Model(&Lote{}).Where("cod_lote= ?", lId).Take(&Lote{}).UpdateColumns(
+	db = db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Take(&lote).UpdateColumns(
 		map[string]interface{}{
-			"cnpj":          l.Cnpj,
-			"contrato":      l.Contrato,
-			"dt_inicio_vig": l.Dt_inicio_vig,
-			"dt_final_vig":  l.Dt_final_vig,
-			"dt_reajuste":   l.Dt_reajuste,
+			"cnpj":          lote.Cnpj,
+			"contrato":      lote.Contrato,
+			"dt_inicio_vig": lote.Dt_inicio_vig,
+			"dt_final_vig":  lote.Dt_final_vig,
+			"dt_reajuste":   lote.Dt_reajuste,
 		},
 	)
+
 	if db.Error != nil {
 		return &Lote{}, db.Error
 	}
 
-	// This is the display the updated user
-	err = db.Debug().Model(&Lote{}).Where("cod_lote = ?", lId).Take(&l).Error
+	err := db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Take(&lote).Error
 	if err != nil {
 		return &Lote{}, err
 	}
 
-	return l, nil
-
+	return lote, err
 }

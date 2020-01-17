@@ -26,8 +26,8 @@ const (
 =========================  */
 
 const (
-	ENTIDADE_PATH        = "/read/entidade"
-	ENTIDADE_ID_PATH     = "/read/entidade/{id}"
+	ENTIDADE_PATH                = "/read/entidade"
+	ENTIDADE_ID_PATH             = "/read/entidade/{id}"
 	ENTIDADE_PATH_CREATEENTIDADE = "/read/entidade/createEntidade"
 )
 
@@ -67,6 +67,16 @@ const (
 const (
 	PREFEITOS_PATH    = "/read/prefeitos"
 	PREFEITOS_ID_PATH = "/read/prefeitos/:id"
+)
+
+/*  =========================
+	CD PATHS HTTP
+=========================  */
+
+const (
+	CD_PATH          = "/read/cd"
+	CD_ID_PATH       = "/read/cd/:id"
+	CD_PATH_CREATECD = "/read/cd/createcd"
 )
 
 /*  =========================
@@ -115,12 +125,15 @@ const (
 =========================  */
 
 const (
-	LOTES_PATH        = "/read/lotes"
-	LOTES_ID_PATH     = "/read/lotes/:id"
-	REAJUSTE_PATH     = "/read/reajuste"
-	REAJUSTE_DEL      = "/read/reajuste/:lote_cod_lote/:ano_ref"
-	LOTEITENS_PATH    = "/read/loteItens"
-	LOTEITENS_ID_PATH = "/read/loteItens/:id"
+	LOTE_PATH                    = "/read/lote"
+	LOTE_ID_PATH                 = "/read/lote/:id"
+	LOTE_PATH_CREATELOTE         = "/read/lote/createlote"
+	REAJUSTE_PATH_CREATEREAJUSTE = "/read/reajuste/createreajuste"
+	REAJUSTE_ID_PATH             = "/read/reajuste/:id"
+	REAJUSTE_PATH                = "/read/reajuste"
+	REAJUSTE_DEL                 = "/read/reajuste/:lote_cod_lote/:ano_ref"
+	LOTEITENS_PATH               = "/read/loteItens"
+	LOTEITENS_ID_PATH            = "/read/loteItens/:id"
 )
 
 /*  =========================

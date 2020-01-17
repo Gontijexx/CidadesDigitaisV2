@@ -28,3 +28,12 @@ type Reajuste struct {
 	Cod_lote   uint32  `gorm:"foreing_key;not null;size:11" json:"cod_lote" validate: "required":`
 	Percentual float64 `gorm:"default:null" json:"percentual" validate: "alphanum":`
 }
+
+type Cd struct {
+	Cod_ibge uint32    `gorm:"primary_key;not null;size:7" json:"cod_ibge" validate: "required":`
+	Cod_lote uint32    `gorm:"foreing_key;not null;size:11" json:"cod_lote" validate: "required":`
+	Os_pe    string    `gorm:"size:10;default:null" json:"os_pe" validate: "alphanum":`
+	Data_pe  time.Date `gorm:"default:null" json:"data_pe" validate: "alphanum":`
+	Os_imp   time.Date `gorm:"size:10;default:null" json:"os_imp" validate: "alphanum":`
+	Data_imp time.Date `gorm:"sdefault:null" json:"data_imp" validate: "alphanum":`
+}

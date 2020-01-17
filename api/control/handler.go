@@ -75,7 +75,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(s.GetLoteByID)).Methods(http.MethodGet)
 
 	//apaga lote ID
-	r.HandleFunc().Methods(http.MethodDelete)
+	//r.HandleFunc().Methods(http.MethodDelete)
 
 	//---------Rotas de Reajuste
 
@@ -94,6 +94,23 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//ROTAS EM REAJUSTE_DEL
 	//apaga reajuste (lote_cod_lote, ano_ref)
 	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleAuth(s.DeleteReajuste)).Methods(http.MethodDelete)
+
+	//**********Rotas em Cd
+
+	//ROTAS EM CD_PATH
+	//lista cd
+	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(s.GetCd)).Methods(http.MethodGet)
+
+	//salva cd
+	r.HandleFunc(config.CD_PATH_CREATECD, middlewares.SetMiddleJSON(s.CreateCd)).Methods(http.MethodPost)
+
+	//edita cd
+	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCd))).Methods(http.MethodPut)
+
+	//ROTAS EM CDS_ID_PATH
+
+	//lista cd por ID
+	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(s.GetCdByID)).Methods(http.MethodGet)
 
 	/*
 		//**********Rotas em Assunto

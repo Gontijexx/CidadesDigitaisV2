@@ -237,6 +237,16 @@ const (
 )
 
 /*  =========================
+	PREVISAO EMPENHO PATHS HTTP
+=========================  */
+
+const (
+	PREVISAO_EMPENHO_PATH    = "/read/previsao_empenho"
+	PREVISAO_EMPENHO_ID_PATH = "/read/previsao_empenho/{cod_previsao_empenho}"
+	PREVISAO_EMPENHO_PATH_CREATEPREVISAO_EMPENHO = "/read/previsao_empenho/createprevisao_empenho"
+)
+
+/*  =========================
 	ITENS PREVISAO EMPENHO PATHS HTTP
 =========================  */
 

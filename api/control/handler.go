@@ -112,12 +112,26 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//lista lote itens ID
 	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetCd_itensByID))).Methods(http.MethodGet)
 
+	//----------Rotas de PrevisaoEmpenho
+	//lista previsao empenho
+	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetPrevisao_empenhos))).Methods(http.MethodGet)
+
+	//salva previsao empenho
+	r.HandleFunc(config.PREVISAO_EMPENHO_PATH_CREATEPREVISAO_EMPENHO, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.CreatePrevisao_empenho))).Methods(http.MethodPost)
+
+	//edita previsao empenho
+	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdatePrevisao_empenho))).Methods(http.MethodPut)
+
+	//lista previsao emprenho por ID
+	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetPrevisao_empenhoByID))).Methods(http.MethodGet)
+
 	//----------Rotas de ItensPrevisaoEmpenho
 	//edita itens previsao empenho
 	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateItens_previsao_empenho))).Methods(http.MethodPut)
 
 	//lista itens previsao empenho (cod_lote, cod_previsao_empenho)
 	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetItens_previsao_empenhoByID))).Methods(http.MethodGet)
+
 	/*
 		//**********Rotas em Assunto
 		//----------Rotas de Assunto
@@ -380,22 +394,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		//apaga prefeitos ID
 		r.HandleFunc().Methods(http.MethodDelete)
 
-		//**********Rotas em PrevisaoEmpenho
-		//----------Rotas de PrevisaoEmpenho
-		//lista previsao empenho
-		r.HandleFunc().Methods(http.MethodGet)
 
-		//salva previsao empenho
-		r.HandleFunc().Methods(http.MethodPost)
-
-		//edita previsao empenho
-		r.HandleFunc().Methods(http.MethodPut)
-
-		//lista previsao emprenho por ID
-		r.HandleFunc().Methods(http.MethodGet)
-
-		//apaga previsao empenho ID
-		r.HandleFunc().Methods(http.MethodDelete)
 
 
 

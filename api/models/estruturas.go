@@ -52,11 +52,20 @@ type Lote_itens struct {
 	Preco         float64 `gorm:"default:null;size:12" json:"preco" validate: "alphanum":`
 }
 
+type Previsao_empenho struct {
+	Cod_previsao_empenho uint32 `gorm:"AUTO_INCREMENT;primary_key;foreing_key:Cod_previsao_empenho;not null;size:11" json:"cod_previsao_empenho" validate: "required":`
+	Cod_lote             uint32 `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
+	Cod_natureza_despesa uint32 `gorm:"foreing_key:Cod_natureza_despesa;not null;size:11" json:"cod_natureza_despesa" validate: "required":`
+	Data                 string `gorm:"default:null" json:"data" validate: "required":`
+	Tipo                 string `gorm:"default:null;size:1" json:"tipo" validate: "alphanum":`
+	Ano_referencia       uint32 `gorm:"default:null;size:11" json:"ano_referencia" validate: "alphanum":`
+}
+
 type Itens_previsao_empenho struct {
-	Cod_previsao_empenho uint32  `gorm:"primary_key;foreing_key:Cod_previsao_empenho;not null;size:11" json:"cod_previsao_empenho" validate: "required":`
+	Cod_previsao_empenho uint32  `gorm:"primary_key;;not null;size:11" json:"Cod_previsao_empenho" validate: "required":`
 	Cod_item             uint32  `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
 	Cod_tipo_item        uint32  `gorm:"primary_key;foreing_key:Cod_tipo_item;not null;size:11" json:"cod_tipo_item" validate: "required":`
-	Cod_lote      		 uint32  `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
+	Cod_lote             uint32  `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Valor                float64 `gorm:"default:null;size:12" json:"valor" validate: "alphanum":`
 	Quantidade           uint32  `gorm:"default:null;size:11" json:"quantidade" validate: "alphanum":`
 }

@@ -235,3 +235,12 @@ const (
 	LOTE_ITENS_PATH    = "/read/lote_itens"
 	LOTE_ITENS_ID_PATH = "/read/lote_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
 )
+
+/*  =========================
+	ITENS PREVISAO EMPENHO PATHS HTTP
+=========================  */
+
+const (
+	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itens_previsao_empenho"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itens_previsao_empenho/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+)

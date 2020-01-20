@@ -51,3 +51,12 @@ type Lote_itens struct {
 	Cod_tipo_item uint32  `gorm:"primary_key;foreing_key:Cod_tipo_item;not null;size:11" json:"cod_tipo_item" validate: "required":`
 	Preco         float64 `gorm:"default:null;size:12" json:"preco" validate: "alphanum":`
 }
+
+type Itens_previsao_empenho struct {
+	Cod_previsao_empenho uint32  `gorm:"primary_key;foreing_key:Cod_previsao_empenho;not null;size:11" json:"cod_previsao_empenho" validate: "required":`
+	Cod_item             uint32  `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
+	Cod_tipo_item        uint32  `gorm:"primary_key;foreing_key:Cod_tipo_item;not null;size:11" json:"cod_tipo_item" validate: "required":`
+	Cod_lote      		 uint32  `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
+	Valor                float64 `gorm:"default:null;size:12" json:"valor" validate: "alphanum":`
+	Quantidade           uint32  `gorm:"default:null;size:11" json:"quantidade" validate: "alphanum":`
+}

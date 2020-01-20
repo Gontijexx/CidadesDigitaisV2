@@ -112,6 +112,12 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//lista lote itens ID
 	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetCd_itensByID))).Methods(http.MethodGet)
 
+	//----------Rotas de ItensPrevisaoEmpenho
+	//edita itens previsao empenho
+	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateItens_previsao_empenho))).Methods(http.MethodPut)
+
+	//lista itens previsao empenho (cod_lote, cod_previsao_empenho)
+	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetItens_previsao_empenhoByID))).Methods(http.MethodGet)
 	/*
 		//**********Rotas em Assunto
 		//----------Rotas de Assunto
@@ -391,12 +397,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		//apaga previsao empenho ID
 		r.HandleFunc().Methods(http.MethodDelete)
 
-		//----------Rotas de PrevisaoEmpenhoItens
-		//edita previsao empenho itens
-		r.HandleFunc().Methods(http.MethodPut)
 
-		//lista previsao empenho itens (cod_lote, cod_previsao_empenho)
-		r.HandleFunc().Methods(http.MethodGet)
 
 		//**********Rotas em TipoItem
 

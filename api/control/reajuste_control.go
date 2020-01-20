@@ -73,7 +73,8 @@ func (server *Server) GetReajusteByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
-	rid, err := strconv.ParseUint(vars["id"], 10, 32)
+	rId1, err := strconv.ParseUint(vars["id1"], 10, 32)
+	rId2, err := strconv.ParseUint(vars["id2"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -99,12 +100,16 @@ func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	if tokenID != uint32(rid) {
+	if tokenID != uint32(rId1) {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+	if tokenID != uint32(rId2) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
 
-	updatedReajuste, err := reajuste.UpdateReajuste(server.DB, uint32(rid))
+	updatedReajuste, err := reajuste.UpdateReajuste(server.DB, uint32(rId1), uint32(rId2))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
@@ -119,12 +124,8 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 
 	reajuste := models.Reajuste{}
 
-	rId, err := strconv.ParseUint(vars["id"], 10, 32)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-	rFk, err := strconv.ParseUint(vars["id"], 10, 32)
+	rId1, err := strconv.ParseUint(vars["id1"], 10, 32)
+	rId2, err := strconv.ParseUint(vars["id2"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -134,19 +135,19 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	if tokenID != 0 && tokenID != uint32(rId) {
+	if tokenID != 0 && tokenID != uint32(rId1) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	if tokenID != 0 && tokenID != uint32(rFk) {
+	if tokenID != 0 && tokenID != uint32(rId2) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	_, err = reajuste.DeleteReajuste(server.DB, uint32(rId), int32(rFk))
+	_, err = reajuste.DeleteReajuste(server.DB, uint32(rId1), int32(rId2))
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	w.Header().Set("Entity", fmt.Sprintf("%d", rId))
+	w.Header().Set("Entity", fmt.Sprintf("%d, %d", rId1, rId2))
 	responses.JSON(w, http.StatusNoContent, "")
 }

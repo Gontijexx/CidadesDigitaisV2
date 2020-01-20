@@ -44,3 +44,10 @@ type Cd_itens struct {
 	Quantidade_projeto_executivo uint32 `gorm:"default:null;size:11" json:"quantidade_projeto_executivo" validate: "alphanum":`
 	Quantidade_termo_instalacao  uint32 `gorm:"default:null;size:11" json:"quantidade_termo_instalacao" validate: "alphanum":`
 }
+
+type Lote_itens struct {
+	Cod_lote      uint32  `gorm:"primary_key;foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
+	Cod_item      uint32  `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
+	Cod_tipo_item uint32  `gorm:"primary_key;foreing_key:Cod_tipo_item;not null;size:11" json:"cod_tipo_item" validate: "required":`
+	Preco         float64 `gorm:"default:null;size:12" json:"preco" validate: "alphanum":`
+}

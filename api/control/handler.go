@@ -103,7 +103,14 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateCd_itens))).Methods(http.MethodPut)
 
 	//lista cd itens ID
-	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetCd_itensByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetCd_itensByID))).Methods(http.MethodGet)
+
+	//----------Rotas de Lote Itens
+	//edita lote itens
+	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateLote_itens))).Methods(http.MethodPut)
+
+	//lista lote itens ID
+	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetCd_itensByID))).Methods(http.MethodGet)
 
 	/*
 		//**********Rotas em Assunto
@@ -269,12 +276,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 
 
-			//----------Rotas de Lote Itens
-					//edita lote itens
-						r.HandleFunc().Methods(http.MethodPut)
 
-					//lista lote itens ID
-						r.HandleFunc().Methods(http.MethodGet)
 
 		//**********Rotas em Modulos
 		//----------Rotas de Modulos

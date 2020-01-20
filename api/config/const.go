@@ -224,5 +224,14 @@ const (
 
 const (
 	CD_ITENS_PATH    = "/read/cd_itens"
-	CD_ITENS_ID_PATH = "/read/cd_itens/:id1/:id2/:id3"
+	CD_ITENS_ID_PATH = "/read/cd_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+)
+
+/*  =========================
+	LOTE ITENS PATHS HTTP
+=========================  */
+
+const (
+	LOTE_ITENS_PATH    = "/read/lote_itens"
+	LOTE_ITENS_ID_PATH = "/read/lote_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
 )

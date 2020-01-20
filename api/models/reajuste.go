@@ -30,11 +30,10 @@ func (reajuste *Reajuste) FindReajusteByID(db *gorm.DB, reajusteID uint64) (*Rea
 	return reajuste, err
 }
 
-func (r *Reajuste) UpdateReajuste(db *gorm.DB, rId uint32) (*Reajuste, error) {
+func (r *Reajuste) UpdateReajuste(db *gorm.DB, rId1, rId2 uint32) (*Reajuste, error) {
 
-	db = db.Debug().Model(&Reajuste{}).Where("ano_ref= ?", rId).Take(&Reajuste{}).UpdateColumns(
+	db = db.Debug().Model(&Reajuste{}).Where("ano_ref= ? AND cod_lote= ?", rId1, rId2).Take(&Reajuste{}).UpdateColumns(
 		map[string]interface{}{
-			"cod_lote":   r.Cod_lote,
 			"percentual": r.Percentual,
 		},
 	)
@@ -43,7 +42,7 @@ func (r *Reajuste) UpdateReajuste(db *gorm.DB, rId uint32) (*Reajuste, error) {
 		return &Reajuste{}, db.Error
 	}
 
-	err := db.Debug().Model(&Reajuste{}).Where("ano_ref = ?", rId).Take(&r).Error
+	err := db.Debug().Model(&Reajuste{}).Where("ano_ref= ? AND cod_lote= ?", rId1, rId2).Take(&r).Error
 	if err != nil {
 		return &Reajuste{}, err
 	}
@@ -52,9 +51,9 @@ func (r *Reajuste) UpdateReajuste(db *gorm.DB, rId uint32) (*Reajuste, error) {
 
 }
 
-func (r *Reajuste) DeleteReajuste(db *gorm.DB, rId uint32, rFk int32) (int64, error) {
+func (r *Reajuste) DeleteReajuste(db *gorm.DB, rId1 uint32, rId2 int32) (int64, error) {
 
-	db = db.Debug().Model(&Reajuste{}).Where("ano_ref = ? AND cod_lote", rId, rFk).Take(&Reajuste{}).Delete(&Reajuste{})
+	db = db.Debug().Model(&Reajuste{}).Where("ano_ref = ? AND cod_lote", rId1, rId2).Take(&Reajuste{}).Delete(&Reajuste{})
 
 	if db.Error != nil {
 		return 0, db.Error

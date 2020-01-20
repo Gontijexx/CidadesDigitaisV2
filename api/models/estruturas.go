@@ -1,5 +1,7 @@
 package models
 
+//	Estrutura referente a tabela Entidade
+
 type Entidade struct {
 	Cnpj           float64 `gorm:"primary_key;not null;size:14" json:"cnpj"`
 	Nome           string  `gorm:"size:50;default:null" json:"nome" validate: "alphanum":`

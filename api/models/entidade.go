@@ -56,3 +56,12 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 
 	return entidade, err
 }
+
+func (e *Entidade) FindAllEntidade(db *gorm.DB) (*[]Entidade, error) {
+	entidade := []Entidade{}
+	err := db.Debug().Model(&Entidade{}).Find(&entidade).Error
+	if err != nil {
+		return &[]Entidade{}, err
+	}
+	return &entidade, err
+}

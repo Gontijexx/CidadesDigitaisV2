@@ -129,9 +129,9 @@ const (
 	LOTE_ID_PATH                 = "/read/lote/:id"
 	LOTE_PATH_CREATELOTE         = "/read/lote/createlote"
 	REAJUSTE_PATH_CREATEREAJUSTE = "/read/reajuste/createreajuste"
-	REAJUSTE_ID_PATH             = "/read/reajuste/:id"
+	REAJUSTE_ID_PATH             = "/read/reajuste/{cod_lote}"
 	REAJUSTE_PATH                = "/read/reajuste"
-	REAJUSTE_DEL                 = "/read/reajuste/:lote_cod_lote/:ano_ref"
+	REAJUSTE_DEL                 = "/read/reajuste/{cod_lote}/{ano_ref}"
 	LOTEITENS_PATH               = "/read/loteItens"
 	LOTEITENS_ID_PATH            = "/read/loteItens/:id"
 )
@@ -216,4 +216,13 @@ const (
 const (
 	ASSUNTO_PATH    = "/read/assunto"
 	ASSUNTO_ID_PATH = "/read/assunto/:id"
+)
+
+/*  =========================
+	CD ITENS PATHS HTTP
+=========================  */
+
+const (
+	CD_ITENS_PATH    = "/read/cd_itens"
+	CD_ITENS_ID_PATH = "/read/cd_itens/:id1/:id2/:id3"
 )

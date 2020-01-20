@@ -74,8 +74,16 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (server *Server) GetEntidades() {
+func (server *Server) GetEntidades(w http.ResponseWriter, r *http.Request) {
 
+	enti := models.Entidade{}
+
+	entidade, err := enti.FindAllEntidade(server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, entidade)
 }
 
 func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {

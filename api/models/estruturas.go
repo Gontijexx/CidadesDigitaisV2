@@ -14,7 +14,7 @@ type Entidade struct {
 
 type Lote struct {
 	Cod_lote      uint32 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate: "required":`
-	Cnpj          string `gorm:"foreing_key;not null;size:14" json:"cnpj" validate: "required":`
+	Cnpj          string `gorm:"foreing_key:Cnpj;not null;size:14" json:"cnpj" validate: "required":`
 	Contrato      string `gorm:"size:10;default:null" json:"contrato" validate: "alphanum":`
 	Dt_inicio_vig string `gorm:"size:10;default:null" json:"dt_inicio_vig" validate: "alphanum":`
 	Dt_final_vig  string `gorm:"size:10;default:null" json:"dt_final_vig" validate: "alphanum":`
@@ -23,15 +23,24 @@ type Lote struct {
 
 type Reajuste struct {
 	Ano_ref    uint32  `gorm:"primary_key;not null;size:11" json:"ano_ref" validate: "required":`
-	Cod_lote   uint32  `gorm:"foreing_key;not null;size:11" json:"cod_lote" validate: "required":`
+	Cod_lote   uint32  `gorm:"primary key;foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Percentual float64 `gorm:"default:null" json:"percentual" validate: "alphanum":`
 }
 
 type Cd struct {
-	Cod_ibge uint32 `gorm:"primary_key;not null;size:7" json:"cod_ibge" validate: "required":`
-	Cod_lote uint32 `gorm:"foreing_key;not null;size:11" json:"cod_lote" validate: "required":`
+	Cod_ibge uint32 `gorm:"primary_key;foreing_key:Cod_ibge;not null;size:7" json:"cod_ibge" validate: "required":`
+	Cod_lote uint32 `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Os_pe    string `gorm:"size:10;default:null" json:"os_pe" validate: "alphanum":`
 	Data_pe  string `gorm:"default:null" json:"data_pe" validate: "alphanum":`
 	Os_imp   string `gorm:"size:10;default:null" json:"os_imp" validate: "alphanum":`
-	Data_imp string `gorm:"sdefault:null" json:"data_imp" validate: "alphanum":`
+	Data_imp string `gorm:"default:null" json:"data_imp" validate: "alphanum":`
+}
+
+type Cd_itens struct {
+	Cod_ibge                     uint32 `gorm:"primary_key;foreing_key:Cod_ibge;not null;size:7" json:"cod_ibge" validate: "required":`
+	Cod_item                     uint32 `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
+	Cod_tipo_item                uint32 `gorm:"primary_key;foreing_key:Cod_tipo_item;not null;size:11" json:"cod_tipo_item" validate: "required":`
+	Quantidade_previsto          uint32 `gorm:"default:null;size:11" json:"quantidade_previsto" validate: "required":`
+	Quantidade_projeto_executivo uint32 `gorm:"default:null;size:11" json:"quantidade_projeto_executivo" validate: "alphanum":`
+	Quantidade_termo_instalacao  uint32 `gorm:"default:null;size:11" json:"quantidade_termo_instalacao" validate: "alphanum":`
 }

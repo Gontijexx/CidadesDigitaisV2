@@ -53,29 +53,6 @@ func (server *Server) CreateReajuste(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (server *Server) GetReajuste(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-
-	reajusteID, err := strconv.ParseUint(vars["id"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-
-	reajuste := models.Reajuste{}
-
-	reajusteGotten, err := reajuste.FindReajusteByID(server.DB, uint64(reajusteID))
-
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-
-	responses.JSON(w, http.StatusOK, reajusteGotten)
-
-}
-
 func (server *Server) GetReajusteByID(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -136,7 +113,6 @@ func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, updatedReajuste)
 }
 
-/*
 func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -144,6 +120,11 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 	reajuste := models.Reajuste{}
 
 	rId, err := strconv.ParseUint(vars["id"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	rFk, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -157,7 +138,11 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	_, err = reajuste.DeleteReajuste(server.DB, uint32(rId), uint32(rFk))
+	if tokenID != 0 && tokenID != uint32(rFk) {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+	_, err = reajuste.DeleteReajuste(server.DB, uint32(rId), int32(rFk))
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -165,4 +150,3 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Entity", fmt.Sprintf("%d", rId))
 	responses.JSON(w, http.StatusNoContent, "")
 }
-*/

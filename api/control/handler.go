@@ -45,7 +45,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetEntidades))).Methods(http.MethodGet)
 
 	//SALVA ENTIDADE
-	r.HandleFunc("/read/entidade", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.CreateEntidade))).Methods(http.MethodPost)
+	r.HandleFunc("/read/entidade/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.CreateEntidade))).Methods(http.MethodPost)
 
 	//edita entidade
 	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateEntidade))).Methods(http.MethodPut)

@@ -10,9 +10,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
-
-	"github.com/gorilla/mux"
 )
 
 //	Funcao criar uma entidade no banco de dados
@@ -29,10 +26,14 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct entidade referenciada (&struct)
 	err = json.Unmarshal(body, &entidade)
+
+	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
+
+	log.Printf("%v", entidade)
 
 	if err = validation.Validator.Struct(entidade); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", err)
@@ -58,6 +59,7 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
 }
 
+/*
 func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -145,3 +147,4 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Entity", fmt.Sprintf("%d", entidadeID))
 	responses.JSON(w, http.StatusNoContent, "")
 }
+*/

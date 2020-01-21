@@ -1,8 +1,6 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
@@ -16,6 +14,7 @@ func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 
 }
 
+/*
 func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
 
 	err := db.Debug().Model(Entidade{}).Where("cnpj = ?", entidadeID).Take(&entidade).Error
@@ -67,3 +66,4 @@ func (entidade *Entidade) DeleteEntidade(db *gorm.DB, entidadeID uint64) (int64,
 
 	return db.RowsAffected, nil
 }
+*/

@@ -35,22 +35,27 @@ func SetMiddleAuthMod(next http.HandlerFunc) http.HandlerFunc {
 		mod, err := auth.ExtractTokenMod(r)
 		umod := InterfaceSlice(mod)
 		fmt.Printf("eu sou umod %v", umod)
+
 		umodInt := make([]float64, len(umod))
+
 		for i := range umod {
 			umodInt[i] = umod[i].(float64)
 		}
+
 		fmt.Printf("eu sou umodit %v", umodInt)
+
 		for _, v := range umodInt {
 			fmt.Printf("eu sou v %v", v)
+
 			if v == PagMod {
 				next(w, r)
-				return
-			} else {
-				responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL Unauthorized"))
 				return
 			}
 
 		}
+
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL Unauthorized"))
+		return
 
 	}
 }

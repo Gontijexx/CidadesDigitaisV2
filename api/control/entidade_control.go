@@ -44,6 +44,7 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 	entidadeCreated, err := entidade.SaveEntidade(server.DB)
 
 	//	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
+	//	Status 500
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
@@ -80,7 +81,7 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (server *Server) GetEntidades() {
+func (server *Server) GetEntidades(w http.ResponseWriter, r *http.Request) {
 
 }
 

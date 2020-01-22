@@ -10,15 +10,18 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 //	Funcao criar uma entidade no banco de dados
-func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
+func (server *Server) AddEntidade(w http.ResponseWriter, r *http.Request) {
 
-	//Autorização de Modulo
+	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 12001)
 
-	//	O metodo RealAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
+	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -49,7 +52,7 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 	//	Status 500
 	if err != nil {
 
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Entidade, Check your details"))
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Entidade, Check server details"))
 		return
 	}
 
@@ -88,7 +91,12 @@ func (server *Server) GetEntidades(w http.ResponseWriter, r *http.Request) {
 
 }
 
+*/
+
 func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	config.AuthMod(w, r, 12003)
 
 	vars := mux.Vars(r)
 	entidadeID, err := strconv.ParseUint(vars["id"], 10, 64)
@@ -104,6 +112,7 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	}
 
 	entidade := models.Entidade{}
+
 	err = json.Unmarshal(body, &entidade)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -126,6 +135,7 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, updateEntidade)
 }
 
+/*
 func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 
 	// vars recebe o ID contido na URL

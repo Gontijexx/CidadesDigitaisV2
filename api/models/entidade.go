@@ -1,8 +1,26 @@
 package models
 
 import (
+	"errors"
+	"html"
+	"strings"
+
 	"github.com/jinzhu/gorm"
 )
+
+func (entidade *Entidade) Prepare() {
+	entidade.Cnpj = 0
+	entidade.Nome = html.EscapeString(strings.TrimSpace(entidade.Nome))
+	entidade.Endereco = html.EscapeString(strings.TrimSpace(entidade.Endereco))
+	entidade.Numero = html.EscapeString(strings.TrimSpace(entidade.Numero))
+	entidade.Bairro = html.EscapeString(strings.TrimSpace(entidade.Bairro))
+	entidade.Cep = html.EscapeString(strings.TrimSpace(entidade.Cep))
+	entidade.Nome_municipio = html.EscapeString(strings.TrimSpace(entidade.Nome_municipio))
+	entidade.Uf = html.EscapeString(strings.TrimSpace(entidade.Uf))
+	entidade.Endereco = html.EscapeString(strings.TrimSpace(entidade.Endereco))
+	entidade.Observacao = html.EscapeString(strings.TrimSpace(entidade.Observacao))
+
+}
 
 func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 
@@ -14,7 +32,6 @@ func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 
 }
 
-/*
 func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
 
 	err := db.Debug().Model(Entidade{}).Where("cnpj = ?", entidadeID).Take(&entidade).Error
@@ -25,7 +42,17 @@ func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Ent
 
 	return entidade, err
 }
-*/
+
+func (entidade *Entidade) FindEntidades(db *gorm.DB) (*[]Entidade, error) {
+
+	entity := []Entidade{}
+	err := db.Debug().Model(&Entidade{}).Limit(100).Find(&entity).Error
+	if err != nil {
+		return &[]Entidade{}, err
+	}
+	return &entity, err
+}
+
 func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
 
 	db = db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Take(&entidade).UpdateColumns(
@@ -53,7 +80,6 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 	return entidade, err
 }
 
-/*
 func (entidade *Entidade) DeleteEntidade(db *gorm.DB, entidadeID uint64) (int64, error) {
 
 	db = db.Debug().Model(&Usuario{}).Where("cnpj = ?", entidadeID).Take(&Entidade{}).Delete(&Entidade{})
@@ -67,4 +93,3 @@ func (entidade *Entidade) DeleteEntidade(db *gorm.DB, entidadeID uint64) (int64,
 
 	return db.RowsAffected, nil
 }
-*/

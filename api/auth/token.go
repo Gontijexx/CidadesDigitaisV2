@@ -14,6 +14,7 @@ import (
 )
 
 func CreateToken(userID uint32, userMod []int64) (string, error) {
+
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["userID"] = userID
@@ -21,7 +22,6 @@ func CreateToken(userID uint32, userMod []int64) (string, error) {
 	claims["exp"] = time.Now().Add(time.Hour * 8).Unix() //Token expires after 8 hour
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(os.Getenv("API_SECRET")))
-
 }
 
 func TokenValid(r *http.Request) error {

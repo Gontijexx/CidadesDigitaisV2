@@ -46,10 +46,10 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidades))).Methods(http.MethodGet)
 
 	//SALVA ENTIDADE
-	r.HandleFunc("/read/entidade/", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateEntidade))).Methods(http.MethodPost)
+	r.HandleFunc("/read/entidade/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.AddEntidade))).Methods(http.MethodPost)
 
-	//edita entidade
-	//r.HandleFunc("/read/entidade/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEntidade))).Methods(http.MethodPut)
+	//EDITA ENTIDADE
+	r.HandleFunc("/read/entidade/{cnpj}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEntidade))).Methods(http.MethodPut)
 
 	//lista entidade por ID
 	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidadeByID))).Methods(http.MethodGet)
@@ -57,7 +57,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//apaga entidade ID
 	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.DeleteEntidades)).Methods(http.MethodDelete)
 
-	//**********Rotas em Lotes
+	/*	=========================
+			ROTAS EM LOTE
+	=========================	*/
 
 	//lista lote
 	r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLote))).Methods(http.MethodGet)

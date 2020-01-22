@@ -19,14 +19,22 @@ import (
 
 func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 
+	//Autorização de Modulo
+	config.AuthMod(w, r, 14001)
+
+	//	O metodo RealAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 	}
 
+	//	Estrutura models.Lote{} "renomeada"
 	lote := models.Lote{}
 
+	//	Unmarshal analisa o JSON recebido e armazena na struct lote referenciada (&struct)
 	err = json.Unmarshal(body, &lote)
+
+	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -38,8 +46,11 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	SaveLote eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	loteCreated, err := lote.SaveLote(server.DB)
 
+	//	Retorna um erro caso nao seja possivel salvar lote no banco de dados
+	//	Status 500
 	if err != nil {
 
 		formattedError := config.FormatError(err.Error())
@@ -49,6 +60,8 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, loteCreated.Cnpj))
+
+	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, loteCreated)
 
 }
@@ -57,7 +70,7 @@ func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	loteID, err := strconv.ParseUint(vars["id"], 10, 64)
+	loteID, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -79,7 +92,7 @@ func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
-	lId, err := strconv.ParseUint(vars["id"], 10, 32)
+	lId, err := strconv.ParseUint(vars["cod_lote"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return

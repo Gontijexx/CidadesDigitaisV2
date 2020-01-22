@@ -75,8 +75,8 @@ const (
 
 const (
 	CD_PATH          = "/read/cd"
-	CD_ID_PATH       = "/read/cd/:id"
-	CD_PATH_CREATECD = "/read/cd/createcd"
+	CD_ID_PATH       = "/read/cd/{id}"
+	CD_PATH_CREATECD = "/read/cd/{modulo}"
 )
 
 /*  =========================
@@ -125,15 +125,29 @@ const (
 =========================  */
 
 const (
-	LOTE_PATH                    = "/read/lote"
-	LOTE_ID_PATH                 = "/read/lote/:id"
-	LOTE_PATH_CREATELOTE         = "/read/lote/createlote"
+	LOTE_PATH            = "/read/lote"
+	LOTE_ID_PATH         = "/read/lote/{cod_lote}/{modulo}"
+	LOTE_PATH_CREATELOTE = "/read/lote/{modulo}"
+)
+
+/*  =========================
+	LOTE ITENS PATHS HTTP
+=========================  */
+
+const (
+	LOTEITENS_PATH    = "/read/loteItens"
+	LOTEITENS_ID_PATH = "/read/loteItens/:id"
+)
+
+/*  =========================
+	REAJUSTE PATHS HTTP
+=========================  */
+
+const (
 	REAJUSTE_PATH_CREATEREAJUSTE = "/read/reajuste/createreajuste"
 	REAJUSTE_ID_PATH             = "/read/reajuste/{cod_lote}"
 	REAJUSTE_PATH                = "/read/reajuste"
 	REAJUSTE_DEL                 = "/read/reajuste/{cod_lote}/{ano_ref}"
-	LOTEITENS_PATH               = "/read/loteItens"
-	LOTEITENS_ID_PATH            = "/read/loteItens/:id"
 )
 
 /*  =========================
@@ -241,8 +255,8 @@ const (
 =========================  */
 
 const (
-	PREVISAO_EMPENHO_PATH    = "/read/previsao_empenho"
-	PREVISAO_EMPENHO_ID_PATH = "/read/previsao_empenho/{cod_previsao_empenho}"
+	PREVISAO_EMPENHO_PATH                        = "/read/previsao_empenho"
+	PREVISAO_EMPENHO_ID_PATH                     = "/read/previsao_empenho/{cod_previsao_empenho}"
 	PREVISAO_EMPENHO_PATH_CREATEPREVISAO_EMPENHO = "/read/previsao_empenho/createprevisao_empenho"
 )
 

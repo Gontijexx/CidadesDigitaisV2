@@ -71,7 +71,7 @@ func (server *Server) AddEntidade(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTA ENTIDADE POR ID
+	FUNCAO LISTAR ENTIDADE POR ID
 =========================  */
 
 func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {

@@ -8,6 +8,15 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/*  =========================
+	FUNCOES QUE FAZEM CONEXAO DIRETA COM O BANCO DE DADOS
+=========================  */
+
+/*  =========================
+	FUNCAO PREPARE ENTIDADE
+=========================  */
+
+//	Prepara as informacoes a serem escritas no banco de dados
 func (entidade *Entidade) Prepare() {
 	entidade.Cnpj = 0
 	entidade.Nome = html.EscapeString(strings.TrimSpace(entidade.Nome))
@@ -22,6 +31,10 @@ func (entidade *Entidade) Prepare() {
 
 }
 
+/*  =========================
+	FUNCAO SALVAR ENTIDADE NO BANCO DE DADOS
+=========================  */
+
 func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 
 	err := db.Debug().Create(&entidade).Error
@@ -31,6 +44,10 @@ func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 	return entidade, nil
 
 }
+
+/*  =========================
+	FUNCAO LISTAR ENTIDADE POR ID
+=========================  */
 
 func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
 
@@ -43,6 +60,10 @@ func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Ent
 	return entidade, err
 }
 
+/*  =========================
+	FUNCAO LISTAR ENTIDADES
+=========================  */
+
 func (entidade *Entidade) FindEntidades(db *gorm.DB) (*[]Entidade, error) {
 
 	entity := []Entidade{}
@@ -52,6 +73,10 @@ func (entidade *Entidade) FindEntidades(db *gorm.DB) (*[]Entidade, error) {
 	}
 	return &entity, err
 }
+
+/*  =========================
+	FUNCAO EDITAR ENTIDADE
+=========================  */
 
 func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
 
@@ -79,6 +104,10 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 
 	return entidade, err
 }
+
+/*  =========================
+	FUNCAO DELETER ENTIDADE POR ID
+=========================  */
 
 func (entidade *Entidade) DeleteEntidade(db *gorm.DB, entidadeID uint64) (int64, error) {
 

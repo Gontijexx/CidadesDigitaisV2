@@ -13,46 +13,74 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
+/*  =========================
+	FUNCAO CRIAR TOKEN AO
+	REALIZAR LOGIN
+=========================  */
 func CreateToken(userID uint32, userMod []int64) (string, error) {
-
+	//cria um mapa de informações sobre o user
 	claims := jwt.MapClaims{}
+	//autoriza o usuario
 	claims["authorized"] = true
+	//id do usuario
 	claims["userID"] = userID
+	//modulos do usuario
 	claims["userMod"] = userMod
-	claims["exp"] = time.Now().Add(time.Hour * 8).Unix() //Token expires after 8 hour
+	//Token expira depois de 8 hrs
+	claims["exp"] = time.Now().Add(time.Hour * 8).Unix()
+	//Criptografa o token no metodo HS256
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	//API_SECRET esta nas variaveis de ambiente
 	return token.SignedString([]byte(os.Getenv("API_SECRET")))
 }
 
+/*  =========================
+	FUNCAO PARA VALIDAR O
+	TOKEN A QUALQUER MOMENTO
+=========================  */
 func TokenValid(r *http.Request) error {
 	tokenString := ExtractToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		//checa se o token está com a criptografia correta e header intecto
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("[ERROR] Unexpected signing method: %v", token.Header["alg"])
 		}
 		return []byte(os.Getenv("API_SECRET")), nil
 	})
 	if err != nil {
-		return fmt.Errorf("[ERROR] invalid Token information, because, %v\n", err)
+		return fmt.Errorf("[ERROR] Invalid Token information, because, %v\n", err)
 	}
+	//printa no terminal o mapa e valida o token informado
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		Pretty(claims)
 	}
 	return nil
 }
 
+/*  =========================
+	FUNCAO RETIRAR O TOKEN
+	O TOKEN DA URI
+=========================  */
+
 func ExtractToken(r *http.Request) string {
+	//extrai o token da url
 	keys := r.URL.Query()
 	token := keys.Get("token")
 	if token != "" {
 		return token
 	}
+	//caso token venha no header
 	bearerToken := r.Header.Get("Authorization")
 	if len(strings.Split(bearerToken, " ")) == 2 {
 		return strings.Split(bearerToken, " ")[1]
 	}
 	return ""
 }
+
+/*  =========================
+	FUNCAO EXTRAIR O ID
+	DO TOKEN DA URI
+=========================  */
 
 func ExtractTokenID(r *http.Request) (uint32, error) {
 
@@ -77,6 +105,10 @@ func ExtractTokenID(r *http.Request) (uint32, error) {
 	return 0, nil
 }
 
+/*  =========================
+	FUNCAO EXTRAIR O MODULO
+	DO TOKEN NA URI
+=========================  */
 func ExtractTokenMod(r *http.Request) (interface{}, error) {
 
 	tokenString := ExtractToken(r)
@@ -98,7 +130,9 @@ func ExtractTokenMod(r *http.Request) (interface{}, error) {
 	return 0, nil
 }
 
-//Pretty display the claims licely in the terminal
+/*  =========================
+  ESPELHA NO TERMINAL A STRUCT
+=========================  */
 func Pretty(data interface{}) {
 	b, err := json.MarshalIndent(data, "", " ")
 	if err != nil {

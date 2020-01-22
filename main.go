@@ -1,4 +1,3 @@
-
 package main
 
 import "CidadesDigitaisV2/api"

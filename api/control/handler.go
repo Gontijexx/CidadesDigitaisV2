@@ -42,20 +42,20 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 			ROTAS EM ENTIDADE
 	=========================	*/
 
-	//LISTA ENTIDADE
-	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidades))).Methods(http.MethodGet)
+	//	LISTA ENTIDADE
+	r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidades))).Methods(http.MethodGet)
 
-	//SALVA ENTIDADE
-	r.HandleFunc("/read/entidade/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.AddEntidade))).Methods(http.MethodPost)
+	//	SALVA ENTIDADE
+	r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.AddEntidade))).Methods(http.MethodPost)
 
-	//EDITA ENTIDADE
-	r.HandleFunc("/read/entidade/{cnpj}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEntidade))).Methods(http.MethodPut)
+	//	EDITA ENTIDADE
+	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEntidade))).Methods(http.MethodPut)
 
-	//lista entidade por ID
-	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidadeByID))).Methods(http.MethodGet)
+	//	LISTA ENTIDADE POR ID
+	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidadeByID))).Methods(http.MethodGet)
 
-	//apaga entidade ID
-	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.DeleteEntidades)).Methods(http.MethodDelete)
+	//	APAGA ENTIDADE POR ID
+	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.DeleteEntidade)).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM LOTE

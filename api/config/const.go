@@ -26,9 +26,8 @@ const (
 =========================  */
 
 const (
-	ENTIDADE_PATH                = "/read/entidade"
-	ENTIDADE_ID_PATH             = "/read/entidade/{id}"
-	ENTIDADE_PATH_CREATEENTIDADE = "/read/entidade/createEntidade"
+	ENTIDADE_PATH    = "/read/entidade/{id}"
+	ENTIDADE_ID_PATH = "/read/entidade/{id}/{cnpj}"
 )
 
 /*  =========================
@@ -241,8 +240,8 @@ const (
 =========================  */
 
 const (
-	PREVISAO_EMPENHO_PATH    = "/read/previsao_empenho"
-	PREVISAO_EMPENHO_ID_PATH = "/read/previsao_empenho/{cod_previsao_empenho}"
+	PREVISAO_EMPENHO_PATH                        = "/read/previsao_empenho"
+	PREVISAO_EMPENHO_ID_PATH                     = "/read/previsao_empenho/{cod_previsao_empenho}"
 	PREVISAO_EMPENHO_PATH_CREATEPREVISAO_EMPENHO = "/read/previsao_empenho/createprevisao_empenho"
 )
 

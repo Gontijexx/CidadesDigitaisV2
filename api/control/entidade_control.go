@@ -10,65 +10,53 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
-
-	"github.com/gorilla/mux"
 )
 
 //	Funcao criar uma entidade no banco de dados
 func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
-	vars := mux.Vars(r)
+	//Autorização de Modulo
+	config.AuthMod(w, r, 12001)
 
-	var adicionarEntidadeModulo uint64 = 12001
-
-	pagMod, _ := strconv.ParseUint(vars["modulo"], 10, 32)
-
-	if adicionarEntidadeModulo == pagMod {
-
-		//	O metodo RealAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			responses.ERROR(w, http.StatusUnprocessableEntity, err)
-		}
-
-		//	Estrutura models.Entidade{} "renomeada"
-		entidade := models.Entidade{}
-
-		//	Unmarshal analisa o JSON recebido e armazena na struct entidade referenciada (&struct)
-		err = json.Unmarshal(body, &entidade)
-
-		//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
-		if err != nil {
-			responses.ERROR(w, http.StatusUnprocessableEntity, err)
-			return
-		}
-
-		log.Printf("%v", entidade)
-
-		if err = validation.Validator.Struct(entidade); err != nil {
-			log.Printf("[WARN] invalid information, because, %v\n", err)
-			w.WriteHeader(http.StatusPreconditionFailed)
-			return
-		}
-
-		//	SaveEntidade eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
-		entidadeCreated, err := entidade.SaveEntidade(server.DB)
-
-		//	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
-		//	Status 500
-		if err != nil {
-			formattedError := config.FormatError(err.Error())
-			responses.ERROR(w, http.StatusInternalServerError, formattedError)
-			return
-		}
-
-		w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, entidadeCreated.Cnpj))
-
-		//	Ao final retorna o Status 201 e o JSON da struct que foi criada
-		responses.JSON(w, http.StatusCreated, entidadeCreated)
-
+	//	O metodo RealAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 	}
+
+	//	Estrutura models.Entidade{} "renomeada"
+	entidade := models.Entidade{}
+
+	//	Unmarshal analisa o JSON recebido e armazena na struct entidade referenciada (&struct)
+	err = json.Unmarshal(body, &entidade)
+
+	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	if err = validation.Validator.Struct(entidade); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", err)
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	//	SaveEntidade eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
+	entidadeCreated, err := entidade.SaveEntidade(server.DB)
+
+	//	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
+	//	Status 500
+	if err != nil {
+
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Entidade, Check your details"))
+		return
+	}
+
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, entidadeCreated.Cnpj))
+
+	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
+	responses.JSON(w, http.StatusCreated, entidadeCreated)
 
 }
 

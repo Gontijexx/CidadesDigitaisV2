@@ -2,6 +2,7 @@ package control
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"io/ioutil"
 	"log"
@@ -77,6 +78,7 @@ func (server *Server) SignIn(login, password string) (string, error) {
 			CodMod = append(CodMod, mods.Cod_modulo)
 
 		}
+		fmt.Printf("eu so codmod: %v", CodMod)
 		return auth.CreateToken(user.Cod_usuario, CodMod)
 	} else {
 		log.Printf("[FATAL] This user is disable,%v\n", user.Status)

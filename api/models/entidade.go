@@ -25,7 +25,7 @@ func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Ent
 
 	return entidade, err
 }
-
+*/
 func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
 
 	db = db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Take(&entidade).UpdateColumns(
@@ -53,6 +53,7 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 	return entidade, err
 }
 
+/*
 func (entidade *Entidade) DeleteEntidade(db *gorm.DB, entidadeID uint64) (int64, error) {
 
 	db = db.Debug().Model(&Usuario{}).Where("cnpj = ?", entidadeID).Take(&Entidade{}).Delete(&Entidade{})

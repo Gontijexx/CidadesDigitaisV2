@@ -1,6 +1,7 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/middlewares"
 	"net/http"
 
@@ -13,7 +14,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	r = s.Router
 	//Home
-	r.HandleFunc("/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.Home))).Methods(http.MethodGet)
+	r.HandleFunc("/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
 
 	/*	=========================
 			ROTAS EM USUARIO
@@ -23,16 +24,16 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc("/read/usuario/login", middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
 
 	//LISTA USUARIOS
-	r.HandleFunc("/read/usuario", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetUsers))).Methods(http.MethodGet)
+	r.HandleFunc("/read/usuario", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUsers))).Methods(http.MethodGet)
 
 	//SALVA USUARIO
-	r.HandleFunc("/read/usuario/createUser", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.CreateUser))).Methods(http.MethodPost)
+	r.HandleFunc("/read/usuario/createUser", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUser))).Methods(http.MethodPost)
 
 	//LISTA USUARIO
-	r.HandleFunc("/read/usuario/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetUser))).Methods(http.MethodGet)
+	r.HandleFunc("/read/usuario/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUser))).Methods(http.MethodGet)
 
 	//EDITA O USUARIO
-	r.HandleFunc("/read/usuario/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateUser))).Methods(http.MethodPut)
+	r.HandleFunc("/read/usuario/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUser))).Methods(http.MethodPut)
 
 	//APAGA O USUARIO
 	//	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleAuth(s.DeleteUser)).Methods(http.MethodDelete)
@@ -42,107 +43,99 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//LISTA ENTIDADE
-	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetEntidades))).Methods(http.MethodGet)
+	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidades))).Methods(http.MethodGet)
 
 	//SALVA ENTIDADE
-	r.HandleFunc("/read/entidade/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.CreateEntidade))).Methods(http.MethodPost)
+	r.HandleFunc("/read/entidade/", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateEntidade))).Methods(http.MethodPost)
 
 	//edita entidade
-	//r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateEntidade))).Methods(http.MethodPut)
+	//r.HandleFunc("/read/entidade/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEntidade))).Methods(http.MethodPut)
 
 	//lista entidade por ID
-	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetEntidadeByID))).Methods(http.MethodGet)
+	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidadeByID))).Methods(http.MethodGet)
 
 	//apaga entidade ID
 	//r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.DeleteEntidades)).Methods(http.MethodDelete)
 
-	/*
+	//**********Rotas em Lotes
 
+	//lista lote
+	r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLote))).Methods(http.MethodGet)
 
+	//salva lote
+	r.HandleFunc(config.LOTE_PATH_CREATELOTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateLote))).Methods(http.MethodPost)
 
+	//edita lote
+	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote))).Methods(http.MethodPut)
 
-		//**********Rotas em Lotes
+	//lista lote por ID
+	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteByID))).Methods(http.MethodGet)
 
-		//lista lote
-		r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetLote))).Methods(http.MethodGet)
+	//apaga lote ID
+	//r.HandleFunc().Methods(http.MethodDelete)
 
-		//salva lote
-		r.HandleFunc(config.LOTE_PATH_CREATELOTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.CreateLote))).Methods(http.MethodPost)
+	//---------Rotas de Reajuste
 
-		//edita lote
-		r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateLote))).Methods(http.MethodPut)
+	//lista reajuste
+	//nao existe
 
-		//lista lote por ID
-		r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetLoteByID))).Methods(http.MethodGet)
+	//salva reajuste
+	r.HandleFunc(config.REAJUSTE_PATH_CREATEREAJUSTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateReajuste))).Methods(http.MethodPost)
 
-		//apaga lote ID
-		//r.HandleFunc().Methods(http.MethodDelete)
+	//lista reajuste por ID
+	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetReajusteByID))).Methods(http.MethodGet)
 
-		//---------Rotas de Reajuste
+	//apaga reajuste (lote_cod_lote, ano_ref)
+	r.HandleFunc(config.REAJUSTE_DEL, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteReajuste))).Methods(http.MethodDelete)
 
-		//lista reajuste
-		//nao existe
+	//**********Rotas em Cd
 
-		//salva reajuste
-		r.HandleFunc(config.REAJUSTE_PATH_CREATEREAJUSTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.CreateReajuste))).Methods(http.MethodPost)
+	//lista cd
+	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCd))).Methods(http.MethodGet)
 
-		//lista reajuste por ID
-		r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetReajusteByID))).Methods(http.MethodGet)
+	//salva cd
+	r.HandleFunc(config.CD_PATH_CREATECD, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCd))).Methods(http.MethodPost)
 
-		//apaga reajuste (lote_cod_lote, ano_ref)
-		r.HandleFunc(config.REAJUSTE_DEL, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.DeleteReajuste))).Methods(http.MethodDelete)
+	//edita cd
+	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCd))).Methods(http.MethodPut)
 
-		//**********Rotas em Cd
+	//lista cd por ID
+	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCdByID))).Methods(http.MethodGet)
 
-		//lista cd
-		r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetCd))).Methods(http.MethodGet)
+	//----------Rotas de Cd Itens
+	//edita cd itens
+	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCd_itens))).Methods(http.MethodPut)
 
-		//salva cd
-		r.HandleFunc(config.CD_PATH_CREATECD, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.CreateCd))).Methods(http.MethodPost)
+	//lista cd itens ID
+	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCd_itensByID))).Methods(http.MethodGet)
 
-		//edita cd
-		r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateCd))).Methods(http.MethodPut)
+	//----------Rotas de Lote Itens
+	//edita lote itens
+	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote_itens))).Methods(http.MethodPut)
 
-		//lista cd por ID
-		r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetCdByID))).Methods(http.MethodGet)
+	//lista lote itens ID
+	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCd_itensByID))).Methods(http.MethodGet)
 
-		//----------Rotas de Cd Itens
-		//edita cd itens
-		r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateCd_itens))).Methods(http.MethodPut)
+	//----------Rotas de PrevisaoEmpenho
+	//lista previsao empenho
+	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisao_empenhos))).Methods(http.MethodGet)
 
-		//lista cd itens ID
-		r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetCd_itensByID))).Methods(http.MethodGet)
+	//salva previsao empenho
+	r.HandleFunc("/read/previsao_empenho/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrevisao_empenho))).Methods(http.MethodPost)
 
-		//----------Rotas de Lote Itens
-		//edita lote itens
-		r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateLote_itens))).Methods(http.MethodPut)
+	//edita previsao empenho
+	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrevisao_empenho))).Methods(http.MethodPut)
 
-		//lista lote itens ID
-		r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetCd_itensByID))).Methods(http.MethodGet)
+	//lista previsao emprenho por ID
+	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisao_empenhoByID))).Methods(http.MethodGet)
 
-		//----------Rotas de PrevisaoEmpenho
-		//lista previsao empenho
-		r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetPrevisao_empenhos))).Methods(http.MethodGet)
+	//----------Rotas de ItensPrevisaoEmpenho
+	//edita itens previsao empenho
+	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItens_previsao_empenho))).Methods(http.MethodPut)
 
-		//salva previsao empenho
-		r.HandleFunc(config.PREVISAO_EMPENHO_PATH_CREATEPREVISAO_EMPENHO, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.CreatePrevisao_empenho))).Methods(http.MethodPost)
+	//lista itens previsao empenho (cod_lote, cod_previsao_empenho)
+	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItens_previsao_empenhoByID))).Methods(http.MethodGet)
 
-		//edita previsao empenho
-		r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdatePrevisao_empenho))).Methods(http.MethodPut)
-
-		//lista previsao emprenho por ID
-		r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetPrevisao_empenhoByID))).Methods(http.MethodGet)
-
-		//----------Rotas de ItensPrevisaoEmpenho
-		//edita itens previsao empenho
-		r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.UpdateItens_previsao_empenho))).Methods(http.MethodPut)
-
-		//lista itens previsao empenho (cod_lote, cod_previsao_empenho)
-		r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuthMod(s.GetItens_previsao_empenhoByID))).Methods(http.MethodGet)
-
-
-
-	*/
 	/*
 		//**********Rotas em Assunto
 		//----------Rotas de Assunto

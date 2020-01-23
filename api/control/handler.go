@@ -61,20 +61,20 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 			ROTAS EM LOTE
 	=========================	*/
 
-	//lista lote
-	r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLote))).Methods(http.MethodGet)
+	//	LISTA LOTE
+	r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLotes))).Methods(http.MethodGet)
 
-	//salva lote
-	r.HandleFunc(config.LOTE_PATH_CREATELOTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateLote))).Methods(http.MethodPost)
+	//	SALVA LOTE
+	r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.AddLote))).Methods(http.MethodPost)
 
-	//edita lote
-	r.HandleFunc("/read/lote/{id}/{cod_lote}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote))).Methods(http.MethodPut)
+	//	EDITA LOTE
+	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote))).Methods(http.MethodPut)
 
-	//lista lote por ID
+	//	LISTA LOTE POR ID
 	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteByID))).Methods(http.MethodGet)
 
-	//apaga lote ID
-	//r.HandleFunc().Methods(http.MethodDelete)
+	//	APAGA LOTE POR ID
+	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteLote))).Methods(http.MethodDelete)
 
 	//---------Rotas de Reajuste
 

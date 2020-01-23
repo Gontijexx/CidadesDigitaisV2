@@ -119,7 +119,7 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 func (entidade *Entidade) DeleteEntidade(db *gorm.DB, entidadeID uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Usuario{}).Where("cnpj = ?", entidadeID).Take(&Entidade{}).Delete(&Entidade{})
+	db = db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Take(&Entidade{}).Delete(&Entidade{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

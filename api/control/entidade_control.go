@@ -10,15 +10,21 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
-//	Funcao criar uma entidade no banco de dados
-func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
+/*  =========================
+	FUNCAO ADICIONAR ENTIDADE
+=========================  */
 
-	//Autorização de Modulo
+func (server *Server) AddEntidade(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 12001)
 
-	//	O metodo RealAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
+	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -26,6 +32,10 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Estrutura models.Entidade{} "renomeada"
 	entidade := models.Entidade{}
+
+	/*	O metodo Prepare deve ser chamado em metodos de POST e PUT
+		a fim de preparar os dados a serem recebidos pelo banco de dados	*/
+	entidade.Prepare()
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct entidade referenciada (&struct)
 	err = json.Unmarshal(body, &entidade)
@@ -49,7 +59,7 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 	//	Status 500
 	if err != nil {
 
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Entidade, Check your details"))
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Entidade, Check server details"))
 		return
 	}
 
@@ -60,12 +70,20 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
 }
 
-/*
+/*  =========================
+	FUNCAO LISTAR ENTIDADE POR ID
+=========================  */
+
 func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 
+	//	Autorizacao de Modulo
+	config.AuthMod(w, r, 12002)
+
+	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	entidadeID, err := strconv.ParseUint(vars["id"], 10, 64)
+	//	entidadeID armazena a chave primaria da tabela entidade
+	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -73,6 +91,7 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 
 	entidade := models.Entidade{}
 
+	//	entidadeGotten recebe o dado buscado no banco de dados
 	entidadeGotten, err := entidade.FindEntidadeByID(server.DB, uint64(entidadeID))
 
 	if err != nil {
@@ -80,18 +99,47 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, entidadeGotten)
 
 }
 
+/*  =========================
+	FUNCAO LISTAR ENTIDADES
+=========================  */
+
 func (server *Server) GetEntidades(w http.ResponseWriter, r *http.Request) {
 
+	//	Autorizacao de Modulo
+	config.AuthMod(w, r, 12002)
+
+	entidade := models.Entidade{}
+
+	//	entidades armazena os dados buscados no banco de dados
+	entidades, err := entidade.FindEntidades(server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct buscada
+	responses.JSON(w, http.StatusOK, entidades)
 }
+
+/*  =========================
+	FUNCAO EDITAR ENTIDADE
+=========================  */
 
 func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 
+	//	Autorizacao de Modulo
+	config.AuthMod(w, r, 12003)
+
+	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
-	entidadeID, err := strconv.ParseUint(vars["id"], 10, 64)
+
+	//	entidadeID armazena a chave primaria da tabela entidade
+	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -104,6 +152,9 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	}
 
 	entidade := models.Entidade{}
+
+	entidade.Prepare()
+
 	err = json.Unmarshal(body, &entidade)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -116,29 +167,41 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updateEntidade, err := entidade.UpdateEntidade(server.DB, uint64(entidadeID))
+	//	updateEntidade recebe a nova entidade, a que foi alterada
+	updateEntidade, err := entidade.UpdateEntidade(server.DB, entidadeID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
 
+	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updateEntidade)
 }
 
+/*  =========================
+	FUNCAO DELETAR ENTIDADE
+=========================  */
+
 func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 
-	// vars recebe o ID contido na URL
+	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
+	config.AuthMod(w, r, 12003)
+
+	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
 	entidade := models.Entidade{}
 
-	entidadeID, err := strconv.ParseUint(vars["id"], 10, 64)
+	//	entidadeID armazena a chave primaria da tabela entidade
+	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 
+	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
 	_, err = entidade.DeleteEntidade(server.DB, uint64(entidadeID))
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
@@ -146,6 +209,7 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Entity", fmt.Sprintf("%d", entidadeID))
+
+	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")
 }
-*/

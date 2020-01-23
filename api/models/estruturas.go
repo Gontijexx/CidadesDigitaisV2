@@ -1,6 +1,8 @@
 package models
 
-//	Estrutura referente a tabela Entidade
+/*  =========================
+	TABELA ENTIDADE
+=========================  */
 
 type Entidade struct {
 	Cnpj           uint64 `gorm:"primary_key;not null;size:14" json:"cnpj"`
@@ -14,6 +16,10 @@ type Entidade struct {
 	Observacao     string `gorm:"size:1000;default:null" json:"observacao" validate: "alphanum":`
 }
 
+/*  =========================
+	TABELA LOTE
+=========================  */
+
 type Lote struct {
 	Cod_lote      uint32 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate: "required":`
 	Cnpj          string `gorm:"foreing_key:Cnpj;not null;size:14" json:"cnpj" validate: "required":`
@@ -23,11 +29,19 @@ type Lote struct {
 	Dt_reajuste   string `gorm:"size:10;default:null" json:"dt_reajuste" validate: "alphanum":`
 }
 
+/*  =========================
+	TABELA REAJUSTE
+=========================  */
+
 type Reajuste struct {
 	Ano_ref    uint32  `gorm:"primary_key;not null;size:11" json:"ano_ref" validate: "required":`
 	Cod_lote   uint32  `gorm:"primary key;foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Percentual float64 `gorm:"default:null" json:"percentual" validate: "alphanum":`
 }
+
+/*  =========================
+	TABELA CD
+=========================  */
 
 type Cd struct {
 	Cod_ibge uint32 `gorm:"primary_key;foreing_key:Cod_ibge;not null;size:7" json:"cod_ibge" validate: "required":`

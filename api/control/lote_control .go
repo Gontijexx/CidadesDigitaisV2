@@ -17,6 +17,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+/*  =========================
+	FUNCAO ADICIONAR LOTE
+=========================  */
+
 func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 
 	//Autorização de Modulo
@@ -66,10 +70,16 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 
 }
 
+/*  =========================
+	FUNCAO LISTAR LOTE
+=========================  */
+
 func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
 
+	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
+	//	loteID armazena a chave primaria da tabela entidade
 	loteID, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -78,6 +88,7 @@ func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
 
 	lote := models.Lote{}
 
+	//	loteGotten recebe o dado buscado no banco de dados
 	loteGotten, err := lote.FindLoteByID(server.DB, uint64(loteID))
 
 	if err != nil {
@@ -85,9 +96,14 @@ func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, loteGotten)
 
 }
+
+/*  =========================
+	FUNCAO LISTAR LOTE POR ID
+=========================  */
 
 func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 
@@ -105,6 +121,10 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, loteGotten)
 }
+
+/*  =========================
+	FUNCAO ATUALIZAR LOTE
+=========================  */
 
 func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 

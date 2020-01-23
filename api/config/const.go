@@ -26,9 +26,8 @@ const (
 =========================  */
 
 const (
-	ENTIDADE_PATH                = "/read/entidade"
-	ENTIDADE_ID_PATH             = "/read/entidade/{id}"
-	ENTIDADE_PATH_CREATEENTIDADE = "/read/entidade/createEntidade"
+	ENTIDADE_PATH    = "/read/entidade"
+	ENTIDADE_ID_PATH = "/read/entidade/{cnpj}"
 )
 
 /*  =========================
@@ -74,9 +73,8 @@ const (
 =========================  */
 
 const (
-	CD_PATH          = "/read/cd"
-	CD_ID_PATH       = "/read/cd/{id}"
-	CD_PATH_CREATECD = "/read/cd/{modulo}"
+	CD_PATH    = "/read/cd"
+	CD_ID_PATH = "/read/cd/{cod_ibge}"
 )
 
 /*  =========================

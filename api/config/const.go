@@ -26,8 +26,8 @@ const (
 =========================  */
 
 const (
-	ENTIDADE_PATH    = "/read/entidade/{id}"
-	ENTIDADE_ID_PATH = "/read/entidade/{id}/{cnpj}"
+	ENTIDADE_PATH    = "/read/entidade"
+	ENTIDADE_ID_PATH = "/read/entidade/{cnpj}"
 )
 
 /*  =========================

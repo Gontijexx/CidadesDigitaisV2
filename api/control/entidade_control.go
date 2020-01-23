@@ -33,6 +33,10 @@ func (server *Server) AddEntidade(w http.ResponseWriter, r *http.Request) {
 	//	Estrutura models.Entidade{} "renomeada"
 	entidade := models.Entidade{}
 
+	/*	O metodo Prepare deve ser chamado em metodos de POST e PUT
+		a fim de preparar os dados a serem recebidos pelo banco de dados	*/
+	entidade.Prepare()
+
 	//	Unmarshal analisa o JSON recebido e armazena na struct entidade referenciada (&struct)
 	err = json.Unmarshal(body, &entidade)
 
@@ -41,10 +45,6 @@ func (server *Server) AddEntidade(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-
-	/*	O metodo Prepare deve ser chamado em metodos de POST e PUT
-		a fim de preparar os dados a serem recebidos pelo banco de dados	*/
-	entidade.Prepare()
 
 	if err = validation.Validator.Struct(entidade); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", err)
@@ -139,7 +139,7 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	//	entidadeID armazena a chave primaria da tabela entidade
-	entidadeID, err := strconv.ParseUint(vars["id"], 10, 64)
+	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -153,13 +153,13 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 
 	entidade := models.Entidade{}
 
+	entidade.Prepare()
+
 	err = json.Unmarshal(body, &entidade)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-
-	entidade.Prepare()
 
 	if err = validation.Validator.Struct(entidade); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", err)
@@ -168,7 +168,7 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateEntidade recebe a nova entidade, a que foi alterada
-	updateEntidade, err := entidade.UpdateEntidade(server.DB, uint64(entidadeID))
+	updateEntidade, err := entidade.UpdateEntidade(server.DB, entidadeID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
@@ -194,7 +194,7 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 	entidade := models.Entidade{}
 
 	//	entidadeID armazena a chave primaria da tabela entidade
-	entidadeID, err := strconv.ParseUint(vars["id"], 10, 64)
+	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return

@@ -37,6 +37,7 @@ func (entidade *Entidade) Prepare() {
 
 func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 
+	//	Adiciona um novo elemento ao banco de dados
 	err := db.Debug().Create(&entidade).Error
 	if err != nil {
 		return &Entidade{}, err
@@ -51,6 +52,7 @@ func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 
 func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
 
+	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Entidade{}).Where("cnpj = ?", entidadeID).Take(&entidade).Error
 
 	if err != nil {
@@ -67,6 +69,8 @@ func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Ent
 func (entidade *Entidade) FindEntidades(db *gorm.DB) (*[]Entidade, error) {
 
 	entity := []Entidade{}
+
+	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Model(&Entidade{}).Limit(100).Find(&entity).Error
 	if err != nil {
 		return &[]Entidade{}, err
@@ -80,7 +84,8 @@ func (entidade *Entidade) FindEntidades(db *gorm.DB) (*[]Entidade, error) {
 
 func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
 
-	db = db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Take(&entidade).UpdateColumns(
+	//	Permite a atualizacao dos campos indicados
+	db = db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Take(&Entidade{}).UpdateColumns(
 		map[string]interface{}{
 			"nome":           entidade.Nome,
 			"endereco":       entidade.Endereco,
@@ -97,20 +102,23 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 		return &Entidade{}, db.Error
 	}
 
+	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Take(&entidade).Error
 	if err != nil {
 		return &Entidade{}, err
 	}
 
+	// retorna o elemento que foi alterado
 	return entidade, err
 }
 
 /*  =========================
-	FUNCAO DELETER ENTIDADE POR ID
+	FUNCAO DELETAR ENTIDADE POR ID
 =========================  */
 
 func (entidade *Entidade) DeleteEntidade(db *gorm.DB, entidadeID uint64) (int64, error) {
 
+	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Usuario{}).Where("cnpj = ?", entidadeID).Take(&Entidade{}).Delete(&Entidade{})
 
 	if db.Error != nil {

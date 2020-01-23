@@ -14,7 +14,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	r = s.Router
 	//Home
-	r.HandleFunc("/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
+	r.HandleFunc("/{id}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
 
 	/*	=========================
 			ROTAS EM USUARIO
@@ -27,7 +27,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc("/read/usuario", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUsers))).Methods(http.MethodGet)
 
 	//SALVA USUARIO
-	r.HandleFunc("/read/usuario/createUser", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUser))).Methods(http.MethodPost)
+	r.HandleFunc("/read/usuario/createuser", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUser))).Methods(http.MethodPost)
 
 	//LISTA USUARIO
 	r.HandleFunc("/read/usuario/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUser))).Methods(http.MethodGet)
@@ -55,7 +55,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidadeByID))).Methods(http.MethodGet)
 
 	//	APAGA ENTIDADE POR ID
-	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(s.DeleteEntidade)).Methods(http.MethodDelete)
+	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEntidade))).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM LOTE

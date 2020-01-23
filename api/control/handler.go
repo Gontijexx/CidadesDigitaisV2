@@ -64,8 +64,8 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//lista lote
 	r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLote))).Methods(http.MethodGet)
 
-	//salva lote
-	r.HandleFunc(config.LOTE_PATH_CREATELOTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateLote))).Methods(http.MethodPost)
+	//	SALVA LOTE
+	r.HandleFunc(config.LOTE_PATH_CREATELOTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.AddLote))).Methods(http.MethodPost)
 
 	//edita lote
 	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote))).Methods(http.MethodPut)

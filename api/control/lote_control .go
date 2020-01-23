@@ -17,16 +17,32 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
+/*  =========================
+	FUNCAO ADICIONAR LOTE
+=========================  */
 
+func (server *Server) AddLote(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	config.AuthMod(w, r, 14001)
+
+	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 	}
 
+	//	Estrutura models.Lote{} "renomeada"
 	lote := models.Lote{}
 
+	/*	O metodo Prepare deve ser chamado em metodos de POST e PUT
+		a fim de preparar os dados a serem recebidos pelo banco de dados	*/
+	lote.Prepare()
+
+	//	Unmarshal analisa o JSON recebido e armazena na struct referenciada (&struct)
 	err = json.Unmarshal(body, &lote)
+
+	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -38,59 +54,77 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	SaveLote eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	loteCreated, err := lote.SaveLote(server.DB)
 
+	//	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
+	//	Status 500
 	if err != nil {
 
-		formattedError := config.FormatError(err.Error())
-
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Entidade, Check server details"))
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, loteCreated.Cnpj))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, loteCreated.Cod_lote))
+
+	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, loteCreated)
 
 }
 
-func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-
-	loteID, err := strconv.ParseUint(vars["id"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-
-	lote := models.Lote{}
-
-	loteGotten, err := lote.FindLoteByID(server.DB, uint64(loteID))
-
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-
-	responses.JSON(w, http.StatusOK, loteGotten)
-
-}
+/*  =========================
+	FUNCAO LISTAR LOTE POR ID
+=========================  */
 
 func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 
+	//	Autorizacao de Mudulo
+	config.AuthMod(w, r, 14002)
+
+	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
-	lId, err := strconv.ParseUint(vars["id"], 10, 32)
+
+	//	loteID armazena a chave primaria da tabela entidade
+	loteID, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 	lote := models.Lote{}
-	loteGotten, err := lote.FindLoteByID(server.DB, uint64(lId))
+
+	//	loteGotten recebe o dado buscado no banco de dados
+	loteGotten, err := lote.FindLoteByID(server.DB, uint64(loteID))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
+
+	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, loteGotten)
+}
+
+/*  =========================
+	FUNCAO LISTAR LOTES
+=========================  */
+
+func (server *Server) GetLotes(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	config.AuthMod(w, r, 14002)
+
+	lote := models.Lote{}
+
+	//	lotes armazena os dados buscados no banco de dados
+	lotes, err := lote.FindLotes(server.DB)
+
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct buscada
+	responses.JSON(w, http.StatusOK, lotes)
+
 }
 
 func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {

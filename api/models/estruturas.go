@@ -5,7 +5,7 @@ package models
 =========================  */
 
 type Entidade struct {
-	Cnpj           uint64 `gorm:"primary_key;default:not null;size:14" json:"cnpj"`
+	Cnpj           uint64 `gorm:"primary_key;default:not null;size:14" json:"cnpj" validate: "number":`
 	Nome           string `gorm:"size:50;default:null" json:"nome" validate: "alphanum":`
 	Endereco       string `gorm:"size:100;default:null" json:"endereco" validate: "alphanum":`
 	Numero         string `gorm:"size:10;default:null" json:"numero" validate: "alphanum":`
@@ -21,8 +21,8 @@ type Entidade struct {
 =========================  */
 
 type Lote struct {
-	Cod_lote      uint32 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate: "required":`
-	Cnpj          string `gorm:"foreing_key:Cnpj;not null;size:14" json:"cnpj" validate: "required":`
+	Cod_lote      uint64 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate: "required":`
+	Cnpj          uint64 `gorm:"foreing_key:Cnpj;not null;size:14" json:"cnpj" validate: "required, number":`
 	Contrato      string `gorm:"size:10;default:null" json:"contrato" validate: "alphanum":`
 	Dt_inicio_vig string `gorm:"size:10;default:null" json:"dt_inicio_vig" validate: "alphanum":`
 	Dt_final_vig  string `gorm:"size:10;default:null" json:"dt_final_vig" validate: "alphanum":`

@@ -82,9 +82,8 @@ const (
 =========================  */
 
 const (
-	CD_PATH          = "/read/cd"
-	CD_ID_PATH       = "/read/cd/:id"
-	CD_PATH_CREATECD = "/read/cd/createcd"
+	CD_PATH    = "/read/cd"
+	CD_ID_PATH = "/read/cd/{cod_ibge}"
 )
 
 /*  =========================
@@ -129,7 +128,16 @@ const (
 )
 
 /*  =========================
-	LOTESITENS PATHS HTTP
+	LOTE ITENS PATHS HTTP
+=========================  */
+
+const (
+	LOTEITENS_PATH    = "/read/loteItens"
+	LOTEITENS_ID_PATH = "/read/loteItens/:id"
+)
+
+/*  =========================
+	REAJUSTE PATHS HTTP
 =========================  */
 
 const (
@@ -137,8 +145,6 @@ const (
 	REAJUSTE_ID_PATH             = "/read/reajuste/{cod_lote}"
 	REAJUSTE_PATH                = "/read/reajuste"
 	REAJUSTE_DEL                 = "/read/reajuste/{cod_lote}/{ano_ref}"
-	LOTEITENS_PATH               = "/read/loteItens"
-	LOTEITENS_ID_PATH            = "/read/loteItens/:id"
 )
 
 /*  =========================

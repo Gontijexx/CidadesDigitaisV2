@@ -25,6 +25,7 @@ func (server *Server) AddLote(w http.ResponseWriter, r *http.Request) {
 	config.AuthMod(w, r, 14001)
 
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -33,11 +34,13 @@ func (server *Server) AddLote(w http.ResponseWriter, r *http.Request) {
 	//	Estrutura models.Lote{} "renomeada"
 	lote := models.Lote{}
 
+
 	/*	O metodo Prepare deve ser chamado em metodos de POST e PUT
 		a fim de preparar os dados a serem recebidos pelo banco de dados	*/
 	lote.Prepare()
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct referenciada (&struct)
+
 	err = json.Unmarshal(body, &lote)
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
@@ -55,7 +58,9 @@ func (server *Server) AddLote(w http.ResponseWriter, r *http.Request) {
 	//	SaveLote eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	loteCreated, err := lote.SaveLote(server.DB)
 
+
 	//	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
+
 	//	Status 500
 	if err != nil {
 
@@ -64,6 +69,7 @@ func (server *Server) AddLote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, loteCreated.Cod_lote))
+
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, loteCreated)
@@ -84,6 +90,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 
 	//	loteID armazena a chave primaria da tabela entidade
 	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 32)
+
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return

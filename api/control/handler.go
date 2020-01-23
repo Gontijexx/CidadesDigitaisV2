@@ -14,7 +14,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	r = s.Router
 	//Home
-	r.HandleFunc("/{id}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
+	r.HandleFunc("/", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
 
 	/*	=========================
 			ROTAS EM USUARIO
@@ -82,7 +82,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//nao existe
 
 	//salva reajuste
-	r.HandleFunc(config.REAJUSTE_PATH_CREATEREAJUSTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateReajuste))).Methods(http.MethodPost)
+	//r.HandleFunc(config.REAJUSTE_PATH_CREATEREAJUSTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateReajuste))).Methods(http.MethodPost)
 
 	//lista reajuste por ID
 	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetReajusteByID))).Methods(http.MethodGet)
@@ -96,7 +96,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCd))).Methods(http.MethodGet)
 
 	//salva cd
-	r.HandleFunc(config.CD_PATH_CREATECD, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCd))).Methods(http.MethodPost)
+	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCd))).Methods(http.MethodPost)
 
 	//edita cd
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCd))).Methods(http.MethodPut)

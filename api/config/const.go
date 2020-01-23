@@ -31,6 +31,15 @@ const (
 )
 
 /*  =========================
+	LOTE PATHS HTTP
+=========================  */
+
+const (
+	LOTE_PATH    = "/read/lote"
+	LOTE_ID_PATH = "/read/lote/{cod_lote}"
+)
+
+/*  =========================
 	TIPOLOGIA PATHS HTTP
 =========================  */
 
@@ -120,13 +129,10 @@ const (
 )
 
 /*  =========================
-	LOTES PATHS HTTP
+	LOTESITENS PATHS HTTP
 =========================  */
 
 const (
-	LOTE_PATH                    = "/read/lote"
-	LOTE_ID_PATH                 = "/read/lote/:id"
-	LOTE_PATH_CREATELOTE         = "/read/lote/createlote"
 	REAJUSTE_PATH_CREATEREAJUSTE = "/read/reajuste/createreajuste"
 	REAJUSTE_ID_PATH             = "/read/reajuste/{cod_lote}"
 	REAJUSTE_PATH                = "/read/reajuste"

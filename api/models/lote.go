@@ -112,7 +112,7 @@ func (lote *Lote) UpdateLote(db *gorm.DB, loteID uint64) (*Lote, error) {
 	FUNCAO DELETAR LOTE POR ID
 =========================  */
 
-func (lote *Lote) DeleteEntidade(db *gorm.DB, loteID uint64) (int64, error) {
+func (lote *Lote) DeleteLote(db *gorm.DB, loteID uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Lote{}).Where("cnpj = ?", loteID).Take(&Lote{}).Delete(&Lote{})

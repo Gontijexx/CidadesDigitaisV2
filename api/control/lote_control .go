@@ -1,13 +1,11 @@
 package control
 
 import (
-	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/models"
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -85,7 +83,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	//	loteID armazena a chave primaria da tabela entidade
-	loteID, err := strconv.ParseUint(vars["id"], 10, 32)
+	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -127,45 +125,90 @@ func (server *Server) GetLotes(w http.ResponseWriter, r *http.Request) {
 
 }
 
+/*  =========================
+	FUNCAO EDITAR LOTE
+=========================  */
+
 func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 
+	//	Autorizacao de Modulo
+	config.AuthMod(w, r, 14003)
+
+	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
-	lid, err := strconv.ParseUint(vars["id"], 10, 32)
+
+	//	entidadeID armazena a chave primaria da tabela entidade
+	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
+
 	lote := models.Lote{}
+
+	lote.Prepare()
+
 	err = json.Unmarshal(body, &lote)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
+
 	if err = validation.Validator.Struct(lote); err != nil {
 		log.Printf("[WARN] invalid lote information, because, %v\n", err)
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
-	tokenID, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
-	if tokenID != uint32(lid) {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
-		return
-	}
 
-	updatedLote, err := lote.UpdateLote(server.DB, uint64(lid))
+	//	updateLote recebe a nova entidade, a que foi alterada
+	updatedLote, err := lote.UpdateLote(server.DB, uint64(loteID))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
+
+	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updatedLote)
+}
+
+/*  =========================
+	FUNCAO DELETAR LOTE
+=========================  */
+
+func (server *Server) DeleteLote(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
+	config.AuthMod(w, r, 14003)
+
+	// Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	lote := models.Lote{}
+
+	//	loteID armazena a chave primaria da tabela entidade
+	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
+	_, err = lote.DeleteLote(server.DB, uint64(loteID))
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	w.Header().Set("Entity", fmt.Sprintf("%d", loteID))
+
+	//	Retorna o Status 204, indicando que a informacao foi deletada
+	responses.JSON(w, http.StatusNoContent, "")
 }

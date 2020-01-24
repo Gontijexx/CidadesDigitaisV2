@@ -93,7 +93,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//**********Rotas em Cd
 
 	//lista cd
-	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCd))).Methods(http.MethodGet)
+	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCD))).Methods(http.MethodGet)
 
 	//salva cd
 	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCd))).Methods(http.MethodPost)
@@ -102,21 +102,24 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCd))).Methods(http.MethodPut)
 
 	//lista cd por ID
-	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCdByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDByID))).Methods(http.MethodGet)
 
 	//----------Rotas de Cd Itens
 	//edita cd itens
-	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCd_itens))).Methods(http.MethodPut)
+	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCdItens))).Methods(http.MethodPut)
+
+	//lista cd itens
+	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCdItens))).Methods(http.MethodGet)
 
 	//lista cd itens ID
-	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCd_itensByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCdItem))).Methods(http.MethodGet)
 
 	//----------Rotas de Lote Itens
 	//edita lote itens
 	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote_itens))).Methods(http.MethodPut)
 
 	//lista lote itens ID
-	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCd_itensByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLote_itensByID))).Methods(http.MethodGet)
 
 	//----------Rotas de PrevisaoEmpenho
 	//lista previsao empenho

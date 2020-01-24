@@ -72,7 +72,7 @@ func (server *Server) CreateCd(w http.ResponseWriter, r *http.Request) {
 	FUNCAO LISTAR CD
 =========================  */
 
-func (server *Server) GetCd(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetCD(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 13002)
@@ -95,7 +95,7 @@ func (server *Server) GetCd(w http.ResponseWriter, r *http.Request) {
 	FUNCAO LISTAR CD POR ID
 =========================  */
 
-func (server *Server) GetCdByID(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 13002)

@@ -41,11 +41,13 @@ const (
 
 /*  =========================
 	PREVISAO EMPENHO PATHS HTTP
+	ITENS PREVISAO EMPENHO PATHS HTTP
 =========================  */
 
 const (
-	PREVISAO_EMPENHO_PATH    = "/read/previsaoEmpenho"
-	PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
+	PREVISAO_EMPENHO_PATH          = "/read/previsaoEmpenho"
+	PREVISAO_EMPENHO_ID_PATH       = "/read/previsaoEmpenho/{cod_previsao_empenho}"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
 )
 
 /*  =========================
@@ -53,8 +55,7 @@ const (
 =========================  */
 
 const (
-	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itens_previsao_empenho"
-	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itens_previsao_empenho/{cod_previsao_empenho}/{cod_item}/{cod_tipo_item}"
+	ITENS_PREVISAO_EMPENHO_PATH = "/read/itens_previsao_empenho"
 )
 
 /*  =========================

@@ -39,7 +39,7 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
 
 	//	itensPrevisaoEmpenhoGotten recebe o dado buscado no banco de dados
-	itensPrevisaoEmpenhoGotten, err := itensPrevisaoEmpenho.FindItensPrevisaoEmpenhoByID(server.DB, uint64(itensPrevisaoEmpenhoID)))
+	itensPrevisaoEmpenhoGotten, err := itensPrevisaoEmpenho.FindItensPrevisaoEmpenhoByID(server.DB, uint64(itensPrevisaoEmpenhoID))
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -98,7 +98,7 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 	}
 
 	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
-	err = json.Unmarshal(body, &itens_previsao_empenho)
+	err = json.Unmarshal(body, &itensPrevisaoEmpenho)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -111,7 +111,7 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 	}
 
 	//	updateEntidade recebe a nova entidade, a que foi alterada
-	updateItensPrevisaoEmpenho, err := itensPrevisaoEmpenho.UpdateItensPrevisaoEmpenho(server.DB, uint64(itensPrevisaEempenhoID))
+	updateItensPrevisaoEmpenho, err := itensPrevisaoEmpenho.UpdateItensPrevisaoEmpenho(server.DB, uint64(itensPrevisaoEmpenhoID))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)

@@ -138,7 +138,7 @@ func (server *Server) UpdateCd(w http.ResponseWriter, r *http.Request) {
 	//	cdID armazena a chave primaria da tabela cd
 	cdID, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 

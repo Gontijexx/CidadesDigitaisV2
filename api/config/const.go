@@ -58,17 +58,6 @@ const (
 )
 
 /*  =========================
-	PREVISAO EMPENHO PATHS HTTP
-=========================  */
-
-const (
-	PREV_PATH           = "/read/previsaoEmpenho"
-	PREV_ID_PATH        = "/read/previsaoEmpenho/:id"
-	PREVITENS_ID_PATH   = "/read/previsaoEmpenhoItens"
-	PREVITENS_LIST_PATH = "/read/previsaoEmpenhoItens/:cod_lote/:cod_previsao_empenho"
-)
-
-/*  =========================
 	PREFEITOS PATHS HTTP
 =========================  */
 
@@ -141,10 +130,8 @@ const (
 =========================  */
 
 const (
-	REAJUSTE_PATH_CREATEREAJUSTE = "/read/reajuste/createreajuste"
-	REAJUSTE_ID_PATH             = "/read/reajuste/{cod_lote}"
 	REAJUSTE_PATH                = "/read/reajuste"
-	REAJUSTE_DEL                 = "/read/reajuste/{cod_lote}/{ano_ref}"
+	REAJUSTE_ID_PATH             = "/read/reajuste/{ano_ref}/{cod_lote}"
 )
 
 /*  =========================
@@ -249,12 +236,13 @@ const (
 
 /*  =========================
 	PREVISAO EMPENHO PATHS HTTP
+	ITENS PREVISAO EMPENHO PATHS HTTP
 =========================  */
 
 const (
-	PREVISAO_EMPENHO_PATH                        = "/read/previsao_empenho"
-	PREVISAO_EMPENHO_ID_PATH                     = "/read/previsao_empenho/{cod_previsao_empenho}"
-	PREVISAO_EMPENHO_PATH_CREATEPREVISAO_EMPENHO = "/read/previsao_empenho/createprevisao_empenho"
+	PREVISAO_EMPENHO_PATH          = "/read/previsaoEmpenho"
+	PREVISAO_EMPENHO_ID_PATH       = "/read/previsaoEmpenho/{cod_previsao_empenho}"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
 )
 
 /*  =========================
@@ -262,6 +250,5 @@ const (
 =========================  */
 
 const (
-	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itens_previsao_empenho"
-	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itens_previsao_empenho/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+	ITENS_PREVISAO_EMPENHO_PATH = "/read/itens_previsao_empenho"
 )

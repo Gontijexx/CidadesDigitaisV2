@@ -82,13 +82,19 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//nao existe
 
 	//salva reajuste
-	r.HandleFunc(config.REAJUSTE_PATH_CREATEREAJUSTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateReajuste))).Methods(http.MethodPost)
+	r.HandleFunc(config.REAJUSTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.AddReajuste))).Methods(http.MethodPost)
+
+	//lista reajuste
+	r.HandleFunc(config.REAJUSTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetReajustes))).Methods(http.MethodGet)
 
 	//lista reajuste por ID
-	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetReajusteByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetReajuste))).Methods(http.MethodGet)
+
+	//edita reajuste por ID
+	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateReajuste))).Methods(http.MethodGet)
 
 	//apaga reajuste (lote_cod_lote, ano_ref)
-	r.HandleFunc(config.REAJUSTE_DEL, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteReajuste))).Methods(http.MethodDelete)
+	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteReajuste))).Methods(http.MethodDelete)
 
 	//**********Rotas em Cd
 
@@ -134,12 +140,18 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//lista previsao emprenho por ID
 	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisao_empenhoByID))).Methods(http.MethodGet)
 
-	//----------Rotas de ItensPrevisaoEmpenho
-	//edita itens previsao empenho
-	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItens_previsao_empenho))).Methods(http.MethodPut)
+	/*	=========================
+			ROTAS EM ITENS PREVISAO EMPENHO
+	=========================	*/
 
-	//lista itens previsao empenho (cod_lote, cod_previsao_empenho)
-	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItens_previsao_empenhoByID))).Methods(http.MethodGet)
+	//	EDITA ITENS PREVISAO EMPENHO
+	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensPrevisaoEmpenho))).Methods(http.MethodPut)
+
+	//	LISTA ITENS PREVISAO EMPENDO
+	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensPrevisaoEmpenhoByID))).Methods(http.MethodGet)
+
+	/*
+		//**********Rotas em Assunto
 
 	/*
 		//**********Rotas em Assunto

@@ -34,8 +34,8 @@ type Lote struct {
 =========================  */
 
 type Reajuste struct {
-	Ano_ref    uint32  `gorm:"primary_key;not null;size:11" json:"ano_ref" validate: "required":`
-	Cod_lote   uint32  `gorm:"primary key;foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
+	Ano_ref    uint64  `gorm:"primary_key;not null;size:11" json:"ano_ref" validate: "required":`
+	Cod_lote   uint64  `gorm:"primary key;foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Percentual float64 `gorm:"default:null" json:"percentual" validate: "alphanum":`
 }
 
@@ -52,6 +52,10 @@ type Cd struct {
 	Data_imp string `gorm:"default:null" json:"data_imp" validate: "alphanum":`
 }
 
+/*  =========================
+	TABELA CD_ITENS
+=========================  */
+
 type Cd_itens struct {
 	Cod_ibge                     uint32 `gorm:"primary_key;foreing_key:Cod_ibge;not null;size:7" json:"cod_ibge" validate: "required":`
 	Cod_item                     uint32 `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
@@ -61,12 +65,20 @@ type Cd_itens struct {
 	Quantidade_termo_instalacao  uint32 `gorm:"default:null;size:11" json:"quantidade_termo_instalacao" validate: "alphanum":`
 }
 
+/*  =========================
+	TABELA LOTE_ITENS
+=========================  */
+
 type Lote_itens struct {
 	Cod_lote      uint32  `gorm:"primary_key;foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Cod_item      uint32  `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
 	Cod_tipo_item uint32  `gorm:"primary_key;foreing_key:Cod_tipo_item;not null;size:11" json:"cod_tipo_item" validate: "required":`
 	Preco         float64 `gorm:"default:null;size:12" json:"preco" validate: "alphanum":`
 }
+
+/*  =========================
+	TABELA PREVISAO_EMPENHO
+=========================  */
 
 type Previsao_empenho struct {
 	Cod_previsao_empenho uint32 `gorm:"AUTO_INCREMENT;primary_key;foreing_key:Cod_previsao_empenho;not null;size:11" json:"cod_previsao_empenho" validate: "required":`
@@ -77,6 +89,10 @@ type Previsao_empenho struct {
 	Ano_referencia       uint32 `gorm:"default:null;size:11" json:"ano_referencia" validate: "alphanum":`
 }
 
+/*  =========================
+	TABELA ITENS_PREVISAO_EMPENHO
+=========================  */
+
 type Itens_previsao_empenho struct {
 	Cod_previsao_empenho uint32  `gorm:"primary_key;;not null;size:11" json:"Cod_previsao_empenho" validate: "required":`
 	Cod_item             uint32  `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
@@ -84,4 +100,17 @@ type Itens_previsao_empenho struct {
 	Cod_lote             uint32  `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Valor                float64 `gorm:"default:null;size:12" json:"valor" validate: "alphanum":`
 	Quantidade           uint32  `gorm:"default:null;size:11" json:"quantidade" validate: "alphanum":`
+}
+
+/*  =========================
+	TABELA CONTATO
+=========================  */
+
+type Contato struct {
+	Cod_contato 		 uint64  `gorm:"primary_key;;not null;size:11" json:"Cod_contato" validate: "required":`
+	Cnpj          		 uint64  `gorm:"default:null;size:14" json:"cnpj" validate: "required, number":`
+	Cod_ibge        	 uint64  `gorm:"default:null;size:7" json:"cod_tipo_item" validate: "required":`
+	Nome             	 string  `gorm:"default:null;size:50" json:"nome" validate: "required":`
+	Email                string  `gorm:"default:null;size:100" json:"email" validate: "email":`
+	Funcao           	 string  `gorm:"default:null;size:45" json:"funcao" validate: "alphanum":`
 }

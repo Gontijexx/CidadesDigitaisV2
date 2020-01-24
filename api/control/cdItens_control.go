@@ -39,7 +39,7 @@ func (server *Server) GetCdItem(w http.ResponseWriter, r *http.Request) {
 	cd_itens := models.Cd_itens{}
 
 	//vai utilizar o metodo para procurar o resultado de acordo com a chave
-	cd_itensGotten, err := cd_itens.FindCd_itensByID(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
+	cd_itensGotten, err := cd_itens.FindCdItem(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -63,7 +63,7 @@ func (server *Server) GetCdItens(w http.ResponseWriter, r *http.Request) {
 	cd_item := models.Cd_itens{}
 
 	//	cd_itens armazena os dados buscados no banco de dados
-	cd_itens, err := cd_item.FindAllCd_itens(server.DB)
+	cd_itens, err := cd_item.FindCdItens(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -115,8 +115,8 @@ func (server *Server) UpdateCdItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	updateCd_itens recebe a nova cd_itens, a que foi alterada
-	updateCd_itens, err := cd_itens.UpdateCd_itens(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
+	//	UpdateCdItem recebe a nova cd_itens, a que foi alterada
+	UpdateCdItem, err := cd_itens.UpdateCdItem(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
@@ -124,5 +124,5 @@ func (server *Server) UpdateCdItens(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Retorna o Status 200 e o JSON da struct alterada
-	responses.JSON(w, http.StatusOK, updateCd_itens)
+	responses.JSON(w, http.StatusOK, UpdateCdItem)
 }

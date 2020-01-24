@@ -16,7 +16,7 @@ import (
 
 	"github.com/gorilla/mux"
 )
-/*
+
 func (server *Server) CreateReajuste(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -52,7 +52,7 @@ func (server *Server) CreateReajuste(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, reajusteCreated)
 
 }
-*/
+
 func (server *Server) GetReajusteByID(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)

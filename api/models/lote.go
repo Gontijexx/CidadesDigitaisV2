@@ -115,7 +115,7 @@ func (lote *Lote) UpdateLote(db *gorm.DB, loteID uint64) (*Lote, error) {
 func (lote *Lote) DeleteLote(db *gorm.DB, loteID uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Lote{}).Where("cnpj = ?", loteID).Take(&Lote{}).Delete(&Lote{})
+	db = db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Take(&Lote{}).Delete(&Lote{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

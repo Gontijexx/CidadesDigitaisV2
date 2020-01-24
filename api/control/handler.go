@@ -14,7 +14,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	r = s.Router
 	//Home
-	r.HandleFunc("/", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
+	r.HandleFunc("/{id}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
 
 	/*	=========================
 			ROTAS EM USUARIO
@@ -82,7 +82,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//nao existe
 
 	//salva reajuste
-	//r.HandleFunc(config.REAJUSTE_PATH_CREATEREAJUSTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateReajuste))).Methods(http.MethodPost)
+	r.HandleFunc(config.REAJUSTE_PATH_CREATEREAJUSTE, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateReajuste))).Methods(http.MethodPost)
 
 	//lista reajuste por ID
 	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetReajusteByID))).Methods(http.MethodGet)

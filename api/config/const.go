@@ -128,12 +128,12 @@ const (
 )
 
 /*  =========================
-	LOTE ITENS PATHS HTTP
+	LOTESITENS PATHS HTTP
 =========================  */
 
 const (
-	LOTEITENS_PATH    = "/read/loteItens"
-	LOTEITENS_ID_PATH = "/read/loteItens/:id"
+	LOTEITENS_PATH               = "/read/loteItens"
+	LOTEITENS_ID_PATH            = "/read/loteItens/:id"
 )
 
 /*  =========================

@@ -112,7 +112,7 @@ func (server *Server) GetEntidade(w http.ResponseWriter, r *http.Request) {
 	entidade := models.Entidade{}
 
 	//	entidades armazena os dados buscados no banco de dados
-	entidades, err := entidade.FindEntidades(server.DB)
+	entidades, err := entidade.FindAllEntidade(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return

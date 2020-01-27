@@ -47,14 +47,14 @@ func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Ent
 
 func (entidade *Entidade) FindAllEntidade(db *gorm.DB) (*[]Entidade, error) {
 
-	entity := []Entidade{}
+	allEntidade := []Entidade{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Entidade{}).Limit(100).Find(&entity).Error
+	err := db.Debug().Model(&Entidade{}).Limit(100).Find(&allEntidade).Error
 	if err != nil {
 		return &[]Entidade{}, err
 	}
-	return &entity, err
+	return &allEntidade, err
 }
 
 /*  =========================

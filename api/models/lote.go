@@ -2,8 +2,6 @@ package models
 
 import (
 	"errors"
-	"html"
-	"strings"
 
 	"github.com/jinzhu/gorm"
 )
@@ -11,19 +9,6 @@ import (
 /*  =========================
 	FUNCOES QUE FAZEM CONEXAO DIRETA COM O BANCO DE DADOS
 =========================  */
-
-/*  =========================
-	FUNCAO PREPARE LOTE
-=========================  */
-
-//	Prepara as informacoes a serem escritas no banco de dados
-func (lote *Lote) Prepare() {
-	lote.Contrato = html.EscapeString(strings.TrimSpace(lote.Contrato))
-	lote.Dt_inicio_vig = html.EscapeString(strings.TrimSpace(lote.Dt_inicio_vig))
-	lote.Dt_final_vig = html.EscapeString(strings.TrimSpace(lote.Dt_final_vig))
-	lote.Dt_reajuste = html.EscapeString(strings.TrimSpace(lote.Dt_reajuste))
-
-}
 
 /*  =========================
 	FUNCAO SALVAR LOTE NO BANCO DE DADOS
@@ -60,19 +45,19 @@ func (lote *Lote) FindLoteByID(db *gorm.DB, loteID uint64) (*Lote, error) {
 }
 
 /*  =========================
-	FUNCAO LISTAR LOTES
+	FUNCAO LISTAR TODOS LOTE
 =========================  */
 
-func (lote *Lote) FindLotes(db *gorm.DB) (*[]Lote, error) {
+func (lote *Lote) FindAllLote(db *gorm.DB) (*[]Lote, error) {
 
-	lotes := []Lote{}
+	allLote := []Lote{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Lote{}).Limit(100).Find(&lotes).Error
+	err := db.Debug().Model(&Lote{}).Limit(100).Find(&allLote).Error
 	if err != nil {
 		return &[]Lote{}, err
 	}
-	return &lotes, err
+	return &allLote, err
 }
 
 /*  =========================
@@ -82,21 +67,19 @@ func (lote *Lote) FindLotes(db *gorm.DB) (*[]Lote, error) {
 func (lote *Lote) UpdateLote(db *gorm.DB, loteID uint64) (*Lote, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Take(&lote).UpdateColumns(
-		map[string]interface{}{
-			"contrato":      lote.Contrato,
-			"dt_inicio_vig": lote.Dt_inicio_vig,
-			"dt_final_vig":  lote.Dt_final_vig,
-			"dt_reajuste":   lote.Dt_reajuste,
-		},
-	)
+	err := db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Updates(
+		Lote{
+			Contrato:      lote.Contrato,
+			Dt_inicio_vig: lote.Dt_inicio_vig,
+			Dt_final_vig:  lote.Dt_final_vig,
+			Dt_reajuste:   lote.Dt_reajuste}).Error
 
-	if db.Error != nil {
-		return &Lote{}, db.Error
+	if err != nil {
+		return &Lote{}, err
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Take(&lote).Error
+	err = db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Take(&lote).Error
 	if err != nil {
 		return &Lote{}, err
 	}
@@ -116,7 +99,7 @@ func (lote *Lote) DeleteLote(db *gorm.DB, loteID uint64) (int64, error) {
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Entidade not found")
+			return 0, errors.New("Lote not found")
 		}
 		return 0, db.Error
 	}

@@ -33,12 +33,7 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 	//	Estrutura models.Lote{} "renomeada"
 	lote := models.Lote{}
 
-	/*	O metodo Prepare deve ser chamado em metodos de POST e PUT
-		a fim de preparar os dados a serem recebidos pelo banco de dados	*/
-	lote.Prepare()
-
 	//	Unmarshal analisa o JSON recebido e armazena na struct referenciada (&struct)
-
 	err = json.Unmarshal(body, &lote)
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
@@ -103,10 +98,10 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR LOTES
+	FUNCAO LISTAR TODOS LOTE
 =========================  */
 
-func (server *Server) GetLotes(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 14002)
@@ -114,7 +109,7 @@ func (server *Server) GetLotes(w http.ResponseWriter, r *http.Request) {
 	lote := models.Lote{}
 
 	//	lotes armazena os dados buscados no banco de dados
-	lotes, err := lote.FindLotes(server.DB)
+	lotes, err := lote.FindAllLote(server.DB)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
@@ -152,8 +147,6 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lote := models.Lote{}
-
-	lote.Prepare()
 
 	err = json.Unmarshal(body, &lote)
 	if err != nil {

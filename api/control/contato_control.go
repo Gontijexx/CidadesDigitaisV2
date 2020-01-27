@@ -35,7 +35,7 @@ func (server *Server) AddContato(w http.ResponseWriter, r *http.Request) {
 
 	/*	O metodo Prepare deve ser chamado em metodos de POST e PUT
 		a fim de preparar os dados a serem recebidos pelo banco de dados	*/
-	contato.Prepare()
+	//contato.Prepare()
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct contato referenciada (&struct)
 	err = json.Unmarshal(body, &contato)
@@ -153,7 +153,7 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 
 	contato := models.Contato{}
 
-	contato.Prepare()
+	//contato.Prepare()
 
 	err = json.Unmarshal(body, &contato)
 	if err != nil {

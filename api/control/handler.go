@@ -129,16 +129,16 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//----------Rotas de PrevisaoEmpenho
 	//lista previsao empenho
-	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisao_empenhos))).Methods(http.MethodGet)
+	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisaoEmpenhos))).Methods(http.MethodGet)
 
 	//salva previsao empenho
-	r.HandleFunc("/read/previsao_empenho/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrevisao_empenho))).Methods(http.MethodPost)
+	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrevisaoEmpenho))).Methods(http.MethodPost)
 
 	//edita previsao empenho
-	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrevisao_empenho))).Methods(http.MethodPut)
+	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrevisaoEmpenho))).Methods(http.MethodPut)
 
 	//lista previsao emprenho por ID
-	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisao_empenhoByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisaoEmpenho))).Methods(http.MethodGet)
 
 	/*	=========================
 			ROTAS EM ITENS PREVISAO EMPENHO

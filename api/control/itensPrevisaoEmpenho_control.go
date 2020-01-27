@@ -36,10 +36,10 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 		return
 	}
 
-	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
+	itensPrevisaoEmpenho := models.Itens_previsao_empenho{}
 
 	//	itensPrevisaoEmpenhoGotten recebe o dado buscado no banco de dados
-	itensPrevisaoEmpenhoGotten, err := itensPrevisaoEmpenho.FindItensPrevisaoEmpenhoByID(server.DB, uint64(itensPrevisaoEmpenhoID))
+	itensPrevisaoEmpenhoGotten, err := itensPrevisaoEmpenho.FindItensPrevisaoEmpenho(server.DB, uint64(itensPrevisaoEmpenhoID))
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -59,7 +59,7 @@ func (server *Server) GetItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Req
 	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 18002)
 
-	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
+	itensPrevisaoEmpenho := models.Itens_previsao_empenho{}
 
 	//	itensPrevisaoEmpenhos armazena os dados buscados no banco de dados
 	itensPrevisaoEmpenhos, err := itensPrevisaoEmpenho.FindAllItensPrevisaoEmpenho(server.DB)
@@ -97,7 +97,7 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 		return
 	}
 
-	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
+	itensPrevisaoEmpenho := models.Itens_previsao_empenho{}
 	err = json.Unmarshal(body, &itensPrevisaoEmpenho)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)

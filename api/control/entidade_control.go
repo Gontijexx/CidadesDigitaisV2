@@ -111,7 +111,7 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetEntidades(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 12002)
+	config.AuthMod(w, r, 12009)
 
 	entidade := models.Entidade{}
 

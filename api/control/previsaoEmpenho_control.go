@@ -30,8 +30,8 @@ func (server *Server) CreatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 	}
 
-	//	Estrutura models.PrevisaoEmpenho{} "renomeada"
-	previsaoEmpenho := models.PrevisaoEmpenho{}
+	//	Estrutura models.Previsao_empenho{} "renomeada"
+	previsaoEmpenho := models.Previsao_empenho{}
 
 	//previsaoEmpenho.Prepare()
 
@@ -72,7 +72,7 @@ func (server *Server) CreatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 	FUNCAO LISTAR PREVISAO EMPENHO POR ID
 =========================  */
 
-func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 18002)
@@ -87,7 +87,7 @@ func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	previsaoEmpenho := models.PrevisaoEmpenho{}
+	previsaoEmpenho := models.Previsao_empenho{}
 
 	//	previsaoEmpenhoGotten recebe o dado buscado no banco de dados
 	previsaoEmpenhoGotten, err := previsaoEmpenho.FindPrevisaoEmpenhoByID(server.DB, uint64(previsaoEmpenhoID))
@@ -106,12 +106,12 @@ func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Requ
 	FUNCAO LISTAR PREVISAO EMPENHO
 =========================  */
 
-func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetPrevisaoEmpenhos(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 18002)
+	config.AuthMod(w, r, 18008)
 
-	previsaoEmpenho := models.PrevisaoEmpenho{}
+	previsaoEmpenho := models.Previsao_empenho{}
 
 	//	previsaoEmpenho recebe os dados buscados no banco de dados
 	previsaoEmpenhos, err := previsaoEmpenho.FindAllPrevisaoEmpenho(server.DB)
@@ -149,7 +149,7 @@ func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	previsaoEmpenho := models.PrevisaoEmpenho{}
+	previsaoEmpenho := models.Previsao_empenho{}
 
 	//previsaoEmpenho.Prepare()
 

@@ -81,7 +81,7 @@ type Lote_itens struct {
 =========================  */
 
 type Previsao_empenho struct {
-	Cod_previsao_empenho uint32 `gorm:"AUTO_INCREMENT;primary_key;foreing_key:Cod_previsao_empenho;not null;size:11" json:"cod_previsao_empenho" validate: "required":`
+	Cod_previsao_empenho uint64 `gorm:"AUTO_INCREMENT;primary_key;not null;size:11" json:"cod_previsao_empenho" validate: "required":`
 	Cod_lote             uint32 `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Cod_natureza_despesa uint32 `gorm:"foreing_key:Cod_natureza_despesa;not null;size:11" json:"cod_natureza_despesa" validate: "required":`
 	Data                 string `gorm:"default:null" json:"data" validate: "required":`
@@ -107,10 +107,10 @@ type Itens_previsao_empenho struct {
 =========================  */
 
 type Contato struct {
-	Cod_contato 		 uint64  `gorm:"primary_key;;not null;size:11" json:"Cod_contato" validate: "required":`
-	Cnpj          		 uint64  `gorm:"default:null;size:14" json:"cnpj" validate: "required, number":`
-	Cod_ibge        	 uint64  `gorm:"default:null;size:7" json:"cod_tipo_item" validate: "required":`
-	Nome             	 string  `gorm:"default:null;size:50" json:"nome" validate: "required":`
-	Email                string  `gorm:"default:null;size:100" json:"email" validate: "email":`
-	Funcao           	 string  `gorm:"default:null;size:45" json:"funcao" validate: "alphanum":`
+	Cod_contato uint64 `gorm:"primary_key;;not null;size:11" json:"Cod_contato" validate: "required":`
+	Cnpj        uint64 `gorm:"default:null;size:14" json:"cnpj" validate: "required, number":`
+	Cod_ibge    uint64 `gorm:"default:null;size:7" json:"cod_tipo_item" validate: "required":`
+	Nome        string `gorm:"default:null;size:50" json:"nome" validate: "required":`
+	Email       string `gorm:"default:null;size:100" json:"email" validate: "email":`
+	Funcao      string `gorm:"default:null;size:45" json:"funcao" validate: "alphanum":`
 }

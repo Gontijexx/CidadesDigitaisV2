@@ -10,11 +10,11 @@ import (
 	FUNCAO SALVAR CD
 =========================  */
 
-func (cd *Cd) SaveCd(db *gorm.DB) (*Cd, error) {
+func (cd *CD) SaveCD(db *gorm.DB) (*CD, error) {
 
 	err := db.Debug().Create(&cd).Error
 	if err != nil {
-		return &Cd{}, err
+		return &CD{}, err
 	}
 	return cd, nil
 
@@ -24,16 +24,16 @@ func (cd *Cd) SaveCd(db *gorm.DB) (*Cd, error) {
 	FUNCAO LISTAR CD POR ID
 =========================  */
 
-func (cd *Cd) FindCdByID(db *gorm.DB, cdID uint64) (*Cd, error) {
+func (cd *CD) FindCDByID(db *gorm.DB, cdID uint64) (*CD, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Cd{}).Where("cod_ibge = ?", cdID).Take(&cd).Error
+	err := db.Debug().Model(CD{}).Where("cod_ibge = ?", cdID).Take(&cd).Error
 
 	if err != nil {
-		return &Cd{}, err
+		return &CD{}, err
 	}
 	if gorm.IsRecordNotFoundError(err) {
-		return &Cd{}, errors.New("Cd Not Found")
+		return &CD{}, errors.New("Cd Not Found")
 	}
 
 	return cd, err
@@ -43,43 +43,41 @@ func (cd *Cd) FindCdByID(db *gorm.DB, cdID uint64) (*Cd, error) {
 	FUNCAO LISTAR ENTIDADES
 =========================  */
 
-func (cd *Cd) FindCds(db *gorm.DB) (*[]Cd, error) {
+func (cd *CD) FindAllCD(db *gorm.DB) (*[]CD, error) {
 
-	entity := []Cd{}
+	allCD := []CD{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Cd{}).Limit(100).Find(&entity).Error
+	err := db.Debug().Model(&CD{}).Limit(100).Find(&allCD).Error
 	if err != nil {
-		return &[]Cd{}, err
+		return &[]CD{}, err
 	}
-	return &entity, err
+	return &allCD, err
 }
 
 /*  =========================
 	FUNCAO EDITAR CD
 =========================  */
 
-func (cd *Cd) UpdateCd(db *gorm.DB, cdID uint64) (*Cd, error) {
+func (cd *CD) UpdateCD(db *gorm.DB, cdID uint64) (*CD, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Model(&Cd{}).Where("cod_ibge = ?", cdID).Take(&Cd{}).UpdateColumns(
-		map[string]interface{}{
-			"cod_lote": cd.Cod_lote,
-			"os_pe":    cd.Os_pe,
-			"data_pe":  cd.Data_pe,
-			"os_imp":   cd.Os_imp,
-			"data_imp": cd.Data_imp,
-		},
-	)
+	err := db.Debug().Model(&CD{}).Where("cod_ibge = ?", cdID).Updates(
+		CD{
+			Cod_lote: cd.Cod_lote,
+			Os_pe:    cd.Os_pe,
+			Data_pe:  cd.Data_pe,
+			Os_imp:   cd.Os_imp,
+			Data_imp: cd.Data_imp}).Error
 
-	if db.Error != nil {
-		return &Cd{}, db.Error
+	if err != nil {
+		return &CD{}, err
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(&Cd{}).Where("cod_ibge = ?", cdID).Take(&cd).Error
+	err = db.Debug().Model(&CD{}).Where("cod_ibge = ?", cdID).Take(&cd).Error
 	if err != nil {
-		return &Cd{}, err
+		return &CD{}, err
 	}
 
 	// retorna o elemento que foi alterado

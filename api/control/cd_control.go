@@ -19,7 +19,7 @@ import (
 	FUNCAO ADICIONAR CD
 =========================  */
 
-func (server *Server) CreateCd(w http.ResponseWriter, r *http.Request) {
+func (server *Server) CreateCD(w http.ResponseWriter, r *http.Request) {
 
 	//Autorização de Modulo
 	config.AuthMod(w, r, 13001)
@@ -31,7 +31,7 @@ func (server *Server) CreateCd(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Estrutura models.Cd{} "renomeada"
-	cd := models.Cd{}
+	cd := models.CD{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct cd referenciada (&struct)
 	err = json.Unmarshal(body, &cd)
@@ -48,8 +48,8 @@ func (server *Server) CreateCd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	SaveCd eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
-	cdCreated, err := cd.SaveCd(server.DB)
+	//	SaveCD eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
+	cdCreated, err := cd.SaveCD(server.DB)
 
 	//	Retorna um erro caso nao seja possivel salvar cd no banco de dados
 	//	Status 500
@@ -69,29 +69,6 @@ func (server *Server) CreateCd(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR CD
-=========================  */
-
-func (server *Server) GetCD(w http.ResponseWriter, r *http.Request) {
-
-	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 13002)
-
-	cd := models.Cd{}
-
-	//	cds armazena os dados buscados no banco de dados
-	cds, err := cd.FindCds(server.DB)
-	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
-		return
-	}
-
-	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, cds)
-
-}
-
-/*  =========================
 	FUNCAO LISTAR CD POR ID
 =========================  */
 
@@ -104,16 +81,16 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	//interpreta  a string em uma base de (0, 2 to 36) e tamanho de (0 to 64)
-	cId, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
+	cdID, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	cd := models.Cd{}
+	cd := models.CD{}
 
 	//vai utilizar o metodo para procurar o resultado de acordo com a chave
-	cdGotten, err := cd.FindCdByID(server.DB, uint64(cId))
+	cdGotten, err := cd.FindCDByID(server.DB, uint64(cdID))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -124,10 +101,33 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
+	FUNCAO LISTAR TODOS CD
+=========================  */
+
+func (server *Server) GetCD(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	config.AuthMod(w, r, 13002)
+
+	cd := models.CD{}
+
+	//	cds armazena os dados buscados no banco de dados
+	allCD, err := cd.FindAllCD(server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct buscada
+	responses.JSON(w, http.StatusOK, allCD)
+
+}
+
+/*  =========================
 	FUNCAO ATUALIZAR CD
 =========================  */
 
-func (server *Server) UpdateCd(w http.ResponseWriter, r *http.Request) {
+func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 13003)
@@ -148,9 +148,7 @@ func (server *Server) UpdateCd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cd := models.Cd{}
-
-	//cd.Prepare()
+	cd := models.CD{}
 
 	err = json.Unmarshal(body, &cd)
 	if err != nil {
@@ -164,8 +162,8 @@ func (server *Server) UpdateCd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	updateCd recebe a nova cd, a que foi alterada
-	updateCd, err := cd.UpdateCd(server.DB, cdID)
+	//	updateCD recebe a nova cd, a que foi alterada
+	updateCD, err := cd.UpdateCD(server.DB, cdID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
@@ -173,5 +171,5 @@ func (server *Server) UpdateCd(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Retorna o Status 200 e o JSON da struct alterada
-	responses.JSON(w, http.StatusOK, updateCd)
+	responses.JSON(w, http.StatusOK, updateCD)
 }

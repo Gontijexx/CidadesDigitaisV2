@@ -43,7 +43,7 @@ type Reajuste struct {
 	TABELA CD
 =========================  */
 
-type Cd struct {
+type CD struct {
 	Cod_ibge uint32 `gorm:"primary_key;foreing_key:Cod_ibge;not null;size:7" json:"cod_ibge" validate: "required":`
 	Cod_lote uint32 `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Os_pe    string `gorm:"size:10;default:null" json:"os_pe" validate: "alphanum":`

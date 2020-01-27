@@ -42,10 +42,10 @@ func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Ent
 }
 
 /*  =========================
-	FUNCAO LISTAR ENTIDADES
+	FUNCAO LISTAR TODAS ENTIDADE
 =========================  */
 
-func (entidade *Entidade) FindEntidades(db *gorm.DB) (*[]Entidade, error) {
+func (entidade *Entidade) FindAllEntidade(db *gorm.DB) (*[]Entidade, error) {
 
 	entity := []Entidade{}
 

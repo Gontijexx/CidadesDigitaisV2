@@ -33,10 +33,6 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 	//	Estrutura models.Entidade{} "renomeada"
 	entidade := models.Entidade{}
 
-	/*	O metodo Prepare deve ser chamado em metodos de POST e PUT
-		a fim de preparar os dados a serem recebidos pelo banco de dados	*/
-	entidade.Prepare()
-
 	//	Unmarshal analisa o JSON recebido e armazena na struct entidade referenciada (&struct)
 	err = json.Unmarshal(body, &entidade)
 
@@ -152,8 +148,6 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	}
 
 	entidade := models.Entidade{}
-
-	entidade.Prepare()
 
 	err = json.Unmarshal(body, &entidade)
 	if err != nil {

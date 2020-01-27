@@ -68,6 +68,10 @@ type Lote_itens struct {
 	Preco         float64 `gorm:"default:null;size:12" json:"preco" validate: "alphanum":`
 }
 
+/*  =========================
+	TABELA PREVISAO EMPENHO
+=========================  */
+
 type PrevisaoEmpenho struct {
 	Cod_previsao_empenho uint32 `gorm:"AUTO_INCREMENT;primary_key;foreing_key:Cod_previsao_empenho;not null;size:11" json:"cod_previsao_empenho" validate: "required":`
 	Cod_lote             uint32 `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`

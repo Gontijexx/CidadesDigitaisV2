@@ -7,8 +7,7 @@ import (
 )
 
 /*  =========================
-	FUNCAO SALVAR PREVISAO
-	EMPENHO	NO BANCO DE DADOS
+	FUNCAO SALVAR PREVISAO EMPENHO	NO BANCO DE DADOS
 =========================  */
 
 func (previsaoEmpenho *PrevisaoEmpenho) SavePrevisaoEmpenho(db *gorm.DB) (*PrevisaoEmpenho, error) {
@@ -23,8 +22,7 @@ func (previsaoEmpenho *PrevisaoEmpenho) SavePrevisaoEmpenho(db *gorm.DB) (*Previ
 }
 
 /*  =========================
-	FUNCAO LISTAR
-	PREVISAO EMPENHO POR ID
+	FUNCAO LISTAR PREVISAO EMPENHO POR ID
 =========================  */
 
 func (previsaoEmpenho *PrevisaoEmpenho) FindPrevisaoEmpenhoByID(db *gorm.DB, previsaoEmpenhoID uint64) (*PrevisaoEmpenho, error) {
@@ -48,14 +46,14 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindPrevisaoEmpenhoByID(db *gorm.DB, pre
 
 func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]PrevisaoEmpenho, error) {
 
-	previsaoEmpenhos := []PrevisaoEmpenho{}
+	listPrevisaoEmpenho := []PrevisaoEmpenho{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&PrevisaoEmpenho{}).Find(&previsaoEmpenhos).Error
+	err := db.Debug().Model(&PrevisaoEmpenho{}).Find(&listPrevisaoEmpenho).Error
 	if err != nil {
 		return &[]PrevisaoEmpenho{}, err
 	}
-	return &previsaoEmpenhos, err
+	return &listPrevisaoEmpenho, err
 }
 
 /*  =========================
@@ -65,19 +63,13 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]
 func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, previsaoEmpenhoID uint64) (*PrevisaoEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", previsaoEmpenhoID).Take(&previsaoEmpenho).UpdateColumns(
-		map[string]interface{}{
-			"data":           previsaoEmpenho.Data,
-			"tipo":           previsaoEmpenho.Tipo,
-			"ano_referencia": previsaoEmpenho.Ano_referencia,
-		},
-	)
+	err := db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", previsaoEmpenhoID).Updates(PrevisaoEmpenho{Data: previsaoEmpenho.Data, Tipo: previsaoEmpenho.Tipo, Ano_referencia: previsaoEmpenho.Ano_referencia}).Error
 
-	if db.Error != nil {
-		return &PrevisaoEmpenho{}, db.Error
+	if err != nil {
+		return &PrevisaoEmpenho{}, err
 	}
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", previsaoEmpenhoID).Take(&previsaoEmpenho).Error
+	err = db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", previsaoEmpenhoID).Take(&previsaoEmpenho).Error
 	if err != nil {
 		return &PrevisaoEmpenho{}, err
 	}

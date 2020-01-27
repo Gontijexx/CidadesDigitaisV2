@@ -116,7 +116,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//----------Rotas de Lote Itens
 	//edita lote itens
-	r.HandleFunc("/{id1}/{id2}/{id3}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote_itens))).Methods(http.MethodPut)
+	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote_itens))).Methods(http.MethodPut)
 
 	//lista lote itens ID
 	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLote_itensByID))).Methods(http.MethodGet)

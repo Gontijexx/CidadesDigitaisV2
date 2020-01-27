@@ -165,7 +165,7 @@ func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// updatePrevisaEmpenho recece a nova previsao_empenho, a que foi alterada
+	// updatePrevisaEmpenho recebe a nova previsao_empenho, a que foi alterada
 	updatePrevisaoEmpenho, err := previsaoEmpenho.UpdatePrevisaoEmpenho(server.DB, uint64(previsaoEmpenhoID))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())

@@ -2,8 +2,6 @@ package models
 
 import (
 	"errors"
-	"html"
-	"strings"
 
 	"github.com/jinzhu/gorm"
 )
@@ -11,25 +9,6 @@ import (
 /*  =========================
 	FUNCOES QUE FAZEM CONEXAO DIRETA COM O BANCO DE DADOS
 =========================  */
-
-/*  =========================
-	FUNCAO PREPARE ENTIDADE
-=========================  */
-
-//	Prepara as informacoes a serem escritas no banco de dados
-func (entidade *Entidade) Prepare() {
-	entidade.Cnpj = 0
-	entidade.Nome = html.EscapeString(strings.TrimSpace(entidade.Nome))
-	entidade.Endereco = html.EscapeString(strings.TrimSpace(entidade.Endereco))
-	entidade.Numero = html.EscapeString(strings.TrimSpace(entidade.Numero))
-	entidade.Bairro = html.EscapeString(strings.TrimSpace(entidade.Bairro))
-	entidade.Cep = html.EscapeString(strings.TrimSpace(entidade.Cep))
-	entidade.Nome_municipio = html.EscapeString(strings.TrimSpace(entidade.Nome_municipio))
-	entidade.Uf = html.EscapeString(strings.TrimSpace(entidade.Uf))
-	entidade.Endereco = html.EscapeString(strings.TrimSpace(entidade.Endereco))
-	entidade.Observacao = html.EscapeString(strings.TrimSpace(entidade.Observacao))
-
-}
 
 /*  =========================
 	FUNCAO SALVAR ENTIDADE NO BANCO DE DADOS

@@ -27,7 +27,7 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
 	}
 
 	//	Estrutura models.Lote{} "renomeada"
@@ -38,12 +38,12 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	if err = validation.Validator.Struct(lote); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
@@ -54,8 +54,8 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 	//	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
 	//	Status 500
 	if err != nil {
-
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Lote, Check server details"))
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
 		return
 	}
 
@@ -81,7 +81,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	//	loteID armazena a chave primaria da tabela entidade
 	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 32)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 	lote := models.Lote{}
@@ -89,7 +89,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	//	loteGotten recebe o dado buscado no banco de dados
 	loteGotten, err := lote.FindLoteByID(server.DB, uint64(loteID))
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
 	}
 
@@ -109,15 +109,16 @@ func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
 	lote := models.Lote{}
 
 	//	lotes armazena os dados buscados no banco de dados
-	lotes, err := lote.FindAllLote(server.DB)
+	allLote, err := lote.FindAllLote(server.DB)
 
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, lotes)
+	responses.JSON(w, http.StatusOK, allLote)
 
 }
 
@@ -136,13 +137,13 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 	//	entidadeID armazena a chave primaria da tabela entidade
 	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 32)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
 		return
 	}
 
@@ -150,12 +151,12 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(body, &lote)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	if err = validation.Validator.Struct(lote); err != nil {
-		log.Printf("[WARN] invalid lote information, because, %v\n", err)
+		log.Printf("[WARN] invalid lote information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
@@ -164,7 +165,7 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 	updatedLote, err := lote.UpdateLote(server.DB, uint64(loteID))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
 		return
 	}
 
@@ -189,7 +190,7 @@ func (server *Server) DeleteLote(w http.ResponseWriter, r *http.Request) {
 	//	loteID armazena a chave primaria da tabela entidade
 	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
@@ -197,7 +198,8 @@ func (server *Server) DeleteLote(w http.ResponseWriter, r *http.Request) {
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
 	_, err = lote.DeleteLote(server.DB, uint64(loteID))
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 

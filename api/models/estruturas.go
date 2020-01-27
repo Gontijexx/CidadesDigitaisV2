@@ -89,3 +89,16 @@ type ItensPrevisaoEmpenho struct {
 	Valor                float64 `gorm:"default:null;size:12" json:"valor" validate: "alphanum":`
 	Quantidade           uint32  `gorm:"default:null;size:11" json:"quantidade" validate: "alphanum":`
 }
+
+/*  =========================
+	TABELA CONTATO
+=========================  */
+
+type Contato struct {
+	Cod_contato			 uint64 `gorm:"AUTO_INCREMENT;primary_key;not null;size:11" json:"cod_contato" validate: "required":`
+	Cnpj                 string `gorm:"default:null;size:14" json:"cnpj" validate: "required":`
+	Cod_ibge             int32 `gorm:"default:null;size:7" json:"cod_ibge" validate: "alphanum":`
+	Nome       			 string `gorm:"default:null;size:50" json:"nome" validate: "alphanum":`
+	Email                string `gorm:"default:null;size:100" json:"email" validate: "email":`
+	Funcao       	     string `gorm:"default:null;size:45" json:"funcao" validate: "alphanum":`
+}

@@ -149,6 +149,22 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA ITENS PREVISAO EMPENDO
 	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensPrevisaoEmpenhoByID))).Methods(http.MethodGet)
 
+	/*	=========================
+			ROTAS DE CONTATO
+	=========================	*/
+
+	//LISTA CONTATO
+	r.HandleFunc(config.CONTATO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllContato))).Methods(http.MethodGet)
+
+	//SALVA CONTATO
+	r.HandleFunc(config.CONTATO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.SaveContato))).Methods(http.MethodPost)
+
+	//EDITA CONTATO ID
+	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateContato))).Methods(http.MethodPut)
+
+	//LISTA CONTATO ID
+	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetContatoByID))).Methods(http.MethodGet)
+
 	/*
 		//**********Rotas em Assunto
 		//----------Rotas de Assunto
@@ -211,20 +227,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		//apaga classe empenho ID
 		r.HandleFunc().Methods(http.MethodDelete)
 
-		//**********Rotas em Contato
-			//----------Rotas De Contato
-				//ROTAS EM CONTATO_PATH
-					//lista contato
-						r.HandleFunc().Methods(http.MethodGet)
-
-					//salva contato
-						r.HandleFunc().Methods(http.MethodPost)
-
-					//edita contato
-						r.HandleFunc().Methods(http.MethodPut)
-				//ROTAS EM CONTATO_ID_PATH
-					//apaga contato ID
-						r.HandleFunc().Methods(http.MethodDelete)
+	
 
 			//----------Rotas De Telefone
 				//ROTAS EM TEL_PATH

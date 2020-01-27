@@ -40,6 +40,25 @@ const (
 )
 
 /*  =========================
+	PREVISAO EMPENHO PATHS HTTP
+	ITENS PREVISAO EMPENHO PATHS HTTP
+=========================  */
+
+const (
+	PREVISAO_EMPENHO_PATH          = "/read/previsaoEmpenho"
+	PREVISAO_EMPENHO_ID_PATH       = "/read/previsaoEmpenho/{cod_previsao_empenho}"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
+)
+
+/*  =========================
+	ITENS PREVISAO EMPENHO PATHS HTTP
+=========================  */
+
+const (
+	ITENS_PREVISAO_EMPENHO_PATH = "/read/itens_previsao_empenho"
+)
+
+/*  =========================
 	TIPOLOGIA PATHS HTTP
 =========================  */
 
@@ -55,6 +74,15 @@ const (
 const (
 	TIPOIT_PATH    = "/read/tipoItem"
 	TIPOIT_ID_PATH = "/read/tipoItem/:cod_tipo_item"
+)
+
+/*  =========================
+	PREVISAO EMPENHO PATHS HTTP
+=========================  */
+
+const (
+	PREVITENS_ID_PATH   = "/read/previsaoEmpenhoItens"
+	PREVITENS_LIST_PATH = "/read/previsaoEmpenhoItens/:cod_lote/:cod_previsao_empenho"
 )
 
 /*  =========================
@@ -121,8 +149,8 @@ const (
 =========================  */
 
 const (
-	LOTEITENS_PATH               = "/read/loteItens"
-	LOTEITENS_ID_PATH            = "/read/loteItens/:id"
+	LOTEITENS_PATH    = "/read/loteItens"
+	LOTEITENS_ID_PATH = "/read/loteItens/:id"
 )
 
 /*  =========================
@@ -234,6 +262,7 @@ const (
 	LOTE_ITENS_ID_PATH = "/read/lote_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
 )
 
+
 /*  =========================
 	PREVISAO EMPENHO PATHS HTTP
 	ITENS PREVISAO EMPENHO PATHS HTTP
@@ -252,3 +281,4 @@ const (
 const (
 	ITENS_PREVISAO_EMPENHO_PATH = "/read/itens_previsao_empenho"
 )
+

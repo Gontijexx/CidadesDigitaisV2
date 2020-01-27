@@ -18,8 +18,6 @@ import (
 
 //	Prepara as informacoes a serem escritas no banco de dados
 func (lote *Lote) Prepare() {
-	lote.Cod_lote = 0
-	lote.Cnpj = 0
 	lote.Contrato = html.EscapeString(strings.TrimSpace(lote.Contrato))
 	lote.Dt_inicio_vig = html.EscapeString(strings.TrimSpace(lote.Dt_inicio_vig))
 	lote.Dt_final_vig = html.EscapeString(strings.TrimSpace(lote.Dt_final_vig))
@@ -86,7 +84,6 @@ func (lote *Lote) UpdateLote(db *gorm.DB, loteID uint64) (*Lote, error) {
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Take(&lote).UpdateColumns(
 		map[string]interface{}{
-			"cnpj":          lote.Cnpj,
 			"contrato":      lote.Contrato,
 			"dt_inicio_vig": lote.Dt_inicio_vig,
 			"dt_final_vig":  lote.Dt_final_vig,
@@ -124,6 +121,6 @@ func (lote *Lote) DeleteLote(db *gorm.DB, loteID uint64) (int64, error) {
 		return 0, db.Error
 	}
 
-	//	Retornar o numero de linhas deletedas no banco de dados
+	//	Retornar o numero de linhas deletadas no banco de dados
 	return db.RowsAffected, nil
 }

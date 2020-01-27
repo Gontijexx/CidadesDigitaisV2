@@ -19,7 +19,7 @@ import (
 	FUNCAO ADICIONAR ENTIDADE
 =========================  */
 
-func (server *Server) AddEntidade(w http.ResponseWriter, r *http.Request) {
+func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 12001)

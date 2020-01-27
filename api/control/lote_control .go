@@ -19,7 +19,7 @@ import (
 	FUNCAO ADICIONAR LOTE
 =========================  */
 
-func (server *Server) AddLote(w http.ResponseWriter, r *http.Request) {
+func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 14001)

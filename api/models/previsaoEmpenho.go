@@ -11,12 +11,14 @@ import (
 	EMPENHO	NO BANCO DE DADOS
 =========================  */
 
+
 func (previsaoEmpenho *Previsao_empenho) SavePrevisaoEmpenho(db *gorm.DB) (*Previsao_empenho, error) {
 
 	//	Adiciona um novo elemento ao banco de dados
 	err := db.Debug().Create(&previsaoEmpenho).Error
 	if err != nil {
 		return &Previsao_empenho{}, err
+
 	}
 	return previsaoEmpenho, nil
 
@@ -26,6 +28,7 @@ func (previsaoEmpenho *Previsao_empenho) SavePrevisaoEmpenho(db *gorm.DB) (*Prev
 	FUNCAO LISTAR
 	PREVISAO EMPENHO POR ID
 =========================  */
+
 
 func (previsaoEmpenho *Previsao_empenho) FindPrevisaoEmpenhoByID(db *gorm.DB, previsaoEmpenhoID uint64) (*Previsao_empenho, error) {
 
@@ -37,6 +40,7 @@ func (previsaoEmpenho *Previsao_empenho) FindPrevisaoEmpenhoByID(db *gorm.DB, pr
 	}
 	if gorm.IsRecordNotFoundError(err) {
 		return &Previsao_empenho{}, errors.New("Previsao_empenho Not Found")
+
 	}
 
 	return previsaoEmpenho, err
@@ -46,6 +50,7 @@ func (previsaoEmpenho *Previsao_empenho) FindPrevisaoEmpenhoByID(db *gorm.DB, pr
 	FUNCAO LISTAR TODAS PREVISAO EMPENHO
 =========================  */
 
+
 func (previsaoEmpenho *Previsao_empenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]Previsao_empenho, error) {
 
 	previsaoEmpenhos := []Previsao_empenho{}
@@ -54,6 +59,7 @@ func (previsaoEmpenho *Previsao_empenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[
 	err := db.Debug().Model(&Previsao_empenho{}).Find(&previsaoEmpenhos).Error
 	if err != nil {
 		return &[]Previsao_empenho{}, err
+
 	}
 	return &previsaoEmpenhos, err
 }
@@ -85,4 +91,5 @@ func (previsao_empenho *Previsao_empenho) UpdatePrevisaoEmpenho(db *gorm.DB, pre
 
 	// retorna o elemento que foi alterado
 	return previsao_empenho, err
+
 }

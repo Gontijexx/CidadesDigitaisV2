@@ -8,6 +8,7 @@ import (
 	FUNCAO LISTAR ITENS PREVISAO EMPENHO POR ID
 =========================  */
 
+
 func (itensPrevisaoEmpenho *Itens_previsao_empenho) FindItensPrevisaoEmpenho(db *gorm.DB, itensPrevisaoEmpenhoID uint64) (*Itens_previsao_empenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
@@ -23,6 +24,7 @@ func (itensPrevisaoEmpenho *Itens_previsao_empenho) FindItensPrevisaoEmpenho(db 
 /*  =========================
 	FUNCAO LISTAR TODOS ITENS PREVISAO EMPENHO
 =========================  */
+
 
 func (itensPrevisaoEmpenho *Itens_previsao_empenho) FindAllItensPrevisaoEmpenho(db *gorm.DB) (*[]Itens_previsao_empenho, error) {
 
@@ -40,10 +42,12 @@ func (itensPrevisaoEmpenho *Itens_previsao_empenho) FindAllItensPrevisaoEmpenho(
 	FUNCAO EDITAR ITENS PREVISAO EMPENHO
 =========================  */
 
+
 func (itensPrevisaoEmpenho *Itens_previsao_empenho) UpdateItensPrevisaoEmpenho(db *gorm.DB, itensPrevisaoEmpenhoID uint64) (*Itens_previsao_empenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Model(&Itens_previsao_empenho{}).Where("cod_previsao_empenho = ?", itensPrevisaoEmpenhoID).Take(&itensPrevisaoEmpenho).UpdateColumns(
+    
 		map[string]interface{}{
 			"valor":      itensPrevisaoEmpenho.Valor,
 			"quantidade": itensPrevisaoEmpenho.Quantidade,

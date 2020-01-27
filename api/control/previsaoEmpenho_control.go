@@ -30,8 +30,10 @@ func (server *Server) CreatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 	}
 
+
 	//	Estrutura models.Previsao_empenho{} "renomeada"
 	previsaoEmpenho := models.Previsao_empenho{}
+
 
 	//previsaoEmpenho.Prepare()
 
@@ -72,6 +74,7 @@ func (server *Server) CreatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 	FUNCAO LISTAR PREVISAO EMPENHO POR ID
 =========================  */
 
+
 func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
@@ -88,6 +91,7 @@ func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request)
 	}
 
 	previsaoEmpenho := models.Previsao_empenho{}
+
 
 	//	previsaoEmpenhoGotten recebe o dado buscado no banco de dados
 	previsaoEmpenhoGotten, err := previsaoEmpenho.FindPrevisaoEmpenhoByID(server.DB, uint64(previsaoEmpenhoID))
@@ -106,12 +110,14 @@ func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request)
 	FUNCAO LISTAR PREVISAO EMPENHO
 =========================  */
 
+
 func (server *Server) GetPrevisaoEmpenhos(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 18008)
+	config.AuthMod(w, r, 18002)
 
 	previsaoEmpenho := models.Previsao_empenho{}
+
 
 	//	previsaoEmpenho recebe os dados buscados no banco de dados
 	previsaoEmpenhos, err := previsaoEmpenho.FindAllPrevisaoEmpenho(server.DB)
@@ -150,6 +156,7 @@ func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 	}
 
 	previsaoEmpenho := models.Previsao_empenho{}
+
 
 	//previsaoEmpenho.Prepare()
 

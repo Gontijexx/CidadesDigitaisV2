@@ -46,14 +46,14 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindPrevisaoEmpenhoByID(db *gorm.DB, pre
 
 func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]PrevisaoEmpenho, error) {
 
-	listPrevisaoEmpenho := []PrevisaoEmpenho{}
+	allPrevisaoEmpenho := []PrevisaoEmpenho{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&PrevisaoEmpenho{}).Find(&listPrevisaoEmpenho).Error
+	err := db.Debug().Model(&PrevisaoEmpenho{}).Find(&allPrevisaoEmpenho).Error
 	if err != nil {
 		return &[]PrevisaoEmpenho{}, err
 	}
-	return &listPrevisaoEmpenho, err
+	return &allPrevisaoEmpenho, err
 }
 
 /*  =========================

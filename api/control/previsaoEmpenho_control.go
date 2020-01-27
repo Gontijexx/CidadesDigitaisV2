@@ -103,7 +103,7 @@ func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Requ
 }
 
 /*  =========================
-	FUNCAO LISTAR PREVISAO EMPENHO
+	FUNCAO LISTAR TODAS PREVISAO EMPENHO
 =========================  */
 
 func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
@@ -114,14 +114,14 @@ func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request)
 	previsaoEmpenho := models.PrevisaoEmpenho{}
 
 	//	previsaoEmpenho recebe os dados buscados no banco de dados
-	previsaoEmpenhos, err := previsaoEmpenho.FindAllPrevisaoEmpenho(server.DB)
+	allPrevisaoEmpenho, err := previsaoEmpenho.FindAllPrevisaoEmpenho(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, previsaoEmpenhos)
+	responses.JSON(w, http.StatusOK, allPrevisaoEmpenho)
 }
 
 /*  =========================

@@ -23,6 +23,7 @@ func (server *Server) CreateCD(w http.ResponseWriter, r *http.Request) {
 
 	//Autorização de Modulo
 	config.AuthMod(w, r, 13001)
+	
 
 	//	O metodo RealAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)

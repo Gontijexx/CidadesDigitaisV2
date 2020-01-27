@@ -3,17 +3,17 @@ package config
 import (
 	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/responses"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"reflect"
 )
 
-func AuthMod(w http.ResponseWriter, r *http.Request, PagMod float64) {
+func AuthMod(w http.ResponseWriter, r *http.Request, PagMod float64) (err error) {
 	mod, err := auth.ExtractTokenMod(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf(`{"Error": "We couldn't extract Token"}`))
-		return
 	}
 	umod := InterfaceSlice(mod)
 
@@ -31,9 +31,8 @@ func AuthMod(w http.ResponseWriter, r *http.Request, PagMod float64) {
 		}
 
 	}
-	responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+	err = errors.New("error")
 	return
-
 }
 
 // conversão de interface

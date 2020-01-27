@@ -101,10 +101,10 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR ENTIDADES
+	FUNCAO LISTAR TODAS ENTIDADE
 =========================  */
 
-func (server *Server) GetEntidades(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	config.AuthMod(w, r, 12002)

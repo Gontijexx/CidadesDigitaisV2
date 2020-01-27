@@ -165,6 +165,22 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//LISTA CONTATO ID
 	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetContatoByID))).Methods(http.MethodGet)
 
+	/*	=========================
+			ROTAS DE TELEFONE
+	=========================	*/
+
+	//LISTA TELEFONE
+	r.HandleFunc(config.TELEFONE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetTelefone))).Methods(http.MethodGet)
+
+	//SALVA TELEFONE
+	r.HandleFunc(config.TELEFONE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.SaveTelefone))).Methods(http.MethodPost)
+
+	//APAGA TELEFONE ID
+	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTelefone))).Methods(http.MethodDelete)
+
+	//LISTA TELEFONE ID
+	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetTelefoneByID))).Methods(http.MethodGet)
+
 	/*
 		//**********Rotas em Assunto
 		//----------Rotas de Assunto
@@ -226,8 +242,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 		//apaga classe empenho ID
 		r.HandleFunc().Methods(http.MethodDelete)
-
-	
 
 			//----------Rotas De Telefone
 				//ROTAS EM TEL_PATH

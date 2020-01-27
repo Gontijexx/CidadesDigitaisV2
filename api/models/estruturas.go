@@ -102,3 +102,14 @@ type Contato struct {
 	Email                string `gorm:"default:null;size:100" json:"email" validate: "email":`
 	Funcao       	     string `gorm:"default:null;size:45" json:"funcao" validate: "alphanum":`
 }
+
+/*  =========================
+	TABELA TELEFONE
+=========================  */
+
+type Telefone struct {
+	Cod_telefone	uint64 `gorm:"AUTO_INCREMENT;primary_key;not null;size:11" json:"cod_telefone" validate: "required":`
+	Cod_contato		uint64 `gorm:"foreing_key:Cod_contato;not null;size:11" json:"cod_contato" validate: "required":`
+	Telefone        string `gorm:"default:null;size:11" json:"telefone" validate: "required":`
+	Tipo            string `gorm:"default:null;size:10" json:"tipo" validate: "alphanum":`
+}

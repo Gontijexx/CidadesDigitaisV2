@@ -59,6 +59,15 @@ const (
 )
 
 /*  =========================
+	TELEFONE PATHS HTTP
+=========================  */
+
+const (
+	TELEFONE_PATH    = "/read/telefone"
+	TELEFONE_ID_PATH = "/read/telefone/{cod_telefone}"
+)
+
+/*  =========================
 	TIPOLOGIA PATHS HTTP
 =========================  */
 
@@ -214,9 +223,7 @@ const (
 
 const (
 	CONTATO_PATH    = "/read/contato"
-	CONTATO_ID_PATH = "/read/contato/:id"
-	TEL_PATH        = "/read/telefone"
-	TEL_ID          = "/read/telefone/:id"
+	CONTATO_ID_PATH = "/read/contato/{cod_contato}"
 )
 
 /*  =========================

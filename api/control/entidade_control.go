@@ -27,7 +27,7 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
 	}
 
 	//	Estrutura models.Entidade{} "renomeada"
@@ -38,12 +38,12 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	if err = validation.Validator.Struct(entidade); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
@@ -51,11 +51,11 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 	//	SaveEntidade eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	entidadeCreated, err := entidade.SaveEntidade(server.DB)
 
-	//	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
-	//	Status 500
+	/*	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
+		Status 500	*/
 	if err != nil {
-
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Entidade, Check server details"))
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
 		return
 	}
 
@@ -81,7 +81,7 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 	//	entidadeID armazena a chave primaria da tabela entidade
 	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
@@ -91,7 +91,7 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 	entidadeGotten, err := entidade.FindEntidadeByID(server.DB, uint64(entidadeID))
 
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
 	}
 
@@ -112,14 +112,15 @@ func (server *Server) GetEntidade(w http.ResponseWriter, r *http.Request) {
 	entidade := models.Entidade{}
 
 	//	entidades armazena os dados buscados no banco de dados
-	entidades, err := entidade.FindAllEntidade(server.DB)
+	allEntidade, err := entidade.FindAllEntidade(server.DB)
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, entidades)
+	responses.JSON(w, http.StatusOK, allEntidade)
 }
 
 /*  =========================
@@ -137,13 +138,13 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	//	entidadeID armazena a chave primaria da tabela entidade
 	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
 		return
 	}
 
@@ -151,12 +152,12 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(body, &entidade)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	if err = validation.Validator.Struct(entidade); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
@@ -165,7 +166,7 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	updateEntidade, err := entidade.UpdateEntidade(server.DB, entidadeID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
 		return
 	}
 
@@ -190,7 +191,7 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 	//	entidadeID armazena a chave primaria da tabela entidade
 	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
@@ -198,7 +199,8 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
 	_, err = entidade.DeleteEntidade(server.DB, uint64(entidadeID))
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 

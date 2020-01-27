@@ -27,7 +27,7 @@ func (server *Server) CreateCD(w http.ResponseWriter, r *http.Request) {
 	//	O metodo RealAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it coudn't read the 'body', %v\n", err))
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
 	}
 
 	//	Estrutura models.Cd{} "renomeada"
@@ -57,7 +57,7 @@ func (server *Server) CreateCD(w http.ResponseWriter, r *http.Request) {
 
 		formattedError := config.FormatError(err.Error())
 
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it coudn't save in database , %v\n", formattedError))
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database , %v\n", formattedError))
 		return
 	}
 
@@ -124,7 +124,7 @@ func (server *Server) GetCD(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO ATUALIZAR CD
+	FUNCAO EDITAR CD
 =========================  */
 
 func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
@@ -138,13 +138,13 @@ func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 	//	cdID armazena a chave primaria da tabela cd
 	cdID, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
 		return
 	}
 
@@ -152,12 +152,12 @@ func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(body, &cd)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	if err = validation.Validator.Struct(cd); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
@@ -166,7 +166,7 @@ func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 	updateCD, err := cd.UpdateCD(server.DB, cdID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
 		return
 	}
 

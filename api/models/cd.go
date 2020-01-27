@@ -40,7 +40,7 @@ func (cd *CD) FindCDByID(db *gorm.DB, cdID uint64) (*CD, error) {
 }
 
 /*  =========================
-	FUNCAO LISTAR ENTIDADES
+	FUNCAO LISTAR CD
 =========================  */
 
 func (cd *CD) FindAllCD(db *gorm.DB) (*[]CD, error) {

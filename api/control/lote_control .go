@@ -22,8 +22,11 @@ import (
 func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 14001)
-
+	err := config.AuthMod(w, r, 14001)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -73,8 +76,11 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Mudulo
-	config.AuthMod(w, r, 14002)
-
+	err := config.AuthMod(w, r, 14002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -104,8 +110,11 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 14002)
-
+	err := config.AuthMod(w, r, 14002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	lote := models.Lote{}
 
 	//	lotes armazena os dados buscados no banco de dados
@@ -129,8 +138,11 @@ func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 14003)
-
+	err := config.AuthMod(w, r, 14003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -180,8 +192,11 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeleteLote(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	config.AuthMod(w, r, 14003)
-
+	err := config.AuthMod(w, r, 14003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 

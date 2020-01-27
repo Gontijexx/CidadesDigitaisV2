@@ -18,7 +18,17 @@ import (
 	"github.com/gorilla/mux"
 )
 
+/*  =========================
+	FUNCAO ADICIONAR USUARIO
+=========================  */
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 11001)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -62,7 +72,18 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
+/*  =========================
+	FUNCAO LISTAR TODOS
+		USUARIOS
+=========================  */
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 11002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 
 	user := models.Usuario{}
 
@@ -74,8 +95,16 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, users)
 }
 
+/*  =========================
+	FUNCAO LISTAR UM USUARIO
+=========================  */
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
-
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 11002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	vars := mux.Vars(r)
 	uId, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
@@ -91,8 +120,17 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, userGotten)
 }
 
+/*  =========================
+	FUNCAO PARA ATUALIZAR
+		 USUARIO
+=========================  */
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
-
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 11003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
@@ -135,6 +173,9 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
 
+/*  ============================
+    FUNCAO PARA DELETAR USUARIOS
+=============================  */
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)

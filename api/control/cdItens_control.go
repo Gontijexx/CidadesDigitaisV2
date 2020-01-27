@@ -22,8 +22,11 @@ import (
 func (server *Server) GetCdItem(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 13022)
-
+	err := config.AuthMod(w, r, 13022)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//Vars retorna a rota das variaveis
 	vars := mux.Vars(r)
 
@@ -58,8 +61,11 @@ func (server *Server) GetCdItem(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetCdItens(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 13022)
-
+	err := config.AuthMod(w, r, 13022)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	cd_item := models.Cd_itens{}
 
 	//	cd_itens armazena os dados buscados no banco de dados
@@ -79,8 +85,11 @@ func (server *Server) GetCdItens(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateCdItens(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 13023)
-
+	err := config.AuthMod(w, r, 13023)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 

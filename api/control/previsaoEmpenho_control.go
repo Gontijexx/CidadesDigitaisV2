@@ -22,8 +22,11 @@ import (
 func (server *Server) CreatePrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 18001)
-
+	err := config.AuthMod(w, r, 18001)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -75,8 +78,11 @@ func (server *Server) CreatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 18002)
-
+	err := config.AuthMod(w, r, 18002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -109,8 +115,11 @@ func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Requ
 func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 18002)
-
+	err := config.AuthMod(w, r, 18002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	previsaoEmpenho := models.PrevisaoEmpenho{}
 
 	//	previsaoEmpenho recebe os dados buscados no banco de dados
@@ -132,8 +141,11 @@ func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request)
 func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 18003)
-
+	err := config.AuthMod(w, r, 18003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 

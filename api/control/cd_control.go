@@ -22,8 +22,11 @@ import (
 func (server *Server) CreateCD(w http.ResponseWriter, r *http.Request) {
 
 	//Autorização de Modulo
-	config.AuthMod(w, r, 13001)
-	
+	err := config.AuthMod(w, r, 13001)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 
 	//	O metodo RealAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
@@ -76,8 +79,11 @@ func (server *Server) CreateCD(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 13002)
-
+	err := config.AuthMod(w, r, 13002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//Vars retorna a rota das variaveis
 	vars := mux.Vars(r)
 
@@ -108,8 +114,11 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetCD(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 13002)
-
+	err := config.AuthMod(w, r, 13002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	cd := models.CD{}
 
 	//	cds armazena os dados buscados no banco de dados
@@ -131,8 +140,11 @@ func (server *Server) GetCD(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 13003)
-
+	err := config.AuthMod(w, r, 13003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 

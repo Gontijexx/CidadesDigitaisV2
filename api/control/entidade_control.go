@@ -77,8 +77,11 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 12002)
-
+	err := config.AuthMod(w, r, 12002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -111,8 +114,11 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 12002)
-
+	err := config.AuthMod(w, r, 12002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	entidade := models.Entidade{}
 
 	//	entidades armazena os dados buscados no banco de dados
@@ -134,8 +140,11 @@ func (server *Server) GetEntidade(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 12003)
-
+	err := config.AuthMod(w, r, 12003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -185,8 +194,11 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	config.AuthMod(w, r, 12003)
-
+	err := config.AuthMod(w, r, 12003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 

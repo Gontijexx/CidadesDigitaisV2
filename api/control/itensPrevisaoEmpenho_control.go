@@ -6,6 +6,7 @@ import (
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -23,8 +24,11 @@ import (
 func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 18002)
-
+	err := config.AuthMod(w, r, 18002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -57,8 +61,11 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 func (server *Server) GetItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 18002)
-
+	err := config.AuthMod(w, r, 18002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
 
 	//	itensPrevisaoEmpenhos armazena os dados buscados no banco de dados
@@ -78,8 +85,11 @@ func (server *Server) GetItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Req
 
 func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
-	config.AuthMod(w, r, 18003)
-
+	err := config.AuthMod(w, r, 18003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 

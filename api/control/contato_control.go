@@ -22,8 +22,11 @@ import (
 func (server *Server) SaveContato(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	//config.AuthMod(w, r, 12001)
-
+	err := config.AuthMod(w, r, 12001)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -77,8 +80,11 @@ func (server *Server) SaveContato(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetContatoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	//config.AuthMod(w, r, 12002)
-
+	err := config.AuthMod(w, r, 12002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -111,8 +117,11 @@ func (server *Server) GetContatoByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllContato(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	//config.AuthMod(w, r, 12002)
-
+	err := config.AuthMod(w, r, 12002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	contato := models.Contato{}
 
 	//	contatos armazena os dados buscados no banco de dados
@@ -133,8 +142,11 @@ func (server *Server) GetAllContato(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	//config.AuthMod(w, r, 12003)
-
+	err := config.AuthMod(w, r, 12003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -178,4 +190,3 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updateContato)
 }
-

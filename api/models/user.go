@@ -1,6 +1,7 @@
 package models
 
 import (
+	"CidadesDigitaisV2/api/config"
 	"errors"
 	"html"
 	"log"
@@ -132,4 +133,25 @@ func (u *Usuario) DeleteAUser(db *gorm.DB, uId uint32) (int64, error) {
 	}
 
 	return db.RowsAffected, nil
+}
+
+func (u *Usuario_modulo) CreateModulo(db *gorm.DB, uId uint32, mods interface{}) (*Usuario_modulo, error) {
+
+	modulo := config.InterfaceSlice(mods)
+
+	moduloInt := make([]float64, len(modulo))
+
+	for i := range modulo {
+		moduloInt[i] = modulo[i].(float64)
+	}
+
+	for _, v := range moduloInt {
+		err := db.Debug().Raw("INSERT INTO usuario_modulo VALUE(?,?)", uId, v).Error
+		if err != nil {
+			return &Usuario_modulo{}, err
+		}
+
+	}
+
+	return u, nil
 }

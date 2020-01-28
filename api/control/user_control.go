@@ -173,10 +173,66 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
 
+func (server *Server) AddModulo(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	IDUser, err := strconv.ParseUint(vars["id2"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+	if tokenID != uint32(uid) {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+
+	uID, err := strconv.ParseUint(vars["id"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	userModulo := models.Usuario_modulo{}
+
+	err = json.Unmarshal(body, &userModulo)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	if err = validation.Validator.Struct(userModulo); err != nil {
+		log.Printf("[WARN] invalid user_modulo information, because, %v\n", err)
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	userMod, err := userModulo.CreateModulo(server.DB, uint32(uID), userModulo.Cod_modulo)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+	responses.JSON(w, http.StatusCreated, userMod)
+	return
+}
+
 /*  ============================
     FUNCAO PARA DELETAR USUARIOS
-=============================  */
+=============================
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
+
 
 	vars := mux.Vars(r)
 
@@ -204,3 +260,4 @@ func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Entity", fmt.Sprintf("%d", uid))
 	responses.JSON(w, http.StatusNoContent, "")
 }
+*/

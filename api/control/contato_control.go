@@ -15,6 +15,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+/*	=========================
+		MUDAR MENSAGENS DE ERRO
+=========================	*/
+
 /*  =========================
 	FUNCAO ADICIONAR CONTATO
 =========================  */

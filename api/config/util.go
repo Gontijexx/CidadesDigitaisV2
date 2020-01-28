@@ -14,6 +14,7 @@ func AuthMod(w http.ResponseWriter, r *http.Request, PagMod float64) (err error)
 	mod, err := auth.ExtractTokenMod(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf(`{"Error": "We couldn't extract Token"}`))
+		return
 	}
 	umod := InterfaceSlice(mod)
 

@@ -15,6 +15,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+/*	=========================
+		ALEXANDRE: IREI OLHAR AINDA!
+=========================	*/
+
 /*  =========================
 	FUNCAO LISTAR CD_ITENS POR ID
 =========================  */

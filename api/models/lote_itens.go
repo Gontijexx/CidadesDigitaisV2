@@ -6,6 +6,10 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/*	=========================
+		COMENTAR
+=========================	*/
+
 func (loteItens *Lote_itens) FindLote_itensByID(db *gorm.DB, loteItensID1, loteItensID2, loteItensID3 uint64) (*Lote_itens, error) {
 
 	err := db.Debug().Model(Lote_itens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteItensID1, loteItensID2, loteItensID3).Take(&loteItens).Error

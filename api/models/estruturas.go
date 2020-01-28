@@ -17,6 +17,30 @@ type Entidade struct {
 }
 
 /*  =========================
+	TABELA CONTATO
+=========================  */
+
+type Contato struct {
+	Cod_contato uint64 `gorm:"AUTO_INCREMENT;primary_key;not null;size:11" json:"cod_contato" validate: "required":`
+	Cnpj        string `gorm:"default:null;size:14" json:"cnpj" validate: "required":`
+	Cod_ibge    int32  `gorm:"default:null;size:7" json:"cod_ibge" validate: "alphanum":`
+	Nome        string `gorm:"default:null;size:50" json:"nome" validate: "alphanum":`
+	Email       string `gorm:"default:null;size:100" json:"email" validate: "email":`
+	Funcao      string `gorm:"default:null;size:45" json:"funcao" validate: "alphanum":`
+}
+
+/*  =========================
+	TABELA TELEFONE
+=========================  */
+
+type Telefone struct {
+	Cod_telefone uint64 `gorm:"AUTO_INCREMENT;primary_key;not null;size:11" json:"cod_telefone" validate: "required":`
+	Cod_contato  uint64 `gorm:"foreing_key:Cod_contato;not null;size:11" json:"cod_contato" validate: "required":`
+	Telefone     string `gorm:"default:null;size:11" json:"telefone" validate: "required":`
+	Tipo         string `gorm:"default:null;size:10" json:"tipo" validate: "alphanum":`
+}
+
+/*  =========================
 	TABELA LOTE
 =========================  */
 
@@ -52,6 +76,10 @@ type CD struct {
 	Data_imp string `gorm:"default:null" json:"data_imp" validate: "alphanum":`
 }
 
+/*  =========================
+	TABELA CD ITENS
+=========================  */
+
 type Cd_itens struct {
 	Cod_ibge                     uint32 `gorm:"primary_key;foreing_key:Cod_ibge;not null;size:7" json:"cod_ibge" validate: "required":`
 	Cod_item                     uint32 `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
@@ -60,6 +88,10 @@ type Cd_itens struct {
 	Quantidade_projeto_executivo uint32 `gorm:"default:null;size:11" json:"quantidade_projeto_executivo" validate: "alphanum":`
 	Quantidade_termo_instalacao  uint32 `gorm:"default:null;size:11" json:"quantidade_termo_instalacao" validate: "alphanum":`
 }
+
+/*  =========================
+	TABELA LOTE ITENS
+=========================  */
 
 type Lote_itens struct {
 	Cod_lote      uint32  `gorm:"primary_key;foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
@@ -81,6 +113,10 @@ type PrevisaoEmpenho struct {
 	Ano_referencia       uint32 `gorm:"default:null;size:11" json:"ano_referencia" validate: "alphanum":`
 }
 
+/*  =========================
+	TABELA ITENS PREVISAO EMPENHO
+=========================  */
+
 type ItensPrevisaoEmpenho struct {
 	Cod_previsao_empenho uint32  `gorm:"primary_key;;not null;size:11" json:"Cod_previsao_empenho" validate: "required":`
 	Cod_item             uint32  `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
@@ -88,28 +124,4 @@ type ItensPrevisaoEmpenho struct {
 	Cod_lote             uint32  `gorm:"foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Valor                float64 `gorm:"default:null;size:12" json:"valor" validate: "alphanum":`
 	Quantidade           uint32  `gorm:"default:null;size:11" json:"quantidade" validate: "alphanum":`
-}
-
-/*  =========================
-	TABELA CONTATO
-=========================  */
-
-type Contato struct {
-	Cod_contato			 uint64 `gorm:"AUTO_INCREMENT;primary_key;not null;size:11" json:"cod_contato" validate: "required":`
-	Cnpj                 string `gorm:"default:null;size:14" json:"cnpj" validate: "required":`
-	Cod_ibge             int32 `gorm:"default:null;size:7" json:"cod_ibge" validate: "alphanum":`
-	Nome       			 string `gorm:"default:null;size:50" json:"nome" validate: "alphanum":`
-	Email                string `gorm:"default:null;size:100" json:"email" validate: "email":`
-	Funcao       	     string `gorm:"default:null;size:45" json:"funcao" validate: "alphanum":`
-}
-
-/*  =========================
-	TABELA TELEFONE
-=========================  */
-
-type Telefone struct {
-	Cod_telefone	uint64 `gorm:"AUTO_INCREMENT;primary_key;not null;size:11" json:"cod_telefone" validate: "required":`
-	Cod_contato		uint64 `gorm:"foreing_key:Cod_contato;not null;size:11" json:"cod_contato" validate: "required":`
-	Telefone        string `gorm:"default:null;size:11" json:"telefone" validate: "required":`
-	Tipo            string `gorm:"default:null;size:10" json:"tipo" validate: "alphanum":`
 }

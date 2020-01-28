@@ -10,6 +10,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+/*	=========================
+		COMENTAR!!!!!
+=========================	*/
+
 type Usuario struct {
 	Cod_usuario uint32 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_usuario"`
 	Nome        string `gorm:"size:100;default:null" json:"nome" validate: "alphanum":`

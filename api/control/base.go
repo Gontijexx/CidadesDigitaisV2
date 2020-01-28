@@ -13,6 +13,10 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql" //mysql database driver
 )
 
+/*	=========================
+		COMENTAR
+=========================	*/
+
 type Server struct {
 	DB     *gorm.DB
 	Router *mux.Router

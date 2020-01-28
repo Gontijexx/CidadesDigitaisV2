@@ -1,15 +1,20 @@
 package api
 
 import (
-	"github.com/gorilla/mux"
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/gorilla/mux"
 
 	"CidadesDigitaisV2/api/control"
 
 	"github.com/joho/godotenv"
 )
+
+/*	=========================
+		COMENTAR
+=========================	*/
 
 var server = control.Server{}
 

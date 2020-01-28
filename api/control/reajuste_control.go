@@ -17,6 +17,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+/*	=========================
+		PRECISA DE MANUTENCAO
+=========================	*/
+
 func (server *Server) CreateReajuste(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)

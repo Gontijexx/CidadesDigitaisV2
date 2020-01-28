@@ -14,6 +14,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+/*	=========================
+		PRECISA DE MANUTENCAO
+=========================	*/
+
 func (server *Server) GetLote_itensByID(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)

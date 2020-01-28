@@ -45,14 +45,14 @@ func (contato *Contato) FindContatoByID(db *gorm.DB, contatoID uint64) (*Contato
 
 func (contato *Contato) FindAllContato(db *gorm.DB) (*[]Contato, error) {
 
-	entity := []Contato{}
+	allContato := []Contato{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Contato{}).Limit(100).Find(&entity).Error
+	err := db.Debug().Model(&Contato{}).Limit(100).Find(&allContato).Error
 	if err != nil {
 		return &[]Contato{}, err
 	}
-	return &entity, err
+	return &allContato, err
 }
 
 /*  =========================

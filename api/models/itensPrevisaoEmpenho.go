@@ -26,14 +26,14 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindItensPrevisaoEmpenhoByID(d
 
 func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindAllItensPrevisaoEmpenho(db *gorm.DB) (*[]ItensPrevisaoEmpenho, error) {
 
-	itensPrevisaoEmpenhos := []ItensPrevisaoEmpenho{}
+	allItensPrevisaoEmpenho := []ItensPrevisaoEmpenho{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&ItensPrevisaoEmpenho{}).Limit(100).Find(&itensPrevisaoEmpenhos).Error
+	err := db.Debug().Model(&ItensPrevisaoEmpenho{}).Limit(100).Find(&allItensPrevisaoEmpenho).Error
 	if err != nil {
 		return &[]ItensPrevisaoEmpenho{}, err
 	}
-	return &itensPrevisaoEmpenhos, err
+	return &allItensPrevisaoEmpenho, err
 }
 
 /*  =========================

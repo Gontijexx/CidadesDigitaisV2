@@ -46,11 +46,11 @@ func (cdItens *CDItens) UpdateCDItens(db *gorm.DB, cdItensID1, cdItensID2, cdIte
 	return cdItens, err
 }
 
-func (e *CDItens) FindAllCDItens(db *gorm.DB) (*[]CDItens, error) {
-	cdItens := []CDItens{}
-	err := db.Debug().Model(&CDItens{}).Find(&cdItens).Error
+func (cdItens *CDItens) FindAllCDItens(db *gorm.DB) (*[]CDItens, error) {
+	allCDItens := []CDItens{}
+	err := db.Debug().Model(&CDItens{}).Find(&allCDItens).Error
 	if err != nil {
 		return &[]CDItens{}, err
 	}
-	return &cdItens, err
+	return &allCDItens, err
 }

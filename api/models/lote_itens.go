@@ -44,11 +44,11 @@ func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, loteItensID1, loteItens
 	return loteItens, err
 }
 
-func (e *LoteItens) FindAllLoteItens(db *gorm.DB) (*[]LoteItens, error) {
-	loteItens := []LoteItens{}
-	err := db.Debug().Model(&LoteItens{}).Find(&loteItens).Error
+func (loteItens *LoteItens) FindAllLoteItens(db *gorm.DB) (*[]LoteItens, error) {
+	allLoteItens := []LoteItens{}
+	err := db.Debug().Model(&LoteItens{}).Find(&allLoteItens).Error
 	if err != nil {
 		return &[]LoteItens{}, err
 	}
-	return &loteItens, err
+	return &allLoteItens, err
 }

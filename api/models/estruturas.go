@@ -80,7 +80,7 @@ type CD struct {
 	TABELA CD ITENS
 =========================  */
 
-type Cd_itens struct {
+type CDItens struct {
 	Cod_ibge                     uint32 `gorm:"primary_key;foreing_key:Cod_ibge;not null;size:7" json:"cod_ibge" validate: "required":`
 	Cod_item                     uint32 `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
 	Cod_tipo_item                uint32 `gorm:"primary_key;foreing_key:Cod_tipo_item;not null;size:11" json:"cod_tipo_item" validate: "required":`
@@ -93,7 +93,7 @@ type Cd_itens struct {
 	TABELA LOTE ITENS
 =========================  */
 
-type Lote_itens struct {
+type LoteItens struct {
 	Cod_lote      uint32  `gorm:"primary_key;foreing_key:Cod_lote;not null;size:11" json:"cod_lote" validate: "required":`
 	Cod_item      uint32  `gorm:"primary_key;foreing_key:Cod_item;not null;size:11" json:"cod_item" validate: "required":`
 	Cod_tipo_item uint32  `gorm:"primary_key;foreing_key:Cod_tipo_item;not null;size:11" json:"cod_tipo_item" validate: "required":`

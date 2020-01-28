@@ -123,10 +123,10 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	EDITA LOTE ITENS
-	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLote_itens))).Methods(http.MethodPut)
+	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLoteItens))).Methods(http.MethodPut)
 
 	//	LISTA LOTE ITENS POR ID
-	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLote_itensByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteItensByID))).Methods(http.MethodGet)
 
 	/*	=========================
 			ROTAS EM PREVISAO EMPENHO

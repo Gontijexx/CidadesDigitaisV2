@@ -43,10 +43,10 @@ func (server *Server) GetCdItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cd_itens := models.Cd_itens{}
+	cd_itens := models.CDItens{}
 
 	//vai utilizar o metodo para procurar o resultado de acordo com a chave
-	cd_itensGotten, err := cd_itens.FindCd_itensByID(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
+	cd_itensGotten, err := cd_itens.FindCDItensByID(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -70,10 +70,10 @@ func (server *Server) GetCdItens(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
-	cd_item := models.Cd_itens{}
+	cd_item := models.CDItens{}
 
 	//	cd_itens armazena os dados buscados no banco de dados
-	cd_itens, err := cd_item.FindAllCd_itens(server.DB)
+	cd_itens, err := cd_item.FindAllCDItens(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -112,7 +112,7 @@ func (server *Server) UpdateCdItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cd_itens := models.Cd_itens{}
+	cd_itens := models.CDItens{}
 
 	//cd_itens.Prepare()
 
@@ -129,7 +129,7 @@ func (server *Server) UpdateCdItens(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateCd_itens recebe a nova cd_itens, a que foi alterada
-	updateCd_itens, err := cd_itens.UpdateCd_itens(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
+	updateCd_itens, err := cd_itens.UpdateCDItens(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)

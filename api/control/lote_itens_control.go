@@ -18,7 +18,7 @@ import (
 		PRECISA DE MANUTENCAO
 =========================	*/
 
-func (server *Server) GetLote_itensByID(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetLoteItensByID(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -30,9 +30,9 @@ func (server *Server) GetLote_itensByID(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	lote_itens := models.Lote_itens{}
+	lote_itens := models.LoteItens{}
 
-	lote_itensGotten, err := lote_itens.FindLote_itensByID(server.DB, uint64(lote_itensID1), uint64(lote_itensID2), uint64(lote_itensID3))
+	lote_itensGotten, err := lote_itens.FindLoteItensByID(server.DB, uint64(lote_itensID1), uint64(lote_itensID2), uint64(lote_itensID3))
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -43,11 +43,11 @@ func (server *Server) GetLote_itensByID(w http.ResponseWriter, r *http.Request) 
 
 }
 
-func (server *Server) GetLote_itens(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetLoteItens(w http.ResponseWriter, r *http.Request) {
 
-	enti := models.Lote_itens{}
+	enti := models.LoteItens{}
 
-	lote_itens, err := enti.FindAllLote_itens(server.DB)
+	lote_itens, err := enti.FindAllLoteItens(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
@@ -55,7 +55,7 @@ func (server *Server) GetLote_itens(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, lote_itens)
 }
 
-func (server *Server) UpdateLote_itens(w http.ResponseWriter, r *http.Request) {
+func (server *Server) UpdateLoteItens(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	lote_itensID1, err := strconv.ParseUint(vars["id1"], 10, 64)
@@ -72,7 +72,7 @@ func (server *Server) UpdateLote_itens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lote_itens := models.Lote_itens{}
+	lote_itens := models.LoteItens{}
 	err = json.Unmarshal(body, &lote_itens)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -85,7 +85,7 @@ func (server *Server) UpdateLote_itens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updateLote_itens, err := lote_itens.UpdateLote_itens(server.DB, uint64(lote_itensID1), uint64(lote_itensID2), uint64(lote_itensID3))
+	updateLote_itens, err := lote_itens.UpdateLoteItens(server.DB, uint64(lote_itensID1), uint64(lote_itensID2), uint64(lote_itensID3))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)

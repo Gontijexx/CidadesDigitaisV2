@@ -13,6 +13,10 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
+/*	=========================
+		TERMINAR DE COMENTAR
+=========================	*/
+
 /*  =========================
 	FUNCAO CRIAR TOKEN AO
 	REALIZAR LOGIN

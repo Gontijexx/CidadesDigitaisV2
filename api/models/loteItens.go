@@ -6,6 +6,10 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/*	=========================
+		PRECISA FAZER OS TESTES
+=========================	*/
+
 /*  =========================
 	FUNCAO LISTAR LOTE_ITENS POR ID
 =========================  */

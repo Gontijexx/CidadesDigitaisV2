@@ -170,6 +170,8 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//LISTA CONTATO ID
 	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetContatoByID))).Methods(http.MethodGet)
 
+	//	APAGA LOTE POR ID
+	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteContato))).Methods(http.MethodDelete)
 	/*	=========================
 			ROTAS DE TELEFONE
 	=========================	*/

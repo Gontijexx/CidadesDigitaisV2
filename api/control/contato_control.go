@@ -15,10 +15,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		MUDAR MENSAGENS DE ERRO
-=========================	*/
-
 /*  =========================
 	FUNCAO ADICIONAR CONTATO
 =========================  */
@@ -34,7 +30,7 @@ func (server *Server) SaveContato(w http.ResponseWriter, r *http.Request) {
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
 	}
 
 	//	Estrutura models.Contato{} "renomeada"
@@ -49,12 +45,12 @@ func (server *Server) SaveContato(w http.ResponseWriter, r *http.Request) {
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	if err = validation.Validator.Struct(contato); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
@@ -95,7 +91,7 @@ func (server *Server) GetContatoByID(w http.ResponseWriter, r *http.Request) {
 	//	contatoID armazena a chave primaria da tabela contato
 	contatoID, err := strconv.ParseUint(vars["cod_contato"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
@@ -105,7 +101,7 @@ func (server *Server) GetContatoByID(w http.ResponseWriter, r *http.Request) {
 	contatoGotten, err := contato.FindContatoByID(server.DB, uint64(contatoID))
 
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
 	}
 
@@ -129,14 +125,15 @@ func (server *Server) GetAllContato(w http.ResponseWriter, r *http.Request) {
 	contato := models.Contato{}
 
 	//	contatos armazena os dados buscados no banco de dados
-	contatos, err := contato.FindAllContato(server.DB)
+	allContato, err := contato.FindAllContato(server.DB)
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, contatos)
+	responses.JSON(w, http.StatusOK, allContato)
 }
 
 /*  =========================
@@ -157,13 +154,13 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 	//	contatoID armazena a chave primaria da tabela contato
 	contatoID, err := strconv.ParseUint(vars["cod_contato"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
 		return
 	}
 
@@ -173,12 +170,12 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(body, &contato)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	if err = validation.Validator.Struct(contato); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
@@ -187,10 +184,49 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 	updateContato, err := contato.UpdateContato(server.DB, contatoID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
 		return
 	}
 
 	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updateContato)
+}
+
+/*  =========================
+	FUNCAO DELETAR CONTATO
+=========================  */
+
+func (server *Server) DeleteContato(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
+	err := config.AuthMod(w, r, 12003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+	// Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	contato := models.Contato{}
+
+	//	contatoID armazena a chave primaria da tabela contato
+	contatoID, err := strconv.ParseUint(vars["cod_contato"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
+	_, err = contato.DeleteContato(server.DB, uint64(contatoID))
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
+		return
+	}
+
+	w.Header().Set("Entity", fmt.Sprintf("%d", contatoID))
+
+	//	Retorna o Status 204, indicando que a informacao foi deletada
+	responses.JSON(w, http.StatusNoContent, "")
 }

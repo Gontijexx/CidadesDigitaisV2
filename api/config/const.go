@@ -40,6 +40,15 @@ const (
 )
 
 /*  =========================
+	LOTE ITENS PATHS HTTP
+=========================  */
+
+const (
+	LOTE_ITENS_PATH    = "/read/loteItens"
+	LOTE_ITENS_ID_PATH = "/read/loteItens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+)
+
+/*  =========================
 	PREVISAO EMPENHO PATHS HTTP
 	ITENS PREVISAO EMPENHO PATHS HTTP
 =========================  */
@@ -154,15 +163,6 @@ const (
 )
 
 /*  =========================
-	LOTESITENS PATHS HTTP
-=========================  */
-
-const (
-	LOTEITENS_PATH    = "/read/loteItens"
-	LOTEITENS_ID_PATH = "/read/loteItens/:id"
-)
-
-/*  =========================
 	REAJUSTE PATHS HTTP
 =========================  */
 
@@ -260,13 +260,4 @@ const (
 const (
 	CD_ITENS_PATH    = "/read/cd_itens"
 	CD_ITENS_ID_PATH = "/read/cd_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
-)
-
-/*  =========================
-	LOTE ITENS PATHS HTTP
-=========================  */
-
-const (
-	LOTE_ITENS_PATH    = "/read/lote_itens"
-	LOTE_ITENS_ID_PATH = "/read/lote_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
 )

@@ -6,17 +6,14 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-/*	=========================
-		COMENTAR
-=========================	*/
+/*  =========================
+	FUNCAO LISTAR LOTE_ITENS POR ID
+=========================  */
 
-/*	=========================
-		PRECISA DE MANUTENCAO
-=========================	*/
+func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, loteCodLote, loteCodItem, loteCodTipoItem uint64) (*LoteItens, error) {
 
-func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, loteItensID1, loteItensID2, loteItensID3 uint64) (*LoteItens, error) {
-
-	err := db.Debug().Model(LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteItensID1, loteItensID2, loteItensID3).Take(&loteItens).Error
+	//	Busca um elemento no banco de dados a partir de sua chave primaria
+	err := db.Debug().Model(LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteCodLote, loteCodItem, loteCodTipoItem).Take(&loteItens).Error
 
 	if err != nil {
 		return &LoteItens{}, err
@@ -28,31 +25,41 @@ func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, loteItensID1, loteIte
 	return loteItens, err
 }
 
-func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, loteItensID1, loteItensID2, loteItensID3 uint64) (*LoteItens, error) {
-
-	db = db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteItensID1, loteItensID2, loteItensID3).Take(&loteItens).UpdateColumns(
-		map[string]interface{}{
-			"preco": loteItens.Preco,
-		},
-	)
-
-	if db.Error != nil {
-		return &LoteItens{}, db.Error
-	}
-
-	err := db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteItensID1, loteItensID2, loteItensID3).Take(&loteItens).Error
-	if err != nil {
-		return &LoteItens{}, err
-	}
-
-	return loteItens, err
-}
+/*  =========================
+	FUNCAO LISTAR TODOS LOTE ITENS
+=========================  */
 
 func (loteItens *LoteItens) FindAllLoteItens(db *gorm.DB) (*[]LoteItens, error) {
+
 	allLoteItens := []LoteItens{}
+
+	//	Busca todos elementos contidos no banco de dados
 	err := db.Debug().Model(&LoteItens{}).Find(&allLoteItens).Error
 	if err != nil {
 		return &[]LoteItens{}, err
 	}
 	return &allLoteItens, err
+}
+
+/*  =========================
+	FUNCAO EDITAR LOTE_ITENS
+=========================  */
+
+func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, loteCodLote, loteCodItem, loteCodTipoItem uint64) (*LoteItens, error) {
+
+	err := db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteCodLote, loteCodItem, loteCodTipoItem).Updates(
+		LoteItens{
+			Preco: loteItens.Preco,
+		}).Error
+
+	if db.Error != nil {
+		return &LoteItens{}, db.Error
+	}
+
+	err = db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteCodLote, loteCodItem, loteCodTipoItem).Take(&loteItens).Error
+	if err != nil {
+		return &LoteItens{}, err
+	}
+
+	return loteItens, err
 }

@@ -1,18 +1,20 @@
 package control
 
 import (
-	"github.com/rs/cors"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/middlewares"
 	"net/http"
 
+	"github.com/rs/cors"
+
 	"github.com/gorilla/mux"
 )
-func (s *Server) CreateCors() (*cors.Cors){
+
+func (s *Server) CreateCors() *cors.Cors {
 	return cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
-		AllowedHeaders:	[]string{"Content-Type", "Accept", "Content-Length", "Accept-Encoding", "Authorization"}
+		AllowedHeaders: []string{"Content-Type", "Accept", "Content-Length", "Accept-Encoding", "Authorization"},
 	})
 }
 
@@ -120,6 +122,19 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteLote))).Methods(http.MethodDelete)
 
 	/*	=========================
+			ROTAS EM LOTE ITENS
+	=========================	*/
+
+	//	LISTA LOTE
+	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllLoteItens))).Methods(http.MethodGet)
+
+	//	EDITA LOTE ITENS
+	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLoteItens))).Methods(http.MethodPut)
+
+	//	LISTA LOTE ITENS POR ID
+	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteItensByID))).Methods(http.MethodGet)
+
+	/*	=========================
 			ROTAS EM CD
 	=========================	*/
 
@@ -163,16 +178,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	APAGA REAJUSTE (lote_cod_lote, ano_ref)
 	r.HandleFunc(config.REAJUSTE_DEL, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteReajuste))).Methods(http.MethodDelete)
-
-	/*	=========================
-			ROTAS EM LOTE ITENS
-	=========================	*/
-
-	//	EDITA LOTE ITENS
-	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLoteItens))).Methods(http.MethodPut)
-
-	//	LISTA LOTE ITENS POR ID
-	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteItensByID))).Methods(http.MethodGet)
 
 	/*	=========================
 			ROTAS EM PREVISAO EMPENHO

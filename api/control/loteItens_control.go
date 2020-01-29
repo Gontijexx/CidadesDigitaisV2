@@ -6,6 +6,7 @@ import (
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -18,79 +19,143 @@ import (
 		PRECISA DE MANUTENCAO
 =========================	*/
 
+/*  =========================
+	FUNCAO LISTAR LOTE_ITENS POR ID
+=========================  */
+
 func (server *Server) GetLoteItensByID(w http.ResponseWriter, r *http.Request) {
 
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 14002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	lote_itensID1, err := strconv.ParseUint(vars["id1"], 10, 64)
-	lote_itensID2, err := strconv.ParseUint(vars["id2"], 10, 64)
-	lote_itensID3, err := strconv.ParseUint(vars["id3"], 10, 64)
+	//	loteCodLote armazena a chave primaria da tabela entidade
+	loteCodLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	lote_itens := models.LoteItens{}
-
-	lote_itensGotten, err := lote_itens.FindLoteItensByID(server.DB, uint64(lote_itensID1), uint64(lote_itensID2), uint64(lote_itensID3))
-
+	//	loteCodItem armazena a chave primaria da tabela entidade
+	loteCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	responses.JSON(w, http.StatusOK, lote_itensGotten)
+	//	loteCodTipoItem armazena a chave primaria da tabela entidade
+	loteCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	loteItens := models.LoteItens{}
+
+	//	loteItensGotten recebe o dado buscado no banco de dados
+	loteItensGotten, err := loteItens.FindLoteItensByID(server.DB, uint64(loteCodLote), uint64(loteCodItem), uint64(loteCodTipoItem))
+
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, loteItensGotten)
 
 }
 
-func (server *Server) GetLoteItens(w http.ResponseWriter, r *http.Request) {
+/*  =========================
+	FUNCAO LISTAR TODA LOTE_ITENS
+=========================  */
 
-	enti := models.LoteItens{}
+func (server *Server) GetAllLoteItens(w http.ResponseWriter, r *http.Request) {
 
-	lote_itens, err := enti.FindAllLoteItens(server.DB)
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 14002)
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
-	responses.JSON(w, http.StatusOK, lote_itens)
+
+	loteItens := models.LoteItens{}
+
+	//	allLoteitens armazena os dados buscados no banco de dados
+	allLoteItens, err := loteItens.FindAllLoteItens(server.DB)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
+		return
+	}
+	responses.JSON(w, http.StatusOK, allLoteItens)
 }
+
+/*  =========================
+	FUNCAO EDITAR ENTIDADE
+=========================  */
 
 func (server *Server) UpdateLoteItens(w http.ResponseWriter, r *http.Request) {
 
-	vars := mux.Vars(r)
-	lote_itensID1, err := strconv.ParseUint(vars["id1"], 10, 64)
-	lote_itensID2, err := strconv.ParseUint(vars["id2"], 10, 64)
-	lote_itensID3, err := strconv.ParseUint(vars["id3"], 10, 64)
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 14003)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	loteCodLote armazena a chave primaria da tabela entidade
+	loteCodLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	loteCodItem armazena a chave primaria da tabela entidade
+	loteCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	loteCodTipoItem armazena a chave primaria da tabela entidade
+	loteCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
 		return
 	}
 
-	lote_itens := models.LoteItens{}
-	err = json.Unmarshal(body, &lote_itens)
+	loteItens := models.LoteItens{}
+	err = json.Unmarshal(body, &loteItens)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(lote_itens); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+	if err = validation.Validator.Struct(loteItens); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	updateLote_itens, err := lote_itens.UpdateLoteItens(server.DB, uint64(lote_itensID1), uint64(lote_itensID2), uint64(lote_itensID3))
+	updateLoteItens, err := loteItens.UpdateLoteItens(server.DB, uint64(loteCodLote), uint64(loteCodItem), uint64(loteCodTipoItem))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
 		return
 	}
 
-	responses.JSON(w, http.StatusOK, updateLote_itens)
+	responses.JSON(w, http.StatusOK, updateLoteItens)
 }

@@ -19,8 +19,6 @@ import (
 	FUNCAO LISTAR ITENS PREVISAO EMPENHO POR ID
 =========================  */
 
-/* ACREDITO QUE ITENS PREVISAO EMPENHO PRECISE SER REVISTA NO FUTURO */
-
 func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
@@ -36,7 +34,7 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 	itensPrevisaoEmpenhoID, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
 
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
@@ -46,7 +44,7 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 	itensPrevisaoEmpenhoGotten, err := itensPrevisaoEmpenho.FindItensPrevisaoEmpenhoByID(server.DB, uint64(itensPrevisaoEmpenhoID))
 
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
 	}
 
@@ -71,7 +69,8 @@ func (server *Server) GetItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Req
 	//	itensPrevisaoEmpenhos armazena os dados buscados no banco de dados
 	itensPrevisaoEmpenhos, err := itensPrevisaoEmpenho.FindAllItensPrevisaoEmpenho(server.DB)
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
 
@@ -97,25 +96,25 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 	itensPrevisaoEmpenhoID, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
 
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
 		return
 	}
 
 	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
 	err = json.Unmarshal(body, &itensPrevisaoEmpenho)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	if err = validation.Validator.Struct(itensPrevisaoEmpenho); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
@@ -124,7 +123,7 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 	updateItensPrevisaoEmpenho, err := itensPrevisaoEmpenho.UpdateItensPrevisaoEmpenho(server.DB, uint64(itensPrevisaoEmpenhoID))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
 		return
 	}
 

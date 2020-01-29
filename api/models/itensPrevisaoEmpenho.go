@@ -43,19 +43,18 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindAllItensPrevisaoEmpenho(db
 func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) UpdateItensPrevisaoEmpenho(db *gorm.DB, itensPrevisaoEmpenhoID uint64) (*ItensPrevisaoEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Model(&ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", itensPrevisaoEmpenhoID).Take(&itensPrevisaoEmpenho).UpdateColumns(
-		map[string]interface{}{
-			"valor":      itensPrevisaoEmpenho.Valor,
-			"quantidade": itensPrevisaoEmpenho.Quantidade,
-		},
-	)
+	err := db.Debug().Model(&ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", itensPrevisaoEmpenhoID).Updates(
+		ItensPrevisaoEmpenho{
+			Valor:      itensPrevisaoEmpenho.Valor,
+			Quantidade: itensPrevisaoEmpenho.Quantidade,
+		}).Error
 
 	if db.Error != nil {
 		return &ItensPrevisaoEmpenho{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(&ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", itensPrevisaoEmpenhoID).Take(&itensPrevisaoEmpenho).Error
+	err = db.Debug().Model(&ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", itensPrevisaoEmpenhoID).Take(&itensPrevisaoEmpenho).Error
 	if err != nil {
 		return &ItensPrevisaoEmpenho{}, err
 	}

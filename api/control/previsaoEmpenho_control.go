@@ -112,7 +112,7 @@ func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Requ
 	FUNCAO LISTAR TODAS PREVISAO EMPENHO
 =========================  */
 
-func (server *Server) GetPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 18002)

@@ -56,7 +56,7 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 	FUNCAO LISTAR ITENS PREVISAO EMPENHO
 =========================  */
 
-func (server *Server) GetItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 18002)
@@ -67,7 +67,7 @@ func (server *Server) GetItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Req
 	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
 
 	//	itensPrevisaoEmpenhos armazena os dados buscados no banco de dados
-	itensPrevisaoEmpenhos, err := itensPrevisaoEmpenho.FindAllItensPrevisaoEmpenho(server.DB)
+	allItensPrevisaoEmpenho, err := itensPrevisaoEmpenho.FindAllItensPrevisaoEmpenho(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
@@ -75,7 +75,7 @@ func (server *Server) GetItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Req
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, itensPrevisaoEmpenhos)
+	responses.JSON(w, http.StatusOK, allItensPrevisaoEmpenho)
 }
 
 /*  =========================

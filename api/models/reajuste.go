@@ -10,6 +10,10 @@ import (
 		COMENTAR
 =========================	*/
 
+/*	=========================
+		PRECISA DE MANUTENCAO
+=========================	*/
+
 func (reajuste *Reajuste) SaveReajuste(db *gorm.DB) (*Reajuste, error) {
 
 	err := db.Debug().Create(&reajuste).Error

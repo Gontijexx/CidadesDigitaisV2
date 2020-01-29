@@ -43,7 +43,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA ENTIDADE
-	r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidade))).Methods(http.MethodGet)
+	r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllEntidade))).Methods(http.MethodGet)
 
 	//	SALVA ENTIDADE
 	r.HandleFunc(config.ENTIDADE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateEntidade))).Methods(http.MethodPost)
@@ -58,11 +58,46 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEntidade))).Methods(http.MethodDelete)
 
 	/*	=========================
+			ROTAS DE CONTATO
+	=========================	*/
+
+	//LISTA CONTATO
+	r.HandleFunc(config.CONTATO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllContato))).Methods(http.MethodGet)
+
+	//SALVA CONTATO
+	r.HandleFunc(config.CONTATO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.SaveContato))).Methods(http.MethodPost)
+
+	//EDITA CONTATO ID
+	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateContato))).Methods(http.MethodPut)
+
+	//LISTA CONTATO ID
+	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetContatoByID))).Methods(http.MethodGet)
+
+	//	APAGA LOTE POR ID
+	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteContato))).Methods(http.MethodDelete)
+
+	/*	=========================
+			ROTAS DE TELEFONE
+	=========================	*/
+
+	//LISTA TELEFONE
+	r.HandleFunc(config.TELEFONE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllTelefone))).Methods(http.MethodGet)
+
+	//SALVA TELEFONE
+	r.HandleFunc(config.TELEFONE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.SaveTelefone))).Methods(http.MethodPost)
+
+	//APAGA TELEFONE ID
+	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTelefone))).Methods(http.MethodDelete)
+
+	//LISTA TELEFONE ID
+	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetTelefoneByID))).Methods(http.MethodGet)
+
+	/*	=========================
 			ROTAS EM LOTE
 	=========================	*/
 
 	//	LISTA LOTE
-	r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLote))).Methods(http.MethodGet)
+	r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllLote))).Methods(http.MethodGet)
 
 	//	SALVA LOTE
 	r.HandleFunc(config.LOTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateLote))).Methods(http.MethodPost)
@@ -81,7 +116,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA CD
-	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCD))).Methods(http.MethodGet)
+	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCD))).Methods(http.MethodGet)
 
 	//	SALVA CD
 	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCD))).Methods(http.MethodPost)
@@ -97,7 +132,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCdItens))).Methods(http.MethodPut)
 
 	//lista cd itens
-	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCdItens))).Methods(http.MethodGet)
+	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCDItens))).Methods(http.MethodGet)
 
 	//lista cd itens ID
 	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCdItem))).Methods(http.MethodGet)
@@ -133,7 +168,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA PREVISAO EMPENHO
-	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisaoEmpenho))).Methods(http.MethodGet)
+	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPrevisaoEmpenho))).Methods(http.MethodGet)
 
 	//	SALVA PREVISAO EMPENHO
 	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrevisaoEmpenho))).Methods(http.MethodPost)
@@ -153,40 +188,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	LISTA ITENS PREVISAO EMPENDO
 	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensPrevisaoEmpenhoByID))).Methods(http.MethodGet)
-
-	/*	=========================
-			ROTAS DE CONTATO
-	=========================	*/
-
-	//LISTA CONTATO
-	r.HandleFunc(config.CONTATO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllContato))).Methods(http.MethodGet)
-
-	//SALVA CONTATO
-	r.HandleFunc(config.CONTATO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.SaveContato))).Methods(http.MethodPost)
-
-	//EDITA CONTATO ID
-	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateContato))).Methods(http.MethodPut)
-
-	//LISTA CONTATO ID
-	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetContatoByID))).Methods(http.MethodGet)
-
-	//	APAGA LOTE POR ID
-	r.HandleFunc(config.CONTATO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteContato))).Methods(http.MethodDelete)
-	/*	=========================
-			ROTAS DE TELEFONE
-	=========================	*/
-
-	//LISTA TELEFONE
-	r.HandleFunc(config.TELEFONE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetTelefone))).Methods(http.MethodGet)
-
-	//SALVA TELEFONE
-	r.HandleFunc(config.TELEFONE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.SaveTelefone))).Methods(http.MethodPost)
-
-	//APAGA TELEFONE ID
-	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTelefone))).Methods(http.MethodDelete)
-
-	//LISTA TELEFONE ID
-	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetTelefoneByID))).Methods(http.MethodGet)
 
 	/*
 		//**********Rotas em Assunto

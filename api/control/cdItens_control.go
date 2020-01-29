@@ -19,6 +19,10 @@ import (
 		ALEXANDRE: IREI OLHAR AINDA!
 =========================	*/
 
+/*	=========================
+		PRECISA DE MANUTENCAO
+=========================	*/
+
 /*  =========================
 	FUNCAO LISTAR CD_ITENS POR ID
 =========================  */
@@ -62,7 +66,7 @@ func (server *Server) GetCdItem(w http.ResponseWriter, r *http.Request) {
 	FUNCAO LISTAR CD_ITENS
 =========================  */
 
-func (server *Server) GetCdItens(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllCDItens(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 13022)
@@ -70,16 +74,16 @@ func (server *Server) GetCdItens(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
-	cd_item := models.CDItens{}
+	cdItens := models.CDItens{}
 
-	//	cd_itens armazena os dados buscados no banco de dados
-	cd_itens, err := cd_item.FindAllCDItens(server.DB)
+	//	allCDItens armazena os dados buscados no banco de dados
+	allCDItens, err := cdItens.FindAllCDItens(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, cd_itens)
+	responses.JSON(w, http.StatusOK, allCDItens)
 }
 
 /*  =========================

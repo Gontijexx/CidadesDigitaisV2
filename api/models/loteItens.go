@@ -10,6 +10,10 @@ import (
 		COMENTAR
 =========================	*/
 
+/*	=========================
+		PRECISA DE MANUTENCAO
+=========================	*/
+
 func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, loteItensID1, loteItensID2, loteItensID3 uint64) (*LoteItens, error) {
 
 	err := db.Debug().Model(LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteItensID1, loteItensID2, loteItensID3).Take(&loteItens).Error

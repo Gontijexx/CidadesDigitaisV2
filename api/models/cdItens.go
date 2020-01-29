@@ -10,6 +10,10 @@ import (
 		COMENTAR
 =========================	*/
 
+/*	=========================
+		PRECISA DE MANUTENCAO
+=========================	*/
+
 func (cdItens *CDItens) FindCDItensByID(db *gorm.DB, cdItensID1, cdItensID2, cdItensID3 uint64) (*CDItens, error) {
 
 	err := db.Debug().Model(CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", cdItensID1, cdItensID2, cdItensID3).Take(&cdItens).Error

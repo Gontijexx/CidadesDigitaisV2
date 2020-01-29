@@ -111,7 +111,7 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 	FUNCAO LISTAR TODOS CD
 =========================  */
 
-func (server *Server) GetCD(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllCD(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 13002)

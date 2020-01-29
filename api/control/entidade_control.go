@@ -111,7 +111,7 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 	FUNCAO LISTAR TODAS ENTIDADE
 =========================  */
 
-func (server *Server) GetEntidade(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 12002)

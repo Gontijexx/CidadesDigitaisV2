@@ -26,12 +26,16 @@ import (
 func (server *Server) SaveTelefone(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	//config.AuthMod(w, r, 12001)
+	err := config.AuthMod(w, r, 12001)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
 	}
 
 	//	Estrutura models.Telefone{} "renomeada"
@@ -46,12 +50,12 @@ func (server *Server) SaveTelefone(w http.ResponseWriter, r *http.Request) {
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	if err = validation.Validator.Struct(telefone); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
@@ -62,8 +66,8 @@ func (server *Server) SaveTelefone(w http.ResponseWriter, r *http.Request) {
 	//	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
 	//	Status 500
 	if err != nil {
-
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Telefone, Check server details"))
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
 		return
 	}
 
@@ -81,7 +85,11 @@ func (server *Server) SaveTelefone(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetTelefoneByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	//config.AuthMod(w, r, 12002)
+	err := config.AuthMod(w, r, 12002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
@@ -89,7 +97,7 @@ func (server *Server) GetTelefoneByID(w http.ResponseWriter, r *http.Request) {
 	//	telefoneID armazena a chave primaria da tabela telefone
 	telefoneID, err := strconv.ParseUint(vars["cod_telefone"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
@@ -99,7 +107,7 @@ func (server *Server) GetTelefoneByID(w http.ResponseWriter, r *http.Request) {
 	telefoneGotten, err := telefone.FindTelefoneByID(server.DB, uint64(telefoneID))
 
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
 	}
 
@@ -112,10 +120,14 @@ func (server *Server) GetTelefoneByID(w http.ResponseWriter, r *http.Request) {
 	FUNCAO LISTAR TODAS TELEFONE
 =========================  */
 
-func (server *Server) GetTelefone(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllTelefone(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	config.AuthMod(w, r, 12002)
+	err := config.AuthMod(w, r, 12002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 
 	telefone := models.Telefone{}
 
@@ -151,7 +163,7 @@ func (server *Server) DeleteTelefone(w http.ResponseWriter, r *http.Request) {
 	//	telefoneID armazena a chave primaria da tabela telefone
 	telefoneID, err := strconv.ParseUint(vars["cod_telefone"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
@@ -159,7 +171,8 @@ func (server *Server) DeleteTelefone(w http.ResponseWriter, r *http.Request) {
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
 	_, err = telefone.DeleteTelefone(server.DB, uint64(telefoneID))
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 

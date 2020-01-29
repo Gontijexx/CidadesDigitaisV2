@@ -63,7 +63,11 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]
 func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, previsaoEmpenhoID uint64) (*PrevisaoEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", previsaoEmpenhoID).Updates(PrevisaoEmpenho{Data: previsaoEmpenho.Data, Tipo: previsaoEmpenho.Tipo, Ano_referencia: previsaoEmpenho.Ano_referencia}).Error
+	err := db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", previsaoEmpenhoID).Updates(
+		PrevisaoEmpenho{
+			Data:           previsaoEmpenho.Data,
+			Tipo:           previsaoEmpenho.Tipo,
+			Ano_referencia: previsaoEmpenho.Ano_referencia}).Error
 
 	if err != nil {
 		return &PrevisaoEmpenho{}, err

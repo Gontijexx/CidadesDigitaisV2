@@ -107,7 +107,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	FUNCAO LISTAR TODOS LOTE
 =========================  */
 
-func (server *Server) GetLote(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllLote(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 14002)

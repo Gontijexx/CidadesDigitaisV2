@@ -6,10 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-/*	=========================
-		ALEXANDRE: IREI OLHAR AINDA
-=========================	*/
-
 /*  =========================
 	FUNCAO SALVAR CONTATO
 =========================  */

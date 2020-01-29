@@ -7,10 +7,6 @@ import (
 )
 
 /*  =========================
-	FUNCOES QUE FAZEM CONEXAO DIRETA COM O BANCO DE DADOS
-=========================  */
-
-/*  =========================
 	FUNCAO SALVAR ENTIDADE NO BANCO DE DADOS
 =========================  */
 

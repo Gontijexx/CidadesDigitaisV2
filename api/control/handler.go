@@ -10,10 +10,10 @@ import (
 
 func (s *Server) CreateHandler() (r *mux.Router) {
 
-	//cria um roteador
+	//	CRIA UM ROTEADOR
 
 	r = s.Router
-	//Home
+	//	HOME
 	r.HandleFunc("/{id}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
 
 	/*	=========================

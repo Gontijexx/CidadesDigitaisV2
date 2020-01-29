@@ -1,12 +1,20 @@
 package control
 
 import (
+	"github.com/rs/cors"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/middlewares"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
+func (s *Server) CreateCors() (*cors.Cors){
+	return cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:	[]string{"Content-Type", "Accept", "Content-Length", "Accept-Encoding", "Authorization"}
+	})
+}
 
 func (s *Server) CreateHandler() (r *mux.Router) {
 

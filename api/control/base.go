@@ -48,10 +48,13 @@ func (server *Server) Run() {
 		ReadTimeout:  100 * time.Millisecond,
 		WriteTimeout: 300 * time.Millisecond,
 	}
+	c := server.CreateCors()
 
 	h := server.CreateHandler()
 
-	httpServer.Handler = h
+	handler := c.Handler(h)
+
+	httpServer.Handler = handler
 
 	validation.CreateValidator()
 	log.Println("Listening to port 8080")

@@ -127,15 +127,18 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA CD POR ID
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDByID))).Methods(http.MethodGet)
 
-	//----------Rotas de Cd Itens
-	//edita cd itens
-	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCdItens))).Methods(http.MethodPut)
+	/*	=========================
+			ROTAS EM CD_ITENS
+	=========================	*/
 
-	//lista cd itens
+	//	LISTA CD_ITENS
 	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCDItens))).Methods(http.MethodGet)
 
-	//lista cd itens ID
-	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCdItem))).Methods(http.MethodGet)
+	//	EDITA CD_ITENS
+	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCDItens))).Methods(http.MethodPut)
+
+	//	LISTA CD_ITENS POR ID
+	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDItensByID))).Methods(http.MethodGet)
 
 	/*	=========================
 			ROTAS EM REAJUSTE

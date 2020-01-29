@@ -121,7 +121,7 @@ func (server *Server) GetAllEntidade(w http.ResponseWriter, r *http.Request) {
 	}
 	entidade := models.Entidade{}
 
-	//	entidades armazena os dados buscados no banco de dados
+	//	allEntidade armazena os dados buscados no banco de dados
 	allEntidade, err := entidade.FindAllEntidade(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())

@@ -15,15 +15,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		PRECISA DE MANUTENCAO
-=========================	*/
-
 /*  =========================
 	FUNCAO LISTAR CD_ITENS POR ID
 =========================  */
 
-func (server *Server) GetCdItem(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 13022)
@@ -31,22 +27,34 @@ func (server *Server) GetCdItem(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
-	//Vars retorna a rota das variaveis
+	//	Vars retorna a rota das variaveis
 	vars := mux.Vars(r)
 
-	//interpreta  a string em uma base de (0, 2 to 36) e tamanho de (0 to 64)
-	cd_itensID1, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
-	cd_itensID2, err := strconv.ParseUint(vars["cod_item"], 10, 64)
-	cd_itensID3, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	//	cdCodIbge armazena a chave primaria da tabela cd_itens
+	cdCodIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	cd_itens := models.CDItens{}
+	//	cdCodItem armazena a chave primaria da tabela cd_itens
+	cdCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
 
-	//vai utilizar o metodo para procurar o resultado de acordo com a chave
-	cd_itensGotten, err := cd_itens.FindCDItensByID(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
+	//	cdCodTipoItem armazena a chave primaria da tabela cd_itens
+	cdCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	cdItens := models.CDItens{}
+
+	//	cdItensGotten recebe o dado buscado no banco de dados
+	cdItensGotten, err := cdItens.FindCDItensByID(server.DB, uint64(cdCodIbge), uint64(cdCodItem), uint64(cdCodTipoItem))
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -54,12 +62,12 @@ func (server *Server) GetCdItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//retorna um JSON indicando que funcionou corretamente
-	responses.JSON(w, http.StatusOK, cd_itensGotten)
+	responses.JSON(w, http.StatusOK, cdItensGotten)
 
 }
 
 /*  =========================
-	FUNCAO LISTAR CD_ITENS
+	FUNCAO LISTAR TODOS CD_ITENS
 =========================  */
 
 func (server *Server) GetAllCDItens(w http.ResponseWriter, r *http.Request) {
@@ -75,7 +83,8 @@ func (server *Server) GetAllCDItens(w http.ResponseWriter, r *http.Request) {
 	//	allCDItens armazena os dados buscados no banco de dados
 	allCDItens, err := cdItens.FindAllCDItens(server.DB)
 	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
 	//	Retorna o Status 200 e o JSON da struct buscada
@@ -83,10 +92,10 @@ func (server *Server) GetAllCDItens(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO ATUALIZAR CD_ITENS
+	FUNCAO EDITAR CD_ITENS
 =========================  */
 
-func (server *Server) UpdateCdItens(w http.ResponseWriter, r *http.Request) {
+func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 13023)
@@ -97,10 +106,22 @@ func (server *Server) UpdateCdItens(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	cd_itensIDs armazena a chave primaria da tabela cd_itens
-	cd_itensID1, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
-	cd_itensID2, err := strconv.ParseUint(vars["cod_item"], 10, 64)
-	cd_itensID3, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	//	cdCodIbge armazena a chave primaria da tabela cd_itens
+	cdCodIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	//	cdCodItem armazena a chave primaria da tabela cd_itens
+	cdCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	//	cdCodTipoItem armazena a chave primaria da tabela cd_itens
+	cdCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -108,34 +129,34 @@ func (server *Server) UpdateCdItens(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
 		return
 	}
 
-	cd_itens := models.CDItens{}
+	cdItens := models.CDItens{}
 
 	//cd_itens.Prepare()
 
-	err = json.Unmarshal(body, &cd_itens)
+	err = json.Unmarshal(body, &cdItens)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(cd_itens); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", err)
+	if err = validation.Validator.Struct(cdItens); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	//	updateCd_itens recebe a nova cd_itens, a que foi alterada
-	updateCd_itens, err := cd_itens.UpdateCDItens(server.DB, uint64(cd_itensID1), uint64(cd_itensID2), uint64(cd_itensID3))
+	//	updateCDItens recebe a nova cd_itens, a que foi alterada
+	updateCDItens, err := cdItens.UpdateCDItens(server.DB, uint64(cdCodIbge), uint64(cdCodItem), uint64(cdCodTipoItem))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
 		return
 	}
 
 	//	Retorna o Status 200 e o JSON da struct alterada
-	responses.JSON(w, http.StatusOK, updateCd_itens)
+	responses.JSON(w, http.StatusOK, updateCDItens)
 }

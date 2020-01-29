@@ -12,6 +12,7 @@ import (
 
 func (cd *CD) SaveCD(db *gorm.DB) (*CD, error) {
 
+	//	Adiciona um novo elemento ao banco de dados
 	err := db.Debug().Create(&cd).Error
 	if err != nil {
 		return &CD{}, err

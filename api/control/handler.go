@@ -12,9 +12,10 @@ import (
 
 func (s *Server) CreateCors() *cors.Cors {
 	return cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
-		AllowedHeaders: []string{"Content-Type", "Accept", "Content-Length", "Accept-Encoding", "Authorization"},
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Content-Type", "Accept", "Content-Length", "Accept-Encoding", "Authorization"},
+		AllowCredentials: true,
 	})
 }
 

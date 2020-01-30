@@ -14,8 +14,13 @@ import (
 		PRECISA DE MANUTENCAO
 =========================	*/
 
+/*  =========================
+	FUNCAO SALVAR REAJUSTE NO BANCO DE DADOS
+=========================  */
+
 func (reajuste *Reajuste) SaveReajuste(db *gorm.DB) (*Reajuste, error) {
 
+	//	Adiciona um novo elemento ao banco de dados
 	err := db.Debug().Create(&reajuste).Error
 	if err != nil {
 		return &Reajuste{}, err
@@ -23,6 +28,10 @@ func (reajuste *Reajuste) SaveReajuste(db *gorm.DB) (*Reajuste, error) {
 	return reajuste, nil
 
 }
+
+/*  =========================
+	FUNCAO LISTAR REAJUSTE POR ID
+=========================  */
 
 func (reajuste *Reajuste) FindReajusteByID(db *gorm.DB, reajusteID uint64) (*Reajuste, error) {
 
@@ -38,7 +47,7 @@ func (reajuste *Reajuste) FindReajusteByID(db *gorm.DB, reajusteID uint64) (*Rea
 	return reajuste, err
 }
 
-func (r *Reajuste) UpdateReajuste(db *gorm.DB, rId1, rId2 uint32) (*Reajuste, error) {
+func (r *Reajuste) UpdateReajuste(db *gorm.DB, rId1, rId2 uint64) (*Reajuste, error) {
 
 	db = db.Debug().Model(&Reajuste{}).Where("ano_ref= ? AND cod_lote= ?", rId1, rId2).Take(&Reajuste{}).UpdateColumns(
 		map[string]interface{}{
@@ -58,6 +67,10 @@ func (r *Reajuste) UpdateReajuste(db *gorm.DB, rId1, rId2 uint32) (*Reajuste, er
 	return r, err
 
 }
+
+/*  =========================
+	FUNCAO DELETAR ENTIDADE POR ID
+=========================  */
 
 func (r *Reajuste) DeleteReajuste(db *gorm.DB, rId1 uint32, rId2 int32) (int64, error) {
 

@@ -54,9 +54,8 @@ const (
 =========================  */
 
 const (
-	PREVISAO_EMPENHO_PATH          = "/read/previsaoEmpenho"
-	PREVISAO_EMPENHO_ID_PATH       = "/read/previsaoEmpenho/{cod_previsao_empenho}"
-	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
+	PREVISAO_EMPENHO_PATH    = "/read/previsaoEmpenho"
+	PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
 )
 
 /*  =========================
@@ -64,7 +63,8 @@ const (
 =========================  */
 
 const (
-	ITENS_PREVISAO_EMPENHO_PATH = "/read/itens_previsao_empenho"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
+	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itens_previsao_empenho"
 )
 
 /*  =========================

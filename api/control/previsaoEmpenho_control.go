@@ -96,7 +96,7 @@ func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Requ
 	previsaoEmpenho := models.PrevisaoEmpenho{}
 
 	//	previsaoEmpenhoGotten recebe o dado buscado no banco de dados
-	previsaoEmpenhoGotten, err := previsaoEmpenho.FindPrevisaoEmpenhoByID(server.DB, uint64(previsaoEmpenhoID))
+	previsaoEmpenhoGotten, err := previsaoEmpenho.FindPrevisaoEmpenhoByID(server.DB, previsaoEmpenhoID)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -179,7 +179,7 @@ func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 	}
 
 	// updatePrevisaEmpenho recebe a nova previsao_empenho, a que foi alterada
-	updatePrevisaoEmpenho, err := previsaoEmpenho.UpdatePrevisaoEmpenho(server.DB, uint64(previsaoEmpenhoID))
+	updatePrevisaoEmpenho, err := previsaoEmpenho.UpdatePrevisaoEmpenho(server.DB, previsaoEmpenhoID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

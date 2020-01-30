@@ -104,7 +104,7 @@ func (server *Server) GetReajusteByID(w http.ResponseWriter, r *http.Request) {
 	reajuste := models.Reajuste{}
 
 	//	reajusteGotten recebe o dado buscado no banco de dados
-	reajusteGotten, err := reajuste.FindReajusteByID(server.DB, uint64(reajusteID))
+	reajusteGotten, err := reajuste.FindReajusteByID(server.DB, reajusteID)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -166,7 +166,7 @@ func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateReajuste recebe a nova entidade, a que foi alterada
-	updateReajuste, err := reajuste.UpdateReajuste(server.DB, uint64(codLoteID), uint64(anoRefID))
+	updateReajuste, err := reajuste.UpdateReajuste(server.DB, codLoteID, anoRefID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

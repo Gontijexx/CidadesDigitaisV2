@@ -98,7 +98,7 @@ func (server *Server) GetContatoByID(w http.ResponseWriter, r *http.Request) {
 	contato := models.Contato{}
 
 	//	contatoGotten recebe o dado buscado no banco de dados
-	contatoGotten, err := contato.FindContatoByID(server.DB, uint64(contatoID))
+	contatoGotten, err := contato.FindContatoByID(server.DB, contatoID)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))

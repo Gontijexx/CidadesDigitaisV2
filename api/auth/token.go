@@ -75,12 +75,10 @@ func ExtractToken(r *http.Request) string {
 	}
 	//caso token venha no header
 	reqToken := r.Header.Get("Authorization")
-	log.Printf("reqtoken %v",reqToken)
+	log.Printf("[INFO] Autorization Token %v", reqToken)
 	if reqToken != "" {
-		splitToken := strings.Split(reqToken, "Bearer")
-		log.Print(splitToken)
+		splitToken := strings.Split(reqToken, "Bearer ")
 		reqToken = splitToken[1]
-		log.Printf("reqtoken %v",reqToken)
 		return reqToken
 	}
 	return ""

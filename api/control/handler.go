@@ -5,25 +5,19 @@ import (
 	"CidadesDigitaisV2/api/middlewares"
 	"net/http"
 
-	"github.com/rs/cors"
-
 	"github.com/gorilla/mux"
-)
 
-func (s *Server) CreateCors() *cors.Cors {
-	return cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
-		AllowedHeaders:   []string{"Content-Type", "Accept", "Content-Length", "Accept-Encoding", "Authorization"},
-		AllowCredentials: true,
-	})
-}
+)
 
 func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	CRIA UM ROTEADOR
 
-	r = s.Router
+	r= s.Router
+
+	
+
+
 	//	HOME
 	r.HandleFunc("/{id}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
 

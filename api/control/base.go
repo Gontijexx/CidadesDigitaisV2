@@ -11,6 +11,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql" //mysql database driver
+	"github.com/rs/cors"
 )
 
 /*	=========================
@@ -42,22 +43,27 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 
 func (server *Server) Run() {
 	httpServer := &http.Server{
-		Addr: config.SERVER_ADDR,
-
+		Addr:         config.SERVER_ADDR,
 		IdleTimeout:  200 * time.Millisecond,
 		ReadTimeout:  100 * time.Millisecond,
 		WriteTimeout: 300 * time.Millisecond,
 	}
-	c := server.CreateCors()
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedHeaders:   []string{"Authorization"},
+		AllowedMethods:   []string{http.MethodOptions, http.MethodPost, http.MethodPut, http.MethodGet, http.MethodDelete},
+		AllowCredentials: true,
+		// Enable Debugging for testing, consider disabling in production
+		Debug: true,
+	})
 
 	h := server.CreateHandler()
 
-	handler := c.Handler(h)
-
-	httpServer.Handler = handler
+	httpServer.Handler = c.Handler(h)
 
 	validation.CreateValidator()
 	log.Println("Listening to port 8080")
-	log.Fatal("[CONNECTING] ", httpServer.ListenAndServe())
+	log.Fatal("[FATAL] Server Problem ", httpServer.ListenAndServe())
 
 }

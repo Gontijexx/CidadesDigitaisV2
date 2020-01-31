@@ -31,6 +31,24 @@ const (
 )
 
 /*  =========================
+	CONTATO PATHS HTTP
+=========================  */
+
+const (
+	CONTATO_PATH    = "/read/contato"
+	CONTATO_ID_PATH = "/read/contato/{cod_contato}"
+)
+
+/*  =========================
+	TELEFONE PATHS HTTP
+=========================  */
+
+const (
+	TELEFONE_PATH    = "/read/telefone"
+	TELEFONE_ID_PATH = "/read/telefone/{cod_telefone}"
+)
+
+/*  =========================
 	LOTE PATHS HTTP
 =========================  */
 
@@ -50,7 +68,6 @@ const (
 
 /*  =========================
 	PREVISAO EMPENHO PATHS HTTP
-	ITENS PREVISAO EMPENHO PATHS HTTP
 =========================  */
 
 const (
@@ -63,18 +80,41 @@ const (
 =========================  */
 
 const (
-	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
-	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itens_previsao_empenho"
+	ITENS_PREVISAO_EMPENHO_PATH = "/read/itens_previsao_empenho"
 )
 
 /*  =========================
-	TELEFONE PATHS HTTP
+	CD PATHS HTTP
 =========================  */
 
 const (
-	TELEFONE_PATH    = "/read/telefone"
-	TELEFONE_ID_PATH = "/read/telefone/{cod_telefone}"
+	CD_PATH    = "/read/cd"
+	CD_ID_PATH = "/read/cd/{cod_ibge}"
 )
+
+/*  =========================
+	CD ITENS PATHS HTTP
+=========================  */
+
+const (
+	CD_ITENS_PATH    = "/read/cd_itens"
+	CD_ITENS_ID_PATH = "/read/cd_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+)
+
+/*  =========================
+	REAJUSTE PATHS HTTP
+=========================  */
+//	ARRUMAR!!!!
+const (
+	REAJUSTE_PATH_CREATEREAJUSTE = "/read/reajuste/createreajuste"
+	REAJUSTE_ID_PATH             = "/read/reajuste/{cod_lote}"
+	REAJUSTE_PATH                = "/read/reajuste"
+	REAJUSTE_DEL                 = "/read/reajuste/{cod_lote}/{ano_ref}"
+)
+
+//===============================================================
+//===============================================================
+//===============================================================
 
 /*  =========================
 	TIPOLOGIA PATHS HTTP
@@ -110,15 +150,6 @@ const (
 const (
 	PREFEITOS_PATH    = "/read/prefeitos"
 	PREFEITOS_ID_PATH = "/read/prefeitos/:id"
-)
-
-/*  =========================
-	CD PATHS HTTP
-=========================  */
-
-const (
-	CD_PATH    = "/read/cd"
-	CD_ID_PATH = "/read/cd/{cod_ibge}"
 )
 
 /*  =========================
@@ -160,17 +191,6 @@ const (
 const (
 	MOD_PATH          = "/read/modulo"
 	MOD_USERLIST_PATH = "/read/usuario/:cod_usuario/modulos"
-)
-
-/*  =========================
-	REAJUSTE PATHS HTTP
-=========================  */
-
-const (
-	REAJUSTE_PATH_CREATEREAJUSTE = "/read/reajuste/createreajuste"
-	REAJUSTE_ID_PATH             = "/read/reajuste/{cod_lote}"
-	REAJUSTE_PATH                = "/read/reajuste"
-	REAJUSTE_DEL                 = "/read/reajuste/{cod_lote}/{ano_ref}"
 )
 
 /*  =========================
@@ -218,15 +238,6 @@ const (
 )
 
 /*  =========================
-	CONTATO PATHS HTTP
-=========================  */
-
-const (
-	CONTATO_PATH    = "/read/contato"
-	CONTATO_ID_PATH = "/read/contato/{cod_contato}"
-)
-
-/*  =========================
 	CLASSE EMPENHO PATHS HTTP
 =========================  */
 
@@ -251,13 +262,4 @@ const (
 const (
 	ASSUNTO_PATH    = "/read/assunto"
 	ASSUNTO_ID_PATH = "/read/assunto/:id"
-)
-
-/*  =========================
-	CD ITENS PATHS HTTP
-=========================  */
-
-const (
-	CD_ITENS_PATH    = "/read/cd_itens"
-	CD_ITENS_ID_PATH = "/read/cd_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
 )

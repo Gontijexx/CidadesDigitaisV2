@@ -17,8 +17,8 @@ import (
 
 type Usuario struct {
 	Cod_usuario uint32 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_usuario"`
-	Nome        string `gorm:"size:100;default:null" json:"nome" validate:"alphanum":`
-	Email       string `gorm:"size:45;default:null" json:"email" validate:"email"`
+	Nome        string `gorm:"size:100;default:null" json:"nome" validate:"omitempty,alphanum"`
+	Email       string `gorm:"size:45;default:null" json:"email" validate:"omitempty,email"`
 	Status      bool   `gorm:"size:1;default:null" json:"status" `
 	Login       string `gorm:"size:45;default:null" json:"login" validate:"alphanum"`
 	Senha       string `gorm:"size:100;default:null" json:"senha" validate:"min=8"`

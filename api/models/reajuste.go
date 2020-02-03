@@ -72,9 +72,10 @@ func (r *Reajuste) UpdateReajuste(db *gorm.DB, rId1, rId2 uint64) (*Reajuste, er
 	FUNCAO DELETAR ENTIDADE POR ID
 =========================  */
 
-func (r *Reajuste) DeleteReajuste(db *gorm.DB, rId1 uint32, rId2 int32) (int64, error) {
+func (r *Reajuste) DeleteReajuste(db *gorm.DB, codLoteID, anoRefID uint64) (int64, error) {
 
-	db = db.Debug().Model(&Reajuste{}).Where("ano_ref = ? AND cod_lote", rId1, rId2).Take(&Reajuste{}).Delete(&Reajuste{})
+	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
+	db = db.Debug().Model(&Reajuste{}).Where("cod_lote = ? AND ano_ref", codLoteID, anoRefID).Take(&Reajuste{}).Delete(&Reajuste{})
 
 	if db.Error != nil {
 		return 0, db.Error

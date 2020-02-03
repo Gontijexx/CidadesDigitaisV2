@@ -1,13 +1,11 @@
 package control
 
 import (
-	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/models"
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -91,10 +89,8 @@ func (server *Server) GetReajusteByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	entidadeID armazena a chave primaria da tabela entidade
-
 	//	REVER O PARSEUINT
-	//	reajusteID armazena a chave primaria da tabela entidade
+	//	reajusteID armazena a chave primaria da tabela reajuste
 	reajusteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
@@ -104,7 +100,7 @@ func (server *Server) GetReajusteByID(w http.ResponseWriter, r *http.Request) {
 	reajuste := models.Reajuste{}
 
 	//	reajusteGotten recebe o dado buscado no banco de dados
-	reajusteGotten, err := reajuste.FindReajusteByID(server.DB, uint64(reajusteID))
+	reajusteGotten, err := reajuste.FindReajusteByID(server.DB, reajusteID)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -130,14 +126,14 @@ func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codLoteID armazena a chave primaria da tabela entidade
+	//	codLoteID armazena a chave primaria da tabela reajuste
 	codLoteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	anoRefID armazena a chave primaria da tabela entidade
+	//	anoRefID armazena a chave primaria da tabela reajuste
 	anoRefID, err := strconv.ParseUint(vars["ano_ref"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
@@ -165,8 +161,8 @@ func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	updateReajuste recebe a nova entidade, a que foi alterada
-	updateReajuste, err := reajuste.UpdateReajuste(server.DB, uint64(codLoteID), uint64(anoRefID))
+	//	updateReajuste recebe os novos dados, o que foi alterada
+	updateReajuste, err := reajuste.UpdateReajuste(server.DB, codLoteID, anoRefID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -183,34 +179,39 @@ func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 
-	vars := mux.Vars(r)
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 14003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 
 	reajuste := models.Reajuste{}
 
-	rId1, err := strconv.ParseUint(vars["id1"], 10, 32)
-	rId2, err := strconv.ParseUint(vars["id2"], 10, 32)
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codLoteID armazena a chave primaria da tabela reajuste
+	codLoteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
-	tokenID, err := auth.ExtractTokenID(r)
+
+	//	anoRefID armazena a chave primaria da tabela reajuste
+	anoRefID, err := strconv.ParseUint(vars["ano_ref"], 10, 64)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
-	if tokenID != 0 && tokenID != uint32(rId1) {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
-		return
-	}
-	if tokenID != 0 && tokenID != uint32(rId2) {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
-		return
-	}
-	_, err = reajuste.DeleteReajuste(server.DB, uint32(rId1), int32(rId2))
+
+	_, err = reajuste.DeleteReajuste(server.DB, codLoteID, anoRefID)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	w.Header().Set("Entity", fmt.Sprintf("%d, %d", rId1, rId2))
+	w.Header().Set("Entity", fmt.Sprintf("%d, %d", codLoteID, anoRefID))
+
+	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")
 }

@@ -95,7 +95,7 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 	entidade := models.Entidade{}
 
 	//	entidadeGotten recebe o dado buscado no banco de dados
-	entidadeGotten, err := entidade.FindEntidadeByID(server.DB, uint64(entidadeID))
+	entidadeGotten, err := entidade.FindEntidadeByID(server.DB, entidadeID)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))

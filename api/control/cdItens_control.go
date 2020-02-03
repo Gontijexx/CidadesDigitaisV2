@@ -58,7 +58,7 @@ func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 	cdItens := models.CDItens{}
 
 	//	cdItensGotten recebe o dado buscado no banco de dados
-	cdItensGotten, err := cdItens.FindCDItensByID(server.DB, uint64(cdCodIbge), uint64(cdCodItem), uint64(cdCodTipoItem))
+	cdItensGotten, err := cdItens.FindCDItensByID(server.DB, cdCodIbge, cdCodItem, cdCodTipoItem)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -154,7 +154,7 @@ func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateCDItens recebe a nova cd_itens, a que foi alterada
-	updateCDItens, err := cdItens.UpdateCDItens(server.DB, uint64(cdCodIbge), uint64(cdCodItem), uint64(cdCodTipoItem))
+	updateCDItens, err := cdItens.UpdateCDItens(server.DB, cdCodIbge, cdCodItem, cdCodTipoItem)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

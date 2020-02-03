@@ -22,22 +22,6 @@ func (telefone *Telefone) SaveTelefone(db *gorm.DB) (*Telefone, error) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TELEFONE POR ID
-=========================  */
-
-func (telefone *Telefone) FindTelefoneByID(db *gorm.DB, telefoneID uint64) (*Telefone, error) {
-
-	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Telefone{}).Where("cod_telefone = ?", telefoneID).Take(&telefone).Error
-
-	if err != nil {
-		return &Telefone{}, err
-	}
-
-	return telefone, err
-}
-
-/*  =========================
 	FUNCAO LISTAR TODAS TELEFONE
 =========================  */
 

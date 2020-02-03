@@ -22,7 +22,7 @@ const (
 )
 
 /*  =========================
-	ENTIDADE PATHS HTTP
+	ENTIDADE PATHS HTTP OK!
 =========================  */
 
 const (
@@ -31,7 +31,7 @@ const (
 )
 
 /*  =========================
-	CONTATO PATHS HTTP
+	CONTATO PATHS HTTP OK!
 =========================  */
 
 const (
@@ -40,7 +40,7 @@ const (
 )
 
 /*  =========================
-	TELEFONE PATHS HTTP
+	TELEFONE PATHS HTTP OK!
 =========================  */
 
 const (
@@ -49,7 +49,7 @@ const (
 )
 
 /*  =========================
-	LOTE PATHS HTTP
+	LOTE PATHS HTTP OK!
 =========================  */
 
 const (
@@ -58,7 +58,15 @@ const (
 )
 
 /*  =========================
-	LOTE ITENS PATHS HTTP
+	REAJUSTE PATHS HTTP OK!
+=========================  */
+const (
+	REAJUSTE_PATH    = "/read/reajuste"
+	REAJUSTE_ID_PATH = "/read/reajuste/{cod_lote}/{ano_ref}"
+)
+
+/*  =========================
+	LOTE ITENS PATHS HTTP OK!
 =========================  */
 
 const (
@@ -67,7 +75,7 @@ const (
 )
 
 /*  =========================
-	PREVISAO EMPENHO PATHS HTTP
+	PREVISAO EMPENHO PATHS HTTP OK!
 =========================  */
 
 const (
@@ -76,11 +84,12 @@ const (
 )
 
 /*  =========================
-	ITENS PREVISAO EMPENHO PATHS HTTP
+	ITENS PREVISAO EMPENHO PATHS HTTP OK!
 =========================  */
 
 const (
-	ITENS_PREVISAO_EMPENHO_PATH = "/read/itens_previsao_empenho"
+	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itens_previsao_empenho"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itens_previsao_empenho/{cod_previsao_empenho}"
 )
 
 /*  =========================
@@ -102,14 +111,21 @@ const (
 )
 
 /*  =========================
-	REAJUSTE PATHS HTTP
+	EMPENHO PATHS HTTP OK!
 =========================  */
-//	ARRUMAR!!!!
+
 const (
-	REAJUSTE_PATH_CREATEREAJUSTE = "/read/reajuste/createreajuste"
-	REAJUSTE_ID_PATH             = "/read/reajuste/{cod_lote}"
-	REAJUSTE_PATH                = "/read/reajuste"
-	REAJUSTE_DEL                 = "/read/reajuste/{cod_lote}/{ano_ref}"
+	EMPENHO_PATH    = "/read/empenho"
+	EMPENHO_ID_PATH = "/read/empenho/{cod_empenho}"
+)
+
+/*  =========================
+	ITENS EMPENHO PATHS HTTP
+=========================  */
+
+const (
+	EMPENHO_ITENS    = "/read/empenhoItens"
+	EMPENHO_ITENS_ID = "/read/empenhoItens/:id"
 )
 
 //===============================================================
@@ -224,17 +240,6 @@ const (
 const (
 	ETAPA_PATH    = "/read/etapa"
 	ETAPA_ID_PATH = "/read/etapa/:cod_etapa"
-)
-
-/*  =========================
-	EMPENHO PATHS HTTP
-=========================  */
-
-const (
-	EMPENHO_PATH     = "/read/empenho"
-	EMPENHO_ID_PATH  = "/read/empenho/:id"
-	EMPENHO_ITENS    = "/read/empenhoItens"
-	EMPENHO_ITENS_ID = "/read/empenhoItens/:id"
 )
 
 /*  =========================

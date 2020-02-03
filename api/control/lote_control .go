@@ -62,7 +62,7 @@ func (server *Server) CreateLote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, loteCreated.Cod_lote))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, loteCreated.CodLote))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, loteCreated)
@@ -85,7 +85,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	//	loteID armazena a chave primaria da tabela entidade
-	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 32)
+	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -93,7 +93,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	lote := models.Lote{}
 
 	//	loteGotten recebe o dado buscado no banco de dados
-	loteGotten, err := lote.FindLoteByID(server.DB, uint64(loteID))
+	loteGotten, err := lote.FindLoteByID(server.DB, loteID)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -147,7 +147,7 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	//	entidadeID armazena a chave primaria da tabela entidade
-	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 32)
+	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -174,7 +174,7 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateLote recebe a nova entidade, a que foi alterada
-	updatedLote, err := lote.UpdateLote(server.DB, uint64(loteID))
+	updatedLote, err := lote.UpdateLote(server.DB, loteID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -211,7 +211,7 @@ func (server *Server) DeleteLote(w http.ResponseWriter, r *http.Request) {
 
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = lote.DeleteLote(server.DB, uint64(loteID))
+	_, err = lote.DeleteLote(server.DB, loteID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

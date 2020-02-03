@@ -81,3 +81,22 @@ func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, previ
 	// retorna o elemento que foi alterado
 	return previsaoEmpenho, err
 }
+
+/*  =========================
+	FUNCAO DELETAR PREVISAO EMPENHO
+=========================  */
+
+func (previsaoEmpenho *PrevisaoEmpenho) DeletePrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint64) (int64, error) {
+
+	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
+	db = db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", codPrevisaoEmpenho).Take(&PrevisaoEmpenho{}).Delete(&PrevisaoEmpenho{})
+
+	if db.Error != nil {
+		if gorm.IsRecordNotFoundError(db.Error) {
+			return 0, errors.New("Previsao_Empenho not found")
+		}
+		return 0, db.Error
+	}
+
+	return db.RowsAffected, nil
+}

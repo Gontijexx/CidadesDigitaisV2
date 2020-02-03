@@ -65,7 +65,7 @@ func (server *Server) CreateCD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, cdCreated.Cod_ibge))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, cdCreated.CodIbge))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, cdCreated)
@@ -84,10 +84,10 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
-	//Vars retorna a rota das variaveis
+	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//interpreta  a string em uma base de (0, 2 to 36) e tamanho de (0 to 64)
+	//	cdID armazena a chave primaria da tabela CD
 	cdID, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
@@ -96,14 +96,14 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 
 	cd := models.CD{}
 
-	//vai utilizar o metodo para procurar o resultado de acordo com a chave
+	//	cdGotten recebe o dado buscado no banco de dados
 	cdGotten, err := cd.FindCDByID(server.DB, uint64(cdID))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
 	}
 
-	//retorna um JSON indicando que funcionou corretamente
+	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, cdGotten)
 }
 
@@ -121,7 +121,7 @@ func (server *Server) GetAllCD(w http.ResponseWriter, r *http.Request) {
 	}
 	cd := models.CD{}
 
-	//	cds armazena os dados buscados no banco de dados
+	//	allCD armazena os dados buscados no banco de dados
 	allCD, err := cd.FindAllCD(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)

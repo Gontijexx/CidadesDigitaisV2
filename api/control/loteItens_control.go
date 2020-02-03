@@ -58,7 +58,7 @@ func (server *Server) GetLoteItensByID(w http.ResponseWriter, r *http.Request) {
 	loteItens := models.LoteItens{}
 
 	//	loteItensGotten recebe o dado buscado no banco de dados
-	loteItensGotten, err := loteItens.FindLoteItensByID(server.DB, uint64(loteCodLote), uint64(loteCodItem), uint64(loteCodTipoItem))
+	loteItensGotten, err := loteItens.FindLoteItensByID(server.DB, loteCodLote, loteCodItem, loteCodTipoItem)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -150,7 +150,7 @@ func (server *Server) UpdateLoteItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updateLoteItens, err := loteItens.UpdateLoteItens(server.DB, uint64(loteCodLote), uint64(loteCodItem), uint64(loteCodTipoItem))
+	updateLoteItens, err := loteItens.UpdateLoteItens(server.DB, loteCodLote, loteCodItem, loteCodTipoItem)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

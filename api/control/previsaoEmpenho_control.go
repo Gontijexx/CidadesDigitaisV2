@@ -64,7 +64,7 @@ func (server *Server) CreatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, previsaoEmpenhoCreated.Cod_previsao_empenho))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, previsaoEmpenhoCreated.CodPrevisaoEmpenho))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, previsaoEmpenhoCreated)
@@ -188,4 +188,42 @@ func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 
 	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updatePrevisaoEmpenho)
+}
+
+/*  =========================
+	FUNCAO DELETAR PREVISAO EMPENHO
+=========================  */
+
+func (server *Server) DeletePrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
+	err := config.AuthMod(w, r, 18003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	previsaoEmpenho := models.PrevisaoEmpenho{}
+
+	//	codPrevisaoEmpenho armazena a chame primaria da tabela entidade
+	codPrevisaEmpenho, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	_, err = previsaoEmpenho.DeletePrevisaoEmpenho(server.DB, codPrevisaEmpenho)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database, %v\n", formattedError))
+		return
+	}
+
+	w.Header().Set("Entity", fmt.Sprintf("%d", codPrevisaEmpenho))
+
+	//	Retorna o Status 204, indicando que a informacao foi deletada
+	responses.JSON(w, http.StatusNoContent, "")
 }

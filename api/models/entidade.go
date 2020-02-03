@@ -62,14 +62,14 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Updates(
 		Entidade{
-			Nome:           entidade.Nome,
-			Endereco:       entidade.Endereco,
-			Numero:         entidade.Numero,
-			Bairro:         entidade.Bairro,
-			Cep:            entidade.Cep,
-			Nome_municipio: entidade.Nome_municipio,
-			Uf:             entidade.Uf,
-			Observacao:     entidade.Observacao}).Error
+			Nome:          entidade.Nome,
+			Endereco:      entidade.Endereco,
+			Numero:        entidade.Numero,
+			Bairro:        entidade.Bairro,
+			Cep:           entidade.Cep,
+			NomeMunicipio: entidade.NomeMunicipio,
+			Uf:            entidade.Uf,
+			Observacao:    entidade.Observacao}).Error
 
 	if db.Error != nil {
 		return &Entidade{}, db.Error

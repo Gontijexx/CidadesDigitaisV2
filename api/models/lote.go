@@ -65,10 +65,10 @@ func (lote *Lote) UpdateLote(db *gorm.DB, loteID uint64) (*Lote, error) {
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Updates(
 		Lote{
-			Contrato:      lote.Contrato,
-			Dt_inicio_vig: lote.Dt_inicio_vig,
-			Dt_final_vig:  lote.Dt_final_vig,
-			Dt_reajuste:   lote.Dt_reajuste}).Error
+			Contrato:    lote.Contrato,
+			DtInicioVig: lote.DtInicioVig,
+			DtFinalVig:  lote.DtFinalVig,
+			DtReajuste:  lote.DtReajuste}).Error
 
 	if err != nil {
 		return &Lote{}, err

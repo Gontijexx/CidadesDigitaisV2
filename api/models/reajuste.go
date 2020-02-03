@@ -1,17 +1,11 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
 /*	=========================
-		COMENTAR
-=========================	*/
-
-/*	=========================
-		PRECISA DE MANUTENCAO
+		PRECISA FAZER OS TESTES
 =========================	*/
 
 /*  =========================
@@ -30,42 +24,20 @@ func (reajuste *Reajuste) SaveReajuste(db *gorm.DB) (*Reajuste, error) {
 }
 
 /*  =========================
-	FUNCAO LISTAR REAJUSTE POR ID
+	FUNCAO LISTAR TODOS REAJUSTE
 =========================  */
 
-func (reajuste *Reajuste) FindReajusteByID(db *gorm.DB, reajusteID uint64) (*Reajuste, error) {
+func (reajuste *Reajuste) FindAllReajuste(db *gorm.DB) (*[]Reajuste, error) {
 
-	err := db.Debug().Model(Reajuste{}).Where("ano_ref = ?", reajusteID).Take(&reajuste).Error
+	allReajuste := []Reajuste{}
 
+	//	Busca todos os elementos no banco de dados
+	err := db.Debug().Model(&Entidade{}).Limit(100).Find(&allReajuste).Error
 	if err != nil {
-		return &Reajuste{}, err
-	}
-	if gorm.IsRecordNotFoundError(err) {
-		return &Reajuste{}, errors.New("Reajuste Not Found")
+		return &[]Reajuste{}, err
 	}
 
-	return reajuste, err
-}
-
-func (r *Reajuste) UpdateReajuste(db *gorm.DB, rId1, rId2 uint64) (*Reajuste, error) {
-
-	db = db.Debug().Model(&Reajuste{}).Where("ano_ref= ? AND cod_lote= ?", rId1, rId2).Take(&Reajuste{}).UpdateColumns(
-		map[string]interface{}{
-			"percentual": r.Percentual,
-		},
-	)
-
-	if db.Error != nil {
-		return &Reajuste{}, db.Error
-	}
-
-	err := db.Debug().Model(&Reajuste{}).Where("ano_ref= ? AND cod_lote= ?", rId1, rId2).Take(&r).Error
-	if err != nil {
-		return &Reajuste{}, err
-	}
-
-	return r, err
-
+	return &allReajuste, err
 }
 
 /*  =========================

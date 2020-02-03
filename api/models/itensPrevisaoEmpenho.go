@@ -21,22 +21,6 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindItensPrevisaoEmpenhoByID(d
 }
 
 /*  =========================
-	FUNCAO LISTAR TODOS ITENS PREVISAO EMPENHO
-=========================  */
-
-func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindAllItensPrevisaoEmpenho(db *gorm.DB) (*[]ItensPrevisaoEmpenho, error) {
-
-	allItensPrevisaoEmpenho := []ItensPrevisaoEmpenho{}
-
-	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&ItensPrevisaoEmpenho{}).Limit(100).Find(&allItensPrevisaoEmpenho).Error
-	if err != nil {
-		return &[]ItensPrevisaoEmpenho{}, err
-	}
-	return &allItensPrevisaoEmpenho, err
-}
-
-/*  =========================
 	FUNCAO EDITAR ITENS PREVISAO EMPENHO
 =========================  */
 

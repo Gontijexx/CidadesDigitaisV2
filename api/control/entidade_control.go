@@ -55,7 +55,7 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 	//	SaveEntidade eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	entidadeCreated, err := entidade.SaveEntidade(server.DB)
 
-	/*	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
+	/*	Retorna um erro caso nao seja possivel salvar entidade no banco de dados
 		Status 500	*/
 	if err != nil {
 		formattedError := config.FormatError(err.Error())

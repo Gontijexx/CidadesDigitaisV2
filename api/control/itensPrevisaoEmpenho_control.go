@@ -53,32 +53,6 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 }
 
 /*  =========================
-	FUNCAO LISTAR ITENS PREVISAO EMPENHO
-=========================  */
-
-func (server *Server) GetAllItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
-
-	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 18002)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-		return
-	}
-	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
-
-	//	itensPrevisaoEmpenhos armazena os dados buscados no banco de dados
-	allItensPrevisaoEmpenho, err := itensPrevisaoEmpenho.FindAllItensPrevisaoEmpenho(server.DB)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
-		return
-	}
-
-	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, allItensPrevisaoEmpenho)
-}
-
-/*  =========================
 	FUNCAO EDITAR ITENS PREVISAO EMPENHO
 =========================  */
 

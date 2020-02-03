@@ -65,11 +65,11 @@ func (cd *CD) UpdateCD(db *gorm.DB, cdID uint64) (*CD, error) {
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Model(&CD{}).Where("cod_ibge = ?", cdID).Updates(
 		CD{
-			Cod_lote: cd.Cod_lote,
-			Os_pe:    cd.Os_pe,
-			Data_pe:  cd.Data_pe,
-			Os_imp:   cd.Os_imp,
-			Data_imp: cd.Data_imp}).Error
+			CodLote: cd.CodLote,
+			OsPe:    cd.OsPe,
+			DataPe:  cd.DataPe,
+			OsImp:   cd.OsImp,
+			DataImp: cd.DataImp}).Error
 
 	if err != nil {
 		return &CD{}, err

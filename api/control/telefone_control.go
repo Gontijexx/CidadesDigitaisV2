@@ -67,7 +67,7 @@ func (server *Server) SaveTelefone(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, telefoneCreated.Cod_telefone))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, telefoneCreated.CodTelefone))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, telefoneCreated)
@@ -75,45 +75,7 @@ func (server *Server) SaveTelefone(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TELEFONE POR ID
-=========================  */
-
-func (server *Server) GetTelefoneByID(w http.ResponseWriter, r *http.Request) {
-
-	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12002)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-		return
-	}
-
-	//	Vars retorna as variaveis de rota
-	vars := mux.Vars(r)
-
-	//	telefoneID armazena a chave primaria da tabela telefone
-	telefoneID, err := strconv.ParseUint(vars["cod_telefone"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
-		return
-	}
-
-	telefone := models.Telefone{}
-
-	//	telefoneGotten recebe o dado buscado no banco de dados
-	telefoneGotten, err := telefone.FindTelefoneByID(server.DB, telefoneID)
-
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
-		return
-	}
-
-	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, telefoneGotten)
-
-}
-
-/*  =========================
-	FUNCAO LISTAR TODAS TELEFONE
+	FUNCAO LISTAR TODOS TELEFONE
 =========================  */
 
 func (server *Server) GetAllTelefone(w http.ResponseWriter, r *http.Request) {

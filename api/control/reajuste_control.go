@@ -16,7 +16,7 @@ import (
 )
 
 /*	=========================
-		PRECISA DE MANUTENCAO
+		PRECISA FAZER OS TESTES
 =========================	*/
 
 /*  =========================
@@ -67,7 +67,7 @@ func (server *Server) CreateReajuste(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, reajusteCreated.Ano_ref))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, reajusteCreated.AnoRef))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, reajusteCreated)
@@ -75,102 +75,29 @@ func (server *Server) CreateReajuste(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR REAJUSTE POR ID
+	FUNCAO LISTAR TODOS REAJUSTE
 =========================  */
 
-func (server *Server) GetReajusteByID(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllReajuste(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 14002)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL]Unauthorized"))
 		return
 	}
-	//	Vars retorna as variaveis de rota
-	vars := mux.Vars(r)
-
-	//	REVER O PARSEUINT
-	//	reajusteID armazena a chave primaria da tabela reajuste
-	reajusteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
-		return
-	}
-
 	reajuste := models.Reajuste{}
 
-	//	reajusteGotten recebe o dado buscado no banco de dados
-	reajusteGotten, err := reajuste.FindReajusteByID(server.DB, reajusteID)
+	//	allReajuste armazena os dados buscados no banco de dados
+	allReajuste, err := reajuste.FindAllReajuste(server.DB)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, reajusteGotten)
-}
-
-/*  =========================
-	FUNCAO EDITAR ENTIDADE
-=========================  */
-
-func (server *Server) UpdateReajustes(w http.ResponseWriter, r *http.Request) {
-
-	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 14003)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-		return
-	}
-
-	//	Vars retorna as variaveis de rota
-	vars := mux.Vars(r)
-
-	//	codLoteID armazena a chave primaria da tabela reajuste
-	codLoteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
-		return
-	}
-
-	//	anoRefID armazena a chave primaria da tabela reajuste
-	anoRefID, err := strconv.ParseUint(vars["ano_ref"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
-		return
-	}
-
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
-		return
-	}
-
-	reajuste := models.Reajuste{}
-
-	err = json.Unmarshal(body, &reajuste)
-
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
-		return
-	}
-
-	if err = validation.Validator.Struct(reajuste); err != nil {
-		log.Printf("[WARN] invalid reajuste information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
-		w.WriteHeader(http.StatusPreconditionFailed)
-		return
-	}
-
-	//	updateReajuste recebe os novos dados, o que foi alterada
-	updateReajuste, err := reajuste.UpdateReajuste(server.DB, codLoteID, anoRefID)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
-		return
-	}
-
-	//	Retorna o Status 200 e o JSON da struct alterada
-	responses.JSON(w, http.StatusOK, updateReajuste)
+	responses.JSON(w, http.StatusOK, allReajuste)
 }
 
 /*  =========================

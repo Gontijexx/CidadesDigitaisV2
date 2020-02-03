@@ -22,23 +22,7 @@ func (contato *Contato) SaveContato(db *gorm.DB) (*Contato, error) {
 }
 
 /*  =========================
-	FUNCAO LISTAR CONTATO POR ID
-=========================  */
-
-func (contato *Contato) FindContatoByID(db *gorm.DB, contatoID uint64) (*Contato, error) {
-
-	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Contato{}).Where("cod_contato = ?", contatoID).Take(&contato).Error
-
-	if err != nil {
-		return &Contato{}, err
-	}
-
-	return contato, err
-}
-
-/*  =========================
-	FUNCAO LISTAR CONTATOS
+	FUNCAO LISTAR TODOS CONTATOS
 =========================  */
 
 func (contato *Contato) FindAllContato(db *gorm.DB) (*[]Contato, error) {

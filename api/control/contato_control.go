@@ -66,7 +66,7 @@ func (server *Server) SaveContato(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, contatoCreated.Cod_contato))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, contatoCreated.CodContato))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, contatoCreated)
@@ -74,44 +74,7 @@ func (server *Server) SaveContato(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR CONTATO POR ID
-=========================  */
-
-func (server *Server) GetContatoByID(w http.ResponseWriter, r *http.Request) {
-
-	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12002)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-		return
-	}
-	//	Vars retorna as variaveis de rota
-	vars := mux.Vars(r)
-
-	//	contatoID armazena a chave primaria da tabela contato
-	contatoID, err := strconv.ParseUint(vars["cod_contato"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
-		return
-	}
-
-	contato := models.Contato{}
-
-	//	contatoGotten recebe o dado buscado no banco de dados
-	contatoGotten, err := contato.FindContatoByID(server.DB, contatoID)
-
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
-		return
-	}
-
-	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, contatoGotten)
-
-}
-
-/*  =========================
-	FUNCAO LISTAR CONTATOS
+	FUNCAO LISTAR TODOS CONTATOS
 =========================  */
 
 func (server *Server) GetAllContato(w http.ResponseWriter, r *http.Request) {

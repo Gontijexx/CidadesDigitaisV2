@@ -53,9 +53,9 @@ func (cdItens *CDItens) UpdateCDItens(db *gorm.DB, cdCodIbge, cdCodItem, cdCodTi
 
 	err := db.Debug().Model(&CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", cdCodIbge, cdCodItem, cdCodTipoItem).Updates(
 		CDItens{
-			Quantidade_previsto:          cdItens.Quantidade_previsto,
-			Quantidade_projeto_executivo: cdItens.Quantidade_projeto_executivo,
-			Quantidade_termo_instalacao:  cdItens.Quantidade_termo_instalacao,
+			QuantidadePrevisto:         cdItens.QuantidadePrevisto,
+			QuantidadeProjetoExecutivo: cdItens.QuantidadeProjetoExecutivo,
+			QuantidadeTermoInstalacao:  cdItens.QuantidadeTermoInstalacao,
 		}).Error
 
 	if db.Error != nil {

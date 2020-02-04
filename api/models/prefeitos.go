@@ -6,6 +6,10 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/*	=========================
+		PRECISA FAZER OS TESTES
+=========================	*/
+
 /*  =========================
 	FUNCAO SALVAR PREFEITOS NO BANCO DE DADOS
 =========================  */

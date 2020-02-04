@@ -15,7 +15,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//	ATUALIZAR CODIGO DE MODULO DE PREFEITO
+/*	=========================
+		PRECISA FAZER OS TESTES
+=========================	*/
 
 /*  =========================
 	FUNCAO ADICIONAR PREFEITO
@@ -24,7 +26,7 @@ import (
 func (server *Server) CreatePrefeito(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12001)
+	err := config.AuthMod(w, r, 26001)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -79,7 +81,7 @@ func (server *Server) CreatePrefeito(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetPrefeitoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12002)
+	err := config.AuthMod(w, r, 26002)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -116,7 +118,7 @@ func (server *Server) GetPrefeitoByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllPrefeito(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12002)
+	err := config.AuthMod(w, r, 26002)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -142,7 +144,7 @@ func (server *Server) GetAllPrefeito(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdatePrefeito(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12003)
+	err := config.AuthMod(w, r, 26003)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -196,7 +198,7 @@ func (server *Server) UpdatePrefeito(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeletePrefeito(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 12003)
+	err := config.AuthMod(w, r, 26003)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return

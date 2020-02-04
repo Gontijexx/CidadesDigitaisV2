@@ -210,6 +210,16 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
+			ROTAS EM ITENS EMPENHO
+	=========================	*/
+
+	//	EDITA ITENS EMPENHO (cod_empenho)
+	r.HandleFunc(config.ITENS_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensEmpenho))).Methods(http.MethodPut)
+
+	//	LISTA ITENS EMPENHO (cod_empenho)
+	r.HandleFunc(config.ITENS_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensEmpenhoByID))).Methods(http.MethodGet)
+
+	/*	=========================
 			ROTAS EM PREFEITOS OK!
 	=========================	*/
 

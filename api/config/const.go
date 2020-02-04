@@ -125,7 +125,16 @@ const (
 
 const (
 	EMPENHO_ITENS    = "/read/empenhoItens"
-	EMPENHO_ITENS_ID = "/read/empenhoItens/:id"
+	EMPENHO_ITENS_ID = "/read/empenhoItens/{cod_empenho}"
+)
+
+/*  =========================
+	PREFEITOS PATHS HTTP
+=========================  */
+
+const (
+	PREFEITOS_PATH    = "/read/prefeitos"
+	PREFEITOS_ID_PATH = "/read/prefeitos/{cod_prefeito}"
 )
 
 //===============================================================
@@ -157,15 +166,6 @@ const (
 const (
 	PREVITENS_ID_PATH   = "/read/previsaoEmpenhoItens"
 	PREVITENS_LIST_PATH = "/read/previsaoEmpenhoItens/:cod_lote/:cod_previsao_empenho"
-)
-
-/*  =========================
-	PREFEITOS PATHS HTTP
-=========================  */
-
-const (
-	PREFEITOS_PATH    = "/read/prefeitos"
-	PREFEITOS_ID_PATH = "/read/prefeitos/:id"
 )
 
 /*  =========================

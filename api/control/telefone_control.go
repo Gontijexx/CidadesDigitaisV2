@@ -19,7 +19,7 @@ import (
 	FUNCAO ADICIONAR TELEFONE
 =========================  */
 
-func (server *Server) SaveTelefone(w http.ResponseWriter, r *http.Request) {
+func (server *Server) CreateTelefone(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 12001)

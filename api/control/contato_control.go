@@ -19,7 +19,7 @@ import (
 	FUNCAO ADICIONAR CONTATO
 =========================  */
 
-func (server *Server) SaveContato(w http.ResponseWriter, r *http.Request) {
+func (server *Server) CreateContato(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 12001)

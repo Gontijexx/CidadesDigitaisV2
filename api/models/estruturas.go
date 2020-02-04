@@ -136,3 +136,17 @@ type Empenho struct {
 	Data               string `gorm:"default:null" json:"data" validate:"required"`
 	Contador           uint64 `gorm:"default:null" json:"contador" validate:"alphanum"`
 }
+
+/*  =========================
+	TABELA PREFEITOS
+=========================  */
+
+type Prefeito struct {
+	CodPrefeito uint64 `gorm:"primary_key;auto_incrment;not null" json:"cod_prefeito" validate:"alphanum"`
+	CodIbge     uint64 `gorm:"foreing_key:CodIbge;not null" json:"cod_ibge" validate:"alphanum"`
+	Nome        string `gorm:"default:null" json:"nome" validate:"alphanum"`
+	Cpf         string `gorm:"default:null" json:"cpf" validate:"alphanum"`
+	RG          string `gorm:"default:null" json:"rg" validate:"alphanum"`
+	Partido     string `gorm:"default:null" json:"partido" validate:"alphanum"`
+	Exercicio   string `gorm:"default:null" json:"exercicio" validate:"alphanum"`
+}

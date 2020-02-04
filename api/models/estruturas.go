@@ -136,3 +136,51 @@ type Empenho struct {
 	Data               string `gorm:"default:null" json:"data" validate:"required"`
 	Contador           uint64 `gorm:"default:null" json:"contador" validate:"alphanum"`
 }
+
+/*  =========================
+	TABELA ITENS EMPENHO
+=========================  */
+
+type ItensEmpenho struct {
+	CodEmpenho         string  `gorm:"primary_key;not null;size:13" json:"cod_empenho" validate:"alphanum"`
+	CodItem            uint64  `gorm:"primary_key;not null" json:"cod_item" validate:"number"`
+	CodTipoItem        uint64  `gorm:"primary_key;not null" json:"cod_tipo_item" validate:"number"`
+	CodPrevisaoEmpenho uint64  `gorm:"foreing_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho" validate:"number"`
+	Valor              float64 `gorm:"" json:"valor" validate:"alphanum"`
+	Quantidade         uint64  `gorm:"" json:"quantidade" validate:"number"`
+}
+
+/*  =========================
+	TABELA PREFEITOS
+=========================  */
+
+type Prefeito struct {
+	CodPrefeito uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_prefeito" validate:"number"`
+	CodIbge     uint64 `gorm:"foreing_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number"`
+	Nome        string `gorm:"default:null" json:"nome" validate:"alphanum"`
+	Cpf         string `gorm:"default:null" json:"cpf" validate:"alphanum"`
+	RG          string `gorm:"default:null" json:"rg" validate:"alphanum"`
+	Partido     string `gorm:"default:null" json:"partido" validate:"alphanum"`
+	Exercicio   string `gorm:"default:null" json:"exercicio" validate:"alphanum"`
+}
+
+/*  =========================
+	TABELA MUNICIPIOS
+=========================  */
+
+type Municipios struct {
+	CodIbge       uint64  `gorm:"primary_key;not null;size:7" json:"cod_ibge" validate:"number"`
+	NomeMunicipio string  `gorm:"default:null" json:"nome_municipio" validate:"alphanum"`
+	Populacao     uint64  `gorm:"default:null" json:"populacao" validate:"number"`
+	UF            string  `gorm:"default:null;size:2" json:"uf" validate:"alphanum"`
+	Regiao        string  `gorm:"default:null;size:15" json:"regiao" validate:"alphanum"`
+	CNPJ          string  `gorm:"default:null;size:14" json:"cnpj" validate:"alphanum"`
+	DistCapital   uint64  `gorm:"default:null" json:"dist_capital" validate:"number"`
+	Endereco      string  `gorm:"default:null" json:"endereco" validate:"alphanum"`
+	Numero        string  `gorm:"default:null;size:10" json:"numero" validate:"alphanum"`
+	Complemento   string  `gorm:"default:null" json:"complemento" validate:"alphanum"`
+	Bairro        string  `gorm:"default:null" json:"bairro" validate:"alphanum"`
+	Idhm          float64 `gorm:"default:null" json:"idhm" validate:"number"`
+	Latitude      float64 `gorm:"default:null" json:"latitude" validate:"number"`
+	Longitude     float64 `gorm:"default:null" json:"longitude" validate:"number"`
+}

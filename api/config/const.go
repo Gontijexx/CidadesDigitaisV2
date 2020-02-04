@@ -69,6 +69,8 @@ const (
 	LOTE ITENS PATHS HTTP OK!
 =========================  */
 
+// REVER ID PATH
+
 const (
 	LOTE_ITENS_PATH    = "/read/loteItens"
 	LOTE_ITENS_ID_PATH = "/read/loteItens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
@@ -87,9 +89,11 @@ const (
 	ITENS PREVISAO EMPENHO PATHS HTTP OK!
 =========================  */
 
+//	REVER ID PATH
+
 const (
-	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itens_previsao_empenho"
-	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itens_previsao_empenho/{cod_previsao_empenho}"
+	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itensPrevisaoEmpenho"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensPrevisaoEmpenho/{cod_previsao_empenho}"
 )
 
 /*  =========================
@@ -120,13 +124,39 @@ const (
 )
 
 /*  =========================
-	ITENS EMPENHO PATHS HTTP
+	ITENS EMPENHO PATHS HTTP OK!
 =========================  */
 
 const (
-	EMPENHO_ITENS    = "/read/empenhoItens"
-	EMPENHO_ITENS_ID = "/read/empenhoItens/:id"
+	ITENS_EMPENHO_PATH    = "/read/itensEmpenho"
+	ITENS_EMPENHO_ID_PATH = "/read/itensEmpenhompenho/{cod_empenho}"
 )
+
+/*  =========================
+	PREFEITOS PATHS HTTP OK!
+=========================  */
+
+const (
+	PREFEITOS_PATH    = "/read/prefeitos"
+	PREFEITOS_ID_PATH = "/read/prefeitos/{cod_prefeito}"
+)
+
+/*  =========================
+	MUNICIPIO PATHS HTTP OK!
+=========================  */
+
+const (
+	MUNICIPIO_PATH    = "/read/municipios"
+	MUNICIPIO_ID_PATH = "/read/municipios/{cod_ibge}"
+)
+
+/*  =========================
+	PAGAMENTO PATHS HTTP
+=========================  */
+
+/*  =========================
+	FATURA PATHS HTTP
+=========================  */
 
 //===============================================================
 //===============================================================
@@ -160,15 +190,6 @@ const (
 )
 
 /*  =========================
-	PREFEITOS PATHS HTTP
-=========================  */
-
-const (
-	PREFEITOS_PATH    = "/read/prefeitos"
-	PREFEITOS_ID_PATH = "/read/prefeitos/:id"
-)
-
-/*  =========================
 	PAGAMENTO PATHS HTTP
 =========================  */
 
@@ -189,15 +210,6 @@ const (
 const (
 	NAT_DES_PATH    = "/read/naturezaDespesa"
 	NAT_DES_ID_PATH = "/read/naturezaDespesa/:id"
-)
-
-/*  =========================
-	MUNICIPIO PATHS HTTP
-=========================  */
-
-const (
-	MUNICIPIO_PATH    = "/read/municipios"
-	MUNICIPIO_ID_PATH = "/read/municipios/:id"
 )
 
 /*  =========================

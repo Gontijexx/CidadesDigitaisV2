@@ -40,6 +40,10 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleAuth(s.DeleteUser)).Methods(http.MethodDelete)
 
 	/*	=========================
+			ROTAS EM MODULOS
+	=========================	*/
+
+	/*	=========================
 			ROTAS EM ENTIDADE OK!
 	=========================	*/
 
@@ -88,7 +92,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTelefone))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM CD
+			ROTAS EM CD 13000
 	=========================	*/
 
 	//	LISTA CD
@@ -104,7 +108,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDByID))).Methods(http.MethodGet)
 
 	/*	=========================
-			ROTAS EM CD_ITENS
+			ROTAS EM CD_ITENS 13000
 	=========================	*/
 
 	//	LISTA CD_ITENS
@@ -318,19 +322,19 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 			ROTAS EM PREFEITOS OK!
 	=========================	*/
 
-	//	LISTA EMPENHO
+	//	LISTA PREFEITOS
 	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPrefeito))).Methods(http.MethodGet)
 
-	//	SALVA EMPENHO
+	//	SALVA PREFEITOS
 	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrefeito))).Methods(http.MethodPost)
 
-	//	EDITA EMPENHO (cod_prefeito)
+	//	EDITA PREFEITOS (cod_prefeito)
 	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrefeito))).Methods(http.MethodPut)
 
-	//	LISTA EMPENHO (cod_prefeito)
+	//	LISTA PREFEITOS (cod_prefeito)
 	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrefeitoByID))).Methods(http.MethodGet)
 
-	//	APAGA EMPENHO (cod_prefeito)
+	//	APAGA PREFEITOS (cod_prefeito)
 	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrefeito))).Methods(http.MethodDelete)
 
 	/*	=========================

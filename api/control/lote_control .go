@@ -84,7 +84,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	loteID armazena a chave primaria da tabela entidade
+	//	loteID armazena a chave primaria da tabela lote
 	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
@@ -146,7 +146,7 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	entidadeID armazena a chave primaria da tabela entidade
+	//	loteID armazena a chave primaria da tabela lote
 	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
@@ -173,7 +173,7 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	updateLote recebe a nova entidade, a que foi alterada
+	//	updateLote recebe a nova lote, a que foi alterada
 	updatedLote, err := lote.UpdateLote(server.DB, loteID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
@@ -202,7 +202,7 @@ func (server *Server) DeleteLote(w http.ResponseWriter, r *http.Request) {
 
 	lote := models.Lote{}
 
-	//	loteID armazena a chave primaria da tabela entidade
+	//	loteID armazena a chave primaria da tabela lote
 	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))

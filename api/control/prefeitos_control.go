@@ -89,7 +89,7 @@ func (server *Server) GetPrefeitoByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codPrefeito armazena a chave primaria da tabela entidade
+	//	codPrefeito armazena a chave primaria da tabela prefeito
 	codPrefeito, err := strconv.ParseUint(vars["cod_prefeito"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
@@ -152,7 +152,7 @@ func (server *Server) UpdatePrefeito(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codPrefeito armazena a chave primaria da tabela entidade
+	//	codPrefeito armazena a chave primaria da tabela prefeito
 	codPrefeito, err := strconv.ParseUint(vars["cod_prefeito"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
@@ -208,7 +208,7 @@ func (server *Server) DeletePrefeito(w http.ResponseWriter, r *http.Request) {
 
 	prefeito := models.Prefeito{}
 
-	//	codPrefeito armazena a chave primaria da tabela entidade
+	//	codPrefeito armazena a chave primaria da tabela prefeito
 	codPrefeito, err := strconv.ParseUint(vars["cod_prefeito"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))

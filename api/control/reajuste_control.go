@@ -41,7 +41,7 @@ func (server *Server) CreateReajuste(w http.ResponseWriter, r *http.Request) {
 	//	Estrutura models.Reajuste{} "renomeada"
 	reajuste := models.Reajuste{}
 
-	//	Unmarshal analisa o JSON recebido e armazena na struct entidade referenciada (&struct)
+	//	Unmarshal analisa o JSON recebido e armazena na struct reajuste referenciada (&struct)
 	err = json.Unmarshal(body, &reajuste)
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido

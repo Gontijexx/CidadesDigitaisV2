@@ -12,7 +12,7 @@ type Entidade struct {
 	Bairro        string `gorm:"size:100;default:null" json:"bairro" validate:"alphanum":`
 	Cep           string `gorm:"size:8;default:null" json:"cep" validate:"alphanum":`
 	NomeMunicipio string `gorm:"size:50;default:null" json:"nome_municipio" validate:"alphanum":`
-	Uf            string `gorm:"size:2;default:null" json:"uf" validate:"alphanum":`
+	UF            string `gorm:"size:2;default:null" json:"uf" validate:"alphanum":`
 	Observacao    string `gorm:"size:1000;default:null" json:"observacao" validate:"alphanum":`
 }
 
@@ -38,40 +38,6 @@ type Telefone struct {
 	CodContato  uint64 `gorm:"foreing_key:CodContato;not null;size:11" json:"cod_contato" validate:"number":`
 	Telefone    string `gorm:"default:null;size:11" json:"telefone" validate:"required":`
 	Tipo        string `gorm:"default:null;size:10" json:"tipo" validate:"alphanum":`
-}
-
-/*  =========================
-	TABELA LOTE
-=========================  */
-
-type Lote struct {
-	CodLote     uint64 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate:"number":`
-	Cnpj        string `gorm:"foreing_key:Cnpj;not null;size:14" json:"cnpj" validate:"required, number":`
-	Contrato    string `gorm:"size:10;default:null" json:"contrato" validate:"alphanum":`
-	DtInicioVig string `gorm:"size:10;default:null" json:"dt_inicio_vig" validate:"alphanum":`
-	DtFinalVig  string `gorm:"size:10;default:null" json:"dt_final_vig" validate:"alphanum":`
-	DtReajuste  string `gorm:"size:10;default:null" json:"dt_reajuste" validate:"alphanum":`
-}
-
-/*  =========================
-	TABELA LOTE ITENS
-=========================  */
-
-type LoteItens struct {
-	CodLote     uint64  `gorm:"primary_key;foreing_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	CodItem     uint64  `gorm:"primary_key;foreing_key:CodItem;not null;size:11" json:"cod_item" validate:"number":`
-	CodTipoItem uint64  `gorm:"primary_key;foreing_key:CodTipoItem;not null;size:11" json:"cod_tipo_item" validate:"number":`
-	Preco       float64 `gorm:"default:null;size:12" json:"preco" validate:"alphanum":`
-}
-
-/*  =========================
-	TABELA REAJUSTE
-=========================  */
-
-type Reajuste struct {
-	AnoRef     uint64  `gorm:"primary_key;not null;size:11" json:"ano_ref" validate:"number":`
-	CodLote    uint64  `gorm:"primary key;foreing_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	Percentual float64 `gorm:"default:null" json:"percentual" validate:"alphanum":`
 }
 
 /*  =========================
@@ -101,29 +67,37 @@ type CDItens struct {
 }
 
 /*  =========================
-	TABELA PREVISAO EMPENHO
+	TABELA LOTE
 =========================  */
 
-type PrevisaoEmpenho struct {
-	CodPrevisaoEmpenho uint64 `gorm:"primary_key;foreing_key:CodPrevisaoEmpenho;auto_incrementnot null;size:11" json:"cod_previsao_empenho" validate:"number":`
-	CodLote            uint64 `gorm:"foreing_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	CodNaturezaDespesa uint64 `gorm:"foreing_key:CodNaturezaDespesa;not null;size:11" json:"cod_natureza_despesa" validate:"number":`
-	Data               string `gorm:"default:null" json:"data" validate:"required":`
-	Tipo               string `gorm:"default:null;size:1" json:"tipo" validate:"alphanum":`
-	Ano_referencia     uint64 `gorm:"default:null;size:11" json:"ano_referencia" validate:"alphanum":`
+type Lote struct {
+	CodLote     uint64 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate:"number":`
+	Cnpj        string `gorm:"foreing_key:Cnpj;not null;size:14" json:"cnpj" validate:"required, number":`
+	Contrato    string `gorm:"size:10;default:null" json:"contrato" validate:"alphanum":`
+	DtInicioVig string `gorm:"size:10;default:null" json:"dt_inicio_vig" validate:"alphanum":`
+	DtFinalVig  string `gorm:"size:10;default:null" json:"dt_final_vig" validate:"alphanum":`
+	DtReajuste  string `gorm:"size:10;default:null" json:"dt_reajuste" validate:"alphanum":`
 }
 
 /*  =========================
-	TABELA ITENS PREVISAO EMPENHO
+	TABELA REAJUSTE
 =========================  */
 
-type ItensPrevisaoEmpenho struct {
-	CodPrevisaoEmpenho uint64  `gorm:"primary_key;not null;size:11" json:"cod_previsao_empenho" validate:"number":`
-	CodItem            uint64  `gorm:"primary_key;foreing_key:CodItem;not null;size:11" json:"cod_item" validate:"number":`
-	CodTipoItem        uint64  `gorm:"primary_key;foreing_key:CodTipo_item;not null;size:11" json:"cod_tipo_item" validate:"number":`
-	CodLote            uint64  `gorm:"foreing_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	Valor              float64 `gorm:"default:null;size:12" json:"valor" validate:"alphanum":`
-	Quantidade         uint64  `gorm:"default:null;size:11" json:"quantidade" validate:"alphanum":`
+type Reajuste struct {
+	AnoRef     uint64  `gorm:"primary_key;not null;size:11" json:"ano_ref" validate:"number":`
+	CodLote    uint64  `gorm:"primary key;foreing_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
+	Percentual float64 `gorm:"default:null" json:"percentual" validate:"alphanum":`
+}
+
+/*  =========================
+	TABELA LOTE ITENS
+=========================  */
+
+type LoteItens struct {
+	CodLote     uint64  `gorm:"primary_key;foreing_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
+	CodItem     uint64  `gorm:"primary_key;foreing_key:CodItem;not null;size:11" json:"cod_item" validate:"number":`
+	CodTipoItem uint64  `gorm:"primary_key;foreing_key:CodTipoItem;not null;size:11" json:"cod_tipo_item" validate:"number":`
+	Preco       float64 `gorm:"default:null;size:12" json:"preco" validate:"alphanum":`
 }
 
 /*  =========================
@@ -150,6 +124,100 @@ type ItensEmpenho struct {
 	Quantidade         uint64  `gorm:"" json:"quantidade" validate:"number"`
 }
 
+/*	=========================
+		TABELA PAGAMENTO (OTB)
+=========================	*/
+
+/*	=========================
+		TABELA FATURA
+=========================	*/
+
+/*  =========================
+	TABELA PREVISAO EMPENHO
+=========================  */
+
+type PrevisaoEmpenho struct {
+	CodPrevisaoEmpenho uint64 `gorm:"primary_key;foreing_key:CodPrevisaoEmpenho;auto_incrementnot null;size:11" json:"cod_previsao_empenho" validate:"number":`
+	CodLote            uint64 `gorm:"foreing_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
+	CodNaturezaDespesa uint64 `gorm:"foreing_key:CodNaturezaDespesa;not null;size:11" json:"cod_natureza_despesa" validate:"number":`
+	Data               string `gorm:"default:null" json:"data" validate:"required":`
+	Tipo               string `gorm:"default:null;size:1" json:"tipo" validate:"alphanum":`
+	Ano_referencia     uint64 `gorm:"default:null;size:11" json:"ano_referencia" validate:"alphanum":`
+}
+
+/*  =========================
+	TABELA ITENS PREVISAO EMPENHO
+=========================  */
+
+type ItensPrevisaoEmpenho struct {
+	CodPrevisaoEmpenho uint64  `gorm:"primary_key;not null;size:11" json:"cod_previsao_empenho" validate:"number":`
+	CodItem            uint64  `gorm:"primary_key;foreing_key:CodItem;not null;size:11" json:"cod_item" validate:"number":`
+	CodTipoItem        uint64  `gorm:"primary_key;foreing_key:CodTipo_item;not null;size:11" json:"cod_tipo_item" validate:"number":`
+	CodLote            uint64  `gorm:"foreing_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
+	Valor              float64 `gorm:"default:null;size:12" json:"valor" validate:"alphanum":`
+	Quantidade         uint64  `gorm:"default:null;size:11" json:"quantidade" validate:"alphanum":`
+}
+
+/*	=========================
+		TABELA ASSUNTO
+=========================	*/
+
+type Assunto struct {
+	CodAssunto uint64 `gorm:"primary_key;auto_increment;not null;" json:"cod_assunto" validate:"number"`
+	Descricao  string `gorm:"default:null" json:"descricao" validate:"alphanum"`
+}
+
+/*	=========================
+		TABELA CATEGORIA
+=========================	*/
+
+type Categoria struct {
+	CodCategoria uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_categoria" validate:"number"`
+	Descricao    string `gorm:"default:null" json:"descricao" validate:"alphanum"`
+}
+
+/*	=========================
+		TABELA CLASSE EMPENHO
+=========================	*/
+
+type ClasseEmpenho struct {
+	CodClasseEmpenho uint64 `gorm:"primary_key;not null" json:"cod_classe_empenho" validate:"number"`
+	Descricao        string `gorm:"default:null" json:"descricao" validate:"alphanum"`
+}
+
+/*	=========================
+		TABELA ETAPA
+=========================	*/
+
+/*	=========================
+		TABELA ITENS
+=========================	*/
+
+/*  =========================
+	TABELA MUNICIPIOS
+=========================  */
+
+type Municipios struct {
+	CodIbge       uint64  `gorm:"primary_key;not null;size:7" json:"cod_ibge" validate:"number"`
+	NomeMunicipio string  `gorm:"default:null" json:"nome_municipio" validate:"alphanum"`
+	Populacao     uint64  `gorm:"default:null" json:"populacao" validate:"number"`
+	UF            string  `gorm:"default:null;size:2" json:"uf" validate:"alphanum"`
+	Regiao        string  `gorm:"default:null;size:15" json:"regiao" validate:"alphanum"`
+	Cnpj          string  `gorm:"default:null;size:14" json:"cnpj" validate:"alphanum"`
+	DistCapital   uint64  `gorm:"default:null" json:"dist_capital" validate:"number"`
+	Endereco      string  `gorm:"default:null" json:"endereco" validate:"alphanum"`
+	Numero        string  `gorm:"default:null;size:10" json:"numero" validate:"alphanum"`
+	Complemento   string  `gorm:"default:null" json:"complemento" validate:"alphanum"`
+	Bairro        string  `gorm:"default:null" json:"bairro" validate:"alphanum"`
+	Idhm          float64 `gorm:"default:null" json:"idhm" validate:"number"`
+	Latitude      float64 `gorm:"default:null" json:"latitude" validate:"number"`
+	Longitude     float64 `gorm:"default:null" json:"longitude" validate:"number"`
+}
+
+/*	=========================
+		TABELA NATUREZA DE DESPESA
+=========================	*/
+
 /*  =========================
 	TABELA PREFEITOS
 =========================  */
@@ -164,23 +232,10 @@ type Prefeito struct {
 	Exercicio   string `gorm:"default:null" json:"exercicio" validate:"alphanum"`
 }
 
-/*  =========================
-	TABELA MUNICIPIOS
-=========================  */
+/*	=========================
+		TABELA TIPOLOGIAS
+=========================	*/
 
-type Municipios struct {
-	CodIbge       uint64  `gorm:"primary_key;not null;size:7" json:"cod_ibge" validate:"number"`
-	NomeMunicipio string  `gorm:"default:null" json:"nome_municipio" validate:"alphanum"`
-	Populacao     uint64  `gorm:"default:null" json:"populacao" validate:"number"`
-	UF            string  `gorm:"default:null;size:2" json:"uf" validate:"alphanum"`
-	Regiao        string  `gorm:"default:null;size:15" json:"regiao" validate:"alphanum"`
-	CNPJ          string  `gorm:"default:null;size:14" json:"cnpj" validate:"alphanum"`
-	DistCapital   uint64  `gorm:"default:null" json:"dist_capital" validate:"number"`
-	Endereco      string  `gorm:"default:null" json:"endereco" validate:"alphanum"`
-	Numero        string  `gorm:"default:null;size:10" json:"numero" validate:"alphanum"`
-	Complemento   string  `gorm:"default:null" json:"complemento" validate:"alphanum"`
-	Bairro        string  `gorm:"default:null" json:"bairro" validate:"alphanum"`
-	Idhm          float64 `gorm:"default:null" json:"idhm" validate:"number"`
-	Latitude      float64 `gorm:"default:null" json:"latitude" validate:"number"`
-	Longitude     float64 `gorm:"default:null" json:"longitude" validate:"number"`
-}
+/*	=========================
+		TABELA TIPO ITEM
+=========================	*/

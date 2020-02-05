@@ -68,7 +68,7 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 			Bairro:        entidade.Bairro,
 			Cep:           entidade.Cep,
 			NomeMunicipio: entidade.NomeMunicipio,
-			Uf:            entidade.Uf,
+			UF:            entidade.UF,
 			Observacao:    entidade.Observacao}).Error
 
 	if db.Error != nil {

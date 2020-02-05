@@ -149,7 +149,7 @@ func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	previsaEmepenhoID armazena a chave primaria da tabela entidade
+	//	previsaEmepenhoID armazena a chave primaria da tabela previsao empenho
 	previsaoEmpenhoID, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
@@ -208,7 +208,7 @@ func (server *Server) DeletePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 
 	previsaoEmpenho := models.PrevisaoEmpenho{}
 
-	//	codPrevisaoEmpenho armazena a chame primaria da tabela entidade
+	//	codPrevisaoEmpenho armazena a chame primaria da tabela previsao empenho
 	codPrevisaEmpenho, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))

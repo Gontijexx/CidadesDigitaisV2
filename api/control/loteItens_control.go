@@ -34,21 +34,21 @@ func (server *Server) GetLoteItensByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	loteCodLote armazena a chave primaria da tabela entidade
+	//	loteCodLote armazena a chave primaria da tabela lote itens
 	loteCodLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	loteCodItem armazena a chave primaria da tabela entidade
+	//	loteCodItem armazena a chave primaria da tabela lote itens
 	loteCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	loteCodTipoItem armazena a chave primaria da tabela entidade
+	//	loteCodTipoItem armazena a chave primaria da tabela lote itens
 	loteCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
@@ -95,7 +95,7 @@ func (server *Server) GetAllLoteItens(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO EDITAR ENTIDADE
+	FUNCAO EDITAR LOTE ITENS
 =========================  */
 
 func (server *Server) UpdateLoteItens(w http.ResponseWriter, r *http.Request) {
@@ -110,21 +110,21 @@ func (server *Server) UpdateLoteItens(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	loteCodLote armazena a chave primaria da tabela entidade
+	//	loteCodLote armazena a chave primaria da tabela lote itens
 	loteCodLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	loteCodItem armazena a chave primaria da tabela entidade
+	//	loteCodItem armazena a chave primaria da tabela lote itens
 	loteCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	loteCodTipoItem armazena a chave primaria da tabela entidade
+	//	loteCodTipoItem armazena a chave primaria da tabela lote itens
 	loteCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))

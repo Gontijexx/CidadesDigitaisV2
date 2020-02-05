@@ -37,7 +37,7 @@ func (server *Server) CreateEmpenho(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Estrutura models.Entidade{} "renomeada"
+	//	Estrutura models.Empenho{} "renomeada"
 	empenho := models.Empenho{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct empenho referenciada (&struct)

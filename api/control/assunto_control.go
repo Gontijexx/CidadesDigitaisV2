@@ -55,7 +55,7 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 	//	SaveAssunto eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	assuntoCreated, err := assunto.SaveAssunto(server.DB)
 
-	/*	Retorna um erro caso nao seja possivel salvar entidade no banco de dados
+	/*	Retorna um erro caso nao seja possivel salvar assunto no banco de dados
 		Status 500	*/
 	if err != nil {
 		formattedError := config.FormatError(err.Error())

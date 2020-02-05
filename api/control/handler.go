@@ -249,10 +249,39 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	/*	=========================
 			ROTAS EM CATEGORIA
 	=========================	*/
+	//	LISTA CATEGORIA
+	r.HandleFunc(config.CATEGORIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCategoria))).Methods(http.MethodGet)
+
+	//	SALVA CATEGORIA
+	r.HandleFunc(config.CATEGORIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCategoria))).Methods(http.MethodPost)
+
+	//	EDITA CATEGORIA (cod_categoria)
+	r.HandleFunc(config.CATEGORIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCategoria))).Methods(http.MethodPut)
+
+	//	LISTA CATEGORIA (cod_categoria)
+	r.HandleFunc(config.CATEGORIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCategoriaByID))).Methods(http.MethodGet)
+
+	//	APAGA CATEGORIA (cod_categoria)
+	r.HandleFunc(config.CATEGORIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteCategoria))).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM CLASSE EMPENHO
 	=========================	*/
+
+	//	LISTA CLASSE EMPENHO
+	r.HandleFunc(config.CLASSE_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllClasseEmpenho))).Methods(http.MethodGet)
+
+	//	SALVA CLASSE EMPENHO
+	r.HandleFunc(config.CLASSE_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateClasseEmpenho))).Methods(http.MethodPost)
+
+	//	EDITA CLASSE EMPENHO (cod_classe_empenho)
+	r.HandleFunc(config.CLASSE_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateClasseEmpenho))).Methods(http.MethodPut)
+
+	//	LISTA CLASSE EMPENHO (cod_classe_empenho)
+	r.HandleFunc(config.CLASSE_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetClasseEmpenhoByID))).Methods(http.MethodGet)
+
+	//	APAGA CLASSE EMPENHO (cod_classe_empenho)
+	r.HandleFunc(config.CLASSE_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteClasseEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM ETAPA

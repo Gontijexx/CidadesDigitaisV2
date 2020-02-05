@@ -93,7 +93,7 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 		return
 	}
 
-	//	updateEntidade recebe a nova entidade, a que foi alterada
+	//	updateItensPrevisaoEmpenho recebe a nova itens previsao empenho, a que foi alterada
 	updateItensPrevisaoEmpenho, err := itensPrevisaoEmpenho.UpdateItensPrevisaoEmpenho(server.DB, itensPrevisaoEmpenhoID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())

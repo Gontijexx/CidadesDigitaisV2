@@ -55,7 +55,7 @@ func (server *Server) CreateMunicipios(w http.ResponseWriter, r *http.Request) {
 	//	SaveMunicipios eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	municipiosCreated, err := municipios.SaveMunicipios(server.DB)
 
-	/*	Retorna um erro caso nao seja possivel salvar entidade no banco de dados
+	/*	Retorna um erro caso nao seja possivel salvar municipios no banco de dados
 		Status 500	*/
 	if err != nil {
 		formattedError := config.FormatError(err.Error())

@@ -163,7 +163,7 @@ type ItensPrevisaoEmpenho struct {
 =========================	*/
 
 type Assunto struct {
-	CodAssunto uint64 `gorm:"primary_key;auto_incrementnot null;" json:"cod_assunto" validate:"number"`
+	CodAssunto uint64 `gorm:"primary_key;auto_increment;not null;" json:"cod_assunto" validate:"number"`
 	Descricao  string `gorm:"default:null" json:"descricao" validate:"alphanum"`
 }
 
@@ -171,9 +171,19 @@ type Assunto struct {
 		TABELA CATEGORIA
 =========================	*/
 
+type Categoria struct {
+	CodCategoria uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_categoria" validate:"number"`
+	Descricao    string `gorm:"default:null" json:"descricao" validate:"alphanum"`
+}
+
 /*	=========================
 		TABELA CLASSE EMPENHO
 =========================	*/
+
+type ClasseEmpenho struct {
+	CodClasseEmpenho uint64 `gorm:"primary_key;not null" json:"cod_classe_empenho" validate:"number"`
+	Descricao        string `gorm:"default:null" json:"descricao" validate:"alphanum"`
+}
 
 /*	=========================
 		TABELA ETAPA

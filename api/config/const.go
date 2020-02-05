@@ -152,12 +152,21 @@ const (
 )
 
 /*	=========================
-		CATEGORIA PATHS HTTP
+	CATEGORIA PATHS HTTP
 =========================	*/
+const (
+	CATEGORIA_PATH    = "/read/categoria"
+	CATEGORIA_ID_PATH = "/read/categoria/{cod_categoria}"
+)
 
 /*	=========================
-		CLASSE EMPENHO PATHS HTTP
+	CLASSE EMPENHO PATHS HTTP
 =========================	*/
+
+const (
+	CLASSE_EMPENHO_PATH    = "/read/classeEmpenho"
+	CLASSE_EMPENHO_ID_PATH = "/read/classeEmpenho/{cod_classe_empenho}"
+)
 
 /*	=========================
 		ETAPA PATHS HTTP
@@ -217,15 +226,6 @@ const (
 const (
 	TIPOIT_PATH    = "/read/tipoItem"
 	TIPOIT_ID_PATH = "/read/tipoItem/:cod_tipo_item"
-)
-
-/*  =========================
-	PREVISAO EMPENHO PATHS HTTP
-=========================  */
-
-const (
-	PREVITENS_ID_PATH   = "/read/previsaoEmpenhoItens"
-	PREVITENS_LIST_PATH = "/read/previsaoEmpenhoItens/:cod_lote/:cod_previsao_empenho"
 )
 
 /*  =========================
@@ -297,16 +297,6 @@ const (
 	CLASSE EMPENHO PATHS HTTP
 =========================  */
 
-const (
-	CLASSE_PATH    = "/read/classeEmpenho"
-	CLASSE_ID_PATH = "/read/classeEmpenho/:id"
-)
-
 /*  =========================
 	CATEGORIA PATHS HTTP
 =========================  */
-
-const (
-	CATEGORIA_PATH    = "/read/categoria"
-	CATEGORIA_ID_PATH = "/read/categoria/:id"
-)

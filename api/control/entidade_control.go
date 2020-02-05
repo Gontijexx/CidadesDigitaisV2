@@ -213,7 +213,7 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = entidade.DeleteEntidade(server.DB, uint64(entidadeID))
+	_, err = entidade.DeleteEntidade(server.DB, entidadeID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

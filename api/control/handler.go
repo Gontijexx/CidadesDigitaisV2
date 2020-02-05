@@ -88,6 +88,35 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTelefone))).Methods(http.MethodDelete)
 
 	/*	=========================
+			ROTAS EM CD
+	=========================	*/
+
+	//	LISTA CD
+	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCD))).Methods(http.MethodGet)
+
+	//	SALVA CD
+	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCD))).Methods(http.MethodPost)
+
+	//	EDITA CD
+	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCD))).Methods(http.MethodPut)
+
+	//	LISTA CD POR ID
+	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDByID))).Methods(http.MethodGet)
+
+	/*	=========================
+			ROTAS EM CD_ITENS
+	=========================	*/
+
+	//	LISTA CD_ITENS
+	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCDItens))).Methods(http.MethodGet)
+
+	//	EDITA CD_ITENS
+	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCDItens))).Methods(http.MethodPut)
+
+	//	LISTA CD_ITENS POR ID
+	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDItensByID))).Methods(http.MethodGet)
+
+	/*	=========================
 			ROTAS EM LOTE OK!
 	=========================	*/
 
@@ -133,64 +162,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteItensByID))).Methods(http.MethodGet)
 
 	/*	=========================
-			ROTAS EM CD
-	=========================	*/
-
-	//	LISTA CD
-	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCD))).Methods(http.MethodGet)
-
-	//	SALVA CD
-	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCD))).Methods(http.MethodPost)
-
-	//	EDITA CD
-	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCD))).Methods(http.MethodPut)
-
-	//	LISTA CD POR ID
-	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDByID))).Methods(http.MethodGet)
-
-	/*	=========================
-			ROTAS EM CD_ITENS
-	=========================	*/
-
-	//	LISTA CD_ITENS
-	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCDItens))).Methods(http.MethodGet)
-
-	//	EDITA CD_ITENS
-	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCDItens))).Methods(http.MethodPut)
-
-	//	LISTA CD_ITENS POR ID
-	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDItensByID))).Methods(http.MethodGet)
-
-	/*	=========================
-			ROTAS EM PREVISAO EMPENHO OK!
-	=========================	*/
-
-	//	LISTA PREVISAO EMPENHO
-	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPrevisaoEmpenho))).Methods(http.MethodGet)
-
-	//	SALVA PREVISAO EMPENHO
-	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrevisaoEmpenho))).Methods(http.MethodPost)
-
-	//	EDITA PREVISAO EMPENHO (cod_previsao_empenho)
-	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrevisaoEmpenho))).Methods(http.MethodPut)
-
-	//	LISTA PREVISAO EMPENHO (cod_previsao_empenho)
-	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisaoEmpenhoByID))).Methods(http.MethodGet)
-
-	//	APAGA REAJUSTE (cod_previsao_empenho)
-	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrevisaoEmpenho))).Methods(http.MethodDelete)
-
-	/*	=========================
-			ROTAS EM ITENS PREVISAO EMPENHO OK!
-	=========================	*/
-
-	//	EDITA ITENS PREVISAO EMPENHO
-	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensPrevisaoEmpenho))).Methods(http.MethodPut)
-
-	//	LISTA ITENS PREVISAO EMPENDO
-	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensPrevisaoEmpenhoByID))).Methods(http.MethodGet)
-
-	/*	=========================
 			ROTAS EM EMPENHO OK!
 	=========================	*/
 
@@ -220,6 +191,101 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ITENS_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensEmpenhoByID))).Methods(http.MethodGet)
 
 	/*	=========================
+			ROTAS EM PAGAMENTO
+	=========================	*/
+
+	/*	=========================
+			ROTAS EM FATURA
+	=========================	*/
+
+	/*	=========================
+			ROTAS EM PREVISAO EMPENHO OK!
+	=========================	*/
+
+	//	LISTA PREVISAO EMPENHO
+	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPrevisaoEmpenho))).Methods(http.MethodGet)
+
+	//	SALVA PREVISAO EMPENHO
+	r.HandleFunc(config.PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrevisaoEmpenho))).Methods(http.MethodPost)
+
+	//	EDITA PREVISAO EMPENHO (cod_previsao_empenho)
+	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrevisaoEmpenho))).Methods(http.MethodPut)
+
+	//	LISTA PREVISAO EMPENHO (cod_previsao_empenho)
+	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisaoEmpenhoByID))).Methods(http.MethodGet)
+
+	//	APAGA PREVISAO EMPENHO (cod_previsao_empenho)
+	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrevisaoEmpenho))).Methods(http.MethodDelete)
+
+	/*	=========================
+			ROTAS EM ITENS PREVISAO EMPENHO OK!
+	=========================	*/
+
+	//	EDITA ITENS PREVISAO EMPENHO
+	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensPrevisaoEmpenho))).Methods(http.MethodPut)
+
+	//	LISTA ITENS PREVISAO EMPENHO
+	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensPrevisaoEmpenhoByID))).Methods(http.MethodGet)
+
+	/*	=========================
+			ROTAS EM ASSUNTO
+	=========================	*/
+
+	//	LISTA ASSUNTO
+	r.HandleFunc(config.ASSUNTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllAssunto))).Methods(http.MethodGet)
+
+	//	SALVA ASSUNTO
+	r.HandleFunc(config.ASSUNTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateAssunto))).Methods(http.MethodPost)
+
+	//	EDITA ASSUNTO (cod_assunto)
+	r.HandleFunc(config.ASSUNTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateAssunto))).Methods(http.MethodPut)
+
+	//	LISTA ASSUNTO (cod_assunto)
+	r.HandleFunc(config.ASSUNTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAssuntoByID))).Methods(http.MethodGet)
+
+	//	APAGA ASSUNTO (cod_assunto)
+	r.HandleFunc(config.ASSUNTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteAssunto))).Methods(http.MethodDelete)
+
+	/*	=========================
+			ROTAS EM CATEGORIA
+	=========================	*/
+
+	/*	=========================
+			ROTAS EM CLASSE EMPENHO
+	=========================	*/
+
+	/*	=========================
+			ROTAS EM ETAPA
+	=========================	*/
+
+	/*	=========================
+			ROTAS EM ITENS
+	=========================	*/
+
+	/*	=========================
+			ROTAS EM MUNICIPIOS OK!
+	=========================	*/
+
+	//	LISTA MUNICIPIOS
+	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllMunicipios))).Methods(http.MethodGet)
+
+	//	SALVA MUNICIPIOS
+	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateMunicipios))).Methods(http.MethodPost)
+
+	//	EDITA MUNICIPIOS (cod_ibge)
+	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateMunicipios))).Methods(http.MethodPut)
+
+	//	LISTA MUNICIPIOS (cod_ibge)
+	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetMunicipiosByID))).Methods(http.MethodGet)
+
+	//	APAGA MUNICIPIOS (cod_ibge)
+	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteMunicipios))).Methods(http.MethodDelete)
+
+	/*	=========================
+			ROTAS EM NATUREZA DE DESPESA
+	=========================	*/
+
+	/*	=========================
 			ROTAS EM PREFEITOS OK!
 	=========================	*/
 
@@ -237,6 +303,14 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	APAGA EMPENHO (cod_prefeito)
 	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrefeito))).Methods(http.MethodDelete)
+
+	/*	=========================
+			ROTAS EM TIPOLOGIAS
+	=========================	*/
+
+	/*	=========================
+			ROTAS EM TIPO ITEM
+	=========================	*/
 
 	return
 }

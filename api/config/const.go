@@ -49,6 +49,24 @@ const (
 )
 
 /*  =========================
+	CD PATHS HTTP
+=========================  */
+
+const (
+	CD_PATH    = "/read/cd"
+	CD_ID_PATH = "/read/cd/{cod_ibge}"
+)
+
+/*  =========================
+	CD ITENS PATHS HTTP
+=========================  */
+
+const (
+	CD_ITENS_PATH    = "/read/cd_itens"
+	CD_ITENS_ID_PATH = "/read/cd_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+)
+
+/*  =========================
 	LOTE PATHS HTTP OK!
 =========================  */
 
@@ -77,44 +95,6 @@ const (
 )
 
 /*  =========================
-	PREVISAO EMPENHO PATHS HTTP OK!
-=========================  */
-
-const (
-	PREVISAO_EMPENHO_PATH    = "/read/previsaoEmpenho"
-	PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
-)
-
-/*  =========================
-	ITENS PREVISAO EMPENHO PATHS HTTP OK!
-=========================  */
-
-//	REVER ID PATH
-
-const (
-	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itensPrevisaoEmpenho"
-	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensPrevisaoEmpenho/{cod_previsao_empenho}"
-)
-
-/*  =========================
-	CD PATHS HTTP
-=========================  */
-
-const (
-	CD_PATH    = "/read/cd"
-	CD_ID_PATH = "/read/cd/{cod_ibge}"
-)
-
-/*  =========================
-	CD ITENS PATHS HTTP
-=========================  */
-
-const (
-	CD_ITENS_PATH    = "/read/cd_itens"
-	CD_ITENS_ID_PATH = "/read/cd_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
-)
-
-/*  =========================
 	EMPENHO PATHS HTTP OK!
 =========================  */
 
@@ -127,19 +107,65 @@ const (
 	ITENS EMPENHO PATHS HTTP OK!
 =========================  */
 
+//	REVER ID PATH TALVEZ (cod_emepnho, cod_item, cod_tipo_item)
+
 const (
 	ITENS_EMPENHO_PATH    = "/read/itensEmpenho"
 	ITENS_EMPENHO_ID_PATH = "/read/itensEmpenhompenho/{cod_empenho}"
 )
 
+/*	=========================
+		PAGAMENTO PATH HTTP(OTB)
+=========================	*/
+
+/*	=========================
+		FATURA PATH HTTP
+=========================	*/
+
 /*  =========================
-	PREFEITOS PATHS HTTP OK!
+	PREVISAO EMPENHO PATHS HTTP OK!
 =========================  */
 
 const (
-	PREFEITOS_PATH    = "/read/prefeitos"
-	PREFEITOS_ID_PATH = "/read/prefeitos/{cod_prefeito}"
+	PREVISAO_EMPENHO_PATH    = "/read/previsaoEmpenho"
+	PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
 )
+
+/*  =========================
+	ITENS PREVISAO EMPENHO PATHS HTTP OK!
+=========================  */
+
+//	REVER ID PATH TALVEZ (cod_previsao_empenho, cod_item, cod_tipo_item)
+
+const (
+	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itensPrevisaoEmpenho"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensPrevisaoEmpenho/{cod_previsao_empenho}"
+)
+
+/*  =========================
+	ASSUNTO PATHS HTTP
+=========================  */
+
+const (
+	ASSUNTO_PATH    = "/read/assunto"
+	ASSUNTO_ID_PATH = "/read/assunto/{cod_assunto}"
+)
+
+/*	=========================
+		CATEGORIA PATHS HTTP
+=========================	*/
+
+/*	=========================
+		CLASSE EMPENHO PATHS HTTP
+=========================	*/
+
+/*	=========================
+		ETAPA PATHS HTTP
+=========================	*/
+
+/*	=========================
+		ITENS PATHS HTTP
+=========================	*/
 
 /*  =========================
 	MUNICIPIO PATHS HTTP OK!
@@ -150,13 +176,26 @@ const (
 	MUNICIPIO_ID_PATH = "/read/municipios/{cod_ibge}"
 )
 
-/*  =========================
-	PAGAMENTO PATHS HTTP
-=========================  */
+/*	=========================
+		NATUREZA DE DESPESA PATHS HTTP
+=========================	*/
 
 /*  =========================
-	FATURA PATHS HTTP
+	PREFEITOS PATHS HTTP OK!
 =========================  */
+
+const (
+	PREFEITOS_PATH    = "/read/prefeitos"
+	PREFEITOS_ID_PATH = "/read/prefeitos/{cod_prefeito}"
+)
+
+/*	=========================
+		TIPOLOGIAS PATHS HTTP
+=========================	*/
+
+/*	=========================
+		TIPO ITEM PATHS HTTP
+=========================	*/
 
 //===============================================================
 //===============================================================
@@ -270,13 +309,4 @@ const (
 const (
 	CATEGORIA_PATH    = "/read/categoria"
 	CATEGORIA_ID_PATH = "/read/categoria/:id"
-)
-
-/*  =========================
-	ASSUNTO PATHS HTTP
-=========================  */
-
-const (
-	ASSUNTO_PATH    = "/read/assunto"
-	ASSUNTO_ID_PATH = "/read/assunto/:id"
 )

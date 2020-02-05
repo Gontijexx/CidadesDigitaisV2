@@ -181,7 +181,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM ITENS EMPENHO
+			ROTAS EM ITENS EMPENHO OK!
 	=========================	*/
 
 	//	EDITA ITENS EMPENHO (cod_empenho)
@@ -191,11 +191,11 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ITENS_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensEmpenhoByID))).Methods(http.MethodGet)
 
 	/*	=========================
-			ROTAS EM PAGAMENTO
+			ROTAS EM PAGAMENTO 16000
 	=========================	*/
 
 	/*	=========================
-			ROTAS EM FATURA
+			ROTAS EM FATURA 17000
 	=========================	*/
 
 	/*	=========================
@@ -228,7 +228,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensPrevisaoEmpenhoByID))).Methods(http.MethodGet)
 
 	/*	=========================
-			ROTAS EM ASSUNTO
+			ROTAS EM ASSUNTO OK!
 	=========================	*/
 
 	//	LISTA ASSUNTO
@@ -247,7 +247,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ASSUNTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteAssunto))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM CATEGORIA
+			ROTAS EM CATEGORIA OK!
 	=========================	*/
 	//	LISTA CATEGORIA
 	r.HandleFunc(config.CATEGORIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCategoria))).Methods(http.MethodGet)
@@ -265,7 +265,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CATEGORIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteCategoria))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM CLASSE EMPENHO
+			ROTAS EM CLASSE EMPENHO OK!
 	=========================	*/
 
 	//	LISTA CLASSE EMPENHO
@@ -284,11 +284,11 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CLASSE_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteClasseEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM ETAPA
+			ROTAS EM ETAPA 22000
 	=========================	*/
 
 	/*	=========================
-			ROTAS EM ITENS
+			ROTAS EM ITENS 23000
 	=========================	*/
 
 	/*	=========================
@@ -311,7 +311,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteMunicipios))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM NATUREZA DE DESPESA
+			ROTAS EM NATUREZA DE DESPESA 25000
 	=========================	*/
 
 	/*	=========================
@@ -334,11 +334,11 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrefeito))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM TIPOLOGIAS
+			ROTAS EM TIPOLOGIAS 27000
 	=========================	*/
 
 	/*	=========================
-			ROTAS EM TIPO ITEM
+			ROTAS EM TIPO ITEM 28000
 	=========================	*/
 
 	return

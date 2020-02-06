@@ -87,8 +87,8 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	cdID armazena a chave primaria da tabela CD
-	cdID, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
+	//	codIbge armazena a chave primaria da tabela CD
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -97,7 +97,7 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 	cd := models.CD{}
 
 	//	cdGotten recebe o dado buscado no banco de dados
-	cdGotten, err := cd.FindCDByID(server.DB, uint64(cdID))
+	cdGotten, err := cd.FindCDByID(server.DB, codIbge)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -148,8 +148,8 @@ func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	cdID armazena a chave primaria da tabela cd
-	cdID, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	//	codIbge armazena a chave primaria da tabela cd
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -176,7 +176,7 @@ func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateCD recebe a nova cd, a que foi alterada
-	updateCD, err := cd.UpdateCD(server.DB, cdID)
+	updateCD, err := cd.UpdateCD(server.DB, codIbge)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -185,4 +185,43 @@ func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updateCD)
+}
+
+/*  =========================
+	FUNCAO DELETAR CD
+=========================  */
+
+func (server *Server) DeleteCD(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
+	err := config.AuthMod(w, r, 13003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+	// Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	cd := models.CD{}
+
+	//	codIbge armazena a chave primaria da tabela cd
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
+	_, err = cd.DeleteCD(server.DB, codIbge)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
+		return
+	}
+
+	w.Header().Set("Entity", fmt.Sprintf("%d", codIbge))
+
+	//	Retorna o Status 204, indicando que a informacao foi deletada
+	responses.JSON(w, http.StatusNoContent, "")
 }

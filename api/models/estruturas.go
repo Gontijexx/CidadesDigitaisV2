@@ -67,6 +67,16 @@ type CDItens struct {
 }
 
 /*  =========================
+	TABELA CD PROCESSO
+=========================  */
+
+type Processo struct {
+	CodProcesso string `gorm:"primary_key;not null;size:17" json:"cod_processo" validate:"alphanum"`
+	CodIbge     uint64 `gorm:"primary_key;foreing_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number"`
+	Descricao   string `gorm:"default:null" json:"descricao" validate:"alphanum"`
+}
+
+/*  =========================
 	TABELA LOTE
 =========================  */
 

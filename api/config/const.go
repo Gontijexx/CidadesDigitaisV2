@@ -22,6 +22,17 @@ const (
 )
 
 /*  =========================
+	MODULOS PATHS HTTP
+=========================  */
+
+/*
+const (
+	MOD_PATH          = "/read/modulo"
+	MOD_USERLIST_PATH = "/read/usuario/:cod_usuario/modulos"
+)
+*/
+
+/*  =========================
 	ENTIDADE PATHS HTTP OK!
 =========================  */
 
@@ -49,7 +60,7 @@ const (
 )
 
 /*  =========================
-	CD PATHS HTTP
+	CD PATHS HTTP OK!
 =========================  */
 
 const (
@@ -58,12 +69,21 @@ const (
 )
 
 /*  =========================
-	CD ITENS PATHS HTTP
+	CD ITENS PATHS HTTP OK!
 =========================  */
 
 const (
 	CD_ITENS_PATH    = "/read/cd_itens"
 	CD_ITENS_ID_PATH = "/read/cd_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+)
+
+/*  =========================
+	CD PROCESSO PATHS HTTP
+=========================  */
+
+const (
+	PROCESSO_PATH    = "/read/processo"
+	PROCESSO_ID_PATH = "/read/processo/{cod_processo}"
 )
 
 /*  =========================
@@ -87,15 +107,13 @@ const (
 	LOTE ITENS PATHS HTTP OK!
 =========================  */
 
-// REVER ID PATH
-
 const (
 	LOTE_ITENS_PATH    = "/read/loteItens"
-	LOTE_ITENS_ID_PATH = "/read/loteItens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+	LOTE_ITENS_ID_PATH = "/read/loteItens/{cod_lote}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================
-	EMPENHO PATHS HTTP OK!
+	EMPENHO PATHS HTTP
 =========================  */
 
 const (
@@ -104,7 +122,7 @@ const (
 )
 
 /*  =========================
-	ITENS EMPENHO PATHS HTTP OK!
+	ITENS EMPENHO PATHS HTTP
 =========================  */
 
 //	REVER ID PATH TALVEZ (cod_empenho, cod_item, cod_tipo_item)
@@ -132,7 +150,7 @@ const (
 )
 
 /*  =========================
-	ITENS PREVISAO EMPENHO PATHS HTTP OK!
+	ITENS PREVISAO EMPENHO PATHS HTTP
 =========================  */
 
 //	REVER ID PATH TALVEZ (cod_previsao_empenho, cod_item, cod_tipo_item)
@@ -143,7 +161,7 @@ const (
 )
 
 /*  =========================
-	ASSUNTO PATHS HTTP
+	ASSUNTO PATHS HTTP OK!
 =========================  */
 
 const (
@@ -152,7 +170,7 @@ const (
 )
 
 /*	=========================
-	CATEGORIA PATHS HTTP
+	CATEGORIA PATHS HTTP OK!
 =========================	*/
 const (
 	CATEGORIA_PATH    = "/read/categoria"
@@ -160,7 +178,7 @@ const (
 )
 
 /*	=========================
-	CLASSE EMPENHO PATHS HTTP
+	CLASSE EMPENHO PATHS HTTP OK!
 =========================	*/
 
 const (
@@ -186,12 +204,12 @@ const (
 )
 
 /*	=========================
-		NATUREZA DE DESPESA PATHS HTTP
+		NATUREZA DE DESPESA PATHS HTTP OK!
 =========================	*/
 
 const (
 	NATUREZA_DESPESA_PATH    = "/read/naturezaDespesa"
-	NATUREZA_DESPESA_ID_PATH = "/read/naturezaDespesa/{cod_natureza_despesa}}"
+	NATUREZA_DESPESA_ID_PATH = "/read/naturezaDespesa/{cod_natureza_despesa}"
 )
 
 /*  =========================
@@ -204,7 +222,7 @@ const (
 )
 
 /*	=========================
-		TIPOLOGIAS PATHS HTTP
+		TIPOLOGIAS PATHS HTTP OK!
 =========================	*/
 
 const (
@@ -213,7 +231,7 @@ const (
 )
 
 /*	=========================
-		TIPO ITEM PATHS HTTP
+		TIPO ITEM PATHS HTTP OK!
 =========================	*/
 
 const (

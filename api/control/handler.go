@@ -92,7 +92,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTelefone))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM CIDADE DIGITAL 13000
+			ROTAS EM CIDADE DIGITAL OK!
 	=========================	*/
 
 	//	LISTA CD
@@ -101,14 +101,17 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA CD
 	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCD))).Methods(http.MethodPost)
 
-	//	EDITA CD
+	//	EDITA CD (cod_ibge)
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCD))).Methods(http.MethodPut)
 
-	//	LISTA CD POR ID
+	//	LISTA CD (cod_ibge)
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDByID))).Methods(http.MethodGet)
 
+	//	APAGA CD (cod_ibge)
+	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteCD))).Methods(http.MethodDelete)
+
 	/*	=========================
-			ROTAS EM CIDADE DIGITAL_ITENS 13000
+			ROTAS EM CIDADE DIGITAL_ITENS OK!
 	=========================	*/
 
 	//	LISTA CD_ITENS
@@ -119,6 +122,25 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	LISTA CD_ITENS POR ID
 	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDItensByID))).Methods(http.MethodGet)
+
+	/*	=========================
+			ROTAS EM CIDADE DIGITAL PROCESSO OK!
+	=========================	*/
+
+	//	LISTA PROCESSO
+	r.HandleFunc(config.PROCESSO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllProcesso))).Methods(http.MethodGet)
+
+	//	SALVA PROCESSO
+	r.HandleFunc(config.PROCESSO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateProcesso))).Methods(http.MethodPost)
+
+	//	EDITA PROCESSO (cod_processo)
+	r.HandleFunc(config.PROCESSO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateProcesso))).Methods(http.MethodPut)
+
+	//	LISTA PROCESSO (cod_processo)
+	r.HandleFunc(config.PROCESSO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetProcessoByID))).Methods(http.MethodGet)
+
+	//	APAGA PROCESSO (cod_processo)
+	r.HandleFunc(config.PROCESSO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteProcesso))).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM LOTE OK!

@@ -108,7 +108,7 @@ func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TODoS ASSUNTO
+	FUNCAO LISTAR TODOS ASSUNTO
 =========================  */
 
 func (server *Server) GetAllAssunto(w http.ResponseWriter, r *http.Request) {

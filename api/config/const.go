@@ -107,11 +107,11 @@ const (
 	ITENS EMPENHO PATHS HTTP OK!
 =========================  */
 
-//	REVER ID PATH TALVEZ (cod_emepnho, cod_item, cod_tipo_item)
+//	REVER ID PATH TALVEZ (cod_empenho, cod_item, cod_tipo_item)
 
 const (
 	ITENS_EMPENHO_PATH    = "/read/itensEmpenho"
-	ITENS_EMPENHO_ID_PATH = "/read/itensEmpenhompenho/{cod_empenho}"
+	ITENS_EMPENHO_ID_PATH = "/read/itensEmpenho/{cod_empenho}"
 )
 
 /*	=========================

@@ -92,7 +92,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.TELEFONE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTelefone))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM CD 13000
+			ROTAS EM CIDADE DIGITAL 13000
 	=========================	*/
 
 	//	LISTA CD
@@ -108,7 +108,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDByID))).Methods(http.MethodGet)
 
 	/*	=========================
-			ROTAS EM CD_ITENS 13000
+			ROTAS EM CIDADE DIGITAL_ITENS 13000
 	=========================	*/
 
 	//	LISTA CD_ITENS
@@ -315,8 +315,23 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteMunicipios))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM NATUREZA DE DESPESA 25000
+			ROTAS EM NATUREZA DESPESA OK!
 	=========================	*/
+
+	//	LISTA NATUREZA_DESPESA
+	r.HandleFunc(config.NATUREZA_DESPESA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllNaturezaDespesa))).Methods(http.MethodGet)
+
+	//	SALVA NATUREZA_DESPESA
+	r.HandleFunc(config.NATUREZA_DESPESA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateNaturezaDespesa))).Methods(http.MethodPost)
+
+	//	EDITA NATUREZA_DESPESA (cod_natureza_despesa)
+	r.HandleFunc(config.NATUREZA_DESPESA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateNaturezaDespesa))).Methods(http.MethodPut)
+
+	//	LISTA NATUREZA_DESPESA (cod_natureza_despesa)
+	r.HandleFunc(config.NATUREZA_DESPESA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetNaturezaDespesaByID))).Methods(http.MethodGet)
+
+	//	APAGA NATUREZA_DESPESA (cod_natureza_despesa)
+	r.HandleFunc(config.NATUREZA_DESPESA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteNaturezaDespesa))).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM PREFEITOS OK!
@@ -338,12 +353,42 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrefeito))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM TIPOLOGIAS 27000
+			ROTAS EM TIPOLOGIAS OK!
 	=========================	*/
 
+	//	LISTA TIPOLOGIA
+	r.HandleFunc(config.TIPOLOGIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllTipologia))).Methods(http.MethodGet)
+
+	//	SALVA TIPOLOGIA
+	r.HandleFunc(config.TIPOLOGIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateTipologia))).Methods(http.MethodPost)
+
+	//	EDITA TIPOLOGIA (cod_tipologia)
+	r.HandleFunc(config.TIPOLOGIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateTipologia))).Methods(http.MethodPut)
+
+	//	LISTA TIPOLOGIA (cod_tipologia)
+	r.HandleFunc(config.TIPOLOGIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetTipologiaByID))).Methods(http.MethodGet)
+
+	//	APAGA TIPOLOGIA (cod_tipologia)
+	r.HandleFunc(config.TIPOLOGIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTipologia))).Methods(http.MethodDelete)
+
 	/*	=========================
-			ROTAS EM TIPO ITEM 28000
+			ROTAS EM TIPO ITEM OK!
 	=========================	*/
+
+	//	LISTA TIPO_ITEM
+	r.HandleFunc(config.TIPO_ITEM_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllTipoItem))).Methods(http.MethodGet)
+
+	//	SALVA TIPO_ITEM
+	r.HandleFunc(config.TIPO_ITEM_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateTipoItem))).Methods(http.MethodPost)
+
+	//	EDITA TIPO_ITEM (cod_tipo_item)
+	r.HandleFunc(config.TIPO_ITEM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateTipoItem))).Methods(http.MethodPut)
+
+	//	LISTA TIPO_ITEM (cod_tipo_item)
+	r.HandleFunc(config.TIPO_ITEM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetTipoItemByID))).Methods(http.MethodGet)
+
+	//	APAGA TIPO_ITEM (cod_tipo_item)
+	r.HandleFunc(config.TIPO_ITEM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTipoItem))).Methods(http.MethodDelete)
 
 	return
 }

@@ -215,8 +215,13 @@ type Municipios struct {
 }
 
 /*	=========================
-		TABELA NATUREZA DE DESPESA
+	TABELA NATUREZA DE DESPESA
 =========================	*/
+
+type NaturezaDespesa struct {
+	CodNaturezaDespesa uint64 `gorm:"primary_key;not null" json:"cod_natureza_despesa" validate:"number"`
+	Descricao          string `gorm:"default:null" json:"descricao" validate:"alphanum"`
+}
 
 /*  =========================
 	TABELA PREFEITOS
@@ -236,6 +241,16 @@ type Prefeito struct {
 		TABELA TIPOLOGIAS
 =========================	*/
 
+type Tipologia struct {
+	CodTipologia uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_tipologia" validate:"number"`
+	Descricao    string `gorm:"default:null" json:"descricao" validate:"alphanum"`
+}
+
 /*	=========================
 		TABELA TIPO ITEM
 =========================	*/
+
+type TipoItem struct {
+	CodTipoItem uint64 `gorm:"primary_key;not null" json:"cod_tipo_item" validate:"number"`
+	Descricao   string `gorm:"default:null" json:"descricao" validate:"alphanum"`
+}

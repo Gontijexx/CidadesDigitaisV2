@@ -189,6 +189,11 @@ const (
 		NATUREZA DE DESPESA PATHS HTTP
 =========================	*/
 
+const (
+	NATUREZA_DESPESA_PATH    = "/read/naturezaDespesa"
+	NATUREZA_DESPESA_ID_PATH = "/read/naturezaDespesa/{cod_natureza_despesa}}"
+)
+
 /*  =========================
 	PREFEITOS PATHS HTTP OK!
 =========================  */
@@ -202,9 +207,19 @@ const (
 		TIPOLOGIAS PATHS HTTP
 =========================	*/
 
+const (
+	TIPOLOGIA_PATH    = "/read/tipologia"
+	TIPOLOGIA_ID_PATH = "/read/tipologia/{cod_tipologia}"
+)
+
 /*	=========================
 		TIPO ITEM PATHS HTTP
 =========================	*/
+
+const (
+	TIPO_ITEM_PATH    = "/read/tipoItem"
+	TIPO_ITEM_ID_PATH = "/read/tipoItem/{cod_tipo_item}"
+)
 
 //===============================================================
 //===============================================================
@@ -214,19 +229,9 @@ const (
 	TIPOLOGIA PATHS HTTP
 =========================  */
 
-const (
-	TIPO_PATH    = "/read/tipologia"
-	TIPO_ID_PATH = "/read/tipologia/:id"
-)
-
 /*  =========================
 	TIPO ITEM PATHS HTTP
 =========================  */
-
-const (
-	TIPOIT_PATH    = "/read/tipoItem"
-	TIPOIT_ID_PATH = "/read/tipoItem/:cod_tipo_item"
-)
 
 /*  =========================
 	PAGAMENTO PATHS HTTP
@@ -245,11 +250,6 @@ const (
 /*  =========================
 	NATUREZA DESPESA PATHS HTTP
 =========================  */
-
-const (
-	NAT_DES_PATH    = "/read/naturezaDespesa"
-	NAT_DES_ID_PATH = "/read/naturezaDespesa/:id"
-)
 
 /*  =========================
 	MODULOS PATHS HTTP

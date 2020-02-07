@@ -15,10 +15,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		PRECISA FAZER OS TESTES
-=========================	*/
-
 /*  =========================
 	FUNCAO LISTAR LOTE_ITENS POR ID
 =========================  */

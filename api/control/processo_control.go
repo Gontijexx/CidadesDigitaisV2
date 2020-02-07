@@ -205,7 +205,7 @@ func (server *Server) DeleteProcesso(w http.ResponseWriter, r *http.Request) {
 	processo := models.Processo{}
 
 	//	codProcesso armazena a chave primaria da tabela processo
-	codProcesso, err := strconv.ParseUint(vars["cnpj"], 10, 64)
+	codProcesso, err := strconv.ParseUint(vars["cod_processo"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return

@@ -118,8 +118,8 @@ func (server *Server) DeleteTelefone(w http.ResponseWriter, r *http.Request) {
 
 	telefone := models.Telefone{}
 
-	//	telefoneID armazena a chave primaria da tabela telefone
-	telefoneID, err := strconv.ParseUint(vars["cod_telefone"], 10, 64)
+	//	codTelefone armazena a chave primaria da tabela telefone
+	codTelefone, err := strconv.ParseUint(vars["cod_telefone"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -127,14 +127,14 @@ func (server *Server) DeleteTelefone(w http.ResponseWriter, r *http.Request) {
 
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = telefone.DeleteTelefone(server.DB, telefoneID)
+	_, err = telefone.DeleteTelefone(server.DB, codTelefone)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d", telefoneID))
+	w.Header().Set("Entity", fmt.Sprintf("%d", codTelefone))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

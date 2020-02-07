@@ -114,8 +114,8 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	contatoID armazena a chave primaria da tabela contato
-	contatoID, err := strconv.ParseUint(vars["cod_contato"], 10, 64)
+	//	codContato armazena a chave primaria da tabela contato
+	codContato, err := strconv.ParseUint(vars["cod_contato"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -144,7 +144,7 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateContato recebe a nova contato, a que foi alterada
-	updateContato, err := contato.UpdateContato(server.DB, contatoID)
+	updateContato, err := contato.UpdateContato(server.DB, codContato)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -172,8 +172,8 @@ func (server *Server) DeleteContato(w http.ResponseWriter, r *http.Request) {
 
 	contato := models.Contato{}
 
-	//	contatoID armazena a chave primaria da tabela contato
-	contatoID, err := strconv.ParseUint(vars["cod_contato"], 10, 64)
+	//	codContato armazena a chave primaria da tabela contato
+	codContato, err := strconv.ParseUint(vars["cod_contato"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -181,14 +181,14 @@ func (server *Server) DeleteContato(w http.ResponseWriter, r *http.Request) {
 
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = contato.DeleteContato(server.DB, uint64(contatoID))
+	_, err = contato.DeleteContato(server.DB, codContato)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d", contatoID))
+	w.Header().Set("Entity", fmt.Sprintf("%d", codContato))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

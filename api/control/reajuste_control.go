@@ -15,10 +15,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		PRECISA FAZER OS TESTES
-=========================	*/
-
 /*  =========================
 	FUNCAO ADICIONAR REAJUSTE
 =========================  */

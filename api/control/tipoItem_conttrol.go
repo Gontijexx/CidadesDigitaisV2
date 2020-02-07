@@ -149,7 +149,7 @@ func (server *Server) UpdateTipoItem(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	//	codTipoItem armazena a chave primaria da tabela tipo_item
-	codTipoItem, err := strconv.ParseUint(vars["cnpj"], 10, 64)
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -205,7 +205,7 @@ func (server *Server) DeleteTipoItem(w http.ResponseWriter, r *http.Request) {
 	tipoItem := models.TipoItem{}
 
 	//	codTipoItem armazena a chave primaria da tabela tipo_item
-	codTipoItem, err := strconv.ParseUint(vars["cnpj"], 10, 64)
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return

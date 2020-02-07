@@ -89,7 +89,7 @@ func (server *Server) GetEmpenhoByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	//	codEmpenho armazena a chave primaria da tabela empenho
-	codEmpenho, err := strconv.ParseUint(vars["cnpj"], 10, 64)
+	codEmpenho, err := strconv.ParseUint(vars["cod_empenho"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return

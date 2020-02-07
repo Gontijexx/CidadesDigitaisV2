@@ -88,7 +88,7 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	//	codIbge armazena a chave primaria da tabela CD
-	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 32)
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return

@@ -86,7 +86,7 @@ func (server *Server) GetCategoriaByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	//	codCategoria armazena a chave primaria da tabela categoria
-	codCategoria, err := strconv.ParseUint(vars["cnpj"], 10, 64)
+	codCategoria, err := strconv.ParseUint(vars["cod_categoria"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return

@@ -329,7 +329,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ETAPA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEtapa))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM ITENS 23000
+			ROTAS EM ITENS OK!
 	=========================	*/
 
 	//	LISTA ITENS

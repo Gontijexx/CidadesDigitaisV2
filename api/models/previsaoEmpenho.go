@@ -25,10 +25,10 @@ func (previsaoEmpenho *PrevisaoEmpenho) SavePrevisaoEmpenho(db *gorm.DB) (*Previ
 	FUNCAO LISTAR PREVISAO EMPENHO POR ID
 =========================  */
 
-func (previsaoEmpenho *PrevisaoEmpenho) FindPrevisaoEmpenhoByID(db *gorm.DB, previsaoEmpenhoID uint64) (*PrevisaoEmpenho, error) {
+func (previsaoEmpenho *PrevisaoEmpenho) FindPrevisaoEmpenhoByID(db *gorm.DB, codPrevisaoEmpenho uint64) (*PrevisaoEmpenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", previsaoEmpenhoID).Take(&previsaoEmpenho).Error
+	err := db.Debug().Model(PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", codPrevisaoEmpenho).Take(&previsaoEmpenho).Error
 
 	if err != nil {
 		return &PrevisaoEmpenho{}, err
@@ -60,10 +60,10 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]
 	FUNCAO EDITAR PREVISAO EMPENHO
 =========================  */
 
-func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, previsaoEmpenhoID uint64) (*PrevisaoEmpenho, error) {
+func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint64) (*PrevisaoEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", previsaoEmpenhoID).Updates(
+	err := db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", codPrevisaoEmpenho).Updates(
 		PrevisaoEmpenho{
 			Data:           previsaoEmpenho.Data,
 			Tipo:           previsaoEmpenho.Tipo,
@@ -73,7 +73,7 @@ func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, previ
 		return &PrevisaoEmpenho{}, err
 	}
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", previsaoEmpenhoID).Take(&previsaoEmpenho).Error
+	err = db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", codPrevisaoEmpenho).Take(&previsaoEmpenho).Error
 	if err != nil {
 		return &PrevisaoEmpenho{}, err
 	}

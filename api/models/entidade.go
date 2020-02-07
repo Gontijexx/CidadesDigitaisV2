@@ -25,10 +25,10 @@ func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 	FUNCAO LISTAR ENTIDADE POR ID
 =========================  */
 
-func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
+func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, cnpj uint64) (*Entidade, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Entidade{}).Where("cnpj = ?", entidadeID).Take(&entidade).Error
+	err := db.Debug().Model(Entidade{}).Where("cnpj = ?", cnpj).Take(&entidade).Error
 
 	if err != nil {
 		return &Entidade{}, err
@@ -57,10 +57,10 @@ func (entidade *Entidade) FindAllEntidade(db *gorm.DB) (*[]Entidade, error) {
 	FUNCAO EDITAR ENTIDADE
 =========================  */
 
-func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entidade, error) {
+func (entidade *Entidade) UpdateEntidade(db *gorm.DB, cnpj uint64) (*Entidade, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Updates(
+	err := db.Debug().Model(&Entidade{}).Where("cnpj = ?", cnpj).Updates(
 		Entidade{
 			Nome:          entidade.Nome,
 			Endereco:      entidade.Endereco,
@@ -76,7 +76,7 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Take(&entidade).Error
+	err = db.Debug().Model(&Entidade{}).Where("cnpj = ?", cnpj).Take(&entidade).Error
 	if err != nil {
 		return &Entidade{}, err
 	}
@@ -89,10 +89,10 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, entidadeID uint64) (*Entid
 	FUNCAO DELETAR ENTIDADE POR ID
 =========================  */
 
-func (entidade *Entidade) DeleteEntidade(db *gorm.DB, entidadeID uint64) (int64, error) {
+func (entidade *Entidade) DeleteEntidade(db *gorm.DB, cnpj uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Entidade{}).Where("cnpj = ?", entidadeID).Take(&Entidade{}).Delete(&Entidade{})
+	db = db.Debug().Model(&Entidade{}).Where("cnpj = ?", cnpj).Take(&Entidade{}).Delete(&Entidade{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

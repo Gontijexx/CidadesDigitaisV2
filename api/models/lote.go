@@ -25,10 +25,10 @@ func (lote *Lote) SaveLote(db *gorm.DB) (*Lote, error) {
 	FUNCAO LISTAR LOTE POR ID
 =========================  */
 
-func (lote *Lote) FindLoteByID(db *gorm.DB, loteID uint64) (*Lote, error) {
+func (lote *Lote) FindLoteByID(db *gorm.DB, codLote uint64) (*Lote, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Lote{}).Where("cod_lote = ?", loteID).Take(&lote).Error
+	err := db.Debug().Model(Lote{}).Where("cod_lote = ?", codLote).Take(&lote).Error
 
 	if err != nil {
 		return &Lote{}, err
@@ -60,10 +60,10 @@ func (lote *Lote) FindAllLote(db *gorm.DB) (*[]Lote, error) {
 	FUNCAO EDITAR LOTE
 =========================  */
 
-func (lote *Lote) UpdateLote(db *gorm.DB, loteID uint64) (*Lote, error) {
+func (lote *Lote) UpdateLote(db *gorm.DB, codLote uint64) (*Lote, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Updates(
+	err := db.Debug().Model(&Lote{}).Where("cod_lote = ?", codLote).Updates(
 		Lote{
 			Contrato:    lote.Contrato,
 			DtInicioVig: lote.DtInicioVig,
@@ -75,7 +75,7 @@ func (lote *Lote) UpdateLote(db *gorm.DB, loteID uint64) (*Lote, error) {
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Take(&lote).Error
+	err = db.Debug().Model(&Lote{}).Where("cod_lote = ?", codLote).Take(&lote).Error
 	if err != nil {
 		return &Lote{}, err
 	}
@@ -88,10 +88,10 @@ func (lote *Lote) UpdateLote(db *gorm.DB, loteID uint64) (*Lote, error) {
 	FUNCAO DELETAR LOTE POR ID
 =========================  */
 
-func (lote *Lote) DeleteLote(db *gorm.DB, loteID uint64) (int64, error) {
+func (lote *Lote) DeleteLote(db *gorm.DB, codLote uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Lote{}).Where("cod_lote = ?", loteID).Take(&Lote{}).Delete(&Lote{})
+	db = db.Debug().Model(&Lote{}).Where("cod_lote = ?", codLote).Take(&Lote{}).Delete(&Lote{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

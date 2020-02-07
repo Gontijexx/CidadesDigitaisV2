@@ -310,12 +310,42 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CLASSE_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteClasseEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
-			ROTAS EM ETAPA 22000
+			ROTAS EM ETAPA OK!
 	=========================	*/
+
+	//	LISTA ETAPA
+	r.HandleFunc(config.ETAPA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllEtapa))).Methods(http.MethodGet)
+
+	//	SALVA ETAPA
+	r.HandleFunc(config.ETAPA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateEtapa))).Methods(http.MethodPost)
+
+	//	EDITA ETAPA (cod_etapa)
+	r.HandleFunc(config.ETAPA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEtapa))).Methods(http.MethodPut)
+
+	//	LISTA ETAPA (cod_etapa)
+	r.HandleFunc(config.ETAPA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEtapaByID))).Methods(http.MethodGet)
+
+	//	APAGA ETAPA (cod_etapa)
+	r.HandleFunc(config.ETAPA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEtapa))).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM ITENS 23000
 	=========================	*/
+
+	//	LISTA ITENS
+	r.HandleFunc(config.ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllItens))).Methods(http.MethodGet)
+
+	//	SALVA ITENS
+	r.HandleFunc(config.ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateItens))).Methods(http.MethodPost)
+
+	//	EDITA ITENS (cod_itens)
+	r.HandleFunc(config.ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItens))).Methods(http.MethodPut)
+
+	//	LISTA ITENS (cod_itens)
+	r.HandleFunc(config.ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensByID))).Methods(http.MethodGet)
+
+	//	APAGA ITENS (cod_itens)
+	r.HandleFunc(config.ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteItens))).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM MUNICIPIOS OK!

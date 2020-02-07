@@ -186,13 +186,23 @@ const (
 	CLASSE_EMPENHO_ID_PATH = "/read/classeEmpenho/{cod_classe_empenho}"
 )
 
-/*	=========================
-		ETAPA PATHS HTTP
-=========================	*/
+/*  =========================
+	ETAPA PATHS HTTP
+=========================  */
+
+const (
+	ETAPA_PATH    = "/read/etapa"
+	ETAPA_ID_PATH = "/read/etapa/{cod_etapa}"
+)
 
 /*	=========================
-		ITENS PATHS HTTP
+		ITENS PATHS HTTP OK!
 =========================	*/
+
+const (
+	ITENS_PATH    = "/read/itens"
+	ITENS_ID_PATH = "/read/itens/{cod_item}/{cod_tipo_item}"
+)
 
 /*  =========================
 	MUNICIPIO PATHS HTTP OK!
@@ -244,14 +254,6 @@ const (
 //===============================================================
 
 /*  =========================
-	TIPOLOGIA PATHS HTTP
-=========================  */
-
-/*  =========================
-	TIPO ITEM PATHS HTTP
-=========================  */
-
-/*  =========================
 	PAGAMENTO PATHS HTTP
 =========================  */
 
@@ -266,25 +268,12 @@ const (
 )
 
 /*  =========================
-	NATUREZA DESPESA PATHS HTTP
-=========================  */
-
-/*  =========================
 	MODULOS PATHS HTTP
 =========================  */
 
 const (
 	MOD_PATH          = "/read/modulo"
 	MOD_USERLIST_PATH = "/read/usuario/:cod_usuario/modulos"
-)
-
-/*  =========================
-	ITENS PATHS HTTP
-=========================  */
-
-const (
-	ITENS_PATH    = "/read/itens"
-	ITENS_ID_PATH = "/read/itens/:cod_item/:cod_tipo_item"
 )
 
 /*  =========================
@@ -301,20 +290,3 @@ const (
 	LIST_PAG_FAT         = "/read/faturaOtb/:num_nf/:cod_ibge"
 	FATURA_TOTAL         = "/read/totalFatura/:num_nf"
 )
-
-/*  =========================
-	ETAPA PATHS HTTP
-=========================  */
-
-const (
-	ETAPA_PATH    = "/read/etapa"
-	ETAPA_ID_PATH = "/read/etapa/:cod_etapa"
-)
-
-/*  =========================
-	CLASSE EMPENHO PATHS HTTP
-=========================  */
-
-/*  =========================
-	CATEGORIA PATHS HTTP
-=========================  */

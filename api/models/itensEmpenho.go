@@ -10,10 +10,10 @@ import "github.com/jinzhu/gorm"
 	FUNCAO LISTAR ITENS EMPENHO POR ID
 =========================  */
 
-func (itensEmpenho *ItensEmpenho) FindItensEmpenhoByID(db *gorm.DB, codEmpenho uint64) (*ItensEmpenho, error) {
+func (itensEmpenho *ItensEmpenho) FindItensEmpenhoByID(db *gorm.DB, idEmpenho, codItem, codTipoItem uint64) (*ItensEmpenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(ItensEmpenho{}).Where("cod_empenho = ?", codEmpenho).Take(&itensEmpenho).Error
+	err := db.Debug().Model(ItensEmpenho{}).Where("id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", idEmpenho, codItem, codTipoItem).Take(&itensEmpenho).Error
 
 	if err != nil {
 		return &ItensEmpenho{}, err
@@ -26,10 +26,10 @@ func (itensEmpenho *ItensEmpenho) FindItensEmpenhoByID(db *gorm.DB, codEmpenho u
 	FUNCAO EDITAR ITENS EMPENHO
 =========================  */
 
-func (itensEmpenho *ItensEmpenho) UpdateItensEmpenho(db *gorm.DB, codEmpenho uint64) (*ItensEmpenho, error) {
+func (itensEmpenho *ItensEmpenho) UpdateItensEmpenho(db *gorm.DB, idEmpenho, codItem, codTipoItem uint64) (*ItensEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&ItensEmpenho{}).Where("cod_empenho = ?", codEmpenho).Updates(
+	err := db.Debug().Model(&ItensEmpenho{}).Where("id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", idEmpenho, codItem, codTipoItem).Updates(
 		ItensEmpenho{
 			Valor:      itensEmpenho.Valor,
 			Quantidade: itensEmpenho.Quantidade}).Error
@@ -39,7 +39,7 @@ func (itensEmpenho *ItensEmpenho) UpdateItensEmpenho(db *gorm.DB, codEmpenho uin
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&ItensEmpenho{}).Where("cod_empenho = ?", codEmpenho).Take(&itensEmpenho).Error
+	err = db.Debug().Model(&ItensEmpenho{}).Where("id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", idEmpenho, codItem, codTipoItem).Take(&itensEmpenho).Error
 	if err != nil {
 		return &ItensEmpenho{}, err
 	}

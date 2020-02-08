@@ -115,8 +115,9 @@ type LoteItens struct {
 =========================  */
 
 type Empenho struct {
-	CodEmpenho         string `gorm:"primary_key;not null;size:13" json:"cod_empenho" validate:"alphanum"`
+	IDEmpenho          uint64 `gorm:"primary_key;not null" json:""id_empenho validate:"number"`
 	CodPrevisaoEmpenho uint64 `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho" validate:"number"`
+	CodEmpenho         string `gorm:"default:null;size:13" json:"cod_empenho" validate:"alphanum"`
 	Data               string `gorm:"default:null" json:"data" validate:"required"`
 	Contador           uint64 `gorm:"default:null" json:"contador" validate:"alphanum"`
 }
@@ -126,9 +127,9 @@ type Empenho struct {
 =========================  */
 
 type ItensEmpenho struct {
-	CodEmpenho         string  `gorm:"primary_key;not null;size:13" json:"cod_empenho" validate:"alphanum"`
-	CodItem            uint64  `gorm:"primary_key;not null" json:"cod_item" validate:"number"`
-	CodTipoItem        uint64  `gorm:"primary_key;not null" json:"cod_tipo_item" validate:"number"`
+	IDEmpenho          uint64  `gorm:"primary_key;foreign_key:IDEmpenho;not null;size:13" json:"id_empenho" validate:"number"`
+	CodItem            uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item" validate:"number"`
+	CodTipoItem        uint64  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item" validate:"number"`
 	CodPrevisaoEmpenho uint64  `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho" validate:"number"`
 	Valor              float64 `gorm:"defaul:null" json:"valor" validate:"alphanum"`
 	Quantidade         uint64  `gorm:"default:null" json:"quantidade" validate:"number"`
@@ -147,7 +148,7 @@ type ItensEmpenho struct {
 =========================  */
 
 type PrevisaoEmpenho struct {
-	CodPrevisaoEmpenho uint64 `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;auto_incrementnot null;size:11" json:"cod_previsao_empenho" validate:"number":`
+	CodPrevisaoEmpenho uint64 `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;auto_increment;not null" json:"cod_previsao_empenho" validate:"number":`
 	CodLote            uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
 	CodNaturezaDespesa uint64 `gorm:"foreign_key:CodNaturezaDespesa;not null;size:11" json:"cod_natureza_despesa" validate:"number":`
 	Data               string `gorm:"default:null" json:"data" validate:"required":`
@@ -160,7 +161,7 @@ type PrevisaoEmpenho struct {
 =========================  */
 
 type ItensPrevisaoEmpenho struct {
-	CodPrevisaoEmpenho uint64  `gorm:"primary_key;not null;size:11" json:"cod_previsao_empenho" validate:"number":`
+	CodPrevisaoEmpenho uint64  `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho" validate:"number":`
 	CodItem            uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item" validate:"number":`
 	CodTipoItem        uint64  `gorm:"primary_key;foreign_key:CodTipo_item;not null;size:11" json:"cod_tipo_item" validate:"number":`
 	CodLote            uint64  `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`

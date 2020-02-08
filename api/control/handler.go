@@ -117,10 +117,10 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA CD_ITENS
 	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCDItens))).Methods(http.MethodGet)
 
-	//	EDITA CD_ITENS
+	//	EDITA CD_ITENS (cod_ibge, cod_item, cod_tipo_item)
 	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCDItens))).Methods(http.MethodPut)
 
-	//	LISTA CD_ITENS POR ID
+	//	LISTA CD_ITENS POR ID (cod_ibge, cod_item, cod_tipo_item)
 	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDItensByID))).Methods(http.MethodGet)
 
 	/*	=========================

@@ -118,18 +118,16 @@ const (
 
 const (
 	EMPENHO_PATH    = "/read/empenho"
-	EMPENHO_ID_PATH = "/read/empenho/{cod_empenho}"
+	EMPENHO_ID_PATH = "/read/empenho/{id_empenho}"
 )
 
 /*  =========================
 	ITENS EMPENHO PATHS HTTP
 =========================  */
 
-//	REVER ID PATH TALVEZ (cod_empenho, cod_item, cod_tipo_item)
-
 const (
 	ITENS_EMPENHO_PATH    = "/read/itensEmpenho"
-	ITENS_EMPENHO_ID_PATH = "/read/itensEmpenho/{cod_empenho}"
+	ITENS_EMPENHO_ID_PATH = "/read/itensEmpenho/{id_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*	=========================
@@ -153,11 +151,9 @@ const (
 	ITENS PREVISAO EMPENHO PATHS HTTP
 =========================  */
 
-//	REVER ID PATH TALVEZ (cod_previsao_empenho, cod_item, cod_tipo_item)
-
 const (
 	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itensPrevisaoEmpenho"
-	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensPrevisaoEmpenho/{cod_previsao_empenho}"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensPrevisaoEmpenho/{cod_previsao_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================

@@ -85,8 +85,8 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	entidadeID armazena a chave primaria da tabela entidade
-	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
+	//	cnpj armazena a chave primaria da tabela entidade
+	cnpj, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -95,7 +95,7 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 	entidade := models.Entidade{}
 
 	//	entidadeGotten recebe o dado buscado no banco de dados
-	entidadeGotten, err := entidade.FindEntidadeByID(server.DB, entidadeID)
+	entidadeGotten, err := entidade.FindEntidadeByID(server.DB, cnpj)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -148,8 +148,8 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	entidadeID armazena a chave primaria da tabela entidade
-	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
+	//	cnpj armazena a chave primaria da tabela entidade
+	cnpj, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -176,7 +176,7 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateEntidade recebe a nova entidade, a que foi alterada
-	updateEntidade, err := entidade.UpdateEntidade(server.DB, entidadeID)
+	updateEntidade, err := entidade.UpdateEntidade(server.DB, cnpj)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -204,8 +204,8 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 
 	entidade := models.Entidade{}
 
-	//	entidadeID armazena a chave primaria da tabela entidade
-	entidadeID, err := strconv.ParseUint(vars["cnpj"], 10, 64)
+	//	cnpj armazena a chave primaria da tabela entidade
+	cnpj, err := strconv.ParseUint(vars["cnpj"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -213,14 +213,14 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = entidade.DeleteEntidade(server.DB, entidadeID)
+	_, err = entidade.DeleteEntidade(server.DB, cnpj)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d", entidadeID))
+	w.Header().Set("Entity", fmt.Sprintf("%d", cnpj))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

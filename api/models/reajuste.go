@@ -41,13 +41,13 @@ func (reajuste *Reajuste) FindAllReajuste(db *gorm.DB) (*[]Reajuste, error) {
 }
 
 /*  =========================
-	FUNCAO DELETAR ENTIDADE POR ID
+	FUNCAO DELETAR REAJUSTE POR ID
 =========================  */
 
-func (r *Reajuste) DeleteReajuste(db *gorm.DB, codLoteID, anoRefID uint64) (int64, error) {
+func (r *Reajuste) DeleteReajuste(db *gorm.DB, codLote, anoRef uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Reajuste{}).Where("cod_lote = ? AND ano_ref", codLoteID, anoRefID).Take(&Reajuste{}).Delete(&Reajuste{})
+	db = db.Debug().Model(&Reajuste{}).Where("cod_lote = ? AND ano_ref", codLote, anoRef).Take(&Reajuste{}).Delete(&Reajuste{})
 
 	if db.Error != nil {
 		return 0, db.Error

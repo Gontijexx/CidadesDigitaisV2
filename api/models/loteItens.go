@@ -14,10 +14,10 @@ import (
 	FUNCAO LISTAR LOTE_ITENS POR ID
 =========================  */
 
-func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, loteCodLote, loteCodItem, loteCodTipoItem uint64) (*LoteItens, error) {
+func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, codLote, codItem, codTipoItem uint64) (*LoteItens, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteCodLote, loteCodItem, loteCodTipoItem).Take(&loteItens).Error
+	err := db.Debug().Model(LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", codLote, codItem, codTipoItem).Take(&loteItens).Error
 
 	if err != nil {
 		return &LoteItens{}, err
@@ -49,9 +49,9 @@ func (loteItens *LoteItens) FindAllLoteItens(db *gorm.DB) (*[]LoteItens, error) 
 	FUNCAO EDITAR LOTE_ITENS
 =========================  */
 
-func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, loteCodLote, loteCodItem, loteCodTipoItem uint64) (*LoteItens, error) {
+func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, codLote, codItem, codTipoItem uint64) (*LoteItens, error) {
 
-	err := db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteCodLote, loteCodItem, loteCodTipoItem).Updates(
+	err := db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", codLote, codItem, codTipoItem).Updates(
 		LoteItens{
 			Preco: loteItens.Preco,
 		}).Error
@@ -60,7 +60,7 @@ func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, loteCodLote, loteCodIte
 		return &LoteItens{}, db.Error
 	}
 
-	err = db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteCodLote, loteCodItem, loteCodTipoItem).Take(&loteItens).Error
+	err = db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", codLote, codItem, codTipoItem).Take(&loteItens).Error
 	if err != nil {
 		return &LoteItens{}, err
 	}

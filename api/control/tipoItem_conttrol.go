@@ -16,13 +16,13 @@ import (
 )
 
 /*  =========================
-	FUNCAO ADICIONAR ASSUNTO
+	FUNCAO ADICIONAR TIPO_ITEM
 =========================  */
 
-func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
+func (server *Server) CreateTipoItem(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19001)
+	err := config.AuthMod(w, r, 28001)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -34,11 +34,11 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Estrutura models.Assunto{} "renomeada"
-	assunto := models.Assunto{}
+	//	Estrutura models.TipoItem{} "renomeada"
+	tipoItem := models.TipoItem{}
 
-	//	Unmarshal analisa o JSON recebido e armazena na struct assunto referenciada (&struct)
-	err = json.Unmarshal(body, &assunto)
+	//	Unmarshal analisa o JSON recebido e armazena na struct tipo_item referenciada (&struct)
+	err = json.Unmarshal(body, &tipoItem)
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
@@ -46,16 +46,16 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = validation.Validator.Struct(assunto); err != nil {
+	if err = validation.Validator.Struct(tipoItem); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	//	SaveAssunto eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
-	assuntoCreated, err := assunto.SaveAssunto(server.DB)
+	//	SaveTipoItem eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
+	tipoItemCreated, err := tipoItem.SaveTipoItem(server.DB)
 
-	/*	Retorna um erro caso nao seja possivel salvar assunto no banco de dados
+	/*	Retorna um erro caso nao seja possivel salvar tipo_item no banco de dados
 		Status 500	*/
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
@@ -63,21 +63,21 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, assuntoCreated.CodAssunto))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, tipoItemCreated.CodTipoItem))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
-	responses.JSON(w, http.StatusCreated, assuntoCreated)
+	responses.JSON(w, http.StatusCreated, tipoItemCreated)
 
 }
 
 /*  =========================
-	FUNCAO LISTAR ASSUNTO POR ID
+	FUNCAO LISTAR TIPO_ITEM POR ID
 =========================  */
 
-func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetTipoItemByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19002)
+	err := config.AuthMod(w, r, 28002)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -85,17 +85,17 @@ func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codAssunto armazena a chave primaria da tabela assunto
-	codAssunto, err := strconv.ParseUint(vars["cod_assunto"], 10, 64)
+	//	codTipoItem armazena a chave primaria da tabela tipo_item
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	assunto := models.Assunto{}
+	tipoItem := models.TipoItem{}
 
-	//	assuntoGotten recebe o dado buscado no banco de dados
-	assuntoGotten, err := assunto.FindAssuntoByID(server.DB, codAssunto)
+	//	tipoItemGotten recebe o dado buscado no banco de dados
+	tipoItemGotten, err := tipoItem.FindTipoItemByID(server.DB, codTipoItem)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -103,26 +103,26 @@ func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, assuntoGotten)
+	responses.JSON(w, http.StatusOK, tipoItemGotten)
 
 }
 
 /*  =========================
-	FUNCAO LISTAR TODOS ASSUNTO
+	FUNCAO LISTAR TODAS TIPO_ITEM
 =========================  */
 
-func (server *Server) GetAllAssunto(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllTipoItem(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19002)
+	err := config.AuthMod(w, r, 28002)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
-	assunto := models.Assunto{}
+	tipoItem := models.TipoItem{}
 
-	//	allAssunto armazena os dados buscados no banco de dados
-	allAssunto, err := assunto.FindAllAssunto(server.DB)
+	//	allTipoItem armazena os dados buscados no banco de dados
+	allTipoItem, err := tipoItem.FindAllTipoItem(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
@@ -130,17 +130,17 @@ func (server *Server) GetAllAssunto(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, allAssunto)
+	responses.JSON(w, http.StatusOK, allTipoItem)
 }
 
 /*  =========================
-	FUNCAO EDITAR ASSUNTO
+	FUNCAO EDITAR TIPO_ITEM
 =========================  */
 
-func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
+func (server *Server) UpdateTipoItem(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19003)
+	err := config.AuthMod(w, r, 28003)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -148,8 +148,8 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codAssunto armazena a chave primaria da tabela assunto
-	codAssunto, err := strconv.ParseUint(vars["cod_assunto"], 10, 64)
+	//	codTipoItem armazena a chave primaria da tabela tipo_item
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -161,22 +161,22 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	assunto := models.Assunto{}
+	tipoItem := models.TipoItem{}
 
-	err = json.Unmarshal(body, &assunto)
+	err = json.Unmarshal(body, &tipoItem)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(assunto); err != nil {
+	if err = validation.Validator.Struct(tipoItem); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	//	updateAssunto recebe o novo assunto, a que foi alterada
-	updateAssunto, err := assunto.UpdateAssunto(server.DB, codAssunto)
+	//	updateTipoItem recebe a nova tipo_item, a que foi alterada
+	updateTipoItem, err := tipoItem.UpdateTipoItem(server.DB, codTipoItem)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -184,17 +184,17 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Retorna o Status 200 e o JSON da struct alterada
-	responses.JSON(w, http.StatusOK, updateAssunto)
+	responses.JSON(w, http.StatusOK, updateTipoItem)
 }
 
 /*  =========================
-	FUNCAO DELETAR ASSUNTO
+	FUNCAO DELETAR TIPO_ITEM
 =========================  */
 
-func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
+func (server *Server) DeleteTipoItem(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 19003)
+	err := config.AuthMod(w, r, 12003)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -202,10 +202,10 @@ func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	assunto := models.Assunto{}
+	tipoItem := models.TipoItem{}
 
-	//	codAssunto armazena a chave primaria da tabela assunto
-	codAssunto, err := strconv.ParseUint(vars["cod_assunto"], 10, 64)
+	//	codTipoItem armazena a chave primaria da tabela tipo_item
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -213,14 +213,14 @@ func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
 
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = assunto.DeleteAssunto(server.DB, codAssunto)
+	_, err = tipoItem.DeleteTipoItem(server.DB, codTipoItem)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d", codAssunto))
+	w.Header().Set("Entity", fmt.Sprintf("%d", codTipoItem))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

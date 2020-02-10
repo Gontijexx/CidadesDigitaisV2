@@ -8,10 +8,10 @@ import (
 	FUNCAO LISTAR ITENS PREVISAO EMPENHO POR ID
 =========================  */
 
-func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindItensPrevisaoEmpenhoByID(db *gorm.DB, itensPrevisaoEmpenhoID uint64) (*ItensPrevisaoEmpenho, error) {
+func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindItensPrevisaoEmpenhoByID(db *gorm.DB, codPrevisaoEmpenho, codItem, codTipoItem uint64) (*ItensPrevisaoEmpenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho", itensPrevisaoEmpenhoID).Take(&itensPrevisaoEmpenho).Error
+	err := db.Debug().Model(ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", codPrevisaoEmpenho, codItem, codTipoItem).Take(&itensPrevisaoEmpenho).Error
 
 	if err != nil {
 		return &ItensPrevisaoEmpenho{}, err
@@ -24,10 +24,10 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindItensPrevisaoEmpenhoByID(d
 	FUNCAO EDITAR ITENS PREVISAO EMPENHO
 =========================  */
 
-func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) UpdateItensPrevisaoEmpenho(db *gorm.DB, itensPrevisaoEmpenhoID uint64) (*ItensPrevisaoEmpenho, error) {
+func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) UpdateItensPrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho, codItem, codTipoItem uint64) (*ItensPrevisaoEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", itensPrevisaoEmpenhoID).Updates(
+	err := db.Debug().Model(&ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", codPrevisaoEmpenho, codItem, codTipoItem).Updates(
 		ItensPrevisaoEmpenho{
 			Valor:      itensPrevisaoEmpenho.Valor,
 			Quantidade: itensPrevisaoEmpenho.Quantidade,
@@ -38,7 +38,7 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) UpdateItensPrevisaoEmpenho(db 
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", itensPrevisaoEmpenhoID).Take(&itensPrevisaoEmpenho).Error
+	err = db.Debug().Model(&ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", codPrevisaoEmpenho, codItem, codTipoItem).Take(&itensPrevisaoEmpenho).Error
 	if err != nil {
 		return &ItensPrevisaoEmpenho{}, err
 	}

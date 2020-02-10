@@ -86,8 +86,8 @@ func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Requ
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	previsaoEmpenhoID armazeza a chave primaria da tabela previsao_empenho
-	previsaoEmpenhoID, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
+	//	codPrevisaoEmpenho armazeza a chave primaria da tabela previsao_empenho
+	codPrevisaoEmpenho, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -96,7 +96,7 @@ func (server *Server) GetPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Requ
 	previsaoEmpenho := models.PrevisaoEmpenho{}
 
 	//	previsaoEmpenhoGotten recebe o dado buscado no banco de dados
-	previsaoEmpenhoGotten, err := previsaoEmpenho.FindPrevisaoEmpenhoByID(server.DB, previsaoEmpenhoID)
+	previsaoEmpenhoGotten, err := previsaoEmpenho.FindPrevisaoEmpenhoByID(server.DB, codPrevisaoEmpenho)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -149,8 +149,8 @@ func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	previsaEmepenhoID armazena a chave primaria da tabela previsao empenho
-	previsaoEmpenhoID, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
+	//	codPrevisaoEmpenho armazena a chave primaria da tabela previsao empenho
+	codPrevisaoEmpenho, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -179,7 +179,7 @@ func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 	}
 
 	// updatePrevisaEmpenho recebe a nova previsao_empenho, a que foi alterada
-	updatePrevisaoEmpenho, err := previsaoEmpenho.UpdatePrevisaoEmpenho(server.DB, previsaoEmpenhoID)
+	updatePrevisaoEmpenho, err := previsaoEmpenho.UpdatePrevisaoEmpenho(server.DB, codPrevisaoEmpenho)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

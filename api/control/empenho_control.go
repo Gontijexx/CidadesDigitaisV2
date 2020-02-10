@@ -15,10 +15,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		PRECISA FAZER OS TESTES
-=========================	*/
-
 /*  =========================
 	FUNCAO ADICIONAR EMPENHO
 =========================  */
@@ -88,8 +84,8 @@ func (server *Server) GetEmpenhoByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codEmpenho armazena a chave primaria da tabela empenho
-	codEmpenho, err := strconv.ParseUint(vars["cnpj"], 10, 64)
+	//	idEmpenho armazena a chave primaria da tabela empenho
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -98,7 +94,7 @@ func (server *Server) GetEmpenhoByID(w http.ResponseWriter, r *http.Request) {
 	empenho := models.Empenho{}
 
 	//	empenhoGotten recebe o dado buscado no banco de dados
-	empenhoGotten, err := empenho.FindEmpenhoByID(server.DB, codEmpenho)
+	empenhoGotten, err := empenho.FindEmpenhoByID(server.DB, idEmpenho)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -151,8 +147,8 @@ func (server *Server) UpdateEmpenho(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codEmpenho armazena a chave primaria da tabela empenho
-	codEmpenho, err := strconv.ParseUint(vars["cod_empenho"], 10, 64)
+	//	idEmpenho armazena a chave primaria da tabela empenho
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -179,7 +175,7 @@ func (server *Server) UpdateEmpenho(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateEmpenho recebe o novo empenho, a que foi alterada
-	updateEmpenho, err := empenho.UpdateEmpenho(server.DB, codEmpenho)
+	updateEmpenho, err := empenho.UpdateEmpenho(server.DB, idEmpenho)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -207,8 +203,8 @@ func (server *Server) DeleteEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	empenho := models.Empenho{}
 
-	//	codEmpenho armazena a chave primaria da tabela empenho
-	codEmpenho, err := strconv.ParseUint(vars["cod_empenho"], 10, 64)
+	//	idEmpenho armazena a chave primaria da tabela empenho
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -216,14 +212,14 @@ func (server *Server) DeleteEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = empenho.DeleteEmpenho(server.DB, codEmpenho)
+	_, err = empenho.DeleteEmpenho(server.DB, idEmpenho)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d", codEmpenho))
+	w.Header().Set("Entity", fmt.Sprintf("%d", idEmpenho))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

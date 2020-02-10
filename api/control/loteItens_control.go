@@ -15,10 +15,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		PRECISA FAZER OS TESTES
-=========================	*/
-
 /*  =========================
 	FUNCAO LISTAR LOTE_ITENS POR ID
 =========================  */
@@ -34,22 +30,22 @@ func (server *Server) GetLoteItensByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	loteCodLote armazena a chave primaria da tabela lote itens
-	loteCodLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	//	codLote armazena a chave primaria da tabela lote itens
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	loteCodItem armazena a chave primaria da tabela lote itens
-	loteCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	//	codItem armazena a chave primaria da tabela lote itens
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	loteCodTipoItem armazena a chave primaria da tabela lote itens
-	loteCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	//	codTipoItem armazena a chave primaria da tabela lote itens
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -58,7 +54,7 @@ func (server *Server) GetLoteItensByID(w http.ResponseWriter, r *http.Request) {
 	loteItens := models.LoteItens{}
 
 	//	loteItensGotten recebe o dado buscado no banco de dados
-	loteItensGotten, err := loteItens.FindLoteItensByID(server.DB, loteCodLote, loteCodItem, loteCodTipoItem)
+	loteItensGotten, err := loteItens.FindLoteItensByID(server.DB, codLote, codItem, codTipoItem)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -110,22 +106,22 @@ func (server *Server) UpdateLoteItens(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	loteCodLote armazena a chave primaria da tabela lote itens
-	loteCodLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	//	codLote armazena a chave primaria da tabela lote itens
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	loteCodItem armazena a chave primaria da tabela lote itens
-	loteCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	//	codItem armazena a chave primaria da tabela lote itens
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	loteCodTipoItem armazena a chave primaria da tabela lote itens
-	loteCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	//	codTipoItem armazena a chave primaria da tabela lote itens
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -150,7 +146,7 @@ func (server *Server) UpdateLoteItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updateLoteItens, err := loteItens.UpdateLoteItens(server.DB, loteCodLote, loteCodItem, loteCodTipoItem)
+	updateLoteItens, err := loteItens.UpdateLoteItens(server.DB, codLote, codItem, codTipoItem)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

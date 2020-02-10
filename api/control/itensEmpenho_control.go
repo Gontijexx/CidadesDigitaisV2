@@ -15,10 +15,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		PRECISA FAZER OS TESTES
-=========================	*/
-
 /*  =========================
 	FUNCAO LISTAR ITENS EMPENHO POR ID
 =========================  */
@@ -34,8 +30,22 @@ func (server *Server) GetItensEmpenhoByID(w http.ResponseWriter, r *http.Request
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codEmpenho armazena a chave primaria da tabela itens_empenho
-	codEmpenho, err := strconv.ParseUint(vars["cod_empenho"], 10, 64)
+	//	idEmpenho armazena a chave primaria da tabela itens_empenho
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codItem armazena a chave primaria da tabela itens_empenho
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codTipoItem armazena a chave primaria da tabela itens_empenho
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -44,7 +54,7 @@ func (server *Server) GetItensEmpenhoByID(w http.ResponseWriter, r *http.Request
 	itensEmpenho := models.ItensEmpenho{}
 
 	//	itensEmpenhoGotten recebe o dado buscado no banco de dados
-	itensEmpenhoGotten, err := itensEmpenho.FindItensEmpenhoByID(server.DB, codEmpenho)
+	itensEmpenhoGotten, err := itensEmpenho.FindItensEmpenhoByID(server.DB, idEmpenho, codItem, codTipoItem)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -71,8 +81,22 @@ func (server *Server) UpdateItensEmpenho(w http.ResponseWriter, r *http.Request)
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codEmpenho armazena a chave primaria da tabela itens_empenho
-	codEmpenho, err := strconv.ParseUint(vars["cod_empenho"], 10, 64)
+	//	idEmpenho armazena a chave primaria da tabela itens_empenho
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codItem armazena a chave primaria da tabela itens_empenho
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codTipoItem armazena a chave primaria da tabela itens_empenho
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -99,7 +123,7 @@ func (server *Server) UpdateItensEmpenho(w http.ResponseWriter, r *http.Request)
 	}
 
 	//	updateItensEmpenho recebe o novo item_empenho, a que foi alterada
-	updateItensEmpenho, err := itensEmpenho.UpdateItensEmpenho(server.DB, codEmpenho)
+	updateItensEmpenho, err := itensEmpenho.UpdateItensEmpenho(server.DB, idEmpenho, codItem, codTipoItem)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

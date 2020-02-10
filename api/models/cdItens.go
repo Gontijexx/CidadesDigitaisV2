@@ -6,18 +6,14 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-/*	=========================
-		PRECISA FAZER OS TESTES
-=========================	*/
-
 /*  =========================
 	FUNCAO LISTAR CD_ITENS POR ID
 =========================  */
 
-func (cdItens *CDItens) FindCDItensByID(db *gorm.DB, cdCodIbge, cdCodItem, cdCodTipoItem uint64) (*CDItens, error) {
+func (cdItens *CDItens) FindCDItensByID(db *gorm.DB, codIbge, codItem, codTipoItem uint64) (*CDItens, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", cdCodIbge, cdCodItem, cdCodTipoItem).Take(&cdItens).Error
+	err := db.Debug().Model(CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", codIbge, codItem, codTipoItem).Take(&cdItens).Error
 
 	if err != nil {
 		return &CDItens{}, err
@@ -49,9 +45,9 @@ func (cdItens *CDItens) FindAllCDItens(db *gorm.DB) (*[]CDItens, error) {
 	FUNCAO EDITAR CD_ITENS POR ID
 =========================  */
 
-func (cdItens *CDItens) UpdateCDItens(db *gorm.DB, cdCodIbge, cdCodItem, cdCodTipoItem uint64) (*CDItens, error) {
+func (cdItens *CDItens) UpdateCDItens(db *gorm.DB, codIbge, codItem, codTipoItem uint64) (*CDItens, error) {
 
-	err := db.Debug().Model(&CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", cdCodIbge, cdCodItem, cdCodTipoItem).Updates(
+	err := db.Debug().Model(&CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", codIbge, codItem, codTipoItem).Updates(
 		CDItens{
 			QuantidadePrevisto:         cdItens.QuantidadePrevisto,
 			QuantidadeProjetoExecutivo: cdItens.QuantidadeProjetoExecutivo,
@@ -62,7 +58,7 @@ func (cdItens *CDItens) UpdateCDItens(db *gorm.DB, cdCodIbge, cdCodItem, cdCodTi
 		return &CDItens{}, db.Error
 	}
 
-	err = db.Debug().Model(&CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", cdCodIbge, cdCodItem, cdCodTipoItem).Take(&cdItens).Error
+	err = db.Debug().Model(&CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", codIbge, codItem, codTipoItem).Take(&cdItens).Error
 	if err != nil {
 		return &CDItens{}, err
 	}

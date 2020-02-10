@@ -34,22 +34,22 @@ func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna a rota das variaveis
 	vars := mux.Vars(r)
 
-	//	cdCodIbge armazena a chave primaria da tabela cd_itens
-	cdCodIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	//	codIbge armazena a chave primaria da tabela cd_itens
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	cdCodItem armazena a chave primaria da tabela cd_itens
-	cdCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	//	codItem armazena a chave primaria da tabela cd_itens
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	//	cdCodTipoItem armazena a chave primaria da tabela cd_itens
-	cdCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	//	codTipoItem armazena a chave primaria da tabela cd_itens
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -58,7 +58,7 @@ func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 	cdItens := models.CDItens{}
 
 	//	cdItensGotten recebe o dado buscado no banco de dados
-	cdItensGotten, err := cdItens.FindCDItensByID(server.DB, cdCodIbge, cdCodItem, cdCodTipoItem)
+	cdItensGotten, err := cdItens.FindCDItensByID(server.DB, codIbge, codItem, codTipoItem)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -110,22 +110,22 @@ func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	cdCodIbge armazena a chave primaria da tabela cd_itens
-	cdCodIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	//	codIbge armazena a chave primaria da tabela cd_itens
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 
-	//	cdCodItem armazena a chave primaria da tabela cd_itens
-	cdCodItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	//	codItem armazena a chave primaria da tabela cd_itens
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 
-	//	cdCodTipoItem armazena a chave primaria da tabela cd_itens
-	cdCodTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	//	codTipoItem armazena a chave primaria da tabela cd_itens
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -154,7 +154,7 @@ func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateCDItens recebe a nova cd_itens, a que foi alterada
-	updateCDItens, err := cdItens.UpdateCDItens(server.DB, cdCodIbge, cdCodItem, cdCodTipoItem)
+	updateCDItens, err := cdItens.UpdateCDItens(server.DB, codIbge, codItem, codTipoItem)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

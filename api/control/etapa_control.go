@@ -16,13 +16,13 @@ import (
 )
 
 /*  =========================
-	FUNCAO ADICIONAR ASSUNTO
+	FUNCAO ADICIONAR ETAPA
 =========================  */
 
-func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
+func (server *Server) CreateEtapa(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19001)
+	err := config.AuthMod(w, r, 22001)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -34,11 +34,11 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Estrutura models.Assunto{} "renomeada"
-	assunto := models.Assunto{}
+	//	Estrutura models.Etapa{} "renomeada"
+	etapa := models.Etapa{}
 
-	//	Unmarshal analisa o JSON recebido e armazena na struct assunto referenciada (&struct)
-	err = json.Unmarshal(body, &assunto)
+	//	Unmarshal analisa o JSON recebido e armazena na struct etapa referenciada (&struct)
+	err = json.Unmarshal(body, &etapa)
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
@@ -46,16 +46,16 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = validation.Validator.Struct(assunto); err != nil {
+	if err = validation.Validator.Struct(etapa); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	//	SaveAssunto eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
-	assuntoCreated, err := assunto.SaveAssunto(server.DB)
+	//	SaveEtapa eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
+	etapaCreated, err := etapa.SaveEtapa(server.DB)
 
-	/*	Retorna um erro caso nao seja possivel salvar assunto no banco de dados
+	/*	Retorna um erro caso nao seja possivel salvar etapa no banco de dados
 		Status 500	*/
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
@@ -63,21 +63,21 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, assuntoCreated.CodAssunto))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, etapaCreated.CodEtapa))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
-	responses.JSON(w, http.StatusCreated, assuntoCreated)
+	responses.JSON(w, http.StatusCreated, etapaCreated)
 
 }
 
 /*  =========================
-	FUNCAO LISTAR ASSUNTO POR ID
+	FUNCAO LISTAR ETAPA POR ID
 =========================  */
 
-func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetEtapaByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19002)
+	err := config.AuthMod(w, r, 22002)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -85,17 +85,17 @@ func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codAssunto armazena a chave primaria da tabela assunto
-	codAssunto, err := strconv.ParseUint(vars["cod_assunto"], 10, 64)
+	//	codEtapa armazena a chave primaria da tabela etapa
+	codEtapa, err := strconv.ParseUint(vars["cod_etapa"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
-	assunto := models.Assunto{}
+	etapa := models.Etapa{}
 
-	//	assuntoGotten recebe o dado buscado no banco de dados
-	assuntoGotten, err := assunto.FindAssuntoByID(server.DB, codAssunto)
+	//	etapaGotten recebe o dado buscado no banco de dados
+	etapaGotten, err := etapa.FindEtapaByID(server.DB, codEtapa)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -103,26 +103,26 @@ func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, assuntoGotten)
+	responses.JSON(w, http.StatusOK, etapaGotten)
 
 }
 
 /*  =========================
-	FUNCAO LISTAR TODOS ASSUNTO
+	FUNCAO LISTAR TODAS ETAPA
 =========================  */
 
-func (server *Server) GetAllAssunto(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllEtapa(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19002)
+	err := config.AuthMod(w, r, 12002)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
-	assunto := models.Assunto{}
+	etapa := models.Etapa{}
 
-	//	allAssunto armazena os dados buscados no banco de dados
-	allAssunto, err := assunto.FindAllAssunto(server.DB)
+	//	allEtapa armazena os dados buscados no banco de dados
+	allEtapa, err := etapa.FindAllEtapa(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
@@ -130,17 +130,17 @@ func (server *Server) GetAllAssunto(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, allAssunto)
+	responses.JSON(w, http.StatusOK, allEtapa)
 }
 
 /*  =========================
-	FUNCAO EDITAR ASSUNTO
+	FUNCAO EDITAR ETAPA
 =========================  */
 
-func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
+func (server *Server) UpdateEtapa(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19003)
+	err := config.AuthMod(w, r, 22003)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -148,8 +148,8 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codAssunto armazena a chave primaria da tabela assunto
-	codAssunto, err := strconv.ParseUint(vars["cod_assunto"], 10, 64)
+	//	codEtapa armazena a chave primaria da tabela etapa
+	codEtapa, err := strconv.ParseUint(vars["cod_etapa"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -161,22 +161,22 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	assunto := models.Assunto{}
+	etapa := models.Etapa{}
 
-	err = json.Unmarshal(body, &assunto)
+	err = json.Unmarshal(body, &etapa)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(assunto); err != nil {
+	if err = validation.Validator.Struct(etapa); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	//	updateAssunto recebe o novo assunto, a que foi alterada
-	updateAssunto, err := assunto.UpdateAssunto(server.DB, codAssunto)
+	//	updateEtapa recebe a nova etapa, a que foi alterada
+	updateEtapa, err := etapa.UpdateEtapa(server.DB, codEtapa)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -184,17 +184,17 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Retorna o Status 200 e o JSON da struct alterada
-	responses.JSON(w, http.StatusOK, updateAssunto)
+	responses.JSON(w, http.StatusOK, updateEtapa)
 }
 
 /*  =========================
-	FUNCAO DELETAR ASSUNTO
+	FUNCAO DELETAR ETAPA
 =========================  */
 
-func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
+func (server *Server) DeleteEtapa(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 19003)
+	err := config.AuthMod(w, r, 22003)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
@@ -202,10 +202,10 @@ func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	assunto := models.Assunto{}
+	etapa := models.Etapa{}
 
-	//	codAssunto armazena a chave primaria da tabela assunto
-	codAssunto, err := strconv.ParseUint(vars["cod_assunto"], 10, 64)
+	//	codEtapa armazena a chave primaria da tabela etapa
+	codEtapa, err := strconv.ParseUint(vars["cod_etapa"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -213,14 +213,14 @@ func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
 
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = assunto.DeleteAssunto(server.DB, codAssunto)
+	_, err = etapa.DeleteEtapa(server.DB, codEtapa)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d", codAssunto))
+	w.Header().Set("Entity", fmt.Sprintf("%d", codEtapa))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

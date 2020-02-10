@@ -41,10 +41,10 @@ func (telefone *Telefone) FindAllTelefone(db *gorm.DB) (*[]Telefone, error) {
 	FUNCAO DELETAR TELEFONE POR ID
 =========================  */
 
-func (telefone *Telefone) DeleteTelefone(db *gorm.DB, telefoneID uint64) (int64, error) {
+func (telefone *Telefone) DeleteTelefone(db *gorm.DB, codTelefone uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Telefone{}).Where("cod_telefone = ?", telefoneID).Take(&Telefone{}).Delete(&Telefone{})
+	db = db.Debug().Model(&Telefone{}).Where("cod_telefone = ?", codTelefone).Take(&Telefone{}).Delete(&Telefone{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

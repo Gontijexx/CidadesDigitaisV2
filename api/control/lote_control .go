@@ -84,8 +84,8 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	loteID armazena a chave primaria da tabela lote
-	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	//	codLote armazena a chave primaria da tabela lote
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -93,7 +93,7 @@ func (server *Server) GetLoteByID(w http.ResponseWriter, r *http.Request) {
 	lote := models.Lote{}
 
 	//	loteGotten recebe o dado buscado no banco de dados
-	loteGotten, err := lote.FindLoteByID(server.DB, loteID)
+	loteGotten, err := lote.FindLoteByID(server.DB, codLote)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -146,8 +146,8 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	loteID armazena a chave primaria da tabela lote
-	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	//	codLote armazena a chave primaria da tabela lote
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -174,7 +174,7 @@ func (server *Server) UpdateLote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateLote recebe a nova lote, a que foi alterada
-	updatedLote, err := lote.UpdateLote(server.DB, loteID)
+	updatedLote, err := lote.UpdateLote(server.DB, codLote)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -202,8 +202,8 @@ func (server *Server) DeleteLote(w http.ResponseWriter, r *http.Request) {
 
 	lote := models.Lote{}
 
-	//	loteID armazena a chave primaria da tabela lote
-	loteID, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	//	codLote armazena a chave primaria da tabela lote
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -211,14 +211,14 @@ func (server *Server) DeleteLote(w http.ResponseWriter, r *http.Request) {
 
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = lote.DeleteLote(server.DB, loteID)
+	_, err = lote.DeleteLote(server.DB, codLote)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d", loteID))
+	w.Header().Set("Entity", fmt.Sprintf("%d", codLote))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

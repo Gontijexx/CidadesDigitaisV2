@@ -28,10 +28,10 @@ func (empenho *Empenho) SaveEmpenho(db *gorm.DB) (*Empenho, error) {
 	FUNCAO LISTAR EMPENHO POR ID
 =========================  */
 
-func (empenho *Empenho) FindEmpenhoByID(db *gorm.DB, codEmpenho uint64) (*Empenho, error) {
+func (empenho *Empenho) FindEmpenhoByID(db *gorm.DB, idEmpenho uint64) (*Empenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Empenho{}).Where("cod_empenho = ?", codEmpenho).Take(&empenho).Error
+	err := db.Debug().Model(Empenho{}).Where("id_empenho = ?", idEmpenho).Take(&empenho).Error
 
 	if err != nil {
 		return &Empenho{}, err
@@ -60,10 +60,10 @@ func (empenho *Empenho) FindAllEmpenho(db *gorm.DB) (*[]Empenho, error) {
 	FUNCAO EDITAR EMPENHO
 =========================  */
 
-func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, codEmpenho uint64) (*Empenho, error) {
+func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, idEmpenho uint64) (*Empenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Empenho{}).Where("cod_empenho = ?", codEmpenho).Updates(
+	err := db.Debug().Model(&Empenho{}).Where("id_empenho = ?", idEmpenho).Updates(
 		Empenho{
 			Data:     empenho.Data,
 			Contador: empenho.Contador}).Error
@@ -73,7 +73,7 @@ func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, codEmpenho uint64) (*Empenho,
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Empenho{}).Where("cod_empenho = ?", codEmpenho).Take(&empenho).Error
+	err = db.Debug().Model(&Empenho{}).Where("id_empenho = ?", idEmpenho).Take(&empenho).Error
 	if err != nil {
 		return &Empenho{}, err
 	}
@@ -86,10 +86,10 @@ func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, codEmpenho uint64) (*Empenho,
 	FUNCAO DELETAR EMPENHO
 =========================  */
 
-func (empenho *Empenho) DeleteEmpenho(db *gorm.DB, codEmpenho uint64) (int64, error) {
+func (empenho *Empenho) DeleteEmpenho(db *gorm.DB, idEmpenho uint64) (int64, error) {
 
 	//	Deleta  um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Empenho{}).Where("cod_empenho = ?", codEmpenho).Take(&Empenho{}).Delete(&Empenho{})
+	db = db.Debug().Model(&Empenho{}).Where("id_empenho = ?", idEmpenho).Take(&Empenho{}).Delete(&Empenho{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

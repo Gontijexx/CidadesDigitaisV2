@@ -45,12 +45,13 @@ type Telefone struct {
 =========================  */
 
 type CD struct {
-	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number":`
-	CodLote uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	OsPe    string `gorm:"size:10;default:null" json:"os_pe" validate:"alphanum":`
-	DataPe  string `gorm:"default:null" json:"data_pe" validate:"alphanum":`
-	OsImp   string `gorm:"size:10;default:null" json:"os_imp" validate:"alphanum":`
-	DataImp string `gorm:"default:null" json:"data_imp" validate:"alphanum":`
+	CodIbge       uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number":`
+	CodLote       uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
+	NomeMunicipio string `gorm:"default:null"; validate:"alphanum":`
+	OsPe          string `gorm:"size:10;default:null" json:"os_pe" validate:"alphanum":`
+	DataPe        string `gorm:"default:null" json:"data_pe" validate:"alphanum":`
+	OsImp         string `gorm:"size:10;default:null" json:"os_imp" validate:"alphanum":`
+	DataImp       string `gorm:"default:null" json:"data_imp" validate:"alphanum":`
 }
 
 /*  =========================
@@ -75,6 +76,33 @@ type Processo struct {
 	CodIbge     uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number"`
 	Descricao   string `gorm:"default:null" json:"descricao" validate:"alphanum"`
 }
+
+/*  =========================
+	TABELA UACOM (CD)
+=========================  */
+
+type Uacom struct {
+	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number"`
+	Data    string `gorm:"primary_key;not null" json:"data" validate:"alphanum"`
+	Titulo  string `gorm:"default:null" json:"titulo" validate:"alphanum"`
+	Relato  string `gorm:"default:null" json:"relato" validate:"alphanum"`
+}
+
+/*  =========================
+	TABELA UACOM ASSUNTO (CD)
+=========================  */
+
+/*  =========================
+	TABELA PONTO (CD)
+=========================  */
+
+/*  =========================
+	TABELA PID (CD)
+=========================  */
+
+/*  =========================
+	TABELA PID TIPOLOGIA (CD)
+=========================  */
 
 /*  =========================
 	TABELA LOTE
@@ -131,7 +159,7 @@ type ItensEmpenho struct {
 	CodItem            uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item" validate:"number"`
 	CodTipoItem        uint64  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item" validate:"number"`
 	CodPrevisaoEmpenho uint64  `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho" validate:"number"`
-	Valor              float64 `gorm:"defaul:null" json:"valor" validate:"alphanum"`
+	Valor              float64 `gorm:"default:null" json:"valor" validate:"alphanum"`
 	Quantidade         uint64  `gorm:"default:null" json:"quantidade" validate:"number"`
 }
 
@@ -139,8 +167,25 @@ type ItensEmpenho struct {
 		TABELA PAGAMENTO (OTB)
 =========================	*/
 
+type Otb struct {
+	CodOtb uint64 `gorm:"primary_key;not null" json:"cod_otb" validate:"number"`
+	DtPgto uint64 `gorm:"default:null" json:"dt_pgto" validate:"alphanum"`
+}
+
+/*	=========================
+		TABELA FATURA (OTB)
+=========================	*/
+
+/*	=========================
+		TABELA ITENS (OTB)
+=========================	*/
+
 /*	=========================
 		TABELA FATURA
+=========================	*/
+
+/*	=========================
+		TABELA ITENS FATURA
 =========================	*/
 
 /*  =========================

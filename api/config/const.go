@@ -73,8 +73,8 @@ const (
 =========================  */
 
 const (
-	CD_ITENS_PATH    = "/read/cd_itens"
-	CD_ITENS_ID_PATH = "/read/cd_itens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+	CD_ITENS_PATH    = "/read/cdItens"
+	CD_ITENS_ID_PATH = "/read/cdItens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================
@@ -83,7 +83,41 @@ const (
 
 const (
 	PROCESSO_PATH    = "/read/processo"
-	PROCESSO_ID_PATH = "/read/processo/{cod_processo}"
+	PROCESSO_ID_PATH = "/read/processo/{cod_processo}/{cod_ibge}"
+)
+
+/*  =========================
+	CD UACOM PATHS HTTP
+=========================  */
+
+const (
+	UACOM_PATH    = "/read/uacom"
+	UACOM_ID_PATH = "/read/uacom/{cod_ibge}/{data}"
+)
+
+/*  =========================
+	CD UACOM_ASSUNTO PATHS HTTP
+=========================  */
+
+const (
+	UACOM_ASSUNTO_PATH = "/read/uacomAssunto"
+)
+
+/*  =========================
+	CD PONTO PATHS HTTP
+=========================  */
+
+const (
+	PONTO_PATH    = "/read/ponto"
+	PONTO_ID_PATH = "/read/ponto/{cod_ponto}/{cod_categoria}/{cod_ibge}"
+)
+
+/*  =========================
+	CD PID_TIPOOGIA PATHS HTTP
+=========================  */
+
+const (
+	PID_TOPOLOGIA_ID_PATH = "/read/pontoTipologia/{cod_ponto}/{cod_categoria}/{cod_ibge}/{cod_tipologia}"
 )
 
 /*  =========================

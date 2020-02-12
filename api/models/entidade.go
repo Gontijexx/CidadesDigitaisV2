@@ -17,8 +17,8 @@ func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 	if err != nil {
 		return &Entidade{}, err
 	}
-	return entidade, nil
 
+	return entidade, nil
 }
 
 /*  =========================

@@ -45,13 +45,12 @@ type Telefone struct {
 =========================  */
 
 type CD struct {
-	CodIbge       uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number":`
-	CodLote       uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	NomeMunicipio string `gorm:"default:null"; validate:"alphanum":`
-	OsPe          string `gorm:"size:10;default:null" json:"os_pe" validate:"alphanum":`
-	DataPe        string `gorm:"default:null" json:"data_pe" validate:"alphanum":`
-	OsImp         string `gorm:"size:10;default:null" json:"os_imp" validate:"alphanum":`
-	DataImp       string `gorm:"default:null" json:"data_imp" validate:"alphanum":`
+	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number":`
+	CodLote uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
+	OsPe    string `gorm:"size:10;default:null" json:"os_pe" validate:"alphanum":`
+	DataPe  string `gorm:"default:null" json:"data_pe" validate:"alphanum":`
+	OsImp   string `gorm:"size:10;default:null" json:"os_imp" validate:"alphanum":`
+	DataImp string `gorm:"default:null" json:"data_imp" validate:"alphanum":`
 }
 
 /*  =========================
@@ -92,17 +91,49 @@ type Uacom struct {
 	TABELA UACOM ASSUNTO (CD)
 =========================  */
 
+type UacomAssunto struct {
+	CodIbge    uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number"`
+	Data       string `gorm:"primary_key;foreign_key:Data;not null" json:"data" validate:"alphanum"`
+	CodAssunto uint64 `gorm:"primary_key;foreign_key:CodAssunto;not null" json:"cod_assunto" validate:"number"`
+}
+
 /*  =========================
 	TABELA PONTO (CD)
 =========================  */
+
+type Ponto struct {
+	CodPonto     uint64 `gorm:"primary_key;not null" json:"cod_ponto" validate:"number"`
+	CodCategoria uint64 `gorm:"primary_key;foreign_key:CodCategoria;not null" json:"cod_categoria" validate:"number"`
+	CodIbge      uint64 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge" validate:"number"`
+	CodPID       uint64 `gorm:"foreign_key:CodPID;not null" json:"cod_pid" validate:"number"`
+	Endereco     string `gorm:"default:null" json:"endereco" validate:"alphanum"`
+	Numero       string `gorm:"default:null;size:10" json:"numero" validate:"alphanum"`
+	Complemento  string `gorm:"default:null" json:"complemento" validate:"alphanum"`
+	Bairro       string `gorm:"default:null" json:"bairro" validate:"alphanum"`
+	Cep          string `gorm:"default:null;size:8" json:"cep" validate:"alphanum"`
+	Latitude     uint64 `gorm:"default:null" json:"latitude" validate:"number"`
+	Longitude    uint64 `gorm:"default:null" json:"longitude" validate:"number"`
+}
 
 /*  =========================
 	TABELA PID (CD)
 =========================  */
 
+type PID struct {
+	CodPID  uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_pid" validate:"number"`
+	CodIbge uint64 `gorm:"foreign_key:CodIbge;not null" json:"cod_ibge" validate:"number"`
+	Nome    string `gorm:"default:null" json:"nome" validate:"alphanum"`
+	Inep    string `gorm:"default:null" json:"inep" validate:"alphanum"`
+}
+
 /*  =========================
 	TABELA PID TIPOLOGIA (CD)
 =========================  */
+
+type PIDTipologia struct {
+	CodPID       uint64 `gorm:"primary_key;foreign_key:CodPID;not null" json:"cod_pid" validate:"number"`
+	CodTipologia uint64 `gorm:"primary_key;foreign_key:CodTipologia;not null" json:"cod_tipologia" validate:"number"`
+}
 
 /*  =========================
 	TABELA LOTE
@@ -111,10 +142,10 @@ type Uacom struct {
 type Lote struct {
 	CodLote     uint64 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate:"number":`
 	Cnpj        string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj" validate:"required, number":`
-	Contrato    string `gorm:"size:10;default:null" json:"contrato" validate:"alphanum":`
-	DtInicioVig string `gorm:"size:10;default:null" json:"dt_inicio_vig" validate:"alphanum":`
-	DtFinalVig  string `gorm:"size:10;default:null" json:"dt_final_vig" validate:"alphanum":`
-	DtReajuste  string `gorm:"size:10;default:null" json:"dt_reajuste" validate:"alphanum":`
+	Contrato    string `gorm:"default:null;size:10" json:"contrato" validate:"alphanum":`
+	DtInicioVig string `gorm:"default:null;size:10" json:"dt_inicio_vig" validate:"alphanum":`
+	DtFinalVig  string `gorm:"default:null;size:10" json:"dt_final_vig" validate:"alphanum":`
+	DtReajuste  string `gorm:"default:null;size:10" json:"dt_reajuste" validate:"alphanum":`
 }
 
 /*  =========================

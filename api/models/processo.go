@@ -25,10 +25,10 @@ func (processo *Processo) SaveProcesso(db *gorm.DB) (*Processo, error) {
 	FUNCAO LISTAR PROCESSO POR ID
 =========================  */
 
-func (processo *Processo) FindProcessoByID(db *gorm.DB, codProcesso uint64) (*Processo, error) {
+func (processo *Processo) FindProcessoByID(db *gorm.DB, codProcesso, codIbge uint64) (*Processo, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Processo{}).Where("cod_processo = ?", codProcesso).Take(&processo).Error
+	err := db.Debug().Model(Processo{}).Where("cod_processo = ? AND cod_ibge = ?", codProcesso, codIbge).Take(&processo).Error
 
 	if err != nil {
 		return &Processo{}, err
@@ -57,10 +57,10 @@ func (processo *Processo) FindAllProcesso(db *gorm.DB) (*[]Processo, error) {
 	FUNCAO EDITAR PROCESSO
 =========================  */
 
-func (processo *Processo) UpdateProcesso(db *gorm.DB, codProcesso uint64) (*Processo, error) {
+func (processo *Processo) UpdateProcesso(db *gorm.DB, codProcesso, codIbge uint64) (*Processo, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Processo{}).Where("cod_processo = ?", codProcesso).Updates(
+	err := db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge = ?", codProcesso, codIbge).Updates(
 		Processo{
 			Descricao: processo.Descricao}).Error
 
@@ -69,7 +69,7 @@ func (processo *Processo) UpdateProcesso(db *gorm.DB, codProcesso uint64) (*Proc
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Processo{}).Where("cod_processo = ?", codProcesso).Take(&processo).Error
+	err = db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge", codProcesso, codIbge).Take(&processo).Error
 	if err != nil {
 		return &Processo{}, err
 	}
@@ -82,10 +82,10 @@ func (processo *Processo) UpdateProcesso(db *gorm.DB, codProcesso uint64) (*Proc
 	FUNCAO DELETAR PROCESSO POR ID
 =========================  */
 
-func (processo *Processo) DeleteProcesso(db *gorm.DB, codProcesso uint64) (int64, error) {
+func (processo *Processo) DeleteProcesso(db *gorm.DB, codProcesso, codIbge uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Processo{}).Where("cod_processo = ?", codProcesso).Take(&Processo{}).Delete(&Processo{})
+	db = db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge", codProcesso, codIbge).Take(&Processo{}).Delete(&Processo{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

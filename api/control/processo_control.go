@@ -92,10 +92,17 @@ func (server *Server) GetProcessoByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	codIbge armazena a chave primaria da tabela processo
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	processo := models.Processo{}
 
 	//	processoGotten recebe o dado buscado no banco de dados
-	processoGotten, err := processo.FindProcessoByID(server.DB, codProcesso)
+	processoGotten, err := processo.FindProcessoByID(server.DB, codProcesso, codIbge)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -155,6 +162,13 @@ func (server *Server) UpdateProcesso(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	codIbge armazena a chave primaria da tabela processo
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
@@ -176,7 +190,7 @@ func (server *Server) UpdateProcesso(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateProcesso recebe a nova processo, a que foi alterada
-	updateProcesso, err := processo.UpdateProcesso(server.DB, codProcesso)
+	updateProcesso, err := processo.UpdateProcesso(server.DB, codProcesso, codIbge)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -211,16 +225,23 @@ func (server *Server) DeleteProcesso(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	codIbge armazena a chave primaria da tabela processo
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = processo.DeleteProcesso(server.DB, codProcesso)
+	_, err = processo.DeleteProcesso(server.DB, codProcesso, codIbge)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d", codProcesso))
+	w.Header().Set("Entity", fmt.Sprintf("%d/%d", codProcesso, codIbge))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

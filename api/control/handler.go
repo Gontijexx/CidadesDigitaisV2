@@ -143,6 +143,52 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.PROCESSO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteProcesso))).Methods(http.MethodDelete)
 
 	/*	=========================
+			ROTAS EM CIDADE DIGITAL UACOM OK!
+	=========================	*/
+
+	//	LISTA UACOM
+	r.HandleFunc(config.UACOM_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUacom))).Methods(http.MethodGet)
+
+	//	SALVA UACOM
+	r.HandleFunc(config.UACOM_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUacom))).Methods(http.MethodPost)
+
+	//	LISTA UACOM (cod_ibge, data)
+	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUacomByID))).Methods(http.MethodGet)
+
+	/*	=========================
+			ROTAS EM CIDADE DIGITAL UACOM_ASSUNTO OK!
+	=========================	*/
+
+	//	SALVA UACOM_ASSUNTO
+	r.HandleFunc(config.UACOM_ASSUNTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUacomAssunto))).Methods(http.MethodPost)
+
+	/*	=========================
+			ROTAS EM CIDADE DIGITAL PONTO OK!
+	=========================	*/
+
+	//	LISTA PONTO
+	r.HandleFunc(config.PONTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPonto))).Methods(http.MethodGet)
+
+	//	SALVA PONTO
+	r.HandleFunc(config.PONTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePonto))).Methods(http.MethodPost)
+
+	//	EDITA PONTO (cod_ponto, cod_categoria, cod_ibge)
+	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePonto))).Methods(http.MethodPut)
+
+	//	LISTA PONTO (cod_ponto, cod_categoria, cod_ibge)
+	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPontoByID))).Methods(http.MethodGet)
+
+	//	APAGA PONTO (cod_ponto, cod_categoria, cod_ibge)
+	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePonto))).Methods(http.MethodDelete)
+
+	/*	=========================
+			ROTAS EM CIDADE DIGITAL PID_TIPOLOGIA OK!
+	=========================	*/
+
+	//	APAGA PID_TIPOLOGIA (cod_ponto, cod_categoria, cod_ibge, cod_tipologia)
+	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePIDTipologia))).Methods(http.MethodDelete)
+
+	/*	=========================
 			ROTAS EM LOTE OK!
 	=========================	*/
 

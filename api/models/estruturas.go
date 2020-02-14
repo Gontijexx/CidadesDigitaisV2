@@ -5,15 +5,15 @@ package models
 =========================  */
 
 type Entidade struct {
-	Cnpj          string `gorm:"primary_key;not null;size:14" json:"cnpj" validate:"alphanum":`
-	Nome          string `gorm:"size:50;default:null" json:"nome" validate:"alphanum":`
-	Endereco      string `gorm:"size:100;default:null" json:"endereco" validate:"alphanum":`
-	Numero        string `gorm:"size:10;default:null" json:"numero" validate:"alphanum":`
-	Bairro        string `gorm:"size:100;default:null" json:"bairro" validate:"alphanum":`
-	Cep           string `gorm:"size:8;default:null" json:"cep" validate:"alphanum":`
-	NomeMunicipio string `gorm:"size:50;default:null" json:"nome_municipio" validate:"alphanum":`
-	UF            string `gorm:"size:2;default:null" json:"uf" validate:"alphanum":`
-	Observacao    string `gorm:"size:1000;default:null" json:"observacao" validate:"alphanum":`
+	Cnpj          string `gorm:"primary_key;not null;size:14" json:"cnpj" validate:"alphanum"`
+	Nome          string `gorm:"size:50;default:null" json:"nome" validate:"alphanum"`
+	Endereco      string `gorm:"size:100;default:null" json:"endereco" validate:"alphanum"`
+	Numero        string `gorm:"size:10;default:null" json:"numero" validate:"alphanum"`
+	Bairro        string `gorm:"size:100;default:null" json:"bairro" validate:"alphanum"`
+	Cep           string `gorm:"size:8;default:null" json:"cep" validate:"alphanum"`
+	NomeMunicipio string `gorm:"size:50;default:null" json:"nome_municipio" validate:"alphanum"`
+	UF            string `gorm:"size:2;default:null" json:"uf" validate:"alphanum"`
+	Observacao    string `gorm:"size:1000;default:null" json:"observacao" validate:"alphanum"`
 }
 
 /*  =========================
@@ -21,12 +21,12 @@ type Entidade struct {
 =========================  */
 
 type Contato struct {
-	CodContato uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_contato" validate:"required":`
-	Cnpj       string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj" validate:"required":`
-	CodIbge    uint64 `gorm:"foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"alphanum":`
-	Nome       string `gorm:"default:null;size:50" json:"nome" validate:"alphanum":`
-	Email      string `gorm:"default:null;size:100" json:"email" validate:"email":`
-	Funcao     string `gorm:"default:null;size:45" json:"funcao" validate:"alphanum":`
+	CodContato uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_contato" validate:"required"`
+	Cnpj       string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj" validate:"required"`
+	CodIbge    uint64 `gorm:"foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"alphanum"`
+	Nome       string `gorm:"default:null;size:50" json:"nome" validate:"alphanum"`
+	Email      string `gorm:"default:null;size:100" json:"email" validate:"email"`
+	Funcao     string `gorm:"default:null;size:45" json:"funcao" validate:"alphanum"`
 }
 
 /*  =========================
@@ -34,10 +34,10 @@ type Contato struct {
 =========================  */
 
 type Telefone struct {
-	CodTelefone uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_telefone" validate:"number":`
-	CodContato  uint64 `gorm:"foreign_key:CodContato;not null;size:11" json:"cod_contato" validate:"number":`
-	Telefone    string `gorm:"default:null;size:11" json:"telefone" validate:"required":`
-	Tipo        string `gorm:"default:null;size:10" json:"tipo" validate:"alphanum":`
+	CodTelefone uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_telefone" validate:"number"`
+	CodContato  uint64 `gorm:"foreign_key:CodContato;not null;size:11" json:"cod_contato" validate:"number"`
+	Telefone    string `gorm:"default:null;size:11" json:"telefone" validate:"required"`
+	Tipo        string `gorm:"default:null;size:10" json:"tipo" validate:"alphanum"`
 }
 
 /*  =========================
@@ -45,12 +45,13 @@ type Telefone struct {
 =========================  */
 
 type CD struct {
-	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number":`
-	CodLote uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	OsPe    string `gorm:"size:10;default:null" json:"os_pe" validate:"alphanum":`
-	DataPe  string `gorm:"default:null" json:"data_pe" validate:"alphanum":`
-	OsImp   string `gorm:"size:10;default:null" json:"os_imp" validate:"alphanum":`
-	DataImp string `gorm:"default:null" json:"data_imp" validate:"alphanum":`
+	CodIbge       uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number"`
+	CodLote       uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number"`
+	NomeMunicipio string `gorm:"default:null" json:"nome_municipio" validate:"alphanum"`
+	OsPe          string `gorm:"size:10;default:null" json:"os_pe" validate:"alphanum"`
+	DataPe        string `gorm:"default:null" json:"data_pe" validate:"alphanum"`
+	OsImp         string `gorm:"size:10;default:null" json:"os_imp" validate:"alphanum"`
+	DataImp       string `gorm:"default:null" json:"data_imp" validate:"alphanum"`
 }
 
 /*  =========================
@@ -58,12 +59,12 @@ type CD struct {
 =========================  */
 
 type CDItens struct {
-	CodIbge                    uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number":`
-	CodItem                    uint64 `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item" validate:"number":`
-	CodTipoItem                uint64 `gorm:"primary_key;foreign_key:CodTipo_item;not null;size:11" json:"cod_tipo_item" validate:"number":`
-	QuantidadePrevisto         uint64 `gorm:"default:null;size:11" json:"quantidade_previsto" validate:"required":`
-	QuantidadeProjetoExecutivo uint64 `gorm:"default:null;size:11" json:"quantidade_projeto_executivo" validate:"alphanum":`
-	QuantidadeTermoInstalacao  uint64 `gorm:"default:null;size:11" json:"quantidade_termo_instalacao" validate:"alphanum":`
+	CodIbge                    uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"number"`
+	CodItem                    uint64 `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item" validate:"number"`
+	CodTipoItem                uint64 `gorm:"primary_key;foreign_key:CodTipo_item;not null;size:11" json:"cod_tipo_item" validate:"number"`
+	QuantidadePrevisto         uint64 `gorm:"default:null;size:11" json:"quantidade_previsto" validate:"required"`
+	QuantidadeProjetoExecutivo uint64 `gorm:"default:null;size:11" json:"quantidade_projeto_executivo" validate:"alphanum"`
+	QuantidadeTermoInstalacao  uint64 `gorm:"default:null;size:11" json:"quantidade_termo_instalacao" validate:"alphanum"`
 }
 
 /*  =========================
@@ -140,12 +141,12 @@ type PIDTipologia struct {
 =========================  */
 
 type Lote struct {
-	CodLote     uint64 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate:"number":`
-	Cnpj        string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj" validate:"required, number":`
-	Contrato    string `gorm:"default:null;size:10" json:"contrato" validate:"alphanum":`
-	DtInicioVig string `gorm:"default:null;size:10" json:"dt_inicio_vig" validate:"alphanum":`
-	DtFinalVig  string `gorm:"default:null;size:10" json:"dt_final_vig" validate:"alphanum":`
-	DtReajuste  string `gorm:"default:null;size:10" json:"dt_reajuste" validate:"alphanum":`
+	CodLote     uint64 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate:"number"`
+	Cnpj        string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj" validate:"required, number"`
+	Contrato    string `gorm:"default:null;size:10" json:"contrato" validate:"alphanum"`
+	DtInicioVig string `gorm:"default:null;size:10" json:"dt_inicio_vig" validate:"alphanum"`
+	DtFinalVig  string `gorm:"default:null;size:10" json:"dt_final_vig" validate:"alphanum"`
+	DtReajuste  string `gorm:"default:null;size:10" json:"dt_reajuste" validate:"alphanum"`
 }
 
 /*  =========================
@@ -153,9 +154,9 @@ type Lote struct {
 =========================  */
 
 type Reajuste struct {
-	AnoRef     uint64  `gorm:"primary_key;not null;size:11" json:"ano_ref" validate:"number":`
-	CodLote    uint64  `gorm:"primary key;foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	Percentual float64 `gorm:"default:null" json:"percentual" validate:"alphanum":`
+	AnoRef     uint64  `gorm:"primary_key;not null;size:11" json:"ano_ref" validate:"number"`
+	CodLote    uint64  `gorm:"primary key;foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number"`
+	Percentual float64 `gorm:"default:null" json:"percentual" validate:"alphanum"`
 }
 
 /*  =========================
@@ -163,10 +164,10 @@ type Reajuste struct {
 =========================  */
 
 type LoteItens struct {
-	CodLote     uint64  `gorm:"primary_key;foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item" validate:"number":`
-	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoItem;not null;size:11" json:"cod_tipo_item" validate:"number":`
-	Preco       float64 `gorm:"default:null;size:12" json:"preco" validate:"alphanum":`
+	CodLote     uint64  `gorm:"primary_key;foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number"`
+	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item" validate:"number"`
+	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoItem;not null;size:11" json:"cod_tipo_item" validate:"number"`
+	Preco       float64 `gorm:"default:null;size:12" json:"preco" validate:"alphanum"`
 }
 
 /*  =========================
@@ -224,12 +225,12 @@ type Otb struct {
 =========================  */
 
 type PrevisaoEmpenho struct {
-	CodPrevisaoEmpenho uint64 `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;auto_increment;not null" json:"cod_previsao_empenho" validate:"number":`
-	CodLote            uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	CodNaturezaDespesa uint64 `gorm:"foreign_key:CodNaturezaDespesa;not null;size:11" json:"cod_natureza_despesa" validate:"number":`
-	Data               string `gorm:"default:null" json:"data" validate:"required":`
-	Tipo               string `gorm:"default:null;size:1" json:"tipo" validate:"alphanum":`
-	Ano_referencia     uint64 `gorm:"default:null;size:11" json:"ano_referencia" validate:"alphanum":`
+	CodPrevisaoEmpenho uint64 `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;auto_increment;not null" json:"cod_previsao_empenho" validate:"number"`
+	CodLote            uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number"`
+	CodNaturezaDespesa uint64 `gorm:"foreign_key:CodNaturezaDespesa;not null;size:11" json:"cod_natureza_despesa" validate:"number"`
+	Data               string `gorm:"default:null" json:"data" validate:"required"`
+	Tipo               string `gorm:"default:null;size:1" json:"tipo" validate:"alphanum"`
+	Ano_referencia     uint64 `gorm:"default:null;size:11" json:"ano_referencia" validate:"alphanum"`
 }
 
 /*  =========================
@@ -237,12 +238,12 @@ type PrevisaoEmpenho struct {
 =========================  */
 
 type ItensPrevisaoEmpenho struct {
-	CodPrevisaoEmpenho uint64  `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho" validate:"number":`
-	CodItem            uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item" validate:"number":`
-	CodTipoItem        uint64  `gorm:"primary_key;foreign_key:CodTipo_item;not null;size:11" json:"cod_tipo_item" validate:"number":`
-	CodLote            uint64  `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number":`
-	Valor              float64 `gorm:"default:null;size:12" json:"valor" validate:"alphanum":`
-	Quantidade         uint64  `gorm:"default:null;size:11" json:"quantidade" validate:"alphanum":`
+	CodPrevisaoEmpenho uint64  `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho" validate:"number"`
+	CodItem            uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item" validate:"number"`
+	CodTipoItem        uint64  `gorm:"primary_key;foreign_key:CodTipo_item;not null;size:11" json:"cod_tipo_item" validate:"number"`
+	CodLote            uint64  `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"number"`
+	Valor              float64 `gorm:"default:null;size:12" json:"valor" validate:"alphanum"`
+	Quantidade         uint64  `gorm:"default:null;size:11" json:"quantidade" validate:"alphanum"`
 }
 
 /*	=========================

@@ -77,9 +77,9 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TODOS
-		USUARIOS
+	FUNCAO LISTAR TODOS USUARIOS
 =========================  */
+
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
@@ -102,6 +102,7 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 /*  =========================
 	FUNCAO LISTAR UM USUARIO
 =========================  */
+
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 11002)
@@ -125,10 +126,11 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO PARA ATUALIZAR
-		 USUARIO
+	FUNCAO PARA ATUALIZAR USUARIO
 =========================  */
+
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
+
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 11003)
 	if err != nil {
@@ -177,26 +179,22 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
 
+/*  =========================
+	FUNCAO PARA ADICIONAR MODULO
+=========================  */
+
 func (server *Server) AddModulo(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 11003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
 
 	vars := mux.Vars(r)
 
-	IDUser, err := strconv.ParseUint(vars["id2"], 10, 32)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-	tokenID, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
-	if tokenID != uint32(IDUser) {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
-		return
-	}
-
-	uID, err := strconv.ParseUint(vars["id"], 10, 32)
+	IDUser, err := strconv.ParseUint(vars["cod_usuario"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -222,7 +220,7 @@ func (server *Server) AddModulo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userMod, err := userModulo.CreateModulo(server.DB, uint32(uID), userModulo.Cod_modulo)
+	userMod, err := userModulo.CreateModulo(server.DB, uint32(IDUser), userModulo.Cod_modulo)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)

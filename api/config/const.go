@@ -26,8 +26,8 @@ const (
 =========================  */
 
 const (
-	MOD_PATH          = "/read/modulo"
-	MOD_USERLIST_PATH = "/read/usuario/{cod_usuario}/modulos"
+	MODULO_PATH          = "/read/modulo"
+	MODULO_USERLIST_PATH = "/read/usuario/{cod_usuario}/modulo"
 )
 
 /*  =========================

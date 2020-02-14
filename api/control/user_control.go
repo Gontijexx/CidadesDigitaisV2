@@ -180,6 +180,29 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
+	FUNCAO LISTAR TODOS MODULOS
+=========================  */
+
+func (server *Server) GetAllModulo(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	err := config.AuthMod(w, r, 11003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	modulo := models.Modulo{}
+
+	modulos, err := modulo.FindAllModulo(server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, modulos)
+}
+
+/*  =========================
 	FUNCAO PARA ADICIONAR MODULO
 =========================  */
 

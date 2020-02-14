@@ -46,7 +46,7 @@ func (municipio *Municipio) FindAllMunicipio(db *gorm.DB) (*[]Municipio, error) 
 	allMunicipio := []Municipio{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Municipio{}).Limit(100).Find(&allMunicipio).Error
+	err := db.Debug().Model(&Municipio{}).Find(&allMunicipio).Error
 	if err != nil {
 		return &[]Municipio{}, err
 	}

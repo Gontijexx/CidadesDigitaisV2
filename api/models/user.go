@@ -139,6 +139,16 @@ func (u *Usuario) DeleteAUser(db *gorm.DB, uId uint32) (int64, error) {
 	return db.RowsAffected, nil
 }
 
+func (u *Modulo) FindAllModulo(db *gorm.DB) (*[]Modulo, error) {
+
+	modulo := []Modulo{}
+	err := db.Debug().Model(&Modulo{}).Find(&modulo).Error
+	if err != nil {
+		return &[]Modulo{}, err
+	}
+	return &modulo, err
+}
+
 func (u *Usuario_modulo) CreateModulo(db *gorm.DB, uId uint32, mods interface{}) (*Usuario_modulo, error) {
 
 	modulo := config.InterfaceSlice(mods)

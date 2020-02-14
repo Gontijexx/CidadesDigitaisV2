@@ -46,7 +46,7 @@ func (assunto *Assunto) FindAllAssunto(db *gorm.DB) (*[]Assunto, error) {
 	allAssunto := []Assunto{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Assunto{}).Limit(100).Find(&allAssunto).Error
+	err := db.Debug().Model(&Assunto{}).Find(&allAssunto).Error
 	if err != nil {
 		return &[]Assunto{}, err
 	}

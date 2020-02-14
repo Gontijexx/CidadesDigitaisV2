@@ -46,7 +46,7 @@ func (categoria *Categoria) FindAllCategoria(db *gorm.DB) (*[]Categoria, error) 
 	allCategoria := []Categoria{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Categoria{}).Limit(100).Find(&allCategoria).Error
+	err := db.Debug().Model(&Categoria{}).Find(&allCategoria).Error
 	if err != nil {
 		return &[]Categoria{}, err
 	}

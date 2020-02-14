@@ -299,10 +299,10 @@ type Itens struct {
 }
 
 /*  =========================
-	TABELA MUNICIPIOS
+	TABELA MUNICIPIO
 =========================  */
 
-type Municipios struct {
+type Municipio struct {
 	CodIbge       uint64  `gorm:"primary_key;not null;size:7" json:"cod_ibge" validate:"number"`
 	NomeMunicipio string  `gorm:"default:null" json:"nome_municipio" validate:"alphanum"`
 	Populacao     uint64  `gorm:"default:null" json:"populacao" validate:"number"`

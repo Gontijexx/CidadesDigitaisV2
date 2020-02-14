@@ -239,8 +239,8 @@ const (
 =========================  */
 
 const (
-	MUNICIPIO_PATH    = "/read/municipios"
-	MUNICIPIO_ID_PATH = "/read/municipios/{cod_ibge}"
+	MUNICIPIO_PATH    = "/read/municipio"
+	MUNICIPIO_ID_PATH = "/read/municipio/{cod_ibge}"
 )
 
 /*	=========================

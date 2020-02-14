@@ -398,19 +398,19 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA MUNICIPIOS
-	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllMunicipios))).Methods(http.MethodGet)
+	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllMunicipio))).Methods(http.MethodGet)
 
 	//	SALVA MUNICIPIOS
-	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateMunicipios))).Methods(http.MethodPost)
+	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateMunicipio))).Methods(http.MethodPost)
 
 	//	EDITA MUNICIPIOS (cod_ibge)
-	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateMunicipios))).Methods(http.MethodPut)
+	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateMunicipio))).Methods(http.MethodPut)
 
 	//	LISTA MUNICIPIOS (cod_ibge)
-	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetMunicipiosByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetMunicipioByID))).Methods(http.MethodGet)
 
 	//	APAGA MUNICIPIOS (cod_ibge)
-	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteMunicipios))).Methods(http.MethodDelete)
+	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteMunicipio))).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM NATUREZA DESPESA OK!

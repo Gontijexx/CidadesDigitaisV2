@@ -269,8 +269,23 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ITENS_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensEmpenhoByID))).Methods(http.MethodGet)
 
 	/*	=========================
-			ROTAS EM PAGAMENTO 16000
+			ROTAS EM OTB 16000
 	=========================	*/
+
+	//	LISTA OTB
+	r.HandleFunc(config.OTB_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllOTB))).Methods(http.MethodGet)
+
+	//	SALVA OTB
+	r.HandleFunc(config.OTB_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateOTB))).Methods(http.MethodPost)
+
+	//	EDITA OTB (cod_otb)
+	r.HandleFunc(config.OTB_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateOTB))).Methods(http.MethodPut)
+
+	//	LISTA OTB (cod_otb)
+	r.HandleFunc(config.OTB_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetOTBByID))).Methods(http.MethodGet)
+
+	//	APAGA OTB (cod_ptb)
+	r.HandleFunc(config.OTB_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteOTB))).Methods(http.MethodDelete)
 
 	/*	=========================
 			ROTAS EM FATURA 17000

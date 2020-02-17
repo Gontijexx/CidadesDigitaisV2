@@ -44,7 +44,7 @@ func AuthMod(w http.ResponseWriter, r *http.Request, PagMod float64) (err error)
 func InterfaceSlice(slice interface{}) []interface{} {
 	s := reflect.ValueOf(slice)
 	if s.Kind() != reflect.Slice {
-		panic("InterfaceSlice() given a non-slice type")
+		fmt.Sprint("InterfaceSlice() given a non-slice type")
 	}
 
 	ret := make([]interface{}, s.Len())

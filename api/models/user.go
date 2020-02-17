@@ -1,7 +1,6 @@
 package models
 
 import (
-	"CidadesDigitaisV2/api/config"
 	"errors"
 	"html"
 	"log"
@@ -91,7 +90,7 @@ func (u *Usuario) FindUserByID(db *gorm.DB, uId uint32) (*Usuario, error) {
 func (u *Usuario) FindAllUsers(db *gorm.DB) (*[]Usuario, error) {
 
 	usuario := []Usuario{}
-	err := db.Debug().Model(&Usuario{}).Limit(100).Find(&usuario).Error
+	err := db.Debug().Model(&Usuario{}).Find(&usuario).Error
 	if err != nil {
 		return &[]Usuario{}, err
 	}
@@ -149,23 +148,11 @@ func (u *Modulo) FindAllModulo(db *gorm.DB) (*[]Modulo, error) {
 	return &modulo, err
 }
 
-func (u *Usuario_modulo) CreateModulo(db *gorm.DB, uId uint32, mods interface{}) (*Usuario_modulo, error) {
+func (u *Usuario_modulo) CreateModulo(db *gorm.DB) (*Usuario_modulo, error) {
 
-	modulo := config.InterfaceSlice(mods)
-
-	moduloInt := make([]float64, len(modulo))
-
-	for i := range modulo {
-		moduloInt[i] = modulo[i].(float64)
+	err := db.Debug().Create(&u).Error
+	if err != nil {
+		return &Usuario_modulo{}, err
 	}
-
-	for _, v := range moduloInt {
-		err := db.Debug().Raw("INSERT INTO usuario_modulo VALUE(?,?)", uId, v).Error
-		if err != nil {
-			return &Usuario_modulo{}, err
-		}
-
-	}
-
 	return u, nil
 }

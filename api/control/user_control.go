@@ -215,41 +215,36 @@ func (server *Server) AddModulo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	vars := mux.Vars(r)
-
-	IDUser, err := strconv.ParseUint(vars["cod_usuario"], 10, 32)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	userModulo := models.Usuario_modulo{}
+	var userModulo []models.Usuario_modulo
 
 	err = json.Unmarshal(body, &userModulo)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
+	for _, data := range userModulo {
 
-	if err = validation.Validator.Struct(userModulo); err != nil {
-		log.Printf("[WARN] invalid user_modulo information, because, %v\n", err)
-		w.WriteHeader(http.StatusPreconditionFailed)
-		return
-	}
+		if err = validation.Validator.Struct(data); err != nil {
+			log.Printf("[WARN] invalid user_modulo information, because, %v\n", err)
+			w.WriteHeader(http.StatusPreconditionFailed)
+			return
+		}
 
-	userMod, err := userModulo.CreateModulo(server.DB, uint32(IDUser), userModulo.Cod_modulo)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
-		return
+		userMod, err := data.CreateModulo(server.DB)
+		if err != nil {
+			formattedError := config.FormatError(err.Error())
+			responses.ERROR(w, http.StatusInternalServerError, formattedError)
+			return
+		}
+
+		responses.JSON(w, http.StatusCreated, userMod)
 	}
-	responses.JSON(w, http.StatusCreated, userMod)
 	return
 }
 

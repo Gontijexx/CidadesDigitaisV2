@@ -199,9 +199,9 @@ type ItensEmpenho struct {
 		TABELA PAGAMENTO (OTB)
 =========================	*/
 
-type Otb struct {
+type OTB struct {
 	CodOtb uint64 `gorm:"primary_key;not null" json:"cod_otb" validate:"numeric"`
-	DtPgto uint64 `gorm:"default:null" json:"dt_pgto" validate:"alphanum"`
+	DtPgto string `gorm:"default:null" json:"dt_pgto" `
 }
 
 /*	=========================

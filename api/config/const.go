@@ -163,8 +163,18 @@ const (
 )
 
 /*	=========================
-		PAGAMENTO PATH HTTP(OTB)
+	PAGAMENTO PATH HTTP(OTB)
 =========================	*/
+
+const (
+	OTB_PATH          = "/read/otb"
+	OTB_ID_PATH       = "/read/otb/{cod_otb}"
+	OTB_FAT_MUNICIPIO = "/read/otbMuniFatura/:cd_municipio_cod_ibge"
+	OTB_FAT_LIST      = "/read/otbFatura/:cod_otb"
+	OTB_FAT_SAVE      = "/read/otbFat"
+	OTB_LIST_ITENS    = "/read/otbItens/:cod_otb"
+	OTB_EDIT_ITENS    = "/read/otbItens"
+)
 
 /*	=========================
 		FATURA PATH HTTP
@@ -224,7 +234,7 @@ const (
 )
 
 /*	=========================
-		ITENS PATHS HTTP OK!
+	ITENS PATHS HTTP OK!
 =========================	*/
 
 const (
@@ -242,7 +252,7 @@ const (
 )
 
 /*	=========================
-		NATUREZA DE DESPESA PATHS HTTP OK!
+	NATUREZA DE DESPESA PATHS HTTP OK!
 =========================	*/
 
 const (
@@ -260,7 +270,7 @@ const (
 )
 
 /*	=========================
-		TIPOLOGIAS PATHS HTTP OK!
+	TIPOLOGIAS PATHS HTTP OK!
 =========================	*/
 
 const (
@@ -269,7 +279,7 @@ const (
 )
 
 /*	=========================
-		TIPO ITEM PATHS HTTP OK!
+	TIPO ITEM PATHS HTTP OK!
 =========================	*/
 
 const (
@@ -280,20 +290,6 @@ const (
 //===============================================================
 //===============================================================
 //===============================================================
-
-/*  =========================
-	PAGAMENTO PATHS HTTP
-=========================  */
-
-const (
-	PAG_PATH          = "/read/otb"
-	PAG_ID_PATH       = "/read/otb/:id"
-	PAG_FAT_MUNICIPIO = "/read/otbMuniFatura/:cd_municipio_cod_ibge"
-	PAG_FAT_LIST      = "/read/otbFatura/:cod_otb"
-	PAG_FAT_SAVE      = "/read/otbFat"
-	PAG_LIST_ITENS    = "/read/otbItens/:cod_otb"
-	PAG_EDIT_ITENS    = "/read/otbItens"
-)
 
 /*  =========================
 	FATURA PATHS HTTP

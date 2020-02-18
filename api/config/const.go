@@ -163,17 +163,23 @@ const (
 )
 
 /*	=========================
-	PAGAMENTO PATH HTTP(OTB)
+	OTB PATH HTTP(OTB)
 =========================	*/
 
 const (
-	OTB_PATH          = "/read/otb"
-	OTB_ID_PATH       = "/read/otb/{cod_otb}"
-	OTB_FAT_MUNICIPIO = "/read/otbMuniFatura/:cd_municipio_cod_ibge"
-	OTB_FAT_LIST      = "/read/otbFatura/:cod_otb"
-	OTB_FAT_SAVE      = "/read/otbFat"
-	OTB_LIST_ITENS    = "/read/otbItens/:cod_otb"
-	OTB_EDIT_ITENS    = "/read/otbItens"
+	OTB_PATH    = "/read/otb"
+	OTB_ID_PATH = "/read/otb/{cod_otb}"
+
+	OTB_LIST_ITENS = "/read/otbItens/:cod_otb"
+	OTB_EDIT_ITENS = "/read/otbItens"
+)
+
+/*	=========================
+	FATURA OTB PATH HTTP(OTB)
+=========================	*/
+const (
+	OTB_FATURA_PATH    = "/read/otbFatura"
+	OTB_FATURA_ID_PATH = "/read/otbFatura/{cod_otb}"
 )
 
 /*	=========================

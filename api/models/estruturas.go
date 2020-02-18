@@ -21,7 +21,7 @@ type Entidade struct {
 =========================  */
 
 type Contato struct {
-	CodContato uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_contato" validate:"required"`
+	CodContato uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_contato"`
 	Cnpj       string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj" validate:"required"`
 	CodIbge    uint64 `gorm:"foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"alphanum"`
 	Nome       string `gorm:"default:null;size:50" json:"nome" validate:"alphanum"`
@@ -207,6 +207,12 @@ type OTB struct {
 /*	=========================
 		TABELA FATURA (OTB)
 =========================	*/
+
+type FaturaOTB struct {
+	CodOtb  uint64 `gorm:"primary_key;foreign_key:CodOtb;not null;" json:"cod_otb"`
+	NumNf   uint64 `gorm:"primary_key;foreign_key:NumNf;not null;" json:"num_nf"`
+	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;" json:"cod_ibge"`
+}
 
 /*	=========================
 		TABELA ITENS (OTB)

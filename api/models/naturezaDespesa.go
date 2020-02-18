@@ -46,7 +46,7 @@ func (naturezaDespesa *NaturezaDespesa) FindAllNaturezaDespesa(db *gorm.DB) (*[]
 	allNaturezaDespesa := []NaturezaDespesa{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&NaturezaDespesa{}).Limit(100).Find(&allNaturezaDespesa).Error
+	err := db.Debug().Model(&NaturezaDespesa{}).Find(&allNaturezaDespesa).Error
 	if err != nil {
 		return &[]NaturezaDespesa{}, err
 	}

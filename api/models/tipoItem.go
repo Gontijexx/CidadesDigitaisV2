@@ -46,7 +46,7 @@ func (tipoItem *TipoItem) FindAllTipoItem(db *gorm.DB) (*[]TipoItem, error) {
 	allTipoItem := []TipoItem{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&TipoItem{}).Limit(100).Find(&allTipoItem).Error
+	err := db.Debug().Model(&TipoItem{}).Find(&allTipoItem).Error
 	if err != nil {
 		return &[]TipoItem{}, err
 	}

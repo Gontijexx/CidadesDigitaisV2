@@ -46,7 +46,7 @@ func (processo *Processo) FindAllProcesso(db *gorm.DB) (*[]Processo, error) {
 	allProcesso := []Processo{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Processo{}).Limit(100).Find(&allProcesso).Error
+	err := db.Debug().Model(&Processo{}).Find(&allProcesso).Error
 	if err != nil {
 		return &[]Processo{}, err
 	}

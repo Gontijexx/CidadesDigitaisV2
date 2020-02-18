@@ -30,7 +30,7 @@ func (contato *Contato) FindAllContato(db *gorm.DB) (*[]Contato, error) {
 	allContato := []Contato{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Contato{}).Limit(100).Find(&allContato).Error
+	err := db.Debug().Model(&Contato{}).Find(&allContato).Error
 	if err != nil {
 		return &[]Contato{}, err
 	}

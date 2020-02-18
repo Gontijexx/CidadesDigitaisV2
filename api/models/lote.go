@@ -49,7 +49,7 @@ func (lote *Lote) FindAllLote(db *gorm.DB) (*[]Lote, error) {
 	allLote := []Lote{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Lote{}).Limit(100).Find(&allLote).Error
+	err := db.Debug().Model(&Lote{}).Find(&allLote).Error
 	if err != nil {
 		return &[]Lote{}, err
 	}

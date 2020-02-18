@@ -32,7 +32,7 @@ func (reajuste *Reajuste) FindAllReajuste(db *gorm.DB) (*[]Reajuste, error) {
 	allReajuste := []Reajuste{}
 
 	//	Busca todos os elementos no banco de dados
-	err := db.Debug().Model(&Entidade{}).Limit(100).Find(&allReajuste).Error
+	err := db.Debug().Model(&Entidade{}).Find(&allReajuste).Error
 	if err != nil {
 		return &[]Reajuste{}, err
 	}

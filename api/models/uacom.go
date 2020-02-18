@@ -42,7 +42,7 @@ func (uacom *Uacom) FindAllUacom(db *gorm.DB) (*[]Uacom, error) {
 	allUacom := []Uacom{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Uacom{}).Limit(100).Find(&allUacom).Error
+	err := db.Debug().Model(&Uacom{}).Find(&allUacom).Error
 	if err != nil {
 		return &[]Uacom{}, err
 	}

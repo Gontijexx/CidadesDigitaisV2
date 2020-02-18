@@ -46,7 +46,7 @@ func (tipologia *Tipologia) FindAllTipologia(db *gorm.DB) (*[]Tipologia, error) 
 	allTipologia := []Tipologia{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Tipologia{}).Limit(100).Find(&allTipologia).Error
+	err := db.Debug().Model(&Tipologia{}).Find(&allTipologia).Error
 	if err != nil {
 		return &[]Tipologia{}, err
 	}

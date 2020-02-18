@@ -46,7 +46,7 @@ func (itens *Itens) FindAllItens(db *gorm.DB) (*[]Itens, error) {
 	allItens := []Itens{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Itens{}).Limit(100).Find(&allItens).Error
+	err := db.Debug().Model(&Itens{}).Find(&allItens).Error
 	if err != nil {
 		return &[]Itens{}, err
 	}

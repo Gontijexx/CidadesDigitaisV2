@@ -216,8 +216,9 @@ const (
 =========================	*/
 
 const (
-	FATURA_ITENS_PATH    = "/read/faturaItens"
-	FATURA_ITENS_ID_PATH = "/read/faturaItens/{cod_otb}"
+	FATURA_ITENS_PATH        = "/read/faturaItens"
+	FATURA_ITENS_ID_PATH     = "/read/faturaItens/{num_nf}"
+	FATURA_ITENS_DELETE_PATH = "/read/faturaItens/{num_nf}/{id_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================

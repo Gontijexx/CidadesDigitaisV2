@@ -46,7 +46,7 @@ func (classeEmpenho *ClasseEmpenho) FindAllClasseEmpenho(db *gorm.DB) (*[]Classe
 	allClasseEmpenho := []ClasseEmpenho{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&ClasseEmpenho{}).Limit(100).Find(&allClasseEmpenho).Error
+	err := db.Debug().Model(&ClasseEmpenho{}).Find(&allClasseEmpenho).Error
 	if err != nil {
 		return &[]ClasseEmpenho{}, err
 	}

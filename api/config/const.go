@@ -163,22 +163,62 @@ const (
 )
 
 /*	=========================
-	PAGAMENTO PATH HTTP(OTB)
+	OTB PATH HTTP (PAGAMENTO)
 =========================	*/
 
 const (
-	OTB_PATH          = "/read/otb"
-	OTB_ID_PATH       = "/read/otb/{cod_otb}"
-	OTB_FAT_MUNICIPIO = "/read/otbMuniFatura/:cd_municipio_cod_ibge"
-	OTB_FAT_LIST      = "/read/otbFatura/:cod_otb"
-	OTB_FAT_SAVE      = "/read/otbFat"
-	OTB_LIST_ITENS    = "/read/otbItens/:cod_otb"
-	OTB_EDIT_ITENS    = "/read/otbItens"
+	OTB_PATH    = "/read/otb"
+	OTB_ID_PATH = "/read/otb/{cod_otb}"
 )
 
 /*	=========================
-		FATURA PATH HTTP
+	OTB FATURA PATH HTTP (PAGAMENTO FATURA)
 =========================	*/
+const (
+	OTB_FATURA_PATH    = "/read/otbFatura"
+	OTB_FATURA_ID_PATH = "/read/otbFatura/{cod_otb}"
+)
+
+/*	=========================
+	OTB ITENS PATH HTTP (PAGAMENTO ITENS)
+=========================	*/
+
+const (
+	OTB_ITENS_PATH    = "/read/otbItens"
+	OTB_ITENS_ID_PATH = "/read/otbItens/{cod_otb}"
+)
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++
+	FATURA_ITENS_PATH    = "/read/faturaItens"
+	FATURA_ITENS_LIST    = "/read/faturaItens/:num_nf"
+	FATURA_ITENS_LIST_ID = "/read/faturaItens/:municipio_cod_ibge/:natureza_despesa_cod_natureza_despesa/:cod_item/:cod_tipo_item"
+	FATURA_ITENS_DELETE  = "/read/faturaItens/:fatura_num_nf/:cod_empenho/:cod_item/:cod_tipo_item"
++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+/*	=========================
+	FATURA PATH HTTP
+=========================	*/
+
+const (
+	FATURA_PATH    = "/read/fatura"
+	FATURA_ID_PATH = "/read/fatura/{num_nf}"
+)
+
+/*	=========================
+	FATURA OTB PATH HTTP (FATURA PAGAMENTO)
+=========================	*/
+const (
+	FATURA_OTB_ID_PATH = "/read/faturaOtb/{num_nf}/{cod_ibge}"
+)
+
+/*	=========================
+	FATURA ITENS PATH HTTP (ITENS FATURA)
+=========================	*/
+
+const (
+	FATURA_ITENS_PATH    = "/read/faturaItens"
+	FATURA_ITENS_ID_PATH = "/read/faturaItens/{cod_otb}"
+)
 
 /*  =========================
 	PREVISAO EMPENHO PATHS HTTP OK!
@@ -285,23 +325,4 @@ const (
 const (
 	TIPO_ITEM_PATH    = "/read/tipoItem"
 	TIPO_ITEM_ID_PATH = "/read/tipoItem/{cod_tipo_item}"
-)
-
-//===============================================================
-//===============================================================
-//===============================================================
-
-/*  =========================
-	FATURA PATHS HTTP
-=========================  */
-
-const (
-	FATURA_PATH          = "/read/fatura"
-	FATURA_ID_PATH       = "/read/fatura/:id"
-	FATURA_ITENS_PATH    = "/read/faturaItens"
-	FATURA_ITENS_LIST    = "/read/faturaItens/:num_nf"
-	FATURA_ITENS_LIST_ID = "/read/faturaItens/:municipio_cod_ibge/:natureza_despesa_cod_natureza_despesa/:cod_item/:cod_tipo_item"
-	FATURA_ITENS_DELETE  = "/read/faturaItens/:fatura_num_nf/:cod_empenho/:cod_item/:cod_tipo_item"
-	LIST_PAG_FAT         = "/read/faturaOtb/:num_nf/:cod_ibge"
-	FATURA_TOTAL         = "/read/totalFatura/:num_nf"
 )

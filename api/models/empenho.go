@@ -49,7 +49,7 @@ func (empenho *Empenho) FindAllEmpenho(db *gorm.DB) (*[]Empenho, error) {
 	allEmpenho := []Empenho{}
 
 	//	Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Empenho{}).Limit(100).Find(&allEmpenho).Error
+	err := db.Debug().Model(&Empenho{}).Find(&allEmpenho).Error
 	if err != nil {
 		return &[]Empenho{}, err
 	}

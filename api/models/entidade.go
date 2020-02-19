@@ -46,7 +46,7 @@ func (entidade *Entidade) FindAllEntidade(db *gorm.DB) (*[]Entidade, error) {
 	allEntidade := []Entidade{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Entidade{}).Limit(100).Find(&allEntidade).Error
+	err := db.Debug().Model(&Entidade{}).Find(&allEntidade).Error
 	if err != nil {
 		return &[]Entidade{}, err
 	}

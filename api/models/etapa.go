@@ -46,7 +46,7 @@ func (etapa *Etapa) FindAllEtapa(db *gorm.DB) (*[]Etapa, error) {
 	allEtapa := []Etapa{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Etapa{}).Limit(100).Find(&allEtapa).Error
+	err := db.Debug().Model(&Etapa{}).Find(&allEtapa).Error
 	if err != nil {
 		return &[]Etapa{}, err
 	}

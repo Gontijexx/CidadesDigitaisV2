@@ -47,7 +47,7 @@ func (prefeito *Prefeito) FindAllPrefeito(db *gorm.DB) (*[]Prefeito, error) {
 	allPrefeito := []Prefeito{}
 
 	//	Busca todos os elementos contidos no banco de dados
-	err := db.Debug().Model(&Prefeito{}).Limit(100).Find(&allPrefeito).Error
+	err := db.Debug().Model(&Prefeito{}).Find(&allPrefeito).Error
 	if err != nil {
 		return &[]Prefeito{}, err
 	}

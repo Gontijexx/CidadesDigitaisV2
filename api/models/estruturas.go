@@ -21,7 +21,7 @@ type Entidade struct {
 =========================  */
 
 type Contato struct {
-	CodContato uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_contato" validate:"required"`
+	CodContato uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_contato"`
 	Cnpj       string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj" validate:"required"`
 	CodIbge    uint64 `gorm:"foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"alphanum"`
 	Nome       string `gorm:"default:null;size:50" json:"nome" validate:"alphanum"`
@@ -196,7 +196,7 @@ type ItensEmpenho struct {
 }
 
 /*	=========================
-		TABELA PAGAMENTO (OTB)
+		TABELA OTB (PAGAMENTO)
 =========================	*/
 
 type OTB struct {
@@ -205,20 +205,53 @@ type OTB struct {
 }
 
 /*	=========================
-		TABELA FATURA (OTB)
+		TABELA FATURA_OTB (PAGAMENTO FATURA/FATURA PAGAMENTO)
 =========================	*/
 
+type FaturaOTB struct {
+	CodOtb  uint64 `gorm:"primary_key;foreign_key:CodOtb;not null" json:"cod_otb"`
+	NumNF   uint64 `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
+	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+}
+
 /*	=========================
-		TABELA ITENS (OTB)
+		TABELA ITENS_OTB (PAGAMENTO)
 =========================	*/
+
+type ItensOTB struct {
+	CodOtb      uint64  `gorm:"primary_key;foreign_key:CodOtb;not null" json:"cod_otb"`
+	NumNF       uint64  `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
+	CodIbge     uint64  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	IDEmpenho   uint64  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
+	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
+	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoIte,;not null" json:"cod_tipo_item"`
+	Valor       float64 `gorm:"default:null" json:"valor"`
+	Quantidade  uint64  `gorm:"default:null" json:"quantidade"`
+}
 
 /*	=========================
 		TABELA FATURA
 =========================	*/
 
+type Fatura struct {
+	NumNF   uint64 `gorm:"primary_key;not null" json:"num_nf"`
+	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
+	DtNf    string `gorm:"default:null" json:"dt_nf"`
+}
+
 /*	=========================
 		TABELA ITENS FATURA
 =========================	*/
+
+type ItensFatura struct {
+	NumNF       uint64  `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
+	CodIbge     uint64  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	IDEmpenho   uint64  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
+	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
+	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoIte,;not null" json:"cod_tipo_item"`
+	Valor       float64 `gorm:"default:null" json:"valor"`
+	Quantidade  uint64  `gorm:"default:null" json:"quantidade"`
+}
 
 /*  =========================
 	TABELA PREVISAO EMPENHO

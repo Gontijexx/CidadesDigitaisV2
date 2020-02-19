@@ -46,7 +46,7 @@ func (ponto *Ponto) FindAllPonto(db *gorm.DB) (*[]Ponto, error) {
 	allPonto := []Ponto{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Ponto{}).Limit(100).Find(&allPonto).Error
+	err := db.Debug().Model(&Ponto{}).Find(&allPonto).Error
 	if err != nil {
 		return &[]Ponto{}, err
 	}

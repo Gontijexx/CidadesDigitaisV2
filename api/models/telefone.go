@@ -30,7 +30,7 @@ func (telefone *Telefone) FindAllTelefone(db *gorm.DB) (*[]Telefone, error) {
 	allTelefone := []Telefone{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Telefone{}).Limit(100).Find(&allTelefone).Error
+	err := db.Debug().Model(&Telefone{}).Find(&allTelefone).Error
 	if err != nil {
 		return &[]Telefone{}, err
 	}

@@ -298,6 +298,16 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.OTB_FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaOTB))).Methods(http.MethodGet)
 
 	/*	=========================
+		ROTAS EM ITENS OTB
+	=========================	*/
+
+	//	EDITA ITENS OTB
+	r.HandleFunc(config.OTB_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensOTB))).Methods(http.MethodPut)
+
+	//	LISTA ITENS OTB (cod_otb)
+	r.HandleFunc(config.OTB_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensOTB))).Methods(http.MethodGet)
+
+	/*	=========================
 		ROTAS EM FATURA 17000
 	=========================	*/
 

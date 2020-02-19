@@ -11,7 +11,7 @@ func (itensOTB *ItensOTB) FindItensOTB(db *gorm.DB, codOTB uint64) (*[]ItensOTB,
 	allItensOTB := []ItensOTB{}
 
 	//	Busca todos elementos contidos no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(&ItensOTB{}).Find(&allItensOTB).Where("cod_otb = ?", codOTB).Error
+	err := db.Debug().Model(&ItensOTB{}).Where("cod_otb = ?", codOTB).Find(&allItensOTB).Error
 	if err != nil {
 		return &[]ItensOTB{}, err
 	}
@@ -23,10 +23,10 @@ func (itensOTB *ItensOTB) FindItensOTB(db *gorm.DB, codOTB uint64) (*[]ItensOTB,
 	FUNCAO EDITAR ITENS_OTB
 =========================  */
 
-func (itensOTB *ItensOTB) UpdateItensOTB(db *gorm.DB, codOTB uint64) (*ItensOTB, error) {
+func (itensOTB *ItensOTB) UpdateItensOTB(db *gorm.DB) (*ItensOTB, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&ItensOTB{}).Where("cod_otb = ?", codOTB).Updates(
+	err := db.Debug().Model(&ItensOTB{}).Updates(
 		ItensOTB{
 			Valor:      itensOTB.Valor,
 			Quantidade: itensOTB.Quantidade}).Error
@@ -36,7 +36,7 @@ func (itensOTB *ItensOTB) UpdateItensOTB(db *gorm.DB, codOTB uint64) (*ItensOTB,
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&ItensOTB{}).Where("cod_otb = ?", codOTB).Take(&itensOTB).Error
+	err = db.Debug().Model(&ItensOTB{}).Take(&itensOTB).Error
 	if err != nil {
 		return &ItensOTB{}, err
 	}

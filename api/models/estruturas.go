@@ -47,11 +47,11 @@ type Telefone struct {
 type CD struct {
 	CodIbge       uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge" validate:"numeric"`
 	CodLote       uint64 `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote" validate:"numeric"`
-	NomeMunicipio string `gorm:"default:null" json:"nome_municipio" validate:"alphanum"`
+	NomeMunicipio string `gorm:"default:null" json:"nome_municipio"`
 	OsPe          string `gorm:"size:10;default:null" json:"os_pe" validate:"alphanum"`
-	DataPe        string `gorm:"default:null" json:"data_pe" validate:"alphanum"`
+	DataPe        string `gorm:"default:null" json:"data_pe"`
 	OsImp         string `gorm:"size:10;default:null" json:"os_imp" validate:"alphanum"`
-	DataImp       string `gorm:"default:null" json:"data_imp" validate:"alphanum"`
+	DataImp       string `gorm:"default:null" json:"data_imp"`
 }
 
 /*  =========================
@@ -143,7 +143,7 @@ type PIDTipologia struct {
 type Lote struct {
 	CodLote     uint64 `gorm:"primary_key;not null;size:11" json:"cod_lote" validate:"numeric"`
 	Cnpj        string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj" validate:"alphanum"`
-	Contrato    string `gorm:"default:null;size:10" json:"contrato" validate:"alphanum"`
+	Contrato    string `gorm:"default:null;size:10" json:"contrato"`
 	DtInicioVig string `gorm:"default:null;size:10" json:"dt_inicio_vig" `
 	DtFinalVig  string `gorm:"default:null;size:10" json:"dt_final_vig" `
 	DtReajuste  string `gorm:"default:null;size:10" json:"dt_reajuste" `

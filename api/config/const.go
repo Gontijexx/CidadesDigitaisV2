@@ -188,9 +188,37 @@ const (
 	OTB_ITENS_ID_PATH = "/read/otbItens/{cod_otb}"
 )
 
+/*+++++++++++++++++++++++++++++++++++++++++++++++++
+	FATURA_ITENS_PATH    = "/read/faturaItens"
+	FATURA_ITENS_LIST    = "/read/faturaItens/:num_nf"
+	FATURA_ITENS_LIST_ID = "/read/faturaItens/:municipio_cod_ibge/:natureza_despesa_cod_natureza_despesa/:cod_item/:cod_tipo_item"
+	FATURA_ITENS_DELETE  = "/read/faturaItens/:fatura_num_nf/:cod_empenho/:cod_item/:cod_tipo_item"
++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
 /*	=========================
-		FATURA PATH HTTP
+	FATURA PATH HTTP
 =========================	*/
+
+const (
+	FATURA_PATH    = "/read/fatura"
+	FATURA_ID_PATH = "/read/fatura/{num_nf}"
+)
+
+/*	=========================
+	FATURA OTB PATH HTTP (FATURA PAGAMENTO)
+=========================	*/
+const (
+	FATURA_OTB_ID_PATH = "/read/faturaOtb/{num_nf}/{cod_ibge}"
+)
+
+/*	=========================
+	FATURA ITENS PATH HTTP (FATURA ITENS)
+=========================	*/
+
+const (
+	FATURA_ITENS_PATH    = "/read/faturaItens"
+	FATURA_ITENS_ID_PATH = "/read/faturaItens/{cod_otb}"
+)
 
 /*  =========================
 	PREVISAO EMPENHO PATHS HTTP OK!
@@ -297,23 +325,4 @@ const (
 const (
 	TIPO_ITEM_PATH    = "/read/tipoItem"
 	TIPO_ITEM_ID_PATH = "/read/tipoItem/{cod_tipo_item}"
-)
-
-//===============================================================
-//===============================================================
-//===============================================================
-
-/*  =========================
-	FATURA PATHS HTTP
-=========================  */
-
-const (
-	FATURA_PATH          = "/read/fatura"
-	FATURA_ID_PATH       = "/read/fatura/:id"
-	FATURA_ITENS_PATH    = "/read/faturaItens"
-	FATURA_ITENS_LIST    = "/read/faturaItens/:num_nf"
-	FATURA_ITENS_LIST_ID = "/read/faturaItens/:municipio_cod_ibge/:natureza_despesa_cod_natureza_despesa/:cod_item/:cod_tipo_item"
-	FATURA_ITENS_DELETE  = "/read/faturaItens/:fatura_num_nf/:cod_empenho/:cod_item/:cod_tipo_item"
-	LIST_PAG_FAT         = "/read/faturaOtb/:num_nf/:cod_ibge"
-	FATURA_TOTAL         = "/read/totalFatura/:num_nf"
 )

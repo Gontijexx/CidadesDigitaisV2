@@ -210,7 +210,7 @@ type OTB struct {
 
 type FaturaOTB struct {
 	CodOtb  uint64 `gorm:"primary_key;foreign_key:CodOtb;not null" json:"cod_otb"`
-	NumNf   uint64 `gorm:"primary_key;foreign_key:NumNf;not null" json:"num_nf"`
+	NumNF   uint64 `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
 	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
 }
 
@@ -220,7 +220,7 @@ type FaturaOTB struct {
 
 type ItensOTB struct {
 	CodOtb      uint64  `gorm:"primary_key;foreign_key:CodOtb;not null" json:"cod_otb"`
-	NumNf       uint64  `gorm:"primary_key;foreign_key:NumNf;not null" json:"num_nf"`
+	NumNF       uint64  `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
 	CodIbge     uint64  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
 	IDEmpenho   uint64  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
 	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
@@ -233,9 +233,25 @@ type ItensOTB struct {
 		TABELA FATURA
 =========================	*/
 
+type Fatura struct {
+	NumNF   uint64 `gorm:"primary_key;not null" json:"num_nf"`
+	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
+	DtNf    string `gorm:"default:null" json:"dt_nf"`
+}
+
 /*	=========================
 		TABELA ITENS FATURA
 =========================	*/
+
+type ItensFatura struct {
+	NumNF       uint64  `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
+	CodIbge     uint64  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	IDEmpenho   uint64  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
+	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
+	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoIte,;not null" json:"cod_tipo_item"`
+	Valor       float64 `gorm:"default:null" json:"valor"`
+	Quantidade  uint64  `gorm:"default:null" json:"quantidade"`
+}
 
 /*  =========================
 	TABELA PREVISAO EMPENHO

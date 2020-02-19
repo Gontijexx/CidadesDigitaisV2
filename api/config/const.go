@@ -212,7 +212,7 @@ const (
 )
 
 /*	=========================
-	FATURA ITENS PATH HTTP (FATURA ITENS)
+	FATURA ITENS PATH HTTP (ITENS FATURA)
 =========================	*/
 
 const (

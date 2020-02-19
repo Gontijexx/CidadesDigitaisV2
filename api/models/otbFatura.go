@@ -3,7 +3,7 @@ package models
 import "github.com/jinzhu/gorm"
 
 /*  =========================
-	FUNCAO SALVAR FATURA OTB NO BANCO DE DADOS
+	FUNCAO SALVAR OTB FATURA NO BANCO DE DADOS
 =========================  */
 
 func (faturaOTB *FaturaOTB) SaveOTBFatura(db *gorm.DB) (*FaturaOTB, error) {
@@ -19,7 +19,7 @@ func (faturaOTB *FaturaOTB) SaveOTBFatura(db *gorm.DB) (*FaturaOTB, error) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TODAS FATURA OTB
+	FUNCAO LISTAR TODAS OTB FATURA
 =========================  */
 
 func (faturaOTB *FaturaOTB) FindOTBFatura(db *gorm.DB, codOTB uint64) (*[]FaturaOTB, error) {

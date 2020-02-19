@@ -6,7 +6,7 @@ import "github.com/jinzhu/gorm"
 	FUNCAO SALVAR FATURA OTB NO BANCO DE DADOS
 =========================  */
 
-func (faturaOTB *FaturaOTB) SaveFaturaOTB(db *gorm.DB) (*FaturaOTB, error) {
+func (faturaOTB *FaturaOTB) SaveOTBFatura(db *gorm.DB) (*FaturaOTB, error) {
 
 	//	Adiciona um novo elemento no banco de dados
 	err := db.Debug().Create(&faturaOTB).Error
@@ -22,7 +22,7 @@ func (faturaOTB *FaturaOTB) SaveFaturaOTB(db *gorm.DB) (*FaturaOTB, error) {
 	FUNCAO LISTAR TODAS FATURA OTB
 =========================  */
 
-func (faturaOTB *FaturaOTB) FindFaturaOTB(db *gorm.DB, codOTB uint64) (*[]FaturaOTB, error) {
+func (faturaOTB *FaturaOTB) FindOTBFatura(db *gorm.DB, codOTB uint64) (*[]FaturaOTB, error) {
 
 	allFaturaOTB := []FaturaOTB{}
 

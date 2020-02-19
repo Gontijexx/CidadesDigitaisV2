@@ -292,10 +292,10 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	SALVA FATURA OTB
-	r.HandleFunc(config.OTB_FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateFaturaOTB))).Methods(http.MethodPost)
+	r.HandleFunc(config.OTB_FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateOTBFatura))).Methods(http.MethodPost)
 
 	//	LISTA FATURA OTB (cod_otb)
-	r.HandleFunc(config.OTB_FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaOTB))).Methods(http.MethodGet)
+	r.HandleFunc(config.OTB_FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetOTBFatura))).Methods(http.MethodGet)
 
 	/*	=========================
 		ROTAS EM ITENS OTB
@@ -308,7 +308,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.OTB_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensOTB))).Methods(http.MethodGet)
 
 	/*	=========================
-		ROTAS EM FATURA 17000
+		ROTAS EM FATURA
 	=========================	*/
 
 	//	LISTA FATURA

@@ -16,10 +16,10 @@ import (
 )
 
 /*  =========================
-	FUNCAO ADICIONAR FATURA OTB
+	FUNCAO ADICIONAR OTB FATURA
 =========================  */
 
-func (server *Server) CreateFaturaOTB(w http.ResponseWriter, r *http.Request) {
+func (server *Server) CreateOTBFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 16011)
@@ -53,7 +53,7 @@ func (server *Server) CreateFaturaOTB(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	SaveFaturaOTB eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
-	faturaOTBCreated, err := faturaOTB.SaveFaturaOTB(server.DB)
+	faturaOTBCreated, err := faturaOTB.SaveOTBFatura(server.DB)
 
 	/*	Retorna um erro caso nao seja possivel salvar faturaOTB no banco de dados
 		Status 500	*/
@@ -71,10 +71,10 @@ func (server *Server) CreateFaturaOTB(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TODAS FATURA OTB
+	FUNCAO LISTAR TODAS OTB FATURA
 =========================  */
 
-func (server *Server) GetFaturaOTB(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetOTBFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 16012)
@@ -95,7 +95,7 @@ func (server *Server) GetFaturaOTB(w http.ResponseWriter, r *http.Request) {
 	faturaOTB := models.FaturaOTB{}
 
 	//	allFaturaOTB armazena os dados buscados no banco de dados
-	allFaturaOTB, err := faturaOTB.FindFaturaOTB(server.DB, codOTB)
+	allFaturaOTB, err := faturaOTB.FindOTBFatura(server.DB, codOTB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))

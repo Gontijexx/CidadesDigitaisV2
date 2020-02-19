@@ -311,6 +311,18 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM FATURA 17000
 	=========================	*/
 
+	//	LISTA FATURA
+	r.HandleFunc(config.FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllFatura))).Methods(http.MethodGet)
+
+	//	SALVA FATURA
+	r.HandleFunc(config.FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateFatura))).Methods(http.MethodPost)
+
+	//	LISTA FATURA (num_nf)
+	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaByID))).Methods(http.MethodGet)
+
+	//	APAGA FATURA (num_nf)
+	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteFatura))).Methods(http.MethodDelete)
+
 	/*	=========================
 		ROTAS EM PREVISAO EMPENHO OK!
 	=========================	*/

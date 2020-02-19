@@ -163,23 +163,29 @@ const (
 )
 
 /*	=========================
-	OTB PATH HTTP(OTB)
+	OTB PATH HTTP (PAGAMENTO)
 =========================	*/
 
 const (
 	OTB_PATH    = "/read/otb"
 	OTB_ID_PATH = "/read/otb/{cod_otb}"
-
-	OTB_LIST_ITENS = "/read/otbItens/:cod_otb"
-	OTB_EDIT_ITENS = "/read/otbItens"
 )
 
 /*	=========================
-	FATURA OTB PATH HTTP(OTB)
+	OTB FATURA PATH HTTP (PAGAMENTO FATURA)
 =========================	*/
 const (
 	OTB_FATURA_PATH    = "/read/otbFatura"
 	OTB_FATURA_ID_PATH = "/read/otbFatura/{cod_otb}"
+)
+
+/*	=========================
+	OTB ITENS PATH HTTP (PAGAMENTO ITENS)
+=========================	*/
+
+const (
+	OTB_ITENS_PATH    = "/read/otbItens"
+	OTB_ITENS_ID_PATH = "/read/otbItens/{cod_otb}"
 )
 
 /*	=========================

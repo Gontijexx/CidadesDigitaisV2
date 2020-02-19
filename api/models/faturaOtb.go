@@ -27,7 +27,7 @@ func (faturaOTB *FaturaOTB) FindFaturaOTB(db *gorm.DB, codOTB uint64) (*[]Fatura
 	allFaturaOTB := []FaturaOTB{}
 
 	//	Busca todos elementos contidos no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(&FaturaOTB{}).Find(&allFaturaOTB).Where("cod_otb = ?", codOTB).Error
+	err := db.Debug().Model(&FaturaOTB{}).Where("cod_otb = ?", codOTB).Find(&allFaturaOTB).Error
 	if err != nil {
 		return &[]FaturaOTB{}, err
 	}

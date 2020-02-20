@@ -188,13 +188,6 @@ const (
 	OTB_ITENS_ID_PATH = "/read/otbItens/{cod_otb}"
 )
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++
-	FATURA_ITENS_PATH    = "/read/faturaItens"
-	FATURA_ITENS_LIST    = "/read/faturaItens/:num_nf"
-	FATURA_ITENS_LIST_ID = "/read/faturaItens/:municipio_cod_ibge/:natureza_despesa_cod_natureza_despesa/:cod_item/:cod_tipo_item"
-	FATURA_ITENS_DELETE  = "/read/faturaItens/:fatura_num_nf/:cod_empenho/:cod_item/:cod_tipo_item"
-+++++++++++++++++++++++++++++++++++++++++++++++++*/
-
 /*	=========================
 	FATURA PATH HTTP
 =========================	*/

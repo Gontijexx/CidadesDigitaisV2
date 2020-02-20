@@ -84,13 +84,11 @@ func (lote *Lote) UpdateLote(db *gorm.DB, codLote uint64) (*Lote, error) {
 	return lote, err
 }
 
-
 //Não é possivel deletar por causa das triggers da lote_itens
-
 
 /*  =========================
 	FUNCAO DELETAR LOTE POR ID
-=========================  */
+=========================
 
 func (lote *Lote) DeleteLote(db *gorm.DB, codLote uint64) (int64, error) {
 
@@ -107,3 +105,4 @@ func (lote *Lote) DeleteLote(db *gorm.DB, codLote uint64) (int64, error) {
 	//	Retornar o numero de linhas deletadas no banco de dados
 	return db.RowsAffected, nil
 }
+*/

@@ -25,9 +25,9 @@ type Usuario struct {
 
 type Modulo struct {
 	Cod_modulo  uint   `gorm:"primary_key;not null;size:11" json:"cod_modulo"`
-	Categoria_1 string `gorm:"size:45;default:null" json:"cat_1"`
-	Categoria_2 string `gorm:"size:45;default:null" json:"cat_2"`
-	Categoria_3 string `gorm:"size:45;default:null" json:"cat_3"`
+	Categoria_1 string `gorm:"size:45;default:null" json:"categoria_1"`
+	Categoria_2 string `gorm:"size:45;default:null" json:"categoria_2"`
+	Categoria_3 string `gorm:"size:45;default:null" json:"categoria_3"`
 	Descricao   string `gorm:"size:200;default:null" json:"descricao"`
 }
 

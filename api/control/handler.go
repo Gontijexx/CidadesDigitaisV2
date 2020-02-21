@@ -22,19 +22,19 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//LISTA USUARIOS
-	r.HandleFunc(config.USER_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUsers))).Methods(http.MethodGet)
+	r.HandleFunc(config.USER_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUsuario))).Methods(http.MethodGet)
 
 	//EDITA O USUARIO {cod_usuario}
-	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUser))).Methods(http.MethodPut)
+	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUsuario))).Methods(http.MethodPut)
 
 	//ROTA DE LOGIN
 	r.HandleFunc(config.USER_PATH_LOGIN, middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
 
 	//SALVA USUARIO
-	r.HandleFunc(config.USER_PATH_CREATEUSER, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUser))).Methods(http.MethodPost)
+	r.HandleFunc(config.USER_PATH_CREATEUSER, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUsuario))).Methods(http.MethodPost)
 
 	//APAGA O USUARIO
-	//	r.HandleFunc(config.USER_PATH_DELETEUSER, middlewares.SetMiddleAuth(s.DeleteUser)).Methods(http.MethodDelete)
+	//	r.HandleFunc(config.USER_PATH_DELETEUSER, middlewares.SetMiddleAuth(s.DeleteUsuario)).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM MODULOS

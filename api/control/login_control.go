@@ -22,70 +22,85 @@ import (
 		COMENTAR
 =========================	*/
 
+/*  =========================
+	FUNCAO DE LOGIN
+=========================  */
+
 func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
+
 	body, err := ioutil.ReadAll(r.Body)
+
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	user := models.Usuario{}
-	err = json.Unmarshal(body, &user)
+
+	usuario := models.Usuario{}
+
+	err = json.Unmarshal(body, &usuario)
+
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	if err = validation.Validator.Struct(user); err != nil {
-		log.Printf("[WARN] invalid user information, because, %v\n", err)
+
+	if err = validation.Validator.Struct(usuario); err != nil {
+		log.Printf("[WARN] invalid usuario information, because, %v\n", err)
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	user.Ready()
+	usuario.Prepare()
 
-	token, err := server.SignIn(user.Login, user.Senha)
+	token, err := server.SignIn(usuario.Login, usuario.Senha)
+
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusUnprocessableEntity, formattedError)
 		return
 	}
+
 	if strings.Contains(token, "Error") {
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
+
 	responses.JSON(w, http.StatusOK, token)
+
 }
 
 func (server *Server) SignIn(login, password string) (string, error) {
 
-	var err error
-	var CodMod []int64
-	user := models.Usuario{}
-	mods := models.Usuario_modulo{}
+	var CodigoModulo []int64
+	usuario := models.Usuario{}
+	modulo := models.UsuarioModulo{}
 
-	err = server.DB.Debug().Model(user).Where("login = ?", login).Take(&user).Error
+	err := server.DB.Debug().Model(usuario).Where("login = ?", login).Take(&usuario).Error
 	if err != nil {
 		return "", err
 	}
-	err = models.VerifyPassword(user.Senha, password)
+
+	err = models.VerifyPassword(usuario.Senha, password)
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
 	}
-	if user.Status == true {
-		rows, err := server.DB.Debug().Raw("select cod_modulo from usuario_modulo where cod_usuario = ?", user.Cod_usuario).Rows()
+
+	if usuario.Status == true {
+		rows, err := server.DB.Debug().Raw("SELECT cod_modulo FROM usuario_modulo WHERE cod_usuario = ?", usuario.CodUsuario).Rows()
 		if err != nil {
 			return "", err
 		}
 		for rows.Next() {
 
-			err = rows.Scan(&mods.Cod_modulo)
+			err = rows.Scan(&modulo.CodModulo)
 
-			CodMod = append(CodMod, mods.Cod_modulo)
+			CodigoModulo = append(CodigoModulo, modulo.CodModulo)
 
 		}
-		fmt.Printf("eu so codmod: %v", CodMod)
-		return auth.CreateToken(user.Cod_usuario, CodMod)
+		fmt.Printf("eu so codmod: %v", CodigoModulo)
+		return auth.CreateToken(usuario.CodUsuario, CodigoModulo)
 	} else {
-		log.Printf("[FATAL] This user is disable,%v\n", user.Status)
+		log.Printf("[FATAL] This usuario is disable,%v\n", usuario.Status)
 		return "Error", err
 	}
 

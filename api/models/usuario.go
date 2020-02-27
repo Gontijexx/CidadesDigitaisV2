@@ -40,8 +40,8 @@ type Modulo struct {
 =========================  */
 
 type UsuarioModulo struct {
-	CodUsuario uint32 `gorm:"foreingkey:CodUsuario" json:"cod_usuario" `
-	CodModulo  int64  `gorm:"foreingkey:CodModulo" json:"cod_modulo"`
+	CodUsuario uint32 `gorm:"foreingkey:CodUsuario" json:"cod_usuario" validate:"required"`
+	CodModulo  int64  `gorm:"foreingkey:CodModulo" json:"cod_modulo" validate:"required"`
 }
 
 /*	=========================

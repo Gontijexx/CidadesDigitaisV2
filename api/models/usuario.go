@@ -45,27 +45,30 @@ type UsuarioModulo struct {
 }
 
 /*	=========================
-		COMENTAR!!!!!
+		FUNCAO HASH
 =========================	*/
 
+//	Transforma a string fornecida em um versao hash
 func Hash(senha string) ([]byte, error) {
 
 	return bcrypt.GenerateFromPassword([]byte(senha), bcrypt.DefaultCost)
 }
 
 /*	=========================
-		COMENTAR!!!!!
+		FUNCAO VERIFY PASSWORD
 =========================	*/
 
+//	Durante o login, verifica se a senha fornecida eh igua a senha hash salva no banco de dados
 func VerifyPassword(hashedSenha, senha string) error {
 
 	return bcrypt.CompareHashAndPassword([]byte(hashedSenha), []byte(senha))
 }
 
 /*	=========================
-		COMENTAR!!!!!
+		FUNCAO BEFORE SAVE
 =========================	*/
 
+//	Hash a senha do usuario antes de salva-la no banco de dados
 func (usuario *Usuario) BeforeSave() error {
 
 	hashedSenha, err := Hash(usuario.Senha)
@@ -77,9 +80,10 @@ func (usuario *Usuario) BeforeSave() error {
 }
 
 /*	=========================
-		COMENTAR!!!!!
+		FUNCAO PREPARE
 =========================	*/
 
+//	Prepara os dados a serem salvos no banco de dados quando for criar um usuario novo
 func (usuario *Usuario) Prepare() {
 
 	usuario.CodUsuario = 0
@@ -190,29 +194,34 @@ func (usuario *Usuario) DeleteUsuario(db *gorm.DB, codUsuario uint32) (int64, er
 	return db.RowsAffected, nil
 }
 
-/*	=========================
-		COMENTAR!!!!!
-=========================	*/
+/*  =========================
+	FUNCAO LISTAR TODOS MODULOS
+=========================  */
 
 func (usuario *Modulo) FindAllModulo(db *gorm.DB) (*[]Modulo, error) {
 
 	modulo := []Modulo{}
+
+	//	Busca todos os 80 modulos disponiveis no banco de dados
 	err := db.Debug().Model(&Modulo{}).Find(&modulo).Error
 	if err != nil {
 		return &[]Modulo{}, err
 	}
+
 	return &modulo, err
 }
 
-/*	=========================
-		COMENTAR!!!!!
-=========================	*/
+/*  =========================
+	FUNCAO SALVAR USUARIO_MODULO NO BANCO DE DADOS
+=========================  */
 
 func (usuarioModulo *UsuarioModulo) SaveModulo(db *gorm.DB) (*UsuarioModulo, error) {
 
+	//	Adiciona um novo elemento no banco de dados
 	err := db.Debug().Create(&usuarioModulo).Error
 	if err != nil {
 		return &UsuarioModulo{}, err
 	}
+
 	return usuarioModulo, nil
 }

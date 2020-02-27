@@ -1,7 +1,9 @@
 package models
 
 import (
+	"CidadesDigitaisV2/api/auth"
 	"errors"
+	"fmt"
 	"html"
 	"log"
 	"strings"
@@ -92,12 +94,66 @@ func (usuario *Usuario) VerifyLogin(db *gorm.DB, login string) error {
 }
 
 /*	=========================
+		FUNCAO SIGN IN
+=========================	*/
+
+func (usuario *Usuario) SignIn(db *gorm.DB, login, password string) (string, error) {
+
+	var CodigoModulo []int64
+	modulo := UsuarioModulo{}
+
+	//	Verificar se o login informado existe no banco de dados
+	err := usuario.VerifyLogin(db, login)
+
+	//	Se nao existir o login informado retorna o erro
+	if err != nil {
+		return "", err
+	}
+
+	//	Apos verificar se o login existe, verifica se a senha informada eh compativel com a senha guardada no banco de dados
+	err = VerifyPassword(usuario.Senha, password)
+	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+		return "", err
+	}
+
+	//	Verifica se o usuario tem permissao de acesso
+	if usuario.Status == true {
+		//	Busca todos os cod_modulo relacionados ao usuario
+		rows, err := db.Debug().Raw("SELECT cod_modulo FROM usuario_modulo WHERE cod_usuario = ?", usuario.CodUsuario).Rows()
+		if err != nil {
+			return "", err
+		}
+
+		//	Armazena os cod_modulo associados ao usuario e armazena no array CodigoModulo
+		for rows.Next() {
+
+			err = rows.Scan(&modulo.CodModulo)
+
+			CodigoModulo = append(CodigoModulo, modulo.CodModulo)
+
+		}
+
+		//	Printa os modulos que o usuario tem acesso
+		fmt.Printf("eu so codmod: %v", CodigoModulo)
+
+		//	Cria e retorna o token criado
+		return auth.CreateToken(usuario.CodUsuario, CodigoModulo)
+
+	} else {
+		//	Caso o usuario nao tenha permissao de acesso
+		log.Printf("[FATAL] This usuario is disable,%v\n", usuario.Status)
+		return "Error", err
+	}
+
+}
+
+/*	=========================
 		FUNCAO PREPARE
 =========================	*/
 
-//	Prepara os dados a serem salvos no banco de dados quando for criar um usuario novo
 func (usuario *Usuario) Prepare() {
 
+	//	Prepara os dados a serem salvos no banco de dados quando for criar um usuario novo
 	usuario.CodUsuario = 0
 	usuario.Nome = html.EscapeString(strings.TrimSpace(usuario.Nome))
 	usuario.Email = html.EscapeString(strings.TrimSpace(usuario.Email))

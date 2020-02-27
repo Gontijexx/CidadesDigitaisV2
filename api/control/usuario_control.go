@@ -337,7 +337,9 @@ func (server *Server) AddModulo(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("CodModulo adicionado: %v\n", usuarioMod.CodModulo)
 	}
 
-	//	Retorna o Status 200 e o JSON do Array adicionado
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, usuarioModulo))
+
+	//	Retorna o Status 201 e o JSON do Array adicionado
 	responses.JSON(w, http.StatusCreated, usuarioModulo)
 
 }

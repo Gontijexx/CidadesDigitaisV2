@@ -80,6 +80,18 @@ func (usuario *Usuario) BeforeSave() error {
 }
 
 /*	=========================
+		FUNCAO VERIFY LOGIN
+=========================	*/
+
+func (usuario *Usuario) VerifyLogin(db *gorm.DB, login string) error {
+
+	//	Verifica se o login existe no banco de dados
+	err := db.Debug().Model(usuario).Where("login = ?", login).Take(&usuario).Error
+
+	return err
+}
+
+/*	=========================
 		FUNCAO PREPARE
 =========================	*/
 

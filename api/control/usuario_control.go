@@ -18,10 +18,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		COMENTAR!!! E ATUALIZAR MENSAGENS DE ERRO
-=========================	*/
-
 /*  =========================
 	FUNCAO ADICIONAR USUARIO
 =========================  */
@@ -62,7 +58,9 @@ func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 	newUsuario := usuario.Login
 
 	//	Verifica se o login ja esta em uso
-	err = server.DB.Debug().Model(usuario).Where("login = ?", newUsuario).Take(&usuario).Error
+	err = usuario.VerifyLogin(server.DB, newUsuario)
+
+	//	Tratamento do err, caso 'err != nil' pode-se criar o usuario
 	if err == nil {
 		w.WriteHeader(http.StatusConflict)
 		w.Write([]byte(`{"Error": "Existent Login"}`))
@@ -337,7 +335,9 @@ func (server *Server) AddModulo(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("CodModulo adicionado: %v\n", usuarioMod.CodModulo)
 	}
 
-	//	Retorna o Status 200 e o JSON do Array adicionado
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, usuarioModulo))
+
+	//	Retorna o Status 201 e o JSON do Array adicionado
 	responses.JSON(w, http.StatusCreated, usuarioModulo)
 
 }

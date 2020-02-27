@@ -1,7 +1,9 @@
 package models
 
 import (
+	"CidadesDigitaisV2/api/auth"
 	"errors"
+	"fmt"
 	"html"
 	"log"
 	"strings"
@@ -40,32 +42,35 @@ type Modulo struct {
 =========================  */
 
 type UsuarioModulo struct {
-	CodUsuario uint32 `gorm:"foreingkey:CodUsuario" json:"cod_usuario" `
-	CodModulo  int64  `gorm:"foreingkey:CodModulo" json:"cod_modulo"`
+	CodUsuario uint32 `gorm:"foreingkey:CodUsuario" json:"cod_usuario" validate:"required"`
+	CodModulo  int64  `gorm:"foreingkey:CodModulo" json:"cod_modulo" validate:"required"`
 }
 
 /*	=========================
-		COMENTAR!!!!!
+		FUNCAO HASH
 =========================	*/
 
+//	Transforma a string fornecida em um versao hash
 func Hash(senha string) ([]byte, error) {
 
 	return bcrypt.GenerateFromPassword([]byte(senha), bcrypt.DefaultCost)
 }
 
 /*	=========================
-		COMENTAR!!!!!
+		FUNCAO VERIFY PASSWORD
 =========================	*/
 
+//	Durante o login, verifica se a senha fornecida eh igua a senha hash salva no banco de dados
 func VerifyPassword(hashedSenha, senha string) error {
 
 	return bcrypt.CompareHashAndPassword([]byte(hashedSenha), []byte(senha))
 }
 
 /*	=========================
-		COMENTAR!!!!!
+		FUNCAO BEFORE SAVE
 =========================	*/
 
+//	Hash a senha do usuario antes de salva-la no banco de dados
 func (usuario *Usuario) BeforeSave() error {
 
 	hashedSenha, err := Hash(usuario.Senha)
@@ -77,11 +82,78 @@ func (usuario *Usuario) BeforeSave() error {
 }
 
 /*	=========================
-		COMENTAR!!!!!
+		FUNCAO VERIFY LOGIN
+=========================	*/
+
+func (usuario *Usuario) VerifyLogin(db *gorm.DB, login string) error {
+
+	//	Verifica se o login existe no banco de dados
+	err := db.Debug().Model(usuario).Where("login = ?", login).Take(&usuario).Error
+
+	return err
+}
+
+/*	=========================
+		FUNCAO SIGN IN
+=========================	*/
+
+func (usuario *Usuario) SignIn(db *gorm.DB, login, password string) (string, error) {
+
+	var CodigoModulo []int64
+	modulo := UsuarioModulo{}
+
+	//	Verificar se o login informado existe no banco de dados
+	err := usuario.VerifyLogin(db, login)
+
+	//	Se nao existir o login informado retorna o erro
+	if err != nil {
+		return "", err
+	}
+
+	//	Apos verificar se o login existe, verifica se a senha informada eh compativel com a senha guardada no banco de dados
+	err = VerifyPassword(usuario.Senha, password)
+	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+		return "", err
+	}
+
+	//	Verifica se o usuario tem permissao de acesso
+	if usuario.Status == true {
+		//	Busca todos os cod_modulo relacionados ao usuario
+		rows, err := db.Debug().Raw("SELECT cod_modulo FROM usuario_modulo WHERE cod_usuario = ?", usuario.CodUsuario).Rows()
+		if err != nil {
+			return "", err
+		}
+
+		//	Armazena os cod_modulo associados ao usuario e armazena no array CodigoModulo
+		for rows.Next() {
+
+			err = rows.Scan(&modulo.CodModulo)
+
+			CodigoModulo = append(CodigoModulo, modulo.CodModulo)
+
+		}
+
+		//	Printa os modulos que o usuario tem acesso
+		fmt.Printf("eu so codmod: %v", CodigoModulo)
+
+		//	Cria e retorna o token criado
+		return auth.CreateToken(usuario.CodUsuario, CodigoModulo)
+
+	} else {
+		//	Caso o usuario nao tenha permissao de acesso
+		log.Printf("[FATAL] This usuario is disable,%v\n", usuario.Status)
+		return "Error", err
+	}
+
+}
+
+/*	=========================
+		FUNCAO PREPARE
 =========================	*/
 
 func (usuario *Usuario) Prepare() {
 
+	//	Prepara os dados a serem salvos no banco de dados quando for criar um usuario novo
 	usuario.CodUsuario = 0
 	usuario.Nome = html.EscapeString(strings.TrimSpace(usuario.Nome))
 	usuario.Email = html.EscapeString(strings.TrimSpace(usuario.Email))
@@ -190,29 +262,34 @@ func (usuario *Usuario) DeleteUsuario(db *gorm.DB, codUsuario uint32) (int64, er
 	return db.RowsAffected, nil
 }
 
-/*	=========================
-		COMENTAR!!!!!
-=========================	*/
+/*  =========================
+	FUNCAO LISTAR TODOS MODULOS
+=========================  */
 
 func (usuario *Modulo) FindAllModulo(db *gorm.DB) (*[]Modulo, error) {
 
 	modulo := []Modulo{}
+
+	//	Busca todos os 80 modulos disponiveis no banco de dados
 	err := db.Debug().Model(&Modulo{}).Find(&modulo).Error
 	if err != nil {
 		return &[]Modulo{}, err
 	}
+
 	return &modulo, err
 }
 
-/*	=========================
-		COMENTAR!!!!!
-=========================	*/
+/*  =========================
+	FUNCAO SALVAR USUARIO_MODULO NO BANCO DE DADOS
+=========================  */
 
 func (usuarioModulo *UsuarioModulo) SaveModulo(db *gorm.DB) (*UsuarioModulo, error) {
 
+	//	Adiciona um novo elemento no banco de dados
 	err := db.Debug().Create(&usuarioModulo).Error
 	if err != nil {
 		return &UsuarioModulo{}, err
 	}
+
 	return usuarioModulo, nil
 }

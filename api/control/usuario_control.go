@@ -18,10 +18,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		COMENTAR!!! E ATUALIZAR MENSAGENS DE ERRO
-=========================	*/
-
 /*  =========================
 	FUNCAO ADICIONAR USUARIO
 =========================  */

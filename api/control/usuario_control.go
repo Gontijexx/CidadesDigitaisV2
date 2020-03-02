@@ -18,10 +18,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		COMENTAR!!! E ATUALIZAR MENSAGENS DE ERRO
-=========================	*/
-
 /*  =========================
 	FUNCAO ADICIONAR USUARIO
 =========================  */
@@ -62,7 +58,9 @@ func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 	newUsuario := usuario.Login
 
 	//	Verifica se o login ja esta em uso
-	err = server.DB.Debug().Model(usuario).Where("login = ?", newUsuario).Take(&usuario).Error
+	err = usuario.VerifyLogin(server.DB, newUsuario)
+
+	//	Tratamento do err, caso 'err != nil' pode-se criar o usuario
 	if err == nil {
 		w.WriteHeader(http.StatusConflict)
 		w.Write([]byte(`{"Error": "Existent Login"}`))

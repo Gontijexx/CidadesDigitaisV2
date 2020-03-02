@@ -65,6 +65,7 @@ func (lote *Lote) UpdateLote(db *gorm.DB, codLote uint64) (*Lote, error) {
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Model(&Lote{}).Where("cod_lote = ?", codLote).Updates(
 		Lote{
+			Cnpj:        lote.Cnpj,
 			Contrato:    lote.Contrato,
 			DtInicioVig: lote.DtInicioVig,
 			DtFinalVig:  lote.DtFinalVig,

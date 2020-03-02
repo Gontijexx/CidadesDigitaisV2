@@ -509,19 +509,19 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA PREFEITOS
-	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPrefeito))).Methods(http.MethodGet)
+	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPrefeitos))).Methods(http.MethodGet)
 
 	//	SALVA PREFEITOS
-	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrefeito))).Methods(http.MethodPost)
+	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrefeitos))).Methods(http.MethodPost)
 
 	//	EDITA PREFEITOS (cod_prefeito)
-	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrefeito))).Methods(http.MethodPut)
+	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrefeitos))).Methods(http.MethodPut)
 
 	//	LISTA PREFEITOS (cod_prefeito)
-	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrefeitoByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrefeitosByID))).Methods(http.MethodGet)
 
 	//	APAGA PREFEITOS (cod_prefeito)
-	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrefeito))).Methods(http.MethodDelete)
+	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrefeitos))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM TIPOLOGIAS OK!

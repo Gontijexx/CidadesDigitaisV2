@@ -21,23 +21,20 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM USUARIO
 	=========================	*/
 
-	//ROTA DE LOGIN
-	r.HandleFunc("/read/usuario/login", middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
-
 	//LISTA USUARIOS
-	r.HandleFunc("/read/usuario", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUsers))).Methods(http.MethodGet)
+	r.HandleFunc(config.USER_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllUsuario))).Methods(http.MethodGet)
+
+	//EDITA O USUARIO {cod_usuario}
+	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUsuario))).Methods(http.MethodPut)
+
+	//ROTA DE LOGIN
+	r.HandleFunc(config.USER_PATH_LOGIN, middlewares.SetMiddleJSON(s.Login)).Methods(http.MethodPost)
 
 	//SALVA USUARIO
-	r.HandleFunc("/read/usuario/createuser", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUser))).Methods(http.MethodPost)
-
-	//LISTA USUARIO
-	r.HandleFunc("/read/usuario/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUser))).Methods(http.MethodGet)
-
-	//EDITA O USUARIO
-	r.HandleFunc("/read/usuario/{id}/{modulo}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUser))).Methods(http.MethodPut)
+	r.HandleFunc(config.USER_PATH_CREATEUSER, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUsuario))).Methods(http.MethodPost)
 
 	//APAGA O USUARIO
-	//	r.HandleFunc(config.USER_ID_PATH, middlewares.SetMiddleAuth(s.DeleteUser)).Methods(http.MethodDelete)
+	//	r.HandleFunc(config.USER_PATH_DELETEUSER, middlewares.SetMiddleAuth(s.DeleteUsuario)).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM MODULOS
@@ -211,7 +208,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteByID))).Methods(http.MethodGet)
 
 	//	APAGA LOTE (cod_lote)
-	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteLote))).Methods(http.MethodDelete)
+	//	r.HandleFunc(config.LOTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteLote))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM REAJUSTE OK!
@@ -512,19 +509,19 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA PREFEITOS
-	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPrefeito))).Methods(http.MethodGet)
+	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPrefeitos))).Methods(http.MethodGet)
 
 	//	SALVA PREFEITOS
-	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrefeito))).Methods(http.MethodPost)
+	r.HandleFunc(config.PREFEITOS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePrefeitos))).Methods(http.MethodPost)
 
 	//	EDITA PREFEITOS (cod_prefeito)
-	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrefeito))).Methods(http.MethodPut)
+	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePrefeitos))).Methods(http.MethodPut)
 
 	//	LISTA PREFEITOS (cod_prefeito)
-	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrefeitoByID))).Methods(http.MethodGet)
+	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrefeitosByID))).Methods(http.MethodGet)
 
 	//	APAGA PREFEITOS (cod_prefeito)
-	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrefeito))).Methods(http.MethodDelete)
+	r.HandleFunc(config.PREFEITOS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrefeitos))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM TIPOLOGIAS OK!

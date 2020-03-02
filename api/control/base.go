@@ -45,8 +45,8 @@ func (server *Server) Run() {
 	httpServer := &http.Server{
 		Addr:         config.SERVER_ADDR,
 		IdleTimeout:  200 * time.Millisecond,
-		ReadTimeout:  100 * time.Millisecond,
-		WriteTimeout: 300 * time.Millisecond,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 8 * time.Second,
 	}
 
 	c := cors.New(cors.Options{

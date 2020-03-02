@@ -71,8 +71,8 @@ const (
 =========================  */
 
 const (
-	CD_ITENS_PATH    = "/read/cdItens"
-	CD_ITENS_ID_PATH = "/read/cdItens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+	CD_ITENS_PATH    = "/read/cditens"
+	CD_ITENS_ID_PATH = "/read/cditens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================
@@ -98,7 +98,7 @@ const (
 =========================  */
 
 const (
-	UACOM_ASSUNTO_PATH = "/read/uacomAssunto"
+	UACOM_ASSUNTO_PATH = "/read/uacomassunto"
 )
 
 /*  =========================
@@ -115,7 +115,7 @@ const (
 =========================  */
 
 const (
-	PID_TOPOLOGIA_ID_PATH = "/read/pontoTipologia/{cod_ponto}/{cod_categoria}/{cod_ibge}/{cod_tipologia}"
+	PID_TOPOLOGIA_ID_PATH = "/read/pontotipologia/{cod_ponto}/{cod_categoria}/{cod_ibge}/{cod_tipologia}"
 )
 
 /*  =========================
@@ -140,8 +140,8 @@ const (
 =========================  */
 
 const (
-	LOTE_ITENS_PATH    = "/read/loteItens"
-	LOTE_ITENS_ID_PATH = "/read/loteItens/{cod_lote}/{cod_item}/{cod_tipo_item}"
+	LOTE_ITENS_PATH    = "/read/loteitens"
+	LOTE_ITENS_ID_PATH = "/read/loteitens/{cod_lote}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================
@@ -158,8 +158,8 @@ const (
 =========================  */
 
 const (
-	ITENS_EMPENHO_PATH    = "/read/itensEmpenho"
-	ITENS_EMPENHO_ID_PATH = "/read/itensEmpenho/{id_empenho}/{cod_item}/{cod_tipo_item}"
+	ITENS_EMPENHO_PATH    = "/read/itensempenho"
+	ITENS_EMPENHO_ID_PATH = "/read/itensempenho/{id_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*	=========================
@@ -175,8 +175,8 @@ const (
 	OTB FATURA PATH HTTP (PAGAMENTO FATURA)
 =========================	*/
 const (
-	OTB_FATURA_PATH    = "/read/otbFatura"
-	OTB_FATURA_ID_PATH = "/read/otbFatura/{cod_otb}"
+	OTB_FATURA_PATH    = "/read/otbfatura"
+	OTB_FATURA_ID_PATH = "/read/otbfatura/{cod_otb}"
 )
 
 /*	=========================
@@ -184,16 +184,9 @@ const (
 =========================	*/
 
 const (
-	OTB_ITENS_PATH    = "/read/otbItens"
-	OTB_ITENS_ID_PATH = "/read/otbItens/{cod_otb}"
+	OTB_ITENS_PATH    = "/read/otbitens"
+	OTB_ITENS_ID_PATH = "/read/otbitens/{cod_otb}"
 )
-
-/*+++++++++++++++++++++++++++++++++++++++++++++++++
-	FATURA_ITENS_PATH    = "/read/faturaItens"
-	FATURA_ITENS_LIST    = "/read/faturaItens/:num_nf"
-	FATURA_ITENS_LIST_ID = "/read/faturaItens/:municipio_cod_ibge/:natureza_despesa_cod_natureza_despesa/:cod_item/:cod_tipo_item"
-	FATURA_ITENS_DELETE  = "/read/faturaItens/:fatura_num_nf/:cod_empenho/:cod_item/:cod_tipo_item"
-+++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 /*	=========================
 	FATURA PATH HTTP
@@ -208,7 +201,7 @@ const (
 	FATURA OTB PATH HTTP (FATURA PAGAMENTO)
 =========================	*/
 const (
-	FATURA_OTB_ID_PATH = "/read/faturaOtb/{num_nf}/{cod_ibge}"
+	FATURA_OTB_ID_PATH = "/read/faturaotb/{num_nf}/{cod_ibge}"
 )
 
 /*	=========================
@@ -216,9 +209,9 @@ const (
 =========================	*/
 
 const (
-	FATURA_ITENS_PATH        = "/read/faturaItens"
-	FATURA_ITENS_ID_PATH     = "/read/faturaItens/{num_nf}"
-	FATURA_ITENS_DELETE_PATH = "/read/faturaItens/{num_nf}/{id_empenho}/{cod_item}/{cod_tipo_item}"
+	FATURA_ITENS_PATH        = "/read/faturaitens"
+	FATURA_ITENS_ID_PATH     = "/read/faturaitens/{num_nf}"
+	FATURA_ITENS_DELETE_PATH = "/read/faturaitens/{num_nf}/{id_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================
@@ -226,8 +219,8 @@ const (
 =========================  */
 
 const (
-	PREVISAO_EMPENHO_PATH    = "/read/previsaoEmpenho"
-	PREVISAO_EMPENHO_ID_PATH = "/read/previsaoEmpenho/{cod_previsao_empenho}"
+	PREVISAO_EMPENHO_PATH    = "/read/previsaoempenho"
+	PREVISAO_EMPENHO_ID_PATH = "/read/previsaoempenho/{cod_previsao_empenho}"
 )
 
 /*  =========================
@@ -235,8 +228,8 @@ const (
 =========================  */
 
 const (
-	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itensPrevisaoEmpenho"
-	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensPrevisaoEmpenho/{cod_previsao_empenho}/{cod_item}/{cod_tipo_item}"
+	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itensprevisaoempenho"
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensprevisaoempenho/{cod_previsao_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================
@@ -261,8 +254,8 @@ const (
 =========================	*/
 
 const (
-	CLASSE_EMPENHO_PATH    = "/read/classeEmpenho"
-	CLASSE_EMPENHO_ID_PATH = "/read/classeEmpenho/{cod_classe_empenho}"
+	CLASSE_EMPENHO_PATH    = "/read/classeempenho"
+	CLASSE_EMPENHO_ID_PATH = "/read/classeempenho/{cod_classe_empenho}"
 )
 
 /*  =========================
@@ -297,8 +290,8 @@ const (
 =========================	*/
 
 const (
-	NATUREZA_DESPESA_PATH    = "/read/naturezaDespesa"
-	NATUREZA_DESPESA_ID_PATH = "/read/naturezaDespesa/{cod_natureza_despesa}"
+	NATUREZA_DESPESA_PATH    = "/read/naturezadespesa"
+	NATUREZA_DESPESA_ID_PATH = "/read/naturezadespesa/{cod_natureza_despesa}"
 )
 
 /*  =========================
@@ -324,6 +317,6 @@ const (
 =========================	*/
 
 const (
-	TIPO_ITEM_PATH    = "/read/tipoItem"
-	TIPO_ITEM_ID_PATH = "/read/tipoItem/{cod_tipo_item}"
+	TIPO_ITEM_PATH    = "/read/tipoitem"
+	TIPO_ITEM_ID_PATH = "/read/tipoitem/{cod_tipo_item}"
 )

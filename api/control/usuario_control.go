@@ -60,8 +60,6 @@ func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 	//	Verifica se o login ja esta em uso
 	err = usuario.VerifyLogin(server.DB, newUsuario)
 
-	fmt.Println(err)
-
 	//	Tratamento do err, caso 'err != nil' pode-se criar o usuario
 	if err == nil {
 		w.WriteHeader(http.StatusConflict)

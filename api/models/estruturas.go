@@ -366,7 +366,7 @@ type NaturezaDespesa struct {
 	TABELA PREFEITOS
 =========================  */
 
-type Prefeito struct {
+type Prefeitos struct {
 	CodPrefeito uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_prefeito"`
 	CodIbge     uint64 `gorm:"foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
 	Nome        string `gorm:"default:null" json:"nome"`

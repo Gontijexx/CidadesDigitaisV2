@@ -6,92 +6,89 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-/*	=========================
-		PRECISA FAZER OS TESTES
-=========================	*/
-
 /*  =========================
 	FUNCAO SALVAR PREFEITOS NO BANCO DE DADOS
 =========================  */
 
-func (prefeito *Prefeito) SavePrefeito(db *gorm.DB) (*Prefeito, error) {
+func (prefeitos *Prefeitos) SavePrefeitos(db *gorm.DB) (*Prefeitos, error) {
 
 	//	Adiciona um elemento ao banco de dados
-	err := db.Debug().Create(&prefeito).Error
+	err := db.Debug().Create(&prefeitos).Error
 	if err != nil {
-		return &Prefeito{}, err
+		return &Prefeitos{}, err
 	}
-	return prefeito, nil
+	return prefeitos, nil
 }
 
 /*  =========================
 	FUNCAO SALVAR PREFEITOS POR ID
 =========================  */
 
-func (prefeito *Prefeito) FindPrefeitoByID(db *gorm.DB, codPrefeito uint64) (*Prefeito, error) {
+func (prefeitos *Prefeitos) FindPrefeitosByID(db *gorm.DB, codPrefeito uint64) (*Prefeitos, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Prefeito{}).Where("cod_prefeito = ?", codPrefeito).Take(&prefeito).Error
+	err := db.Debug().Model(Prefeitos{}).Where("cod_prefeito = ?", codPrefeito).Take(&prefeitos).Error
 	if err != nil {
-		return &Prefeito{}, err
+		return &Prefeitos{}, err
 	}
-	return prefeito, err
+	return prefeitos, err
 }
 
 /*  =========================
 	FUNCAO LISTAR TODOS PREFEITOS
 =========================  */
 
-func (prefeito *Prefeito) FindAllPrefeito(db *gorm.DB) (*[]Prefeito, error) {
+func (prefeitos *Prefeitos) FindAllPrefeitos(db *gorm.DB) (*[]Prefeitos, error) {
 
-	allPrefeito := []Prefeito{}
+	allPrefeitos := []Prefeitos{}
 
 	//	Busca todos os elementos contidos no banco de dados
-	err := db.Debug().Model(&Prefeito{}).Find(&allPrefeito).Error
+	err := db.Debug().Model(&Prefeitos{}).Find(&allPrefeitos).Error
 	if err != nil {
-		return &[]Prefeito{}, err
+		return &[]Prefeitos{}, err
 	}
 
-	return &allPrefeito, err
+	return &allPrefeitos, err
 }
 
 /*  =========================
-	FUNCAO EDITAR PREFEITO
+	FUNCAO EDITAR PREFEITOS
 =========================  */
 
-func (prefeito *Prefeito) UpdatePrefeito(db *gorm.DB, codPrefeito uint64) (*Prefeito, error) {
+func (prefeitos *Prefeitos) UpdatePrefeitos(db *gorm.DB, codPrefeito uint64) (*Prefeitos, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Prefeito{}).Where("cod_prefeito = ?", codPrefeito).Updates(
-		Prefeito{
-			Nome:      prefeito.Nome,
-			Cpf:       prefeito.Cpf,
-			RG:        prefeito.RG,
-			Partido:   prefeito.Partido,
-			Exercicio: prefeito.Exercicio}).Error
+	err := db.Debug().Model(&Prefeitos{}).Where("cod_prefeito = ?", codPrefeito).Updates(
+		Prefeitos{
+			CodIbge:   prefeitos.CodIbge,
+			Nome:      prefeitos.Nome,
+			Cpf:       prefeitos.Cpf,
+			RG:        prefeitos.RG,
+			Partido:   prefeitos.Partido,
+			Exercicio: prefeitos.Exercicio}).Error
 
 	if db.Error != nil {
-		return &Prefeito{}, db.Error
+		return &Prefeitos{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Prefeito{}).Where("cod_prefeito = ?", codPrefeito).Take(&prefeito).Error
+	err = db.Debug().Model(&Prefeitos{}).Where("cod_prefeito = ?", codPrefeito).Take(&prefeitos).Error
 	if err != nil {
-		return &Prefeito{}, err
+		return &Prefeitos{}, err
 	}
 
 	//	retorna o elemento que foi alterado
-	return prefeito, err
+	return prefeitos, err
 }
 
 /*  =========================
-	FUNCAO DELETAR PREFEITO POR ID
+	FUNCAO DELETAR PREFEITOS POR ID
 =========================  */
 
-func (prefeito *Prefeito) DeletePrefeito(db *gorm.DB, codPrefeito uint64) (int64, error) {
+func (prefeitos *Prefeitos) DeletePrefeitos(db *gorm.DB, codPrefeito uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(&Prefeito{}).Where("cod_prefeito = ?", codPrefeito).Take(&Prefeito{}).Delete(&Prefeito{})
+	err := db.Debug().Model(&Prefeitos{}).Where("cod_prefeito = ?", codPrefeito).Take(&Prefeitos{}).Delete(&Prefeitos{})
 	if err != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
 			return 0, errors.New("Prefeito not found")

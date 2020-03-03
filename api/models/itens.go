@@ -60,7 +60,7 @@ func (itens *Itens) FindAllItens(db *gorm.DB) (*[]Itens, error) {
 func (itens *Itens) UpdateItens(db *gorm.DB, codItem, codTipoItem uint64) (*Itens, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item", codItem, codTipoItem).Updates(
+	err := db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Updates(
 		Itens{
 			Descricao: itens.Descricao,
 			Unidade:   itens.Unidade}).Error
@@ -70,7 +70,7 @@ func (itens *Itens) UpdateItens(db *gorm.DB, codItem, codTipoItem uint64) (*Iten
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item", codItem, codTipoItem).Take(&itens).Error
+	err = db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Take(&itens).Error
 	if err != nil {
 		return &Itens{}, err
 	}
@@ -86,7 +86,7 @@ func (itens *Itens) UpdateItens(db *gorm.DB, codItem, codTipoItem uint64) (*Iten
 func (itens *Itens) DeleteItens(db *gorm.DB, codItem, codTipoItem uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item", codItem, codTipoItem).Take(&Itens{}).Delete(&Itens{})
+	db = db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Take(&Itens{}).Delete(&Itens{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

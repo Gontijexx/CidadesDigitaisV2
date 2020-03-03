@@ -264,7 +264,7 @@ func (server *Server) DeleteUsuario(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllModulo(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 11003)
+	err := config.AuthMod(w, r, 11002)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return

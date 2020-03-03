@@ -114,7 +114,7 @@ func (server *Server) GetEtapaByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllEtapa(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12002)
+	err := config.AuthMod(w, r, 22002)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return

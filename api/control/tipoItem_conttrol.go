@@ -194,7 +194,7 @@ func (server *Server) UpdateTipoItem(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeleteTipoItem(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 12003)
+	err := config.AuthMod(w, r, 28003)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return

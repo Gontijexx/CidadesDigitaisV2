@@ -62,8 +62,10 @@ func (itens *Itens) UpdateItens(db *gorm.DB, codItem, codTipoItem uint64) (*Iten
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Updates(
 		Itens{
-			Descricao: itens.Descricao,
-			Unidade:   itens.Unidade}).Error
+			CodNaturezaDespesa: itens.CodNaturezaDespesa,
+			CodClasseEmpenho:   itens.CodClasseEmpenho,
+			Descricao:          itens.Descricao,
+			Unidade:            itens.Unidade}).Error
 
 	if db.Error != nil {
 		return &Itens{}, db.Error

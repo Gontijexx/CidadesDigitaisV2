@@ -341,7 +341,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	=========================	*/
 
 	//	LISTA FATURA (num_nf, cod_ibge)
-	r.HandleFunc(config.FATURA_OTB_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaOTB))).Methods(http.MethodGet)
+	r.HandleFunc(config.FATURA_OTB_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaOTBByID))).Methods(http.MethodGet)
 
 	/*	=========================
 		ROTAS EM PREVISAO EMPENHO OK!

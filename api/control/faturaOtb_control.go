@@ -12,10 +12,10 @@ import (
 )
 
 /*  =========================
-	FUNCAO LISTAR TODAS FATURA OTB
+	FUNCAO FATURA OTB POR ID
 =========================  */
 
-func (server *Server) GetFaturaOTB(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetFaturaOTBByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 17012)

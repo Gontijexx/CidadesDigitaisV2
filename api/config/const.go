@@ -58,67 +58,6 @@ const (
 )
 
 /*  =========================
-	CD PATHS HTTP OK!
-=========================  */
-
-const (
-	CD_PATH    = "/read/cd"
-	CD_ID_PATH = "/read/cd/{cod_ibge}"
-)
-
-/*  =========================
-	CD ITENS PATHS HTTP OK!
-=========================  */
-
-const (
-	CD_ITENS_PATH    = "/read/cditens"
-	CD_ITENS_ID_PATH = "/read/cditens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
-)
-
-/*  =========================
-	CD PROCESSO PATHS HTTP
-=========================  */
-
-const (
-	PROCESSO_PATH    = "/read/processo"
-	PROCESSO_ID_PATH = "/read/processo/{cod_processo}/{cod_ibge}"
-)
-
-/*  =========================
-	CD UACOM PATHS HTTP
-=========================  */
-
-const (
-	UACOM_PATH    = "/read/uacom"
-	UACOM_ID_PATH = "/read/uacom/{cod_ibge}/{data}"
-)
-
-/*  =========================
-	CD UACOM_ASSUNTO PATHS HTTP
-=========================  */
-
-const (
-	UACOM_ASSUNTO_PATH = "/read/uacomassunto"
-)
-
-/*  =========================
-	CD PONTO PATHS HTTP
-=========================  */
-
-const (
-	PONTO_PATH    = "/read/ponto"
-	PONTO_ID_PATH = "/read/ponto/{cod_ponto}/{cod_categoria}/{cod_ibge}"
-)
-
-/*  =========================
-	CD PID_TIPOOGIA PATHS HTTP
-=========================  */
-
-const (
-	PID_TOPOLOGIA_ID_PATH = "/read/pontotipologia/{cod_ponto}/{cod_categoria}/{cod_ibge}/{cod_tipologia}"
-)
-
-/*  =========================
 	LOTE PATHS HTTP OK!
 =========================  */
 
@@ -145,7 +84,108 @@ const (
 )
 
 /*  =========================
-	EMPENHO PATHS HTTP
+	CD PATHS HTTP OK!
+=========================  */
+
+const (
+	CD_PATH    = "/read/cd"
+	CD_ID_PATH = "/read/cd/{cod_ibge}"
+)
+
+/*  =========================
+	CD ITENS PATHS HTTP OK!
+=========================  */
+
+const (
+	CD_ITENS_PATH    = "/read/cditens"
+	CD_ITENS_ID_PATH = "/read/cditens/{cod_ibge}/{cod_item}/{cod_tipo_item}"
+)
+
+/*  =========================
+	CD PROCESSO PATHS HTTP OK!
+=========================  */
+
+const (
+	PROCESSO_PATH    = "/read/processo"
+	PROCESSO_ID_PATH = "/read/processo/{cod_processo}/{cod_ibge}"
+)
+
+/*  =========================
+	CD UACOM PATHS HTTP OK!
+=========================  */
+
+const (
+	UACOM_PATH    = "/read/uacom"
+	UACOM_ID_PATH = "/read/uacom/{cod_ibge}/{data}"
+)
+
+/*  =========================
+	CD UACOM_ASSUNTO PATHS HTTP OK!
+=========================  */
+
+const (
+	UACOM_ASSUNTO_PATH    = "/read/uacomassunto"
+	UACOM_ASSUNTO_ID_PATH = "/read/uacomassunto/{cod_ibge}/{data}/{cod_assunto}"
+)
+
+/*  =========================
+	ASSUNTO PATHS HTTP OK!
+=========================  */
+
+const (
+	ASSUNTO_PATH    = "/read/assunto"
+	ASSUNTO_ID_PATH = "/read/assunto/{cod_assunto}"
+)
+
+/*  =========================
+	ETAPAS_CD PATHS HTTP OK!
+=========================  */
+
+/*  =========================
+	ETAPA PATHS HTTP OK!
+=========================  */
+
+const (
+	ETAPA_PATH    = "/read/etapa"
+	ETAPA_ID_PATH = "/read/etapa/{cod_etapa}"
+)
+
+/*  =========================
+	CD PONTO PATHS HTTP OK!
+=========================  */
+
+const (
+	PONTO_PATH    = "/read/ponto"
+	PONTO_ID_PATH = "/read/ponto/{cod_ponto}/{cod_categoria}/{cod_ibge}"
+)
+
+/*	=========================
+	CATEGORIA PATHS HTTP OK!
+=========================	*/
+const (
+	CATEGORIA_PATH    = "/read/categoria"
+	CATEGORIA_ID_PATH = "/read/categoria/{cod_categoria}"
+)
+
+/*  =========================
+	CD PID_TIPOLOGIA PATHS HTTP
+=========================  */
+
+const (
+	PID_TOPOLOGIA_ID_PATH = "/read/pidtipologia/{cod_ponto}/{cod_categoria}/{cod_ibge}/{cod_tipologia}"
+)
+
+/*	=========================
+	TIPOLOGIA PATHS HTTP OK!
+=========================	*/
+
+const (
+	TIPOLOGIA_PATH    = "/read/tipologia"
+	TIPOLOGIA_ID_PATH = "/read/tipologia/{cod_tipologia}"
+)
+
+/*  =========================
+	EMPENHO PATHS HTTP OK!
 =========================  */
 
 const (
@@ -154,7 +194,7 @@ const (
 )
 
 /*  =========================
-	ITENS EMPENHO PATHS HTTP
+	ITENS EMPENHO PATHS HTTP OK!
 =========================  */
 
 const (
@@ -224,47 +264,12 @@ const (
 )
 
 /*  =========================
-	ITENS PREVISAO EMPENHO PATHS HTTP
+	ITENS PREVISAO EMPENHO PATHS HTTP OK!
 =========================  */
 
 const (
 	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itensprevisaoempenho"
 	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensprevisaoempenho/{cod_previsao_empenho}/{cod_item}/{cod_tipo_item}"
-)
-
-/*  =========================
-	ASSUNTO PATHS HTTP OK!
-=========================  */
-
-const (
-	ASSUNTO_PATH    = "/read/assunto"
-	ASSUNTO_ID_PATH = "/read/assunto/{cod_assunto}"
-)
-
-/*	=========================
-	CATEGORIA PATHS HTTP OK!
-=========================	*/
-const (
-	CATEGORIA_PATH    = "/read/categoria"
-	CATEGORIA_ID_PATH = "/read/categoria/{cod_categoria}"
-)
-
-/*	=========================
-	CLASSE EMPENHO PATHS HTTP OK!
-=========================	*/
-
-const (
-	CLASSE_EMPENHO_PATH    = "/read/classeempenho"
-	CLASSE_EMPENHO_ID_PATH = "/read/classeempenho/{cod_classe_empenho}"
-)
-
-/*  =========================
-	ETAPA PATHS HTTP
-=========================  */
-
-const (
-	ETAPA_PATH    = "/read/etapa"
-	ETAPA_ID_PATH = "/read/etapa/{cod_etapa}"
 )
 
 /*	=========================
@@ -276,13 +281,22 @@ const (
 	ITENS_ID_PATH = "/read/itens/{cod_item}/{cod_tipo_item}"
 )
 
-/*  =========================
-	MUNICIPIO PATHS HTTP OK!
-=========================  */
+/*	=========================
+	CLASSE EMPENHO PATHS HTTP OK!
+=========================	*/
 
 const (
-	MUNICIPIO_PATH    = "/read/municipio"
-	MUNICIPIO_ID_PATH = "/read/municipio/{cod_ibge}"
+	CLASSE_EMPENHO_PATH    = "/read/classeempenho"
+	CLASSE_EMPENHO_ID_PATH = "/read/classeempenho/{cod_classe_empenho}"
+)
+
+/*	=========================
+	TIPO ITEM PATHS HTTP OK!
+=========================	*/
+
+const (
+	TIPO_ITEM_PATH    = "/read/tipoitem"
+	TIPO_ITEM_ID_PATH = "/read/tipoitem/{cod_tipo_item}"
 )
 
 /*	=========================
@@ -295,28 +309,19 @@ const (
 )
 
 /*  =========================
+	MUNICIPIO PATHS HTTP OK!
+=========================  */
+
+const (
+	MUNICIPIO_PATH    = "/read/municipio"
+	MUNICIPIO_ID_PATH = "/read/municipio/{cod_ibge}"
+)
+
+/*  =========================
 	PREFEITOS PATHS HTTP OK!
 =========================  */
 
 const (
 	PREFEITOS_PATH    = "/read/prefeitos"
 	PREFEITOS_ID_PATH = "/read/prefeitos/{cod_prefeito}"
-)
-
-/*	=========================
-	TIPOLOGIAS PATHS HTTP OK!
-=========================	*/
-
-const (
-	TIPOLOGIA_PATH    = "/read/tipologia"
-	TIPOLOGIA_ID_PATH = "/read/tipologia/{cod_tipologia}"
-)
-
-/*	=========================
-	TIPO ITEM PATHS HTTP OK!
-=========================	*/
-
-const (
-	TIPO_ITEM_PATH    = "/read/tipoitem"
-	TIPO_ITEM_ID_PATH = "/read/tipoitem/{cod_tipo_item}"
 )

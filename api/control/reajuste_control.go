@@ -114,13 +114,6 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
-	//	codLote armazena a chave primaria da tabela reajuste
-	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
-		return
-	}
-
 	//	anoRef armazena a chave primaria da tabela reajuste
 	anoRef, err := strconv.ParseUint(vars["ano_ref"], 10, 64)
 	if err != nil {
@@ -128,12 +121,19 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = reajuste.DeleteReajuste(server.DB, codLote, anoRef)
+	//	codLote armazena a chave primaria da tabela reajuste
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	_, err = reajuste.DeleteReajuste(server.DB, anoRef, codLote)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	w.Header().Set("Entity", fmt.Sprintf("%d, %d", codLote, anoRef))
+	w.Header().Set("Entity", fmt.Sprintf("%d, %d", anoRef, codLote))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

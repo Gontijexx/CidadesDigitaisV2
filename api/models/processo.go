@@ -69,7 +69,7 @@ func (processo *Processo) UpdateProcesso(db *gorm.DB, codProcesso, codIbge uint6
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge", codProcesso, codIbge).Take(&processo).Error
+	err = db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge = ?", codProcesso, codIbge).Take(&processo).Error
 	if err != nil {
 		return &Processo{}, err
 	}
@@ -85,7 +85,7 @@ func (processo *Processo) UpdateProcesso(db *gorm.DB, codProcesso, codIbge uint6
 func (processo *Processo) DeleteProcesso(db *gorm.DB, codProcesso, codIbge uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge", codProcesso, codIbge).Take(&Processo{}).Delete(&Processo{})
+	db = db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge = ?", codProcesso, codIbge).Take(&Processo{}).Delete(&Processo{})
 
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {

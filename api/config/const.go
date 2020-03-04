@@ -71,7 +71,7 @@ const (
 =========================  */
 const (
 	REAJUSTE_PATH    = "/read/reajuste"
-	REAJUSTE_ID_PATH = "/read/reajuste/{cod_lote}/{ano_ref}"
+	REAJUSTE_ID_PATH = "/read/reajuste/{ano_ref}/{cod_lote}"
 )
 
 /*  =========================

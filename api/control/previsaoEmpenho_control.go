@@ -192,7 +192,7 @@ func (server *Server) UpdatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 
 /*  =========================
 	FUNCAO DELETAR PREVISAO EMPENHO
-=========================  */
+=========================
 
 func (server *Server) DeletePrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
@@ -227,3 +227,5 @@ func (server *Server) DeletePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")
 }
+
+*/

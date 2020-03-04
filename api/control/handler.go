@@ -246,14 +246,14 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA EMPENHO
 	r.HandleFunc(config.EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateEmpenho))).Methods(http.MethodPost)
 
-	//	EDITA EMPENHO (cod_empenho)
+	//	EDITA EMPENHO (id_empenho)
 	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEmpenho))).Methods(http.MethodPut)
 
-	//	LISTA EMPENHO (cod_empenho)
+	//	LISTA EMPENHO (id_empenho)
 	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEmpenhoByID))).Methods(http.MethodGet)
 
-	//	APAGA EMPENHO (cod_empenho)
-	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEmpenho))).Methods(http.MethodDelete)
+	//	APAGA EMPENHO (id_empenho)
+	//	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM ITENS EMPENHO OK!

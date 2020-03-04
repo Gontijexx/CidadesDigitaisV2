@@ -188,7 +188,7 @@ func (server *Server) UpdateEmpenho(w http.ResponseWriter, r *http.Request) {
 
 /*  =========================
 	FUNCAO DELETAR EMPENHO
-=========================  */
+=========================
 
 func (server *Server) DeleteEmpenho(w http.ResponseWriter, r *http.Request) {
 
@@ -210,8 +210,8 @@ func (server *Server) DeleteEmpenho(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
+	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	//	Caso nao seja possivel deletar o dado especificado tratamos o erro
 	_, err = empenho.DeleteEmpenho(server.DB, idEmpenho)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
@@ -224,3 +224,4 @@ func (server *Server) DeleteEmpenho(w http.ResponseWriter, r *http.Request) {
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")
 }
+*/

@@ -230,11 +230,11 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA LOTE
 	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllLoteItens))).Methods(http.MethodGet)
 
-	//	EDITA LOTE ITENS
-	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLoteItens))).Methods(http.MethodPut)
+	//	EDITA LOTE ITENS (cod_lote, cod_item, cod_tipo_item)
+	r.HandleFunc(config.LOTE_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLoteItens))).Methods(http.MethodPut)
 
-	//	LISTA LOTE ITENS POR ID
-	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteItensByID))).Methods(http.MethodGet)
+	//	LISTA LOTE ITENS POR ID (cod_lote, cod_item, cod_tipo_item)
+	r.HandleFunc(config.LOTE_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteItensByID))).Methods(http.MethodGet)
 
 	/*	=========================
 		ROTAS EM EMPENHO OK!

@@ -220,7 +220,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA REAJUSTE
 	r.HandleFunc(config.REAJUSTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllReajuste))).Methods(http.MethodGet)
 
-	//	APAGA REAJUSTE (lote_cod_lote, ano_ref)
+	//	APAGA REAJUSTE (ano_ref, cod_lote)
 	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteReajuste))).Methods(http.MethodDelete)
 
 	/*	=========================

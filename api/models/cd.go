@@ -88,7 +88,7 @@ func (cd *CD) UpdateCD(db *gorm.DB, codIbge uint64) (*CD, error) {
 
 /*  =========================
 	FUNCAO DELETAR CD POR ID
-=========================  */
+=========================
 
 func (cd *CD) DeleteCD(db *gorm.DB, codIbge uint64) (int64, error) {
 
@@ -104,3 +104,4 @@ func (cd *CD) DeleteCD(db *gorm.DB, codIbge uint64) (int64, error) {
 
 	return db.RowsAffected, nil
 }
+*/

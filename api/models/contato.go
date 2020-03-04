@@ -46,9 +46,11 @@ func (contato *Contato) UpdateContato(db *gorm.DB, codContato uint64) (*Contato,
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Model(&Contato{}).Where("cod_contato = ?", codContato).Updates(
 		Contato{
-			Nome:   contato.Nome,
-			Email:  contato.Email,
-			Funcao: contato.Funcao}).Error
+			Cnpj:    contato.Cnpj,
+			CodIbge: contato.CodIbge,
+			Nome:    contato.Nome,
+			Email:   contato.Email,
+			Funcao:  contato.Funcao}).Error
 
 	if db.Error != nil {
 		return &Contato{}, db.Error

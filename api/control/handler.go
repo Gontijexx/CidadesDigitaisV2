@@ -111,7 +111,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDByID))).Methods(http.MethodGet)
 
 	//	APAGA CD (cod_ibge)
-	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteCD))).Methods(http.MethodDelete)
+	//	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteCD))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM CIDADE DIGITAL_ITENS OK!
@@ -220,7 +220,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA REAJUSTE
 	r.HandleFunc(config.REAJUSTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllReajuste))).Methods(http.MethodGet)
 
-	//	APAGA REAJUSTE (lote_cod_lote, ano_ref)
+	//	APAGA REAJUSTE (ano_ref, cod_lote)
 	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteReajuste))).Methods(http.MethodDelete)
 
 	/*	=========================
@@ -230,11 +230,11 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA LOTE
 	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllLoteItens))).Methods(http.MethodGet)
 
-	//	EDITA LOTE ITENS
-	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLoteItens))).Methods(http.MethodPut)
+	//	EDITA LOTE ITENS (cod_lote, cod_item, cod_tipo_item)
+	r.HandleFunc(config.LOTE_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateLoteItens))).Methods(http.MethodPut)
 
-	//	LISTA LOTE ITENS POR ID
-	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteItensByID))).Methods(http.MethodGet)
+	//	LISTA LOTE ITENS POR ID (cod_lote, cod_item, cod_tipo_item)
+	r.HandleFunc(config.LOTE_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteItensByID))).Methods(http.MethodGet)
 
 	/*	=========================
 		ROTAS EM EMPENHO OK!
@@ -246,14 +246,14 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA EMPENHO
 	r.HandleFunc(config.EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateEmpenho))).Methods(http.MethodPost)
 
-	//	EDITA EMPENHO (cod_empenho)
+	//	EDITA EMPENHO (id_empenho)
 	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEmpenho))).Methods(http.MethodPut)
 
-	//	LISTA EMPENHO (cod_empenho)
+	//	LISTA EMPENHO (id_empenho)
 	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEmpenhoByID))).Methods(http.MethodGet)
 
-	//	APAGA EMPENHO (cod_empenho)
-	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEmpenho))).Methods(http.MethodDelete)
+	//	APAGA EMPENHO (id_empenho)
+	//	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM ITENS EMPENHO OK!
@@ -360,7 +360,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisaoEmpenhoByID))).Methods(http.MethodGet)
 
 	//	APAGA PREVISAO EMPENHO (cod_previsao_empenho)
-	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrevisaoEmpenho))).Methods(http.MethodDelete)
+	//r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrevisaoEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM ITENS PREVISAO EMPENHO OK!

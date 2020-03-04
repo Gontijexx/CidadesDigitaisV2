@@ -1,14 +1,8 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
-
-/*	=========================
-		PRECISA FAZER OS TESTES
-=========================	*/
 
 /*  =========================
 	FUNCAO SALVAR EMPENHO NO BANCO DE DADOS
@@ -65,8 +59,10 @@ func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, idEmpenho uint64) (*Empenho, 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Model(&Empenho{}).Where("id_empenho = ?", idEmpenho).Updates(
 		Empenho{
-			Data:     empenho.Data,
-			Contador: empenho.Contador}).Error
+			CodPrevisaoEmpenho: empenho.CodPrevisaoEmpenho,
+			CodEmpenho:         empenho.CodEmpenho,
+			Data:               empenho.Data,
+			Contador:           empenho.Contador}).Error
 
 	if err != nil {
 		return &Empenho{}, db.Error
@@ -84,7 +80,7 @@ func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, idEmpenho uint64) (*Empenho, 
 
 /*  =========================
 	FUNCAO DELETAR EMPENHO
-=========================  */
+=========================
 
 func (empenho *Empenho) DeleteEmpenho(db *gorm.DB, idEmpenho uint64) (int64, error) {
 
@@ -100,3 +96,5 @@ func (empenho *Empenho) DeleteEmpenho(db *gorm.DB, idEmpenho uint64) (int64, err
 
 	return db.RowsAffected, nil
 }
+
+*/

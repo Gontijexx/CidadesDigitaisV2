@@ -175,7 +175,7 @@ type LoteItens struct {
 =========================  */
 
 type Empenho struct {
-	IDEmpenho          uint64 `gorm:"primary_key;not null" json:""id_empenho`
+	IDEmpenho          uint64 `gorm:"primary_key;auto_increment;default:null" json:""id_empenho`
 	CodPrevisaoEmpenho uint64 `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
 	CodEmpenho         string `gorm:"default:null;size:13" json:"cod_empenho"`
 	Data               string `gorm:"default:null" json:"data"`

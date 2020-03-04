@@ -360,7 +360,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPrevisaoEmpenhoByID))).Methods(http.MethodGet)
 
 	//	APAGA PREVISAO EMPENHO (cod_previsao_empenho)
-	r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrevisaoEmpenho))).Methods(http.MethodDelete)
+	//r.HandleFunc(config.PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePrevisaoEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM ITENS PREVISAO EMPENHO OK!

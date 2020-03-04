@@ -22,8 +22,8 @@ type Entidade struct {
 
 type Contato struct {
 	CodContato uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_contato"`
-	Cnpj       string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj"`
-	CodIbge    uint64 `gorm:"foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
+	Cnpj       string `gorm:"foreign_key:Cnpj;default:null;size:14" json:"cnpj"`
+	CodIbge    uint64 `gorm:"foreign_key:CodIbge;default:null;size:7" json:"cod_ibge"`
 	Nome       string `gorm:"default:null;size:50" json:"nome"`
 	Email      string `gorm:"default:null;size:100" json:"email" validate:"email"`
 	Funcao     string `gorm:"default:null;size:45" json:"funcao"`

@@ -189,7 +189,7 @@ func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 
 /*  =========================
 	FUNCAO DELETAR CD
-=========================  */
+=========================
 
 func (server *Server) DeleteCD(w http.ResponseWriter, r *http.Request) {
 
@@ -211,8 +211,8 @@ func (server *Server) DeleteCD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
+	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario.
+	//	Caso nao seja possivel deletar o dado especificado tratamos o erro
 	_, err = cd.DeleteCD(server.DB, codIbge)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
@@ -225,3 +225,4 @@ func (server *Server) DeleteCD(w http.ResponseWriter, r *http.Request) {
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")
 }
+*/

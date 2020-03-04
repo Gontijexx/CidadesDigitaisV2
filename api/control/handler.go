@@ -111,7 +111,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDByID))).Methods(http.MethodGet)
 
 	//	APAGA CD (cod_ibge)
-	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteCD))).Methods(http.MethodDelete)
+	//	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteCD))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM CIDADE DIGITAL_ITENS OK!

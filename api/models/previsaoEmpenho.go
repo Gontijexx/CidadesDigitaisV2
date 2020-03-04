@@ -65,9 +65,11 @@ func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, codPr
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", codPrevisaoEmpenho).Updates(
 		PrevisaoEmpenho{
-			Data:           previsaoEmpenho.Data,
-			Tipo:           previsaoEmpenho.Tipo,
-			Ano_referencia: previsaoEmpenho.Ano_referencia}).Error
+			CodLote:            previsaoEmpenho.CodLote,
+			CodNaturezaDespesa: previsaoEmpenho.CodNaturezaDespesa,
+			Data:               previsaoEmpenho.Data,
+			Tipo:               previsaoEmpenho.Tipo,
+			Ano_referencia:     previsaoEmpenho.Ano_referencia}).Error
 
 	if err != nil {
 		return &PrevisaoEmpenho{}, err
@@ -84,7 +86,7 @@ func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, codPr
 
 /*  =========================
 	FUNCAO DELETAR PREVISAO EMPENHO
-=========================  */
+=========================
 
 func (previsaoEmpenho *PrevisaoEmpenho) DeletePrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint64) (int64, error) {
 
@@ -100,3 +102,5 @@ func (previsaoEmpenho *PrevisaoEmpenho) DeletePrevisaoEmpenho(db *gorm.DB, codPr
 
 	return db.RowsAffected, nil
 }
+
+*/

@@ -20,7 +20,7 @@ type Usuario struct {
 	CodUsuario uint32 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_usuario"`
 	Nome       string `gorm:"size:100;default:null" json:"nome"`
 	Email      string `gorm:"size:45;default:null" json:"email" validate:"omitempty,email"`
-	Status     bool   `gorm:"size:1;default:null" json:"status" `
+	Status     string `gorm:"size:1;default:null" json:"status" `
 	Login      string `gorm:"size:45;default:null" json:"login" validate:"alphanum"`
 	Senha      string `gorm:"size:100;default:null" json:"senha" validate:"min=8"`
 }
@@ -117,7 +117,7 @@ func (usuario *Usuario) SignIn(db *gorm.DB, login, password string) (string, err
 	}
 
 	//	Verifica se o usuario tem permissao de acesso
-	if usuario.Status == true {
+	if usuario.Status == "1" {
 		//	Busca todos os cod_modulo relacionados ao usuario
 		rows, err := db.Debug().Raw("SELECT cod_modulo FROM usuario_modulo WHERE cod_usuario = ?", usuario.CodUsuario).Rows()
 		if err != nil {
@@ -157,7 +157,7 @@ func (usuario *Usuario) Prepare() {
 	usuario.CodUsuario = 0
 	usuario.Nome = html.EscapeString(strings.TrimSpace(usuario.Nome))
 	usuario.Email = html.EscapeString(strings.TrimSpace(usuario.Email))
-	usuario.Status = true
+	usuario.Status = "1"
 	usuario.Login = html.EscapeString(strings.TrimSpace(usuario.Login))
 }
 
@@ -223,20 +223,14 @@ func (usuario *Usuario) UpdateUsuario(db *gorm.DB, codUsuario uint32) (*Usuario,
 	}
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Model(&Usuario{}).Where("cod_usuario= ?", codUsuario).Take(&Usuario{}).UpdateColumns(
-		map[string]interface{}{
-			"nome":   usuario.Nome,
-			"email":  usuario.Email,
-			"status": usuario.Status,
-			"senha":  usuario.Senha,
-		},
-	)
+	db = db.Debug().Exec("UPDATE usuario SET nome = ?, email = ?, status = ?, login = ?, senha = ? WHERE cod_usuario = ?", usuario.Nome, usuario.Email, usuario.Status, usuario.Login, usuario.Senha, codUsuario)
+
 	if db.Error != nil {
 		return &Usuario{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Usuario{}).Where("cod_usuario = ?", VerifyPassword).Take(&usuario).Error
+	err = db.Debug().Model(&Usuario{}).Where("cod_usuario = ?", codUsuario).Take(&usuario).Error
 	if err != nil {
 		return &Usuario{}, err
 	}

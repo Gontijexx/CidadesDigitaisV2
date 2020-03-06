@@ -60,12 +60,7 @@ func (itens *Itens) FindAllItens(db *gorm.DB) (*[]Itens, error) {
 func (itens *Itens) UpdateItens(db *gorm.DB, codItem, codTipoItem uint64) (*Itens, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Updates(
-		Itens{
-			CodNaturezaDespesa: itens.CodNaturezaDespesa,
-			CodClasseEmpenho:   itens.CodClasseEmpenho,
-			Descricao:          itens.Descricao,
-			Unidade:            itens.Unidade}).Error
+	err := db.Debug().Exec("UPDATE itens SET cod_natureza_despesa = ?, cod_classe_empenho = ?, descricao = ?, unidade = ? WHERE cod_item = ? AND cod_tipo_item = ?", itens.CodNaturezaDespesa, itens.CodClasseEmpenho, itens.Descricao, itens.Unidade, codItem, codTipoItem).Error
 
 	if db.Error != nil {
 		return &Itens{}, db.Error

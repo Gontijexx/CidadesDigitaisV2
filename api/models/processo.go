@@ -60,9 +60,7 @@ func (processo *Processo) FindAllProcesso(db *gorm.DB) (*[]Processo, error) {
 func (processo *Processo) UpdateProcesso(db *gorm.DB, codProcesso, codIbge uint64) (*Processo, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge = ?", codProcesso, codIbge).Updates(
-		Processo{
-			Descricao: processo.Descricao}).Error
+	err := db.Debug().Exec("UPDATE processo SET descricao = ? WHERE cod_processo = ? AND cod_ibge = ?", processo.Descricao, codProcesso, codIbge).Error
 
 	if db.Error != nil {
 		return &Processo{}, db.Error

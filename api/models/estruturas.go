@@ -326,8 +326,8 @@ type Etapa struct {
 type Itens struct {
 	CodItem            uint64 `gorm:"primary_key;not null" json:"cod_item"`
 	CodTipoItem        uint64 `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
-	CodNaturezaDespesa uint64 `gorm:"foreign_key:CodNaturezaDespesa" json:"cod_natureza_despesa"`
-	CodClasseEmpenho   uint64 `gorm:"foreign_key:CodClasseEmpenho" json:"cod_classe_empenho"`
+	CodNaturezaDespesa uint64 `gorm:"foreign_key:CodNaturezaDespesa;not null" json:"cod_natureza_despesa"`
+	CodClasseEmpenho   uint64 `gorm:"foreign_key:CodClasseEmpenho;not null" json:"cod_classe_empenho"`
 	Descricao          string `gorm:"default:null" json:"descricao"`
 	Unidade            string `gorm:"default:null" json:"unidade"`
 }

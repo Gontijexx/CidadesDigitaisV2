@@ -47,12 +47,7 @@ func (cdItens *CDItens) FindAllCDItens(db *gorm.DB) (*[]CDItens, error) {
 
 func (cdItens *CDItens) UpdateCDItens(db *gorm.DB, codIbge, codItem, codTipoItem uint64) (*CDItens, error) {
 
-	err := db.Debug().Model(&CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", codIbge, codItem, codTipoItem).Updates(
-		CDItens{
-			QuantidadePrevisto:         cdItens.QuantidadePrevisto,
-			QuantidadeProjetoExecutivo: cdItens.QuantidadeProjetoExecutivo,
-			QuantidadeTermoInstalacao:  cdItens.QuantidadeTermoInstalacao,
-		}).Error
+	err := db.Debug().Exec("UPDATE cd_itens SET quantidade_previsto = ?, quantidade_projeto_executivo = ?, quantidade_termo_instalacao = ? WHERE cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", cdItens.QuantidadePrevisto, cdItens.QuantidadeProjetoExecutivo, cdItens.QuantidadeTermoInstalacao, codIbge, codItem, codTipoItem).Error
 
 	if db.Error != nil {
 		return &CDItens{}, db.Error

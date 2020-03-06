@@ -60,9 +60,7 @@ func (classeEmpenho *ClasseEmpenho) FindAllClasseEmpenho(db *gorm.DB) (*[]Classe
 func (classeEmpenho *ClasseEmpenho) UpdateClasseEmpenho(db *gorm.DB, codClasseEmpenho uint64) (*ClasseEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&ClasseEmpenho{}).Where("cod_classe_empenho = ?", codClasseEmpenho).Updates(
-		ClasseEmpenho{
-			Descricao: classeEmpenho.Descricao}).Error
+	err := db.Debug().Exec("UPDATE classe_empenho SET descricao = ? WHERE cod_classe_empenho = ?", classeEmpenho.Descricao, codClasseEmpenho).Error
 
 	if db.Error != nil {
 		return &ClasseEmpenho{}, db.Error

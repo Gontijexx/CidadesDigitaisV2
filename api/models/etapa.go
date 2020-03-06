@@ -60,13 +60,7 @@ func (etapa *Etapa) FindAllEtapa(db *gorm.DB) (*[]Etapa, error) {
 func (etapa *Etapa) UpdateEtapa(db *gorm.DB, codEtapa uint64) (*Etapa, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Etapa{}).Where("cod_etapa = ?", codEtapa).Updates(
-		Etapa{
-			Descricao: etapa.Descricao,
-			Duracao:   etapa.Duracao,
-			Depende:   etapa.Depende,
-			Delay:     etapa.Delay,
-			SetorResp: etapa.SetorResp}).Error
+	err := db.Debug().Exec("UPDATE etapa SET descricao = ?, duracao =?, depende = ?, delay = ?, setor_resp = ? WHERE cod_etapa = ?", etapa.Descricao, etapa.Duracao, etapa.Depende, etapa.Delay, etapa.SetorResp, codEtapa).Error
 
 	if db.Error != nil {
 		return &Etapa{}, db.Error

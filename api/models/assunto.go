@@ -60,9 +60,7 @@ func (assunto *Assunto) FindAllAssunto(db *gorm.DB) (*[]Assunto, error) {
 func (assunto *Assunto) UpdateAssunto(db *gorm.DB, codAssunto uint64) (*Assunto, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Assunto{}).Where("cod_assunto = ?", codAssunto).Updates(
-		Assunto{
-			Descricao: assunto.Descricao}).Error
+	err := db.Debug().Exec("UPDATE assunto SET descricao = ? WHERE cod_assunto = ?", assunto.Descricao, codAssunto).Error
 
 	if db.Error != nil {
 		return &Assunto{}, db.Error

@@ -60,9 +60,7 @@ func (categoria *Categoria) FindAllCategoria(db *gorm.DB) (*[]Categoria, error) 
 func (categoria *Categoria) UpdateCategoria(db *gorm.DB, codCategoria uint64) (*Categoria, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Categoria{}).Where("cod_categoria = ?", codCategoria).Updates(
-		Categoria{
-			Descricao: categoria.Descricao}).Error
+	err := db.Debug().Exec("UPDATE categoria SET descricao = ? WHERE cod_categoria = ?", categoria.Descricao, codCategoria).Error
 
 	if db.Error != nil {
 		return &Categoria{}, db.Error

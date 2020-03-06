@@ -44,13 +44,7 @@ func (contato *Contato) FindAllContato(db *gorm.DB) (*[]Contato, error) {
 func (contato *Contato) UpdateContato(db *gorm.DB, codContato uint64) (*Contato, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Contato{}).Where("cod_contato = ?", codContato).Updates(
-		Contato{
-			Cnpj:    contato.Cnpj,
-			CodIbge: contato.CodIbge,
-			Nome:    contato.Nome,
-			Email:   contato.Email,
-			Funcao:  contato.Funcao}).Error
+	err := db.Debug().Exec("UPDATE contato SET cnpj =? , cod_ibge = ? , nome = ?, email = ?, funcao = ? WHERE cod_contato = ?", contato.Cnpj, contato.CodIbge, contato.Nome, contato.Email, contato.Funcao, codContato).Error
 
 	if db.Error != nil {
 		return &Contato{}, db.Error

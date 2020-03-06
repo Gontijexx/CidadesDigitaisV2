@@ -17,12 +17,12 @@ import (
 =========================  */
 
 type Usuario struct {
-	CodUsuario uint32 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_usuario"`
-	Nome       string `gorm:"size:100;default:null" json:"nome"`
-	Email      string `gorm:"size:45;default:null" json:"email" validate:"omitempty,email"`
-	Status     string `gorm:"size:1;default:null" json:"status" `
-	Login      string `gorm:"size:45;default:null" json:"login" validate:"alphanum"`
-	Senha      string `gorm:"size:100;default:null" json:"senha" validate:"min=8"`
+	CodUsuario *uint32 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_usuario"`
+	Nome       *string `gorm:"size:100;default:null" json:"nome"`
+	Email      *string `gorm:"size:45;default:null" json:"email" validate:"omitempty,email"`
+	Status     *string `gorm:"size:1;default:null" json:"status" `
+	Login      *string `gorm:"size:45;default:null" json:"login" validate:"alphanum"`
+	Senha      *string `gorm:"size:100;default:null" json:"senha" validate:"min=8"`
 }
 
 /*  =========================
@@ -30,11 +30,11 @@ type Usuario struct {
 =========================  */
 
 type Modulo struct {
-	CodModulo  uint   `gorm:"primary_key;not null;size:11" json:"cod_modulo"`
-	Categoria1 string `gorm:"size:45;default:null" json:"categoria_1"`
-	Categoria2 string `gorm:"size:45;default:null" json:"categoria_2"`
-	Categoria3 string `gorm:"size:45;default:null" json:"categoria_3"`
-	Descricao  string `gorm:"size:200;default:null" json:"descricao"`
+	CodModulo  *uint   `gorm:"primary_key;not null;size:11" json:"cod_modulo"`
+	Categoria1 *string `gorm:"size:45;default:null" json:"categoria_1"`
+	Categoria2 *string `gorm:"size:45;default:null" json:"categoria_2"`
+	Categoria3 *string `gorm:"size:45;default:null" json:"categoria_3"`
+	Descricao  *string `gorm:"size:200;default:null" json:"descricao"`
 }
 
 /*  =========================
@@ -42,8 +42,8 @@ type Modulo struct {
 =========================  */
 
 type UsuarioModulo struct {
-	CodUsuario uint32 `gorm:"foreingkey:CodUsuario" json:"cod_usuario" validate:"required"`
-	CodModulo  int64  `gorm:"foreingkey:CodModulo" json:"cod_modulo" validate:"required"`
+	CodUsuario *uint32 `gorm:"foreingkey:CodUsuario" json:"cod_usuario" validate:"required"`
+	CodModulo  *int64  `gorm:"foreingkey:CodModulo" json:"cod_modulo" validate:"required"`
 }
 
 /*	=========================

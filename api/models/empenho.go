@@ -57,12 +57,7 @@ func (empenho *Empenho) FindAllEmpenho(db *gorm.DB) (*[]Empenho, error) {
 func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, idEmpenho uint64) (*Empenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Empenho{}).Where("id_empenho = ?", idEmpenho).Updates(
-		Empenho{
-			CodPrevisaoEmpenho: empenho.CodPrevisaoEmpenho,
-			CodEmpenho:         empenho.CodEmpenho,
-			Data:               empenho.Data,
-			Contador:           empenho.Contador}).Error
+	err := db.Debug().Exec("UPDATE empenho SET cod_previsao_empenho = ?, cod_empenho = ?, data = ?, contador = ? WHERE id_empenho = ?", empenho.CodPrevisaoEmpenho, empenho.CodEmpenho, empenho.Data, empenho.Contador, idEmpenho).Error
 
 	if err != nil {
 		return &Empenho{}, db.Error

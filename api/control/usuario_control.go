@@ -209,10 +209,8 @@ func (server *Server) UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usuario.Prepare()
-
 	//	updateUsuario recebe o novo usuario, o que foi alterado
-	updatedUsuario, err := usuario.UpdateUsuario(server.DB, uint32(codUsuario))
+	updatedUsuario, err := usuario.UpdateUsuario(server.DB, uint32(usuario.CodUsuario))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)

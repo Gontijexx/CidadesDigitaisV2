@@ -60,21 +60,7 @@ func (municipio *Municipio) FindAllMunicipio(db *gorm.DB) (*[]Municipio, error) 
 func (municipio *Municipio) UpdateMunicipio(db *gorm.DB, codIbge uint64) (*Municipio, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Municipio{}).Where("cod_ibge = ?", codIbge).Updates(
-		Municipio{
-			NomeMunicipio: municipio.NomeMunicipio,
-			Populacao:     municipio.Populacao,
-			UF:            municipio.UF,
-			Regiao:        municipio.Regiao,
-			Cnpj:          municipio.Cnpj,
-			DistCapital:   municipio.DistCapital,
-			Endereco:      municipio.Endereco,
-			Numero:        municipio.Numero,
-			Complemento:   municipio.Complemento,
-			Bairro:        municipio.Bairro,
-			Idhm:          municipio.Idhm,
-			Latitude:      municipio.Latitude,
-			Longitude:     municipio.Longitude}).Error
+	err := db.Debug().Exec("UPDATE municipio SET nome_municipio = ?, populacao = ?, uf = ?, regiao = ?, cnpj = ?, dist_capital = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, idhm = ?, latitude = ?, longitude = ? WHERE cod_ibge = ?", municipio.NomeMunicipio, municipio.Populacao, municipio.UF, municipio.Regiao, municipio.Cnpj, municipio.DistCapital, municipio.Endereco, municipio.Numero, municipio.Complemento, municipio.Bairro, municipio.Idhm, municipio.Latitude, municipio.Longitude, codIbge).Error
 
 	if db.Error != nil {
 		return &Municipio{}, db.Error

@@ -159,7 +159,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUacomByID))).Methods(http.MethodGet)
 
 	// EDITA UACOM (COD_IBGE, DATA)
-	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUacomByID))).Methods(http.MethodPut)
+	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUacom))).Methods(http.MethodPut)
 
 	/*	=========================
 		ROTAS EM CIDADE DIGITAL UACOM_ASSUNTO OK!

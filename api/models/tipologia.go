@@ -61,9 +61,7 @@ func (tipologia *Tipologia) FindAllTipologia(db *gorm.DB) (*[]Tipologia, error) 
 func (tipologia *Tipologia) UpdateTipologia(db *gorm.DB, codTipologia uint64) (*Tipologia, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Tipologia{}).Where("cod_tipologia = ?", codTipologia).Updates(
-		Tipologia{
-			Descricao: tipologia.Descricao}).Error
+	err := db.Debug().Exec("UPDATE tipologia SET descricao = ? WHERE cod_tipologia = ?", tipologia.Descricao, codTipologia).Error
 
 	if db.Error != nil {
 		return &Tipologia{}, db.Error

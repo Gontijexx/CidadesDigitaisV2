@@ -60,9 +60,7 @@ func (naturezaDespesa *NaturezaDespesa) FindAllNaturezaDespesa(db *gorm.DB) (*[]
 func (naturezaDespesa *NaturezaDespesa) UpdateNaturezaDespesa(db *gorm.DB, codNaturezaDespesa uint64) (*NaturezaDespesa, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&NaturezaDespesa{}).Where("cod_natureza_despesa = ?", codNaturezaDespesa).Updates(
-		NaturezaDespesa{
-			Descricao: naturezaDespesa.Descricao}).Error
+	err := db.Debug().Exec("UPDATE natureza_despesa SET descricao = ? WHERE cod_natureza_despesa = ?", naturezaDespesa.Descricao, codNaturezaDespesa).Error
 
 	if db.Error != nil {
 		return &NaturezaDespesa{}, db.Error

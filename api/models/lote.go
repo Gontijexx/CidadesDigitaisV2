@@ -63,13 +63,7 @@ func (lote *Lote) FindAllLote(db *gorm.DB) (*[]Lote, error) {
 func (lote *Lote) UpdateLote(db *gorm.DB, codLote uint64) (*Lote, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Lote{}).Where("cod_lote = ?", codLote).Updates(
-		Lote{
-			Cnpj:        lote.Cnpj,
-			Contrato:    lote.Contrato,
-			DtInicioVig: lote.DtInicioVig,
-			DtFinalVig:  lote.DtFinalVig,
-			DtReajuste:  lote.DtReajuste}).Error
+	err := db.Debug().Exec("UPDATE lote SET cnpj = ?, contrato = ?, dt_inicio_vig = ?, dt_final_vig = ?, dt_reajuste = ? WHERE cod_lote = ?", lote.Cnpj, lote.Contrato, lote.DtInicioVig, lote.DtFinalVig, lote.DtReajuste, codLote).Error
 
 	if err != nil {
 		return &Lote{}, err

@@ -234,7 +234,7 @@ const (
 
 const (
 	FATURA_PATH    = "/read/fatura"
-	FATURA_ID_PATH = "/read/fatura/{num_nf}"
+	FATURA_ID_PATH = "/read/fatura/{num_nf}/{cod_ibge}"
 )
 
 /*	=========================

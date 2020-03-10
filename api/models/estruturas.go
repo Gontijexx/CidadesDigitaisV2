@@ -205,7 +205,7 @@ type OTB struct {
 }
 
 /*	=========================
-		TABELA FATURA_OTB (PAGAMENTO FATURA/FATURA PAGAMENTO)
+		TABELA FATURA_OTB
 =========================	*/
 
 type FaturaOTB struct {

@@ -158,7 +158,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA UACOM (cod_ibge, data)
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUacomByID))).Methods(http.MethodGet)
 
-	// EDITA UACOM (COD_IBGE, DATA)
+	//	EDITA UACOM (COD_IBGE, DATA)
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUacom))).Methods(http.MethodPut)
 
 	/*	=========================
@@ -317,10 +317,13 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA FATURA
 	r.HandleFunc(config.FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateFatura))).Methods(http.MethodPost)
 
-	//	LISTA FATURA (num_nf)
+	//	EDITA FATURA (num_nf, cod_ibge)
+	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateFatura))).Methods(http.MethodPut)
+
+	//	LISTA FATURA (num_nf, cod_ibge)
 	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaByID))).Methods(http.MethodGet)
 
-	//	APAGA FATURA (num_nf)
+	//	APAGA FATURA (num_nf, cod_ibge)
 	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteFatura))).Methods(http.MethodDelete)
 
 	/*	=========================

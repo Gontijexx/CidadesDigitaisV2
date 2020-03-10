@@ -242,9 +242,8 @@ const (
 =========================	*/
 
 const (
-	FATURA_ITENS_PATH        = "/read/faturaitens"
-	FATURA_ITENS_ID_PATH     = "/read/faturaitens/{num_nf}"
-	FATURA_ITENS_DELETE_PATH = "/read/faturaitens/{num_nf}/{id_empenho}/{cod_item}/{cod_tipo_item}"
+	ITENS_FATURA_PATH    = "/read/itensfatura"
+	ITENS_FATURA_ID_PATH = "/read/itensfatura/{num_nf}/{cod_ibge}/{id_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================

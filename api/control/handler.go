@@ -288,16 +288,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.OTB_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteOTB))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM OTB FATURA
-	=========================	*/
-
-	//	SALVA FATURA OTB
-	r.HandleFunc(config.OTB_FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateOTBFatura))).Methods(http.MethodPost)
-
-	//	LISTA FATURA OTB (cod_otb)
-	r.HandleFunc(config.OTB_FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetOTBFatura))).Methods(http.MethodGet)
-
-	/*	=========================
 		ROTAS EM OTB ITENS (ITENS OTB)
 	=========================	*/
 
@@ -346,7 +336,10 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM FATURA OTB
 	=========================	*/
 
-	//	LISTA FATURA (num_nf, cod_ibge)
+	//	SALVA FATURA OTB
+	r.HandleFunc(config.FATURA_OTB_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateFaturaOTB))).Methods(http.MethodPost)
+
+	//	LISTA FATURA (cod_otb, num_nf, cod_ibge)
 	r.HandleFunc(config.FATURA_OTB_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaOTBByID))).Methods(http.MethodGet)
 
 	/*	=========================

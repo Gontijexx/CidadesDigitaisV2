@@ -92,10 +92,17 @@ func (server *Server) GetFaturaByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	codIbge armazena a chave primaria da tabela fatura
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	fatura := models.Fatura{}
 
 	//	faturaGotten recebe o dado buscado no banco de dados
-	faturaGotten, err := fatura.FindFaturaByID(server.DB, numNF)
+	faturaGotten, err := fatura.FindFaturaByID(server.DB, numNF, codIbge)
 
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
@@ -134,6 +141,58 @@ func (server *Server) GetAllFatura(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
+	FUNCAO EDITAR FATURA
+=========================  */
+
+func (server *Server) UpdateFatura(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	if err := config.AuthMod(w, r, 17003); err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	numNF armazena a chave primaria da tabela fatura
+	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codIbge armazena a chave primaria da tabela fatura
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] It couldn't read the 'body', %v\n", err))
+		return
+	}
+
+	fatura := models.Fatura{}
+
+	if err = json.Unmarshal(body, &fatura); err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATEL] ERROR: 422, %v\n", err))
+		return
+	}
+
+	//	updateFatura recebe a nova fatura alterada
+	updateFatura, err := fatura.UpdateFatura(server.DB, numNF, codIbge)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] It couldn't update in database, %v\n", formattedError))
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, updateFatura)
+}
+
+/*  =========================
 	FUNCAO DELETAR FATURA
 =========================  */
 
@@ -157,9 +216,16 @@ func (server *Server) DeleteFatura(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	codIbge armazena a chave primaria da tabela fatura
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
 	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = fatura.DeleteFatura(server.DB, numNF)
+	_, err = fatura.DeleteFatura(server.DB, numNF, codIbge)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

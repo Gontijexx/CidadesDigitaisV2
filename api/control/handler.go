@@ -158,7 +158,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA UACOM (cod_ibge, data)
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUacomByID))).Methods(http.MethodGet)
 
-	// EDITA UACOM (COD_IBGE, DATA)
+	//	EDITA UACOM (COD_IBGE, DATA)
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUacom))).Methods(http.MethodPut)
 
 	/*	=========================
@@ -288,16 +288,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.OTB_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteOTB))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM OTB FATURA
-	=========================	*/
-
-	//	SALVA FATURA OTB
-	r.HandleFunc(config.OTB_FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateOTBFatura))).Methods(http.MethodPost)
-
-	//	LISTA FATURA OTB (cod_otb)
-	r.HandleFunc(config.OTB_FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetOTBFatura))).Methods(http.MethodGet)
-
-	/*	=========================
 		ROTAS EM OTB ITENS (ITENS OTB)
 	=========================	*/
 
@@ -317,33 +307,42 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA FATURA
 	r.HandleFunc(config.FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateFatura))).Methods(http.MethodPost)
 
-	//	LISTA FATURA (num_nf)
+	//	EDITA FATURA (num_nf, cod_ibge)
+	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateFatura))).Methods(http.MethodPut)
+
+	//	LISTA FATURA (num_nf, cod_ibge)
 	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaByID))).Methods(http.MethodGet)
 
-	//	APAGA FATURA (num_nf)
+	//	APAGA FATURA (num_nf, cod_ibge)
 	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteFatura))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM FATURA ITENS (ITENS FATURA)
+		ROTAS EM ITENS FATURA
 	=========================	*/
 
-	//	SALVA FATURA ITENS
-	//r.HandleFunc(config.OTB_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateOTB))).Methods(http.MethodPost)
+	//	SALVA ITENS FATURA
+	r.HandleFunc(config.ITENS_FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateItensFatura))).Methods(http.MethodPost)
 
-	//	EDITA FATURA ITENS
-	r.HandleFunc(config.FATURA_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensFatura))).Methods(http.MethodPut)
+	//	LISTA ITENS FATURA
+	r.HandleFunc(config.ITENS_FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllItensFatura))).Methods(http.MethodGet)
 
-	//	LISTA FATURA ITENS (num_nf)
-	r.HandleFunc(config.FATURA_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllItensFatura))).Methods(http.MethodGet)
+	//	LISTA ITENS FATURA (num_nf, cod_ibge, id_empenho, cod_item, cod_tipo_item)
+	r.HandleFunc(config.ITENS_FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensFaturaByID))).Methods(http.MethodGet)
 
-	//	APAGA FATURA ITENS (num_nf, id_empenho, cod_item, cod_tipo_item)
-	r.HandleFunc(config.FATURA_ITENS_DELETE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteItensFatura))).Methods(http.MethodDelete)
+	//	EDITA ITENS FATURA (num_nf, cod_ibge, id_empenho, cod_item, cod_tipo_item)
+	r.HandleFunc(config.ITENS_FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensFatura))).Methods(http.MethodPut)
+
+	//	APAGA ITENS FATURA (num_nf, cod_ibge, id_empenho, cod_item, cod_tipo_item)
+	r.HandleFunc(config.ITENS_FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteItensFatura))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM FATURA OTB
 	=========================	*/
 
-	//	LISTA FATURA (num_nf, cod_ibge)
+	//	SALVA FATURA OTB
+	r.HandleFunc(config.FATURA_OTB_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateFaturaOTB))).Methods(http.MethodPost)
+
+	//	LISTA FATURA (cod_otb, num_nf, cod_ibge)
 	r.HandleFunc(config.FATURA_OTB_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaOTBByID))).Methods(http.MethodGet)
 
 	/*	=========================

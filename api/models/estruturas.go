@@ -147,6 +147,7 @@ type Lote struct {
 	DtInicioVig string `gorm:"default:null;size:10" json:"dt_inicio_vig" `
 	DtFinalVig  string `gorm:"default:null;size:10" json:"dt_final_vig" `
 	DtReajuste  string `gorm:"default:null;size:10" json:"dt_reajuste" `
+	Nome        string `gorm:"default:null" json:"nome"`
 }
 
 /*  =========================
@@ -168,6 +169,7 @@ type LoteItens struct {
 	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item"`
 	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoItem;not null;size:11" json:"cod_tipo_item"`
 	Preco       float64 `gorm:"default:null;size:12" json:"preco"`
+	Descricao   string `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================

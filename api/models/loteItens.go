@@ -34,7 +34,8 @@ func (loteItens *LoteItens) FindAllLoteItens(db *gorm.DB) (*[]LoteItens, error) 
 	allLoteItens := []LoteItens{}
 
 	//	Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&LoteItens{}).Find(&allLoteItens).Error
+	err := db.Debug().Table("cd").Select("municipio.nome_municipio, cd.*").
+		Joins("join municipio on cd.cod_ibge = municipio.cod_ibge").Scan(&allCD).Error
 	if err != nil {
 		return &[]LoteItens{}, err
 	}

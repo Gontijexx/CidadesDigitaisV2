@@ -34,7 +34,10 @@ func (loteItens *LoteItens) FindAllLoteItens(db *gorm.DB) (*[]LoteItens, error) 
 	allLoteItens := []LoteItens{}
 
 	//	Busca todos elementos contidos no banco de dados
-	err := db.Debug().Exec("SELECT * from lote_itens INNER JOIN itens on lote_itens.cod_item = itens.cod_item AND lote_itens.cod_tipo_item = itens.cod_tipo_item").Error
+
+	err := db.Debug().Table("lote_itens").Select("itens.descricao, lote_itens.*").
+		Joins("join itens on lote_itens.cod_lote = itens.cod_lote AND lote_itens.cod_tipo_lote = itens.cod_tipo_lote").Scan(&allLoteItens).Error
+
 	if err != nil {
 		return &[]LoteItens{}, err
 	}

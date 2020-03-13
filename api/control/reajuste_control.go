@@ -97,6 +97,65 @@ func (server *Server) GetAllReajuste(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
+	FUNCAO UPDATE REAJUSTE
+=========================  */
+
+func (server *Server) UpdateReajuste(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	if err := config.AuthMod(w, r, 14003); err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	anoRef armazena a chave primaria da tabela reajuste
+	anoRef, err := strconv.ParseUint(vars["ano_ref"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codLote armazena a chave primaria da tabela reajuste
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
+	}
+
+	reajuste := models.Reajuste{}
+
+	if err = json.Unmarshal(body, &reajuste); err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] ERROR : 422, %v\n", err))
+		return
+	}
+
+	if err = validation.Validator.Struct(reajuste); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	//	updateReajuste recebe o novo reajuste, a que foi alterada
+	updateReajuste, err := reajuste.UpdateReajuste(server.DB, anoRef, codLote)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database, %v\n", formattedError))
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct alterada
+	responses.JSON(w, http.StatusOK, updateReajuste)
+}
+
+/*  =========================
 	FUNCAO DELETAR REAJUSTE
 =========================  */
 

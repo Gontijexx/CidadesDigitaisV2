@@ -58,9 +58,53 @@ func (server *Server) GetItensOTB(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateItensOTB(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 16023)
-	if err != nil {
+	if err := config.AuthMod(w, r, 16023); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codOtb armazena a chave primaria da tabela entidade
+	codOtb, err := strconv.ParseUint(vars["cod_otb"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	numNf armazena a chave primaria da tabela entidade
+	numNf, err := strconv.ParseUint(vars["num_nf"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codIbge armazena a chave primaria da tabela entidade
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	idEmpenho armazena a chave primaria da tabela entidade
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codItem armazena a chave primaria da tabela entidade
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codTipoItem armazena a chave primaria da tabela entidade
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
 
@@ -85,7 +129,7 @@ func (server *Server) UpdateItensOTB(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	updateItensOTB recebe a nova itensOTB, a que foi alterada
-	updateItensOTB, err := itensOTB.UpdateItensOTB(server.DB)
+	updateItensOTB, err := itensOTB.UpdateItensOTB(server.DB, codOtb, numNf, codIbge, idEmpenho, codItem, codTipoItem)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

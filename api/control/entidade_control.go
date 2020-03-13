@@ -225,3 +225,19 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")
 }
+
+/*  =========================
+	FUNCAO LISTAR ENTIDADE.CNPJ E ENTIDADE.NOME
+=========================  */
+
+func (server *Server) GetEntidadeIDandName(w http.ResponseWriter, r *http.Request) {
+
+	entidade := models.Entidade{}
+
+	//	entidadeGotten recebe o dado buscado no banco de dados
+	entidadeGotten := entidade.GetEntidadeIDAndName(server.DB)
+
+	bytes, _ := json.Marshal(entidadeGotten)
+
+	w.Write(bytes)
+}

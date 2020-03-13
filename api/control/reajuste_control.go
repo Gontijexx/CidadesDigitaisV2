@@ -127,13 +127,13 @@ func (server *Server) UpdateReajuste(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
 	}
 
 	reajuste := models.Reajuste{}
 
 	if err = json.Unmarshal(body, &reajuste); err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] ERROR : 422, %v\n", err))
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR : 422, %v\n", err))
 		return
 	}
 

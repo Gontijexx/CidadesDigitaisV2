@@ -132,7 +132,8 @@ func (server *Server) UpdateReajuste(w http.ResponseWriter, r *http.Request) {
 
 	reajuste := models.Reajuste{}
 
-	if err = json.Unmarshal(body, &reajuste); err != nil {
+	err = json.Unmarshal(body, &reajuste)
+	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR : 422, %v\n", err))
 		return
 	}

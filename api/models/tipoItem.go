@@ -60,9 +60,7 @@ func (tipoItem *TipoItem) FindAllTipoItem(db *gorm.DB) (*[]TipoItem, error) {
 func (tipoItem *TipoItem) UpdateTipoItem(db *gorm.DB, codTipoItem uint64) (*TipoItem, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&TipoItem{}).Where("cod_tipo_item = ?", codTipoItem).Updates(
-		TipoItem{
-			Descricao: tipoItem.Descricao}).Error
+	err := db.Debug().Exec("UPDATE tipo_item SET descricao = ? WHERE cod_tipo_item = ?", tipoItem.Descricao, codTipoItem).Error
 
 	if db.Error != nil {
 		return &TipoItem{}, db.Error

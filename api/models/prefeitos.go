@@ -58,14 +58,7 @@ func (prefeitos *Prefeitos) FindAllPrefeitos(db *gorm.DB) (*[]Prefeitos, error) 
 func (prefeitos *Prefeitos) UpdatePrefeitos(db *gorm.DB, codPrefeito uint64) (*Prefeitos, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Prefeitos{}).Where("cod_prefeito = ?", codPrefeito).Updates(
-		Prefeitos{
-			CodIbge:   prefeitos.CodIbge,
-			Nome:      prefeitos.Nome,
-			Cpf:       prefeitos.Cpf,
-			RG:        prefeitos.RG,
-			Partido:   prefeitos.Partido,
-			Exercicio: prefeitos.Exercicio}).Error
+	err := db.Debug().Exec("UPDATE prefeitos SET cod_ibge = ?, nome = ?, cpf = ?, rg = ?, partido = ?, exercicio = ? WHERE cod_prefeito = ?", prefeitos.CodIbge, prefeitos.Nome, prefeitos.Cpf, prefeitos.RG, prefeitos.Partido, prefeitos.Exercicio, codPrefeito).Error
 
 	if db.Error != nil {
 		return &Prefeitos{}, db.Error

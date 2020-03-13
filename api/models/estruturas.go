@@ -40,7 +40,7 @@ type Telefone struct {
 	Tipo        string `gorm:"default:null;size:10" json:"tipo"`
 }
 
-/*  =========================
+/* =========================
 	TABELA CD
 =========================  */
 
@@ -116,7 +116,7 @@ type Ponto struct {
 	Longitude    uint64 `gorm:"default:null" json:"longitude"`
 }
 
-/*  =========================
+/*   =========================
 	TABELA PID (CD)
 =========================  */
 
@@ -147,6 +147,7 @@ type Lote struct {
 	DtInicioVig string `gorm:"default:null;size:10" json:"dt_inicio_vig" `
 	DtFinalVig  string `gorm:"default:null;size:10" json:"dt_final_vig" `
 	DtReajuste  string `gorm:"default:null;size:10" json:"dt_reajuste" `
+	Nome        string `gorm:"default:null" json:"nome"`
 }
 
 /*  =========================
@@ -161,13 +162,14 @@ type Reajuste struct {
 
 /*  =========================
 	TABELA LOTE ITENS
-=========================  */
+========================= */
 
 type LoteItens struct {
 	CodLote     uint64  `gorm:"primary_key;foreign_key:CodLote;not null;size:11" json:"cod_lote"`
 	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item"`
 	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoItem;not null;size:11" json:"cod_tipo_item"`
 	Preco       float64 `gorm:"default:null;size:12" json:"preco"`
+	Descricao   string `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================
@@ -205,7 +207,7 @@ type OTB struct {
 }
 
 /*	=========================
-		TABELA FATURA_OTB (PAGAMENTO FATURA/FATURA PAGAMENTO)
+		TABELA FATURA_OTB
 =========================	*/
 
 type FaturaOTB struct {

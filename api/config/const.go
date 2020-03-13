@@ -212,14 +212,6 @@ const (
 )
 
 /*	=========================
-	OTB FATURA PATH HTTP (PAGAMENTO FATURA)
-=========================	*/
-const (
-	OTB_FATURA_PATH    = "/read/otbfatura"
-	OTB_FATURA_ID_PATH = "/read/otbfatura/{cod_otb}"
-)
-
-/*	=========================
 	OTB ITENS PATH HTTP (PAGAMENTO ITENS)
 =========================	*/
 
@@ -234,14 +226,15 @@ const (
 
 const (
 	FATURA_PATH    = "/read/fatura"
-	FATURA_ID_PATH = "/read/fatura/{num_nf}"
+	FATURA_ID_PATH = "/read/fatura/{num_nf}/{cod_ibge}"
 )
 
 /*	=========================
 	FATURA OTB PATH HTTP (FATURA PAGAMENTO)
 =========================	*/
 const (
-	FATURA_OTB_ID_PATH = "/read/faturaotb/{num_nf}/{cod_ibge}"
+	FATURA_OTB_PATH    = "/read/faturaotb"
+	FATURA_OTB_ID_PATH = "/read/faturaotb/{cod_otb}/{num_nf}/{cod_ibge}"
 )
 
 /*	=========================
@@ -249,9 +242,8 @@ const (
 =========================	*/
 
 const (
-	FATURA_ITENS_PATH        = "/read/faturaitens"
-	FATURA_ITENS_ID_PATH     = "/read/faturaitens/{num_nf}"
-	FATURA_ITENS_DELETE_PATH = "/read/faturaitens/{num_nf}/{id_empenho}/{cod_item}/{cod_tipo_item}"
+	ITENS_FATURA_PATH    = "/read/itensfatura"
+	ITENS_FATURA_ID_PATH = "/read/itensfatura/{num_nf}/{cod_ibge}/{id_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================

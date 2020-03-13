@@ -15,6 +15,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+//time.Now().Format(time.RFC3339)
 /*  =========================
 	FUNCAO ADICIONAR UACOM
 =========================  */
@@ -93,7 +94,9 @@ func (server *Server) GetUacomByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	data armazena a chave primaria da tabela uacom
-	data, err := strconv.ParseUint(vars["data"], 10, 64)
+	data := vars["data"]
+	fmt.Print(data)
+	
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -163,7 +166,7 @@ func (server *Server) UpdateUacom(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	data armazena a chave primaria da tabela uacom
-	data, err := strconv.ParseUint(vars["data"], 10, 64)
+	data := vars["data"]
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return

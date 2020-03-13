@@ -28,7 +28,7 @@ func (reajuste *Reajuste) FindAllReajuste(db *gorm.DB) (*[]Reajuste, error) {
 	allReajuste := []Reajuste{}
 
 	//	Busca todos os elementos no banco de dados
-	err := db.Debug().Model(&Entidade{}).Find(&allReajuste).Error
+	err := db.Debug().Model(&Reajuste{}).Find(&allReajuste).Error
 	if err != nil {
 		return &[]Reajuste{}, err
 	}
@@ -37,10 +37,33 @@ func (reajuste *Reajuste) FindAllReajuste(db *gorm.DB) (*[]Reajuste, error) {
 }
 
 /*  =========================
+	FUNCAO EDITAR REAJUSTE
+=========================  */
+
+func (reajuste *Reajuste) UpdateReajuste(db *gorm.DB, anoRef, codLote uint64) (*Reajuste, error) {
+
+	//	Permite a atualizacao dos campos indicados
+	err := db.Debug().Exec("UPDATE reajuste SET percentual = ? WHERE ano_ref = ? AND cod_lote = ?", reajuste.Percentual, anoRef, codLote).Error
+
+	if db.Error != nil {
+		return &Reajuste{}, db.Error
+	}
+
+	//	Busca um elemento no banco de dados a partir de sua chave primaria
+	err = db.Debug().Model(&Reajuste{}).Where("ano_ref = ? AND cod_lote = ?", anoRef, codLote).Take(&reajuste).Error
+	if err != nil {
+		return &Reajuste{}, err
+	}
+
+	//	retorna o elemento que foi alterado
+	return reajuste, err
+}
+
+/*  =========================
 	FUNCAO DELETAR REAJUSTE POR ID
 =========================  */
 
-func (r *Reajuste) DeleteReajuste(db *gorm.DB, anoRef, codLote uint64) (int64, error) {
+func (reajuste *Reajuste) DeleteReajuste(db *gorm.DB, anoRef, codLote uint64) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Reajuste{}).Where("ano_ref = ? AND cod_lote = ?", anoRef, codLote).Take(&Reajuste{}).Delete(&Reajuste{})

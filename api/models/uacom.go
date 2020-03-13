@@ -21,7 +21,7 @@ func (uacom *Uacom) SaveUacom(db *gorm.DB) (*Uacom, error) {
 	FUNCAO LISTAR UACOM POR ID
 =========================  */
 
-func (uacom *Uacom) FindUacomByID(db *gorm.DB, codIbge, data uint64) (*Uacom, error) {
+func (uacom *Uacom) FindUacomByID(db *gorm.DB, codIbge uint64, data string) (*Uacom, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Uacom{}).Where("cod_ibge = ? AND data = ?", codIbge, data).Take(&uacom).Error
@@ -53,13 +53,10 @@ func (uacom *Uacom) FindAllUacom(db *gorm.DB) (*[]Uacom, error) {
 	FUNCAO EDITAR UACOM
 =========================  */
 
-func (uacom *Uacom) UpdateUacom(db *gorm.DB, codIbge, data uint64) (*Uacom, error) {
+func (uacom *Uacom) UpdateUacom(db *gorm.DB, codIbge uint64, data string) (*Uacom, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Uacom{}).Where("cod_ibge = ? AND data = ?", codIbge, data).Updates(
-		Uacom{
-			Titulo: uacom.Titulo,
-			Relato: uacom.Relato}).Error
+	err := db.Debug().Exec("UPDATE uacom SET titulo = ?, relato = ? WHERE cod_ibge = ? AND data = ?", uacom.Titulo, uacom.Relato, codIbge, data).Error
 
 	if db.Error != nil {
 		return &Uacom{}, db.Error

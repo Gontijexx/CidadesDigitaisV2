@@ -50,7 +50,7 @@ func (cd *CD) FindAllCD(db *gorm.DB) (*[]CD, error) {
 
 	// Busca todos elementos contidos no banco de dados e faz join com a tabela municipio
 	err := db.Debug().Table("cd").Select("municipio.nome_municipio, cd.*").
-		Joins("join municipio on cd.cod_ibge = municipio.cod_ibge").Scan(&allCD).Error
+		Joins("JOIN municipio ON cd.cod_ibge = municipio.cod_ibge").Scan(&allCD).Error
 	if err != nil {
 		return &[]CD{}, err
 	}

@@ -50,7 +50,7 @@ func (lote *Lote) FindAllLote(db *gorm.DB) (*[]Lote, error) {
 
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("lote").Select("entidade.nome, lote.*").
-		Joins("join entidade on lote.cnpj = entidade.cnpj").Scan(&allLote).Error
+		Joins("JOIN entidade ON lote.cnpj = entidade.cnpj").Scan(&allLote).Error
 	if err != nil {
 		return &[]Lote{}, err
 	}

@@ -99,11 +99,14 @@ func (entidade *Entidade) DeleteEntidade(db *gorm.DB, cnpj uint64) (int64, error
 	FUNCAO LISTAR ENTIDADE.CNPJ E ENTIDADE.NOME
 =========================  */
 
-func (entidade *Entidade) GetEntidadeIDAndName(db *gorm.DB) *[]Entidade {
+func (entidade *Entidade) GetEntidadeIDAndName(db *gorm.DB) (*[]Entidade, error) {
 
 	allEntidade := []Entidade{}
 
-	db.Debug().Select("cnpj, nome").Find(&allEntidade)
+	err := db.Debug().Select("cnpj, nome").Find(&allEntidade).Error
+	if err != nil {
+		return &[]Entidade{}, err
+	}
 
-	return &allEntidade
+	return &allEntidade, err
 }

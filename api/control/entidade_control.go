@@ -235,7 +235,12 @@ func (server *Server) GetEntidadeIDandName(w http.ResponseWriter, r *http.Reques
 	entidade := models.Entidade{}
 
 	//	entidadeGotten recebe o dado buscado no banco de dados
-	entidadeGotten := entidade.GetEntidadeIDAndName(server.DB)
+	entidadeGotten, err := entidade.GetEntidadeIDAndName(server.DB)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
+		return
+	}
 
 	bytes, _ := json.Marshal(entidadeGotten)
 

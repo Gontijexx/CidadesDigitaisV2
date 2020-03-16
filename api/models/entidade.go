@@ -99,7 +99,7 @@ func (entidade *Entidade) DeleteEntidade(db *gorm.DB, cnpj uint64) (int64, error
 	FUNCAO LISTAR ENTIDADE.CNPJ E ENTIDADE.NOME
 =========================  */
 
-func (entidade *Entidade) GetEntidadeIDAndName(db *gorm.DB) (*[]Entidade, error) {
+func (entidade *Entidade) FindEntidadeIDAndName(db *gorm.DB) (*[]Entidade, error) {
 
 	allEntidade := []Entidade{}
 

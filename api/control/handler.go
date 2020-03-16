@@ -433,6 +433,25 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	APAGA CLASSE EMPENHO (cod_classe_empenho)
 	r.HandleFunc(config.CLASSE_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteClasseEmpenho))).Methods(http.MethodDelete)
 
+	/*  =========================
+		ROTAS EM ETAPAS CD
+	=========================  */
+
+	//	LISTA ETAPAS CD
+	r.HandleFunc(config.ETAPAS_CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllEtapasCD))).Methods(http.MethodGet)
+
+	//	SALVA ETAPAS CD
+	r.HandleFunc(config.ETAPAS_CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateEtapasCD))).Methods(http.MethodPost)
+
+	//	EDITA ETAPAS CD (cod_ibge, cod_etapa)
+	r.HandleFunc(config.ETAPAS_CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEtapasCD))).Methods(http.MethodPut)
+
+	//	LISTA ETAPAS CD (cod_ibge, cod_etapa)
+	r.HandleFunc(config.ETAPAS_CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEtapasCDByID))).Methods(http.MethodGet)
+
+	//	APAGA ETAPAS CD (cod_ibge, cod_etapa)
+	r.HandleFunc(config.ETAPAS_CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEtapasCD))).Methods(http.MethodDelete)
+
 	/*	=========================
 		ROTAS EM ETAPA
 	=========================	*/
@@ -572,6 +591,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	GET ENTIDADE NOME CNPJ
 	r.HandleFunc("/read/entidadeget", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidadeIDandName))).Methods(http.MethodGet)
+
+	//	GET ETAPAS CD PK
+	r.HandleFunc("/read/etapascdpk", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEtapasCDPK))).Methods(http.MethodGet)
 
 	return
 }

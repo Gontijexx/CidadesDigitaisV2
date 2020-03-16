@@ -141,6 +141,11 @@ const (
 	ETAPAS_CD PATHS HTTP OK!
 =========================  */
 
+const (
+	ETAPAS_CD_PATH    = "/read/etapascd"
+	ETAPAS_CD_ID_PATH = "/read/etapascd/{cod_ibge}/{cod_etapa}"
+)
+
 /*  =========================
 	ETAPA PATHS HTTP OK!
 =========================  */

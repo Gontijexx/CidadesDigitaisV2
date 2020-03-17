@@ -52,9 +52,9 @@ func ValidationCNPJ(cnpj string) bool {
 
 	if resto < 2 {
 		resto = 0
+	} else {
+		resto = 11 - resto
 	}
-
-	resto = 11 - resto
 
 	if resto != numberCNPJ[13] {
 		fmt.Println("Erro na validado do segundo digito")

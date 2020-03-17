@@ -52,6 +52,14 @@ func (server *Server) CreatePrefeitos(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Validacao de CPF
+	result := validation.ValidationCPF(prefeitos.Cpf)
+	if result == false {
+		log.Printf("[FATAL] invalid CPF!")
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
 	//	SavePrefeitos eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	prefeitosCreated, err := prefeitos.SavePrefeitos(server.DB)
 

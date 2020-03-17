@@ -21,7 +21,7 @@ func (prefeitos *Prefeitos) SavePrefeitos(db *gorm.DB) (*Prefeitos, error) {
 }
 
 /*  =========================
-	FUNCAO SALVAR PREFEITOS POR ID
+	FUNCAO LISTAR PREFEITOS POR ID
 =========================  */
 
 func (prefeitos *Prefeitos) FindPrefeitosByID(db *gorm.DB, codPrefeito uint64) (*Prefeitos, error) {

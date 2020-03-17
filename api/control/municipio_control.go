@@ -52,6 +52,14 @@ func (server *Server) CreateMunicipio(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Validacao de CNPJ
+	result := validation.ValidationCNPJ(municipio.Cnpj)
+	if result == false {
+		log.Printf("[FATAL] invalid CNPJ!")
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
 	//	SaveMunicipio eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	municipioCreated, err := municipio.SaveMunicipio(server.DB)
 

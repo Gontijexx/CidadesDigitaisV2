@@ -15,7 +15,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r = s.Router
 
 	//	HOME
-	r.HandleFunc("/{id}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
+	r.HandleFunc("/", s.Home).Methods(http.MethodGet)
 
 	/*	=========================
 		ROTAS EM USUARIO

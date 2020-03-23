@@ -10,6 +10,7 @@ import (
 	"CidadesDigitaisV2/api/control"
 
 	"github.com/joho/godotenv"
+	"github.com/pkg/browser"
 )
 
 /*	=========================
@@ -31,7 +32,7 @@ func Run() {
 	server.Router = mux.NewRouter()
 
 	server.Initialize(os.Getenv("DB_DRIVER"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"))
-
+	browser.OpenFile("Front/index.html")
 	server.Run()
 
 }

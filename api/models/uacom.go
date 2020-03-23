@@ -1,6 +1,10 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"errors"
+
+	"github.com/jinzhu/gorm"
+)
 
 /*  =========================
 	FUNCAO SALVAR UACOM NO BANCO DE DADOS
@@ -70,4 +74,23 @@ func (uacom *Uacom) UpdateUacom(db *gorm.DB, codIbge uint64, data string) (*Uaco
 
 	// retorna o elemento que foi alterado
 	return uacom, err
+}
+
+/*  =========================
+	FUNCAO DELETAR UACOM
+=========================  */
+
+func (uacom *Uacom) DeleteUacom(db *gorm.DB, codIbge uint64, data string) (int64, error) {
+
+	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
+	db = db.Debug().Model(&Uacom{}).Where("cod_ibge = ? AND data = ?", codIbge, data).Take(&Uacom{}).Delete(&Uacom{})
+
+	if db.Error != nil {
+		if gorm.IsRecordNotFoundError(db.Error) {
+			return 0, errors.New("Uacom not found")
+		}
+		return 0, db.Error
+	}
+
+	return db.RowsAffected, nil
 }

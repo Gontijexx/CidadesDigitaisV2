@@ -1,13 +1,26 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
 /*  =========================
-	FUNCAO LISTAR LOTE_ITENS POR ID
+	FUNCAO SALVAR LOTE ITENS NO BANCO DE DADOS
+=========================  */
+
+func (loteItens *LoteItens) SaveLoteItens(db **gorm.DB) (*LoteItens, error) {
+
+	//	Adicionao um novo elemento no banco de dados
+	err := db.Debug().Create(&loteItens).Error
+	if err != nil {
+		return &LoteItens, err
+	}
+
+	return loteItens, nil
+}
+
+/*  =========================
+	FUNCAO LISTAR LOTE ITENS POR ID
 =========================  */
 
 func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, codLote, codItem, codTipoItem uint64) (*LoteItens, error) {
@@ -17,9 +30,6 @@ func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, codLote, codItem, cod
 
 	if err != nil {
 		return &LoteItens{}, err
-	}
-	if gorm.IsRecordNotFoundError(err) {
-		return &LoteItens{}, errors.New("Lote_itens Not Found")
 	}
 
 	return loteItens, err
@@ -45,7 +55,7 @@ func (loteItens *LoteItens) FindAllLoteItens(db *gorm.DB) (*[]LoteItens, error) 
 }
 
 /*  =========================
-	FUNCAO EDITAR LOTE_ITENS
+	FUNCAO EDITAR LOTE ITENS
 =========================  */
 
 func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, codLote, codItem, codTipoItem uint64) (*LoteItens, error) {

@@ -94,3 +94,19 @@ func (municipio *Municipio) DeleteMunicipio(db *gorm.DB, codIbge uint64) (int64,
 
 	return db.RowsAffected, nil
 }
+
+/*  =========================
+	FUNCAO LISTAR MUNICIPIO.COD_IBGE E MUNICIPIO.NOME_MUNICIPIO
+=========================  */
+
+func (municipio *Municipio) FindMunicipioIDandNomeMunicipio(db *gorm.DB) (*[]Municipio, error) {
+
+	allMunicipio := []Municipio{}
+
+	err := db.Debug().Select("cod_ibge, nome_municipio").Find(&allMunicipio).Error
+	if err != nil {
+		return &[]Municipio{}, err
+	}
+
+	return &allMunicipio, err
+}

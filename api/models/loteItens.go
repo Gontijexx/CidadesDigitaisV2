@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -72,4 +74,21 @@ func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, codLote, codItem, codTi
 	}
 
 	return loteItens, err
+}
+
+/*  =========================
+	FUNCAO DELETAR LOTE ITENS
+=========================  */
+
+func (loteItens *LoteItens) DeleteLoteItens(db *gorm.DB, codLote, codItem, codTipoItem uint64) (int64, error) {
+
+	db = db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", codLote, codItem, codTipoItem).Take(&LoteItens{}).Delete(&LoteItens{})
+	if db.Error != nil {
+		if gorm.IsRecordNotFoundError(db.Error) {
+			return 0, errors.New("Lote Itens not found")
+		}
+		return 0, db.Error
+	}
+
+	return db.RowsAffected, nil
 }

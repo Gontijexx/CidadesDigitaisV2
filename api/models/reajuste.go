@@ -20,6 +20,22 @@ func (reajuste *Reajuste) SaveReajuste(db *gorm.DB) (*Reajuste, error) {
 }
 
 /*  =========================
+	FUNCAO LISTAR REAJUSTE POR ID
+=========================  */
+
+func (reajuste *Reajuste) FindReajusteByID(db *gorm.DB, anoRef, codLote uint64) (*Reajuste, error) {
+
+	//	Busca um elemento no banco de dados a partir de sua chave primaria
+	err := db.Debug().Model(Reajuste{}).Where("ano_ref = ? AND cod_lote = ?", anoRef, codLote).Take(&reajuste).Error
+
+	if err != nil {
+		return &Reajuste{}, err
+	}
+
+	return reajuste, err
+}
+
+/*  =========================
 	FUNCAO LISTAR TODOS REAJUSTE
 =========================  */
 

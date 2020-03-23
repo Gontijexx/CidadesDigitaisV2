@@ -8,12 +8,12 @@ import (
 	FUNCAO SALVAR LOTE ITENS NO BANCO DE DADOS
 =========================  */
 
-func (loteItens *LoteItens) SaveLoteItens(db **gorm.DB) (*LoteItens, error) {
+func (loteItens *LoteItens) SaveLoteItens(db *gorm.DB) (*LoteItens, error) {
 
 	//	Adicionao um novo elemento no banco de dados
 	err := db.Debug().Create(&loteItens).Error
 	if err != nil {
-		return &LoteItens, err
+		return &LoteItens{}, err
 	}
 
 	return loteItens, nil

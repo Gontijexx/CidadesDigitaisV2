@@ -155,3 +155,54 @@ func (server *Server) UpdateLoteItens(w http.ResponseWriter, r *http.Request) {
 
 	responses.JSON(w, http.StatusOK, updateLoteItens)
 }
+
+/*  =========================
+	FUNCAO DELETAR LOTE ITENS
+=========================  */
+
+func (server *Server) DeleteLoteItens(w http.ResponseWriter, r *http.Request) {
+
+	err := config.AuthMod(w, r, 14003)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	loteItens := models.LoteItens{}
+
+	//	codLote armazena a chave primaria da tabela lote itens
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codItem armazena a chave primaria da tabela lote itens
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codTipoItem armazena a chave primaria da tabela lote itens
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	_, err = loteItens.DeleteLoteItens(server.DB, codLote, codItem, codTipoItem)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
+		return
+	}
+
+	w.Header().Set("Entity", fmt.Sprintf("%d/%d/%d", codLote, codLote, codTipoItem))
+
+	//	Retorna o Status 204, indicando que a informacao foi deletada
+	responses.JSON(w, http.StatusNoContent, "")
+
+}

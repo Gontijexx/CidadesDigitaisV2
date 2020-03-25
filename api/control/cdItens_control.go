@@ -15,12 +15,55 @@ import (
 	"github.com/gorilla/mux"
 )
 
-/*	=========================
-		PRECISA FAZER OS TESTES
-=========================	*/
+/*  =========================
+	FUNCAO ADICIONAR CD ITENS
+=========================  */
+
+func (server *Server) CreateCDItens(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	// err := config.AuthMod(w, r, 13021)
+	// if err != nil {
+	// 	responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+	// 	return
+	// }
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
+		return
+	}
+
+	cdItens := models.CDItens{}
+
+	err = json.Unmarshal(body, &cdItens)
+
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
+		return
+	}
+
+	if err = validation.Validator.Struct(cdItens); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	cdItensCreated, err := cdItens.SaveCDItens(server.DB)
+
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d/%d/%d", r.Host, r.RequestURI, cdItensCreated.CodIbge, cdItensCreated.CodItem, cdItensCreated.CodTipoItem))
+
+	responses.JSON(w, http.StatusCreated, cdItensCreated)
+}
 
 /*  =========================
-	FUNCAO LISTAR CD_ITENS POR ID
+	FUNCAO LISTAR CD ITENS POR ID
 =========================  */
 
 func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
@@ -71,7 +114,7 @@ func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TODOS CD_ITENS
+	FUNCAO LISTAR TODOS CD ITENS
 =========================  */
 
 func (server *Server) GetAllCDItens(w http.ResponseWriter, r *http.Request) {
@@ -96,7 +139,7 @@ func (server *Server) GetAllCDItens(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO EDITAR CD_ITENS
+	FUNCAO EDITAR CD ITENS
 =========================  */
 
 func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {

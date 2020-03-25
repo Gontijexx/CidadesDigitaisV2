@@ -96,7 +96,7 @@ func (server *Server) GetUacomByID(w http.ResponseWriter, r *http.Request) {
 	//	data armazena a chave primaria da tabela uacom
 	data := vars["data"]
 	fmt.Print(data)
-	
+
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -202,4 +202,46 @@ func (server *Server) UpdateUacom(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updateUacom)
+}
+
+/*  =========================
+	FUNCAO DELETAR UACOM
+=========================  */
+
+func (server *Server) DeleteUacom(w http.ResponseWriter, r *http.Request) {
+
+	err := config.AuthMod(w, r, 13103)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+	// Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	uacom := models.Uacom{}
+
+	//	codIbge armazena a chave primaria da tabela uacom
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	data armazena a chave primaria da tabela uacom
+	data := vars["data"]
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+	_, err = uacom.DeleteUacom(server.DB, codIbge, data)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
+		return
+	}
+
+	w.Header().Set("Entity", fmt.Sprintf("%d/%d", codIbge, data))
+
+	//	Retorna o Status 204, indicando que a informacao foi deletada
+	responses.JSON(w, http.StatusNoContent, "")
 }

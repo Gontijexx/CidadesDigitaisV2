@@ -65,6 +65,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	APAGA ENTIDADE POR ID
 	r.HandleFunc(config.ENTIDADE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEntidade))).Methods(http.MethodDelete)
 
+	//	GET ENTIDADE NOME CNPJ
+	r.HandleFunc("/read/entidadeget", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidadeIDandName))).Methods(http.MethodGet)
+
 	/*	=========================
 		ROTAS DE CONTATO
 	=========================	*/
@@ -97,12 +100,11 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	/*	=========================
 		ROTAS EM CIDADE DIGITAL
 	=========================	*/
+	//	SALVA CD
+	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCD))).Methods(http.MethodPost)
 
 	//	LISTA CD
 	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCD))).Methods(http.MethodGet)
-
-	//	SALVA CD
-	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCD))).Methods(http.MethodPost)
 
 	//	EDITA CD (cod_ibge)
 	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCD))).Methods(http.MethodPut)
@@ -114,16 +116,19 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	r.HandleFunc(config.CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteCD))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM CIDADE DIGITAL_ITENS
+		ROTAS EM CIDADE DIGITAL ITENS
 	=========================	*/
 
-	//	LISTA CD_ITENS
+	//	SALVA CD ITENS
+	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCDItens))).Methods(http.MethodPost)
+
+	//	LISTA CD ITENS
 	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCDItens))).Methods(http.MethodGet)
 
-	//	EDITA CD_ITENS (cod_ibge, cod_item, cod_tipo_item)
+	//	EDITA CD ITENS (cod_ibge, cod_item, cod_tipo_item)
 	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateCDItens))).Methods(http.MethodPut)
 
-	//	LISTA CD_ITENS POR ID (cod_ibge, cod_item, cod_tipo_item)
+	//	LISTA CD ITENS POR ID (cod_ibge, cod_item, cod_tipo_item)
 	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDItensByID))).Methods(http.MethodGet)
 
 	/*	=========================
@@ -158,14 +163,17 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA UACOM (cod_ibge, data)
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUacomByID))).Methods(http.MethodGet)
 
-	//	EDITA UACOM (COD_IBGE, DATA)
+	//	EDITA UACOM (cod_ibge, data)
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUacom))).Methods(http.MethodPut)
 
+	//	APAGA UACOM (cod_ibge, data)
+	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteUacom))).Methods(http.MethodDelete)
+
 	/*	=========================
-		ROTAS EM CIDADE DIGITAL UACOM_ASSUNTO
+		ROTAS EM CIDADE DIGITAL UACOM ASSUNTO
 	=========================	*/
 
-	//	SALVA UACOM_ASSUNTO
+	//	SALVA UACOM ASSUNTO
 	r.HandleFunc(config.UACOM_ASSUNTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUacomAssunto))).Methods(http.MethodPost)
 
 	/*	=========================
@@ -223,6 +231,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA REAJUSTE
 	r.HandleFunc(config.REAJUSTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllReajuste))).Methods(http.MethodGet)
 
+	//	LISTA REAJUSTE POR ID (ano_ref, cod_lote)
+	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetReajusteByID))).Methods(http.MethodGet)
+
 	//	EDITA REAJUSTE (ano_ref, cod_lote)
 	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateReajuste))).Methods(http.MethodPut)
 
@@ -233,7 +244,10 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM LOTE ITENS
 	=========================	*/
 
-	//	LISTA LOTE
+	//	SALVA LOTE ITENS
+	r.HandleFunc(config.REAJUSTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateLoteItens))).Methods(http.MethodPost)
+
+	//	LISTA LOTE ITENS
 	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllLoteItens))).Methods(http.MethodGet)
 
 	//	EDITA LOTE ITENS (cod_lote, cod_item, cod_tipo_item)
@@ -241,6 +255,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	LISTA LOTE ITENS POR ID (cod_lote, cod_item, cod_tipo_item)
 	r.HandleFunc(config.LOTE_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetLoteItensByID))).Methods(http.MethodGet)
+
+	//	APAGA LOTE ITENS POR ID (cod_lote, cod_item, cod_tipo_item)
+	r.HandleFunc(config.LOTE_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteLoteItens))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM EMPENHO
@@ -265,11 +282,17 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM ITENS EMPENHO
 	=========================	*/
 
-	//	EDITA ITENS EMPENHO (cod_empenho)
+	//	SALVA ITENS EMPENHO
+	r.HandleFunc(config.ITENS_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateItensEmpenho))).Methods(http.MethodPost)
+
+	//	EDITA ITENS EMPENHO (id_empenho, cod_item, cod_tipo_item)
 	r.HandleFunc(config.ITENS_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensEmpenho))).Methods(http.MethodPut)
 
-	//	LISTA ITENS EMPENHO (cod_empenho)
+	//	LISTA ITENS EMPENHO (id_empenho, cod_item, cod_tipo_item)
 	r.HandleFunc(config.ITENS_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensEmpenhoByID))).Methods(http.MethodGet)
+
+	//	APAGA ITENS EMPENHO (id_empenho, cod_item, cod_tipo_item)
+	r.HandleFunc(config.ITENS_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteItensEmpenho))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM OTB
@@ -452,6 +475,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	APAGA ETAPAS CD (cod_ibge, cod_etapa)
 	r.HandleFunc(config.ETAPAS_CD_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteEtapasCD))).Methods(http.MethodDelete)
 
+	//	GET ETAPAS CD PK
+	r.HandleFunc("/read/etapascdget", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEtapasCDPK))).Methods(http.MethodGet)
+
 	/*	=========================
 		ROTAS EM ETAPA
 	=========================	*/
@@ -491,23 +517,26 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteItens))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM MUNICIPIOS
+		ROTAS EM MUNICIPIO
 	=========================	*/
 
-	//	LISTA MUNICIPIOS
+	//	LISTA MUNICIPIO
 	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllMunicipio))).Methods(http.MethodGet)
 
-	//	SALVA MUNICIPIOS
+	//	SALVA MUNICIPIO
 	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateMunicipio))).Methods(http.MethodPost)
 
-	//	EDITA MUNICIPIOS (cod_ibge)
+	//	EDITA MUNICIPIO (cod_ibge)
 	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateMunicipio))).Methods(http.MethodPut)
 
-	//	LISTA MUNICIPIOS (cod_ibge)
+	//	LISTA MUNICIPIO (cod_ibge)
 	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetMunicipioByID))).Methods(http.MethodGet)
 
-	//	APAGA MUNICIPIOS (cod_ibge)
+	//	APAGA MUNICIPIO (cod_ibge)
 	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteMunicipio))).Methods(http.MethodDelete)
+
+	//	LISTAR MUNICIPIO.CODIBGE E MUNICIPIO.NOMEMUNICIPIO
+	r.HandleFunc("/read/municipioget", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetMunicipioIDandNomeMunicipio))).Methods(http.MethodGet)
 
 	/*	=========================
 		ROTAS EM NATUREZA DESPESA
@@ -584,16 +613,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	APAGA TIPO_ITEM (cod_tipo_item)
 	r.HandleFunc(config.TIPO_ITEM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteTipoItem))).Methods(http.MethodDelete)
-
-	/*	=========================
-		COMPLEMENTARES
-	=========================	*/
-
-	//	GET ENTIDADE NOME CNPJ
-	r.HandleFunc("/read/entidadeget", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEntidadeIDandName))).Methods(http.MethodGet)
-
-	//	GET ETAPAS CD PK
-	r.HandleFunc("/read/etapascdpk", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEtapasCDPK))).Methods(http.MethodGet)
 
 	return
 }

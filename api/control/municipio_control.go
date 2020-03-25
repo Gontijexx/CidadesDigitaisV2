@@ -233,3 +233,24 @@ func (server *Server) DeleteMunicipio(w http.ResponseWriter, r *http.Request) {
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")
 }
+
+/*  =========================
+	FUNCAO LISTAR MUNICIPIO.CODIBGE E MUNICIPIO.NOMEMUNICIPIO
+=========================  */
+
+func (server *Server) GetMunicipioIDandNomeMunicipio(w http.ResponseWriter, r *http.Request) {
+
+	municipio := models.Municipio{}
+
+	//	municipioGotten recebe o dado buscado no banco de dados
+	municipioGotten, err := municipio.FindMunicipioIDandNomeMunicipio(server.DB)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
+		return
+	}
+
+	bytes, _ := json.Marshal(municipioGotten)
+
+	w.Write(bytes)
+}

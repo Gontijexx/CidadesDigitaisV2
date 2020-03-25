@@ -7,6 +7,21 @@ import (
 )
 
 /*  =========================
+	FUNCAO SALVAR CD_ITENS NO BANCO DE DADOS
+=========================  */
+
+func (cdItens *CDItens) SaveCDItens(db *gorm.DB) (*CDItens, error) {
+
+	//	Adiciona um novo elemento no banco de dados
+	err := db.Debug().Create(&cdItens).Error
+	if err != nil {
+		return &CDItens{}, err
+	}
+
+	return cdItens, nil
+}
+
+/*  =========================
 	FUNCAO LISTAR CD_ITENS POR ID
 =========================  */
 

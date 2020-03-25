@@ -7,7 +7,22 @@ import (
 )
 
 /*  =========================
-	FUNCAO LISTAR LOTE_ITENS POR ID
+	FUNCAO SALVAR LOTE ITENS NO BANCO DE DADOS
+=========================  */
+
+func (loteItens *LoteItens) SaveLoteItens(db *gorm.DB) (*LoteItens, error) {
+
+	//	Adicionao um novo elemento no banco de dados
+	err := db.Debug().Create(&loteItens).Error
+	if err != nil {
+		return &LoteItens{}, err
+	}
+
+	return loteItens, nil
+}
+
+/*  =========================
+	FUNCAO LISTAR LOTE ITENS POR ID
 =========================  */
 
 func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, codLote, codItem, codTipoItem uint64) (*LoteItens, error) {
@@ -17,9 +32,6 @@ func (loteItens *LoteItens) FindLoteItensByID(db *gorm.DB, codLote, codItem, cod
 
 	if err != nil {
 		return &LoteItens{}, err
-	}
-	if gorm.IsRecordNotFoundError(err) {
-		return &LoteItens{}, errors.New("Lote_itens Not Found")
 	}
 
 	return loteItens, err
@@ -45,7 +57,7 @@ func (loteItens *LoteItens) FindAllLoteItens(db *gorm.DB) (*[]LoteItens, error) 
 }
 
 /*  =========================
-	FUNCAO EDITAR LOTE_ITENS
+	FUNCAO EDITAR LOTE ITENS
 =========================  */
 
 func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, codLote, codItem, codTipoItem uint64) (*LoteItens, error) {
@@ -62,4 +74,21 @@ func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, codLote, codItem, codTi
 	}
 
 	return loteItens, err
+}
+
+/*  =========================
+	FUNCAO DELETAR LOTE ITENS
+=========================  */
+
+func (loteItens *LoteItens) DeleteLoteItens(db *gorm.DB, codLote, codItem, codTipoItem uint64) (int64, error) {
+
+	db = db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", codLote, codItem, codTipoItem).Take(&LoteItens{}).Delete(&LoteItens{})
+	if db.Error != nil {
+		if gorm.IsRecordNotFoundError(db.Error) {
+			return 0, errors.New("Lote Itens not found")
+		}
+		return 0, db.Error
+	}
+
+	return db.RowsAffected, nil
 }

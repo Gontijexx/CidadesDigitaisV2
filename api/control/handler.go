@@ -228,6 +228,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA REAJUSTE
 	r.HandleFunc(config.REAJUSTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllReajuste))).Methods(http.MethodGet)
 
+	//	LISTA REAJUSTE POR ID (ano_ref, cod_lote)
+	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetReajusteByID))).Methods(http.MethodGet)
+
 	//	EDITA REAJUSTE (ano_ref, cod_lote)
 	r.HandleFunc(config.REAJUSTE_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateReajuste))).Methods(http.MethodPut)
 
@@ -508,22 +511,22 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteItens))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM MUNICIPIOS
+		ROTAS EM MUNICIPIO
 	=========================	*/
 
-	//	LISTA MUNICIPIOS
+	//	LISTA MUNICIPIO
 	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllMunicipio))).Methods(http.MethodGet)
 
-	//	SALVA MUNICIPIOS
+	//	SALVA MUNICIPIO
 	r.HandleFunc(config.MUNICIPIO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateMunicipio))).Methods(http.MethodPost)
 
-	//	EDITA MUNICIPIOS (cod_ibge)
+	//	EDITA MUNICIPIO (cod_ibge)
 	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateMunicipio))).Methods(http.MethodPut)
 
-	//	LISTA MUNICIPIOS (cod_ibge)
+	//	LISTA MUNICIPIO (cod_ibge)
 	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetMunicipioByID))).Methods(http.MethodGet)
 
-	//	APAGA MUNICIPIOS (cod_ibge)
+	//	APAGA MUNICIPIO (cod_ibge)
 	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteMunicipio))).Methods(http.MethodDelete)
 
 	//	LISTAR MUNICIPIO.CODIBGE E MUNICIPIO.NOMEMUNICIPIO

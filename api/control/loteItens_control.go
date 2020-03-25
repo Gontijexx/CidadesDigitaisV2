@@ -16,7 +16,53 @@ import (
 )
 
 /*  =========================
-	FUNCAO LISTAR LOTE_ITENS POR ID
+	FUNCAO ADICIONAR LOTE ITENS
+=========================  */
+
+func (server *Server) CreateLoteItens(w http.ResponseWriter, r *http.Request) {
+
+	err := config.AuthMod(w, r, 14001)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
+		return
+	}
+
+	loteItens := models.LoteItens{}
+
+	err = json.Unmarshal(body, &loteItens)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
+		return
+	}
+
+	if err = validation.Validator.Struct(loteItens); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	loteItensCreated, err := loteItens.SaveLoteItens(server.DB)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d/%d/%d", r.Host, r.RequestURI, loteItensCreated.CodLote, loteItensCreated.CodItem, loteItensCreated.CodTipoItem))
+
+	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
+	responses.JSON(w, http.StatusCreated, loteItensCreated)
+
+}
+
+/*  =========================
+	FUNCAO LISTAR LOTE ITENS POR ID
 =========================  */
 
 func (server *Server) GetLoteItensByID(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +112,7 @@ func (server *Server) GetLoteItensByID(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO LISTAR TODA LOTE_ITENS
+	FUNCAO LISTAR TODA LOTE ITENS
 =========================  */
 
 func (server *Server) GetAllLoteItens(w http.ResponseWriter, r *http.Request) {

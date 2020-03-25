@@ -282,6 +282,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM ITENS EMPENHO
 	=========================	*/
 
+	//	SALVA ITENS EMPENHO
+	r.HandleFunc(config.ITENS_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateItensEmpenho))).Methods(http.MethodPost)
+
 	//	EDITA ITENS EMPENHO (id_empenho, cod_item, cod_tipo_item)
 	r.HandleFunc(config.ITENS_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensEmpenho))).Methods(http.MethodPut)
 

@@ -71,6 +71,45 @@ func (server *Server) CreateReajuste(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
+	FUNCAO LISTAR REAJUSTE POR ID
+=========================  */
+
+func (server *Server) GetReajusteByID(w http.ResponseWriter, r *http.Request) {
+
+	err := config.AuthMod(w, r, 14002)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL]Unauthorized"))
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	anoRef, err := strconv.ParseUint(vars["ano_ref"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	reajuste := models.Reajuste{}
+
+	reajusteGotten, err := reajuste.FindReajusteByID(server.DB, anoRef, codLote)
+
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, reajusteGotten)
+
+}
+
+/*  =========================
 	FUNCAO LISTAR TODOS REAJUSTE
 =========================  */
 

@@ -238,6 +238,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM LOTE ITENS
 	=========================	*/
 
+	//	SALVA LOTE ITENS
+	r.HandleFunc(config.REAJUSTE_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateLoteItens))).Methods(http.MethodPost)
+
 	//	LISTA LOTE ITENS
 	r.HandleFunc(config.LOTE_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllLoteItens))).Methods(http.MethodGet)
 

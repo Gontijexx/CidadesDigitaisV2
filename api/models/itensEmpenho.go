@@ -7,6 +7,21 @@ import (
 )
 
 /*  =========================
+	FUNCAO SALVAR ITENS EMPENHO NO BANCO DE DADOS
+=========================  */
+
+func (itensEmpenho *ItensEmpenho) SaveItensEmpenho(db *gorm.DB) (*ItensEmpenho, error) {
+
+	//	Adiciona um novo elemento ao banco de dados
+	err := db.Debug().Create(&itensEmpenho).Error
+	if err != nil {
+		return &ItensEmpenho{}, err
+	}
+
+	return itensEmpenho, nil
+}
+
+/*  =========================
 	FUNCAO LISTAR ITENS EMPENHO POR ID
 =========================  */
 

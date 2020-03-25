@@ -526,6 +526,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	APAGA MUNICIPIOS (cod_ibge)
 	r.HandleFunc(config.MUNICIPIO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteMunicipio))).Methods(http.MethodDelete)
 
+	//	LISTAR MUNICIPIO.CODIBGE E MUNICIPIO.NOMEMUNICIPIO
+	r.HandleFunc("/read/municipioget", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetMunicipioIDandNomeMunicipio))).Methods(http.MethodGet)
+
 	/*	=========================
 		ROTAS EM NATUREZA DESPESA
 	=========================	*/

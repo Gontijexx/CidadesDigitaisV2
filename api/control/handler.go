@@ -163,14 +163,17 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA UACOM (cod_ibge, data)
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetUacomByID))).Methods(http.MethodGet)
 
-	//	EDITA UACOM (COD_IBGE, DATA)
+	//	EDITA UACOM (cod_ibge, data)
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateUacom))).Methods(http.MethodPut)
 
+	//	APAGA UACOM (cod_ibge, data)
+	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteUacom))).Methods(http.MethodDelete)
+
 	/*	=========================
-		ROTAS EM CIDADE DIGITAL UACOM_ASSUNTO
+		ROTAS EM CIDADE DIGITAL UACOM ASSUNTO
 	=========================	*/
 
-	//	SALVA UACOM_ASSUNTO
+	//	SALVA UACOM ASSUNTO
 	r.HandleFunc(config.UACOM_ASSUNTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUacomAssunto))).Methods(http.MethodPost)
 
 	/*	=========================

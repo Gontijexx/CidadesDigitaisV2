@@ -1,10 +1,10 @@
 package control
 
 import (
-	"CidadesDigitaisV2/api/config"
-	"CidadesDigitaisV2/api/models"
-	"CidadesDigitaisV2/api/responses"
 	"fmt"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
 	"net/http"
 	"strconv"
 

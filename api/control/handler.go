@@ -1,8 +1,8 @@
 package control
 
 import (
-	"CidadesDigitaisV2/api/config"
-	"CidadesDigitaisV2/api/middlewares"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/middlewares"
 	"net/http"
 
 	"github.com/gorilla/mux"

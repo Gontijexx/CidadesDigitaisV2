@@ -1,7 +1,7 @@
 package main
 
 import (
-	"CidadesDigitaisV2/api"
+	"github.com/Gontijexx/CidadesDigitaisV2/api"
 )
 
 func main() {

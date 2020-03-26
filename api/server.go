@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"CidadesDigitaisV2/api/control"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/control"
 
 	"github.com/joho/godotenv"
 	"github.com/pkg/browser"

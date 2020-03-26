@@ -1,10 +1,10 @@
 package config
 
 import (
-	"CidadesDigitaisV2/api/auth"
-	"CidadesDigitaisV2/api/responses"
 	"errors"
 	"fmt"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/auth"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
 	"log"
 	"net/http"
 	"reflect"

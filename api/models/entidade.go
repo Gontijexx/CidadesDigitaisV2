@@ -7,6 +7,22 @@ import (
 )
 
 /*  =========================
+	STRUCT ENTIDADE
+=========================  */
+
+type Entidade struct {
+	Cnpj          string `gorm:"primary_key;not null;size:14" json:"cnpj"`
+	Nome          string `gorm:"size:50;default:null" json:"nome"`
+	Endereco      string `gorm:"size:100;default:null" json:"endereco"`
+	Numero        string `gorm:"size:10;default:null" json:"numero"`
+	Bairro        string `gorm:"size:100;default:null" json:"bairro"`
+	Cep           string `gorm:"size:8;default:null" json:"cep"`
+	NomeMunicipio string `gorm:"size:50;default:null" json:"nome_municipio"`
+	UF            string `gorm:"size:2;default:null" json:"uf"`
+	Observacao    string `gorm:"size:1000;default:null" json:"observacao"`
+}
+
+/*  =========================
 	FUNCAO SALVAR ENTIDADE NO BANCO DE DADOS
 =========================  */
 

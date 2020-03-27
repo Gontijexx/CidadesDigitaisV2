@@ -60,15 +60,7 @@ func (ponto *Ponto) FindAllPonto(db *gorm.DB) (*[]Ponto, error) {
 func (ponto *Ponto) UpdatePonto(db *gorm.DB, codPonto, codCategoria, codIbge uint64) (*Ponto, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Model(&Ponto{}).Where("cod_ponto = ? AND cod_categoria =? AND cod_ibge = ?", codPonto, codCategoria, codIbge).Updates(
-		Ponto{
-			Endereco:    ponto.Endereco,
-			Numero:      ponto.Numero,
-			Complemento: ponto.Complemento,
-			Bairro:      ponto.Bairro,
-			Cep:         ponto.Cep,
-			Latitude:    ponto.Latitude,
-			Longitude:   ponto.Longitude}).Error
+	err := db.Debug().Exec("UPDATE ponto SET cod_pid = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, cep = ?, latitude = ?, longitude = ? WHERE cod_ponto = ? AND cod_categoria = ? AND cod_ibge = ?", ponto.CodPid, ponto.Endereco, ponto.Numero, ponto.Complemento, ponto.Bairro, ponto.Cep, ponto.Latitude, ponto.Longitude, codPonto, codCategoria, codIbge).Error
 
 	if db.Error != nil {
 		return &Ponto{}, db.Error

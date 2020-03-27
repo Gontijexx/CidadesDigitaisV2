@@ -34,15 +34,29 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Estrutura models.Ponto{} "renomeada"
+	//	Struct's necessarias
+	pid := models.Pid{}
 	ponto := models.Ponto{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct ponto referenciada (&struct)
+	err = json.Unmarshal(body, &pid)
+
+	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
+		return
+	}
+
 	err = json.Unmarshal(body, &ponto)
 
 	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
+		return
+	}
+	if err = validation.Validator.Struct(pid); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
+		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
@@ -52,12 +66,23 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	pidCreated, err := pid.SavePID(server.DB)
+
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	ponto.CodPid = pidCreated.CodPid
+
 	//	SavePonto eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	pontoCreated, err := ponto.SavePonto(server.DB)
 
-	/*	Retorna um erro caso nao seja possivel salvar ponto no banco de dados
-		Status 500	*/
+	//	Retorna um erro caso nao seja possivel salvar ponto no banco de dados
+	//	Status 500
 	if err != nil {
+		_, _ = pid.DeletePID(server.DB, pidCreated.CodPid)
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
 		return

@@ -1,7 +1,10 @@
 package main
 
-import "CidadesDigitaisV2/api"
+import (
+	"github.com/Gontijexx/CidadesDigitaisV2/api"
+)
 
 func main() {
 	api.Run()
+
 }

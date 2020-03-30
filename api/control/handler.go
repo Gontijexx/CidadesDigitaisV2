@@ -1,8 +1,8 @@
 package control
 
 import (
-	"CidadesDigitaisV2/api/config"
-	"CidadesDigitaisV2/api/middlewares"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/middlewares"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -15,7 +15,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r = s.Router
 
 	//	HOME
-	r.HandleFunc("/{id}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
+	r.HandleFunc("/", s.Home).Methods(http.MethodGet)
 
 	/*	=========================
 		ROTAS EM USUARIO

@@ -4,13 +4,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+
+	"github.com/Gontijexx/CidadesDigitaisV2/api/auth"
 	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
 	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
 	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
 	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
-	"io/ioutil"
-	"log"
-	"net/http"
 
 	"github.com/gorilla/mux"
 )

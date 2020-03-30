@@ -6,14 +6,14 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-/*   =========================
+/*  =========================
 	STRUCT PID
 =========================  */
 
 type Pid struct {
 	CodPid  uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_pid"`
 	CodIbge uint64 `gorm:"foreign_key:CodIbge;not null" json:"cod_ibge"`
-	Nome    string `gorm:"default:null" json:"nome"`
+	Nome    string `gorm:"not null" json:"nome"`
 	Inep    string `gorm:"default:null" json:"inep"`
 }
 

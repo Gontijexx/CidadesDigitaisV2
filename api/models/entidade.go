@@ -41,7 +41,7 @@ func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 	FUNCAO LISTAR ENTIDADE POR ID
 =========================  */
 
-func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, cnpj uint64) (*Entidade, error) {
+func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, cnpj string) (*Entidade, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Entidade{}).Where("cnpj = ?", cnpj).Take(&entidade).Error
@@ -73,7 +73,7 @@ func (entidade *Entidade) FindAllEntidade(db *gorm.DB) (*[]Entidade, error) {
 	FUNCAO EDITAR ENTIDADE
 =========================  */
 
-func (entidade *Entidade) UpdateEntidade(db *gorm.DB, cnpj uint64) (*Entidade, error) {
+func (entidade *Entidade) UpdateEntidade(db *gorm.DB, cnpj string) (*Entidade, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Exec("UPDATE entidade SET nome = ?, endereco = ?, numero = ?, bairro = ?, cep = ?, nome_municipio = ?, uf = ?, observacao = ? WHERE cnpj = ?", entidade.Nome, entidade.Endereco, entidade.Numero, entidade.Bairro, entidade.Cep, entidade.NomeMunicipio, entidade.UF, entidade.Observacao, cnpj).Error
@@ -96,7 +96,7 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, cnpj uint64) (*Entidade, e
 	FUNCAO DELETAR ENTIDADE POR ID
 =========================  */
 
-func (entidade *Entidade) DeleteEntidade(db *gorm.DB, cnpj uint64) (int64, error) {
+func (entidade *Entidade) DeleteEntidade(db *gorm.DB, cnpj string) (int64, error) {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Entidade{}).Where("cnpj = ?", cnpj).Take(&Entidade{}).Delete(&Entidade{})

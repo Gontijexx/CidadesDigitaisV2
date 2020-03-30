@@ -5,7 +5,7 @@ package config
 =========================  */
 
 const (
-	// defines ip and port address for server instance
+	//	defines ip and port address for server instance
 	SERVER_ADDR = "localhost:8080"
 )
 
@@ -31,7 +31,7 @@ const (
 )
 
 /*  =========================
-	ENTIDADE PATHS HTTP OK!
+	ENTIDADE PATHS HTTP
 =========================  */
 
 const (
@@ -40,7 +40,7 @@ const (
 )
 
 /*  =========================
-	CONTATO PATHS HTTP OK!
+	CONTATO PATHS HTTP
 =========================  */
 
 const (
@@ -49,7 +49,7 @@ const (
 )
 
 /*  =========================
-	TELEFONE PATHS HTTP OK!
+	TELEFONE PATHS HTTP
 =========================  */
 
 const (
@@ -58,7 +58,7 @@ const (
 )
 
 /*  =========================
-	LOTE PATHS HTTP OK!
+	LOTE PATHS HTTP
 =========================  */
 
 const (
@@ -67,7 +67,7 @@ const (
 )
 
 /*  =========================
-	REAJUSTE PATHS HTTP OK!
+	REAJUSTE PATHS HTTP
 =========================  */
 const (
 	REAJUSTE_PATH    = "/read/reajuste"
@@ -75,7 +75,7 @@ const (
 )
 
 /*  =========================
-	LOTE ITENS PATHS HTTP OK!
+	LOTE ITENS PATHS HTTP
 =========================  */
 
 const (
@@ -84,7 +84,7 @@ const (
 )
 
 /*  =========================
-	CD PATHS HTTP OK!
+	CD PATHS HTTP
 =========================  */
 
 const (
@@ -93,7 +93,7 @@ const (
 )
 
 /*  =========================
-	CD ITENS PATHS HTTP OK!
+	CD ITENS PATHS HTTP
 =========================  */
 
 const (
@@ -102,7 +102,7 @@ const (
 )
 
 /*  =========================
-	CD PROCESSO PATHS HTTP OK!
+	CD PROCESSO PATHS HTTP
 =========================  */
 
 const (
@@ -111,7 +111,7 @@ const (
 )
 
 /*  =========================
-	CD UACOM PATHS HTTP OK!
+	CD UACOM PATHS HTTP
 =========================  */
 
 const (
@@ -120,7 +120,7 @@ const (
 )
 
 /*  =========================
-	CD UACOM_ASSUNTO PATHS HTTP OK!
+	CD UACOM_ASSUNTO PATHS HTTP
 =========================  */
 
 const (
@@ -129,7 +129,7 @@ const (
 )
 
 /*  =========================
-	ASSUNTO PATHS HTTP OK!
+	ASSUNTO PATHS HTTP
 =========================  */
 
 const (
@@ -138,7 +138,7 @@ const (
 )
 
 /*  =========================
-	ETAPAS_CD PATHS HTTP OK!
+	ETAPAS_CD PATHS HTTP
 =========================  */
 
 const (
@@ -147,7 +147,7 @@ const (
 )
 
 /*  =========================
-	ETAPA PATHS HTTP OK!
+	ETAPA PATHS HTTP
 =========================  */
 
 const (
@@ -156,7 +156,7 @@ const (
 )
 
 /*  =========================
-	CD PONTO PATHS HTTP OK!
+	CD PONTO PATHS HTTP
 =========================  */
 
 const (
@@ -165,7 +165,7 @@ const (
 )
 
 /*	=========================
-	CATEGORIA PATHS HTTP OK!
+	CATEGORIA PATHS HTTP
 =========================	*/
 const (
 	CATEGORIA_PATH    = "/read/categoria"
@@ -181,7 +181,7 @@ const (
 )
 
 /*	=========================
-	TIPOLOGIA PATHS HTTP OK!
+	TIPOLOGIA PATHS HTTP
 =========================	*/
 
 const (
@@ -190,7 +190,7 @@ const (
 )
 
 /*  =========================
-	EMPENHO PATHS HTTP OK!
+	EMPENHO PATHS HTTP
 =========================  */
 
 const (
@@ -199,7 +199,7 @@ const (
 )
 
 /*  =========================
-	ITENS EMPENHO PATHS HTTP OK!
+	ITENS EMPENHO PATHS HTTP
 =========================  */
 
 const (
@@ -252,7 +252,7 @@ const (
 )
 
 /*  =========================
-	PREVISAO EMPENHO PATHS HTTP OK!
+	PREVISAO EMPENHO PATHS HTTP
 =========================  */
 
 const (
@@ -261,7 +261,7 @@ const (
 )
 
 /*  =========================
-	ITENS PREVISAO EMPENHO PATHS HTTP OK!
+	ITENS PREVISAO EMPENHO PATHS HTTP
 =========================  */
 
 const (
@@ -270,7 +270,7 @@ const (
 )
 
 /*	=========================
-	ITENS PATHS HTTP OK!
+	ITENS PATHS HTTP
 =========================	*/
 
 const (
@@ -279,7 +279,7 @@ const (
 )
 
 /*	=========================
-	CLASSE EMPENHO PATHS HTTP OK!
+	CLASSE EMPENHO PATHS HTTP
 =========================	*/
 
 const (
@@ -288,7 +288,7 @@ const (
 )
 
 /*	=========================
-	TIPO ITEM PATHS HTTP OK!
+	TIPO ITEM PATHS HTTP
 =========================	*/
 
 const (
@@ -297,7 +297,7 @@ const (
 )
 
 /*	=========================
-	NATUREZA DE DESPESA PATHS HTTP OK!
+	NATUREZA DE DESPESA PATHS HTTP
 =========================	*/
 
 const (
@@ -306,7 +306,7 @@ const (
 )
 
 /*  =========================
-	MUNICIPIO PATHS HTTP OK!
+	MUNICIPIO PATHS HTTP
 =========================  */
 
 const (
@@ -315,7 +315,7 @@ const (
 )
 
 /*  =========================
-	PREFEITOS PATHS HTTP OK!
+	PREFEITOS PATHS HTTP
 =========================  */
 
 const (

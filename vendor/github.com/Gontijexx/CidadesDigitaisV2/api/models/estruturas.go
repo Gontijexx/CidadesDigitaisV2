@@ -1,22 +1,6 @@
 package models
 
 /*  =========================
-	TABELA ENTIDADE
-=========================  */
-
-type Entidade struct {
-	Cnpj          string `gorm:"primary_key;not null;size:14" json:"cnpj"`
-	Nome          string `gorm:"size:50;default:null" json:"nome"`
-	Endereco      string `gorm:"size:100;default:null" json:"endereco"`
-	Numero        string `gorm:"size:10;default:null" json:"numero"`
-	Bairro        string `gorm:"size:100;default:null" json:"bairro"`
-	Cep           string `gorm:"size:8;default:null" json:"cep"`
-	NomeMunicipio string `gorm:"size:50;default:null" json:"nome_municipio"`
-	UF            string `gorm:"size:2;default:null" json:"uf"`
-	Observacao    string `gorm:"size:1000;default:null" json:"observacao"`
-}
-
-/*  =========================
 	TABELA CONTATO
 =========================  */
 
@@ -169,7 +153,7 @@ type LoteItens struct {
 	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item"`
 	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoItem;not null;size:11" json:"cod_tipo_item"`
 	Preco       float64 `gorm:"default:null;size:12" json:"preco"`
-	Descricao   string `gorm:"default:null" json:"descricao"`
+	Descricao   string  `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================

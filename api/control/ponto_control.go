@@ -3,14 +3,15 @@ package control
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
+	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
 
 	"github.com/gorilla/mux"
 )
@@ -74,7 +75,7 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ponto.CodPid = pidCreated.CodPid
+	ponto.CodPID = pidCreated.CodPid
 
 	//	SavePonto eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	pontoCreated, err := ponto.SavePonto(server.DB)

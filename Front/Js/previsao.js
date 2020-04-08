@@ -1,6 +1,6 @@
 //cuida de previsao de empenho
 let listaPrevisao = [];
-
+ 
 function previsao() {
 
     document.getElementById("editar").innerHTML = (`<br>`);

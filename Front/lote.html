@@ -41,13 +41,10 @@
                                     <h2>Tabela <b>Lote</b></h2>
                                 </div>
                                 <div class="col-sm-8">
-                                    <a href="./lote.html" class="btn btn-primary"><i class="material-icons">&#xE863;</i>
-                                        <span>Atualizar
-                                            Lista
-                                        </span></a>
-                                    <a href="#adicionarLote" class="btn btn-success" data-toggle="modal"><i
-                                            class="material-icons">&#xE147;</i> <span>Adicionar</span></a>
-
+                                    <a href="./lote.html" class="btn btn-primary">
+                                        <i class="material-icons">&#xE863;</i><span>Atualizar Lista </span></a>
+                                    <a href="#adicionarLote" class="btn btn-success" data-toggle="modal">
+                                        <i class="material-icons">&#xE147;</i><span>Adicionar</span></a>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +54,7 @@
                                 <div class="col-sm-3">
                                     <div class="show-entries">
                                         <span>Mostrando</span>
-                                        <select class="form-control" id="quantos" onchange="paginacao()">
+                                        <select class="form-control" id="quantos" onchange="pagina(0)">
                                             <option>5</option>
                                             <option>10</option>
                                             <option>15</option>
@@ -85,13 +82,9 @@
                             <ul class="pagination" id="paginacao"></ul>
                         </div>
                     </div>
-                    <div class="fixed-bottom">
-                        <script height="100%" width="100%" src="./Js/menu.js"></script>
-                    </div>
-                    <br><br><br>
-        </section> <!-- cd-intro -->
-        </div>
-        </div>
+                </div>
+            </div>
+        </section>
     </main>
     <!-- Modal Lote -->
     <div id="adicionarLote" class="modal fade">
@@ -186,16 +179,17 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
+    <div class="fixed-bottom">
+        <script height="100%" width="100%" src="./Js/menu.js"></script>
+    </div>
 </body>
+<!-- Menu de cabeçalho -->
 <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
 <script src="./Js/lote.js"></script>
 <script src="./Js/multi.js"></script>
-
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 
 </html>

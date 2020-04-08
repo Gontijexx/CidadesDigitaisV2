@@ -319,7 +319,7 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 201) {
-      alert("Usuário criado com sucesso");
+      //alert("Usuário criado com sucesso");
       response.json().then(function (json) {
         userCriado = json.cod_usuario;
       });

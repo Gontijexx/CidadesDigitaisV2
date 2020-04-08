@@ -3,6 +3,7 @@ let meuToken = localStorage.getItem("token");
 
 //Fazer Tabela
 let cdTotal = [];
+let meuLote;
 
 //pega o JSON de municípios para uso na tabela e para adcionar "CD"s
 let cidades = [];
@@ -164,11 +165,9 @@ function paginacao() {
         } else {
           document.getElementById("proximo").style.visibility = "hidden";
         }
-      
       });
     } else {
       erros(response.status);
-      
     }
   });
 }

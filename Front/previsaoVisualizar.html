@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Previsão de Empenho</title>
+    <title>Visualizar Previsão de Empenho</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -13,17 +13,18 @@
     <link rel="stylesheet" href="bootstrap4\css\bootstrap.css"> <!-- CSS bootstrap -->
     <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/multi.css">
     <!--Resource style -->
     <link rel="stylesheet" href="./css/style2.css">
     <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
 </head>
 
 <body>
     <main id="cd-main-content">
-        <section id="cd-intro">
+        <section id="cd-intro" style="overflow-y: auto;">
             <!--imagem de fundo-->
             <div class="row">
                 <div class="container">
@@ -32,23 +33,59 @@
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <h2 class="text-align:center">Visualizar Lista de Previsão de Empenho</h2>
+                                    <h2>Visualizar Lista de Previsão de Empenho</h2>
+                                </div>
+                                <div class="col-sm-8">
+                                    <a href="./previsaoVisualizar.html" class="btn btn-primary">
+                                        <i class="material-icons">&#xE863;</i><span>Atualizar Lista</span></a>
                                 </div>
                             </div>
                         </div>
-                        <!-- Conteúdo -->
-                        
+                        <!-- Estrutura da Tabela -->
+                        <div class="table-filter">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="show-entries">
+                                        <span>Mostrando</span>
+                                        <select class="form-control" id="quantos" onchange="pagina(0)">
+                                            <option>5</option>
+                                            <option>10</option>
+                                            <option>15</option>
+                                            <option>20</option>
+                                        </select>
+                                        <span>Itens</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <button type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                    <div class="filter-group">
+                                        <label>Nome</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Tabela por JS-->
+                        <div style="overflow-x:auto;">
+                            <table class="table table-striped table-bordered table-hover" id="tabela"></table>
+                        </div>
+                        <!--Footer-->
+                        <div class="clearfix">
+                            <div class="hint-text" id="mostrando"></div>
+                            <ul class="pagination" id="paginacao"></ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section> <!-- cd-intro -->
+        </section>
     </main>
+    <!-- Menu de cabeçalho -->
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 </body>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="./Js/gerenciaLote.js"></script>
+<script src="./Js/previsaoVisualizar.js"></script>
+<script src="./Js/modernizr.js"></script> <!-- Modernizr -->
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 
 </html>

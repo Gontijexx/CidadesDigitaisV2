@@ -54,7 +54,7 @@
                                 <div class="col-sm-3">
                                     <div class="show-entries">
                                         <span>Mostrando</span>
-                                        <select class="form-control" id="quantos" onchange="paginacao()">
+                                        <select class="form-control" id="quantos" onchange="pagina(0)">
                                             <option>5</option>
                                             <option>10</option>
                                             <option>15</option>
@@ -135,21 +135,21 @@
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-6">
                                                     <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="Nome" onchange="changer()" value="" id="nome" />
+                                                        placeholder="Nome" value="" id="nome" />
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4 mt-sm-0">
                                                     <input class="multisteps-form__input form-control" type="email"
-                                                        placeholder="Email" onchange="changer()" value="" id="email" />
+                                                        placeholder="Email" value="" id="email" />
                                                 </div>
                                             </div>
                                             <div class="form-row mt-4">
                                                 <div class="col-12 col-sm-6">
                                                     <input class="multisteps-form__input form-control" type="text"
-                                                        placeholder="Login" onchange="changer()" value="" id="login" />
+                                                        placeholder="Login" value="" id="login" />
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4 mt-sm-0">
                                                     <input class="multisteps-form__input form-control" type="password"
-                                                        placeholder="Senha" onchange="changer()" value="" id="senha" />
+                                                        placeholder="Senha" value="" id="senha" />
                                                 </div>
                                             </div>
                                             <!--
@@ -193,13 +193,11 @@
             </div>
         </div>
     </div>
-
+    <!-- Menu de cabeçalho -->
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    </script>
+    <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
     <script src="./Js/multi.js"></script>
     <script src="./Js/usuario.js"></script>
     <script src="./Js/main.js"></script> <!-- Resource jQuery -->

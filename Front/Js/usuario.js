@@ -143,8 +143,102 @@ function paginacao() {
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
         if (json.length > porPagina) {
-          for (i = 0; i < totalPaginas; i++) {
-            paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+          //caso seja apenas 10 paginas
+          if(totalPaginas<10){
+            for (i = 0; i < totalPaginas; i++) {
+              paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
+            }
+            //caso sejam mais de 10
+          } else{
+            //mostrar apenas inicio e fim
+            if(contador==0 || contador==Math.floor(totalPaginas)){
+              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
+              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
+              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
+              paginas += `<li><a>...</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
+            }
+            //opções do começo
+            else if(contador==1){
+              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
+              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
+              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
+              paginas += `<li class="page-item" id="page3"><a href="#" onclick="pagina(3)" class="page-link">4</a></li>`;
+              paginas += `<li><a>...</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
+            }
+            else if(contador==2){
+              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
+              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
+              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
+              paginas += `<li class="page-item" id="page3"><a href="#" onclick="pagina(3)" class="page-link">4</a></li>`;
+              paginas += `<li class="page-item" id="page4"><a href="#" onclick="pagina(4)" class="page-link">5</a></li>`;
+              paginas += `<li><a>...</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
+            }
+            else if(contador==3){
+              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
+              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
+              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
+              paginas += `<li class="page-item" id="page3"><a href="#" onclick="pagina(3)" class="page-link">4</a></li>`;
+              paginas += `<li class="page-item" id="page4"><a href="#" onclick="pagina(4)" class="page-link">5</a></li>`;
+              paginas += `<li class="page-item" id="page5"><a href="#" onclick="pagina(5)" class="page-link">6</a></li>`;
+              paginas += `<li><a>...</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
+            }
+            //opções no final
+            else if(contador==Math.floor(totalPaginas-3)){
+              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
+              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
+              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
+              paginas += `<li><a>...</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-5) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-5) + `)" class="page-link">` + Math.floor(totalPaginas - 4) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-4) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-4) + `)" class="page-link">` + Math.floor(totalPaginas - 3) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-3) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-3) + `)" class="page-link">` + Math.floor(totalPaginas - 2) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
+            }
+            else if(contador==Math.floor(totalPaginas-2)){
+              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
+              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
+              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
+              paginas += `<li><a>...</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-4) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-4) + `)" class="page-link">` + Math.floor(totalPaginas - 3) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-3) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-3) + `)" class="page-link">` + Math.floor(totalPaginas - 2) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
+            }
+            else if(contador==Math.floor(totalPaginas-1)){
+              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
+              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
+              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
+              paginas += `<li><a>...</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-3) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-3) + `)" class="page-link">` + Math.floor(totalPaginas - 2) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
+            }
+            else{
+              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
+              paginas += `<li><a>...</a></li>`;
+              paginas += `<li class="page-item" id="page` + (contador-2) + `"><a href="#" onclick="pagina(` + (contador-2) + `)" class="page-link">` + (contador-1) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + (contador-1) + `"><a href="#" onclick="pagina(` + (contador-1) + `)" class="page-link">` + contador + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + contador + `"><a href="#" onclick="pagina(` + contador + `)" class="page-link">` + (contador+ 1) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + (contador+1) + `"><a href="#" onclick="pagina(` + (contador+1) + `)" class="page-link">` + (contador+2) + `</a></li>`;
+              paginas += `<li class="page-item" id="page` + (contador+2) + `"><a href="#" onclick="pagina(` + (contador+2) + `)" class="page-link">` + (contador+3) + `</a></li>`;
+              paginas += `<li><a>...</a></li>`;
+              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
+            }
           }
         }
         paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;

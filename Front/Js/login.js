@@ -46,7 +46,7 @@ input2.addEventListener("keyup", function (event) {
 //o json usado para mandar as informações pelo fetch
 let info = {
   "login": " ",
-  "senha": " "
+  "senha": " ",
 };
 
 //função que altera as informações do json, capturando do html
@@ -72,8 +72,7 @@ function entrar() {
   }).then(function (response) {
 
     //checar o status do pedido
-    console.log(response.status);
-
+    console.log(corpo);
     //tratamento dos erros
 
     if (response.status == 200 || response.status == 202) {

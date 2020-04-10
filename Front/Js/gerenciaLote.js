@@ -92,10 +92,6 @@ window.onload = function () {
 
   //estes campos precisam de adaptações para serem aceitos, como yyyy-MM-dd
 
-  let dt_inicio_vig1 = document.getElementById("dt_inicio_vig");
-  let dt_final_vig1 = document.getElementById("dt_final_vig");
-  let dt_reajuste1 = document.getElementById("dt_reajuste");
-
   let data1 = new Date(localStorage.getItem("dt_inicio_vig"));
   let data2 = new Date(localStorage.getItem("dt_final_vig"));
   let data3 = new Date(localStorage.getItem("dt_reajuste"));
@@ -104,13 +100,11 @@ window.onload = function () {
   let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
   let dataFinal3 = String(data3.getFullYear()).padStart(4, '0') + "-" + String(data3.getMonth() + 1).padStart(2, '0') + "-" + String(data3.getDate()).padStart(2, '0');
 
-  dt_inicio_vig1.value = dataFinal1;
-  dt_final_vig1.value = dataFinal2;
-  dt_reajuste1.value = dataFinal3;
-
+  document.getElementById("dt_inicio_vig").innerHTML = dataFinal1;
+  document.getElementById("dt_final_vig").innerHTML = dataFinal2;
+  document.getElementById("dt_reajuste").innerHTML = dataFinal3;
 
 }
-
 
 function enviar() {
 

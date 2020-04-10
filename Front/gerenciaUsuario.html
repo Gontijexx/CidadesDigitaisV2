@@ -52,22 +52,27 @@
                                         <label for="nome">Nome</label>
                                         <input type="text" class="form-control" id="nome" maxlength="100">
                                     </div>
- 
 
                                     <div class="form-group col-md-4">
                                         <label for="email">Email</label>
                                         <input type="text" class="form-control" id="email" maxlength="45">
                                     </div>
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="login">Login</label>
                                         <input type="text" class="form-control" id="login" maxlength="45">
                                     </div>
 
                                     <div class="form-group col-md-4">
+                                        <label for="senha">Senha</label>
+                                        <input type="text" class="form-control" id="senha" maxlength="100">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
                                         <label for="status">Status</label>
                                         <select type="text" class="form-control" id="status">
-                                            <>
+                                            <option value="1">Ativo</option>
+                                            <option value="0">Inativo</option>
                                         </select>
                                     </div>
 
@@ -91,9 +96,9 @@
                                 <button onclick="previsao()" type="button" style="background-color:#959595" class="btn btn-primary">Prev. Empenho</button>
                                 <button onclick="itens()" type="button" style="background-color:#959595" class="btn btn-primary">Itens</button>
                                 <button onclick="ponto()" type="button" style="background-color:#959595" class="btn btn-primary">Ponto</button>   
-                            </div> -->
+                            </div>
                             
-                            <!-- <div class="p-4 form-group" style="overflow-x:auto;">
+                            <div class="p-4 form-group" style="overflow-x:auto;">
                                 <p id="editar"></p>
                                 <table style="margin: 0px auto;" class="table table-striped table-bordered table-hover" id="tabela"></table>
                                 <div class="hint-text" id="mostrando"></div>

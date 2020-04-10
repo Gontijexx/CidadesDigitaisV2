@@ -33,6 +33,7 @@ let info = {
   "email": "",
   "status": "",
   "login": "",
+  "senha": "",
 };
 
 //pega os valores corretos das variaveis
@@ -41,30 +42,35 @@ let meuNome = localStorage.getItem("nome");
 let meuEmail = localStorage.getItem("email");
 let meuLogin = localStorage.getItem("login");
 let meuStatus = localStorage.getItem("status");
+let meuSenha = localStorage.getItem("senha");
 
 // inserindo os valores no html
+document.getElementById("cod_usuario").value = meuCodigo;
 document.getElementById("nome").value = meuNome;
 document.getElementById("email").value = meuEmail;
 document.getElementById("login").value = meuLogin;
 document.getElementById("status").value = meuStatus;
+document.getElementById("senha").value = meuSenha;
 
 function enviar() {
 
   let a = document.getElementById("nome");
   info.nome = a.value;
   let b = document.getElementById("email");
-  info.email =b.value;
+  info.email = b.value;
   let c = document.getElementById("login");
   info.login = c.value;
   let d = document.getElementById("status");
-  info.status =d.value;
+  info.status = d.value;
+  let e = document.getElementById("senha");
+  info.senha = e.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario/', {
-    method: 'POST',
+  fetch('http://localhost:8080/read/usuario/'+meuCodigo, {
+    method: 'PUT',
     body: corpo,
     headers: {
       'Authorization': 'Bearer ' + meuToken

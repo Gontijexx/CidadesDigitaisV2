@@ -13,7 +13,7 @@ let info = {
   "nome": "",
   "email": "",
   "login": "",
-  "senha": ""
+  "senha": "",
 };
 
 //tratamento de erros
@@ -109,17 +109,17 @@ function paginacao() {
             }
           }
           for (let i = comeco; i < fim && i < jsonDeStatus.length; i++) {
-            userTotal[i] = json[i];
+            userTotal[i] = jsonDeStatus[i];
             tabela += (`<tr> <td>`);
-            tabela += json[i]["cod_usuario"];
+            tabela += jsonDeStatus[i]["cod_usuario"];
             tabela += (`</td> <td>`);
-            tabela += json[i]["nome"]
+            tabela += jsonDeStatus[i]["nome"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["email"]
+            tabela += jsonDeStatus[i]["email"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["login"]
+            tabela += jsonDeStatus[i]["login"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["status"]
+            tabela += jsonDeStatus[i]["status"]
             tabela += (`</td> <td> 
                   <span class="d-flex">
                   <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
@@ -134,26 +134,24 @@ function paginacao() {
           let j = 0;
           let jsonDeStatus =[];
           for (let i = 0; i < json.length; i++) {
-            console.log(json[i]["status"])
             if (json[i]["status"] == 0) {
               jsonDeStatus[j] = json[i];
-              console.log(json[i]["status"])
               j++;
             }
           }
 
           for (let i = comeco; i < fim && i < jsonDeStatus.length; i++) {
-            userTotal[i] = json[i];
+            userTotal[i] = jsonDeStatus[i];
             tabela += (`<tr> <td>`);
-            tabela += json[i]["cod_usuario"];
+            tabela += jsonDeStatus[i]["cod_usuario"];
             tabela += (`</td> <td>`);
-            tabela += json[i]["nome"]
+            tabela += jsonDeStatus[i]["nome"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["email"]
+            tabela += jsonDeStatus[i]["email"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["login"]
+            tabela += jsonDeStatus[i]["login"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["status"]
+            tabela += jsonDeStatus[i]["status"]
             tabela += (`</td> <td> 
                   <span class="d-flex">
                   <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
@@ -414,6 +412,7 @@ function editarUsuario(valor) {
   localStorage.setItem("email", userTotal[valor].email);
   localStorage.setItem("login", userTotal[valor].login);
   localStorage.setItem("status", userTotal[valor].status);
+  localStorage.setItem("senha", userTotal[valor].senha);
   window.location.href = "./gerenciaUsuario.html";
 }
 

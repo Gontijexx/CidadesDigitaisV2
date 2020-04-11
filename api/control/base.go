@@ -1,9 +1,9 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/validation"
 	"fmt"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
 	"log"
 	"net/http"
 	"time"

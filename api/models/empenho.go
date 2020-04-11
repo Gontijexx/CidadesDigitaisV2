@@ -5,7 +5,19 @@ import (
 )
 
 /*  =========================
-	FUNCAO SALVAR EMPENHO NO BANCO DE DADOS
+	TABELA EMPENHO
+=========================  */
+
+type Empenho struct {
+	IDEmpenho          uint32 `gorm:"primary_key;auto_increment;default:not null" json:""id_empenho`
+	CodPrevisaoEmpenho uint32 `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
+	CodEmpenho         string `gorm:"not null;size:13" json:"cod_empenho"`
+	Data               string `gorm:"default:null" json:"data"`
+	Contador           uint32 `gorm:"default:null" json:"contador"`
+}
+
+/*  =========================
+	FUNCAO SALVAR EMPENHO
 =========================  */
 
 func (empenho *Empenho) SaveEmpenho(db *gorm.DB) (*Empenho, error) {
@@ -15,18 +27,18 @@ func (empenho *Empenho) SaveEmpenho(db *gorm.DB) (*Empenho, error) {
 	if err != nil {
 		return &Empenho{}, err
 	}
-	return empenho, nil
+
+	return empenho, err
 }
 
 /*  =========================
 	FUNCAO LISTAR EMPENHO POR ID
 =========================  */
 
-func (empenho *Empenho) FindEmpenhoByID(db *gorm.DB, idEmpenho uint64) (*Empenho, error) {
+func (empenho *Empenho) FindEmpenhoByID(db *gorm.DB, idEmpenho uint32) (*Empenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Empenho{}).Where("id_empenho = ?", idEmpenho).Take(&empenho).Error
-
 	if err != nil {
 		return &Empenho{}, err
 	}
@@ -54,11 +66,10 @@ func (empenho *Empenho) FindAllEmpenho(db *gorm.DB) (*[]Empenho, error) {
 	FUNCAO EDITAR EMPENHO
 =========================  */
 
-func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, idEmpenho uint64) (*Empenho, error) {
+func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, idEmpenho uint32) (*Empenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Exec("UPDATE empenho SET cod_previsao_empenho = ?, cod_empenho = ?, data = ?, contador = ? WHERE id_empenho = ?", empenho.CodPrevisaoEmpenho, empenho.CodEmpenho, empenho.Data, empenho.Contador, idEmpenho).Error
-
 	if err != nil {
 		return &Empenho{}, db.Error
 	}
@@ -69,7 +80,6 @@ func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, idEmpenho uint64) (*Empenho, 
 		return &Empenho{}, err
 	}
 
-	//	Retorna o elemento que foi alterado
 	return empenho, err
 }
 
@@ -77,19 +87,18 @@ func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, idEmpenho uint64) (*Empenho, 
 	FUNCAO DELETAR EMPENHO
 =========================
 
-func (empenho *Empenho) DeleteEmpenho(db *gorm.DB, idEmpenho uint64) (int64, error) {
+func (empenho *Empenho) DeleteEmpenho(db *gorm.DB, idEmpenho uint) (error) {
 
 	//	Deleta  um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Empenho{}).Where("id_empenho = ?", idEmpenho).Take(&Empenho{}).Delete(&Empenho{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Empenho not found")
+			return errors.New("Empenho not found")
 		}
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }
 
 */

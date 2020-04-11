@@ -8,11 +8,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Gontijexx/CidadesDigitaisV2/api/auth"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
+	"CidadesDigitaisV2/api/auth"
+	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/models"
+	"CidadesDigitaisV2/api/responses"
+	"CidadesDigitaisV2/api/validation"
 
 	"github.com/gorilla/mux"
 )
@@ -24,18 +24,9 @@ import (
 func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	if err := config.AuthMod(w, r, 12001); err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-		return
-	}
-
-	entidade := models.Entidade{}
-	logEntidade := models.Log{}
-
-	//	Extrai o cod_usuario do body
-	tokenID, err := auth.ExtractTokenID(r)
+	err := config.AuthMod(w, r, 12001)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
 
@@ -46,6 +37,16 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
+	entidade := models.Entidade{}
+	logEntidade := models.Log{}
+
 	//	Unmarshal analisa o JSON recebido e armazena na struct entidade referenciada (&struct)
 	err = json.Unmarshal(body, &entidade)
 	if err != nil {
@@ -53,21 +54,29 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Validacao da struct recebida
-	if err = validation.Validator.Struct(entidade); err != nil {
+	//	Validacao de estrutura
+	err = validation.Validator.Struct(entidade)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
 	//	Validacao de CNPJ
-	if result := validation.ValidationCNPJ(entidade.Cnpj); result != true {
+	result := validation.ValidationCNPJ(entidade.Cnpj)
+	if result != true {
 		log.Printf("[FATAL] invalid CNPJ!")
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	logEntidade.ConcatEntidade(server.DB, entidade.Cnpj)
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logEntidade.LogEntidade(server.DB, entidade.Cnpj, "entidade", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
 
 	//	SaveEntidade eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	entidadeCreated, err := entidade.SaveEntidade(server.DB)
@@ -77,13 +86,10 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logEntidade.LogEntidade(server.DB, entidade.Cnpj, "entidade", "i", tokenID)
-
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, entidadeCreated.Cnpj))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%v", r.Host, r.RequestURI, entidadeCreated.Cnpj))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, entidadeCreated)
-
 }
 
 /*  =========================
@@ -93,7 +99,8 @@ func (server *Server) CreateEntidade(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	if err := config.AuthMod(w, r, 12002); err != nil {
+	err := config.AuthMod(w, r, 12002)
+	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -115,7 +122,6 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, entidadeGotten)
-
 }
 
 /*  =========================
@@ -125,7 +131,8 @@ func (server *Server) GetEntidadeByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	if err := config.AuthMod(w, r, 12002); err != nil {
+	err := config.AuthMod(w, r, 12002)
+	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -151,7 +158,8 @@ func (server *Server) GetAllEntidade(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	if err := config.AuthMod(w, r, 12003); err != nil {
+	err := config.AuthMod(w, r, 12003)
+	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -184,24 +192,28 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = validation.Validator.Struct(entidade); err != nil {
+	err = validation.Validator.Struct(entidade)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
-	logEntidade.ConcatEntidade(server.DB, cnpj)
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logEntidade.LogEntidade(server.DB, cnpj, "entidade", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
 
 	//	updateEntidade recebe a nova entidade, a que foi alterada
 	updateEntidade, err := entidade.UpdateEntidade(server.DB, cnpj)
-
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
 		return
 	}
-
-	logEntidade.LogEntidade(server.DB, cnpj, "entidade", "u", tokenID)
 
 	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updateEntidade)
@@ -214,10 +226,12 @@ func (server *Server) UpdateEntidade(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	if err := config.AuthMod(w, r, 12003); err != nil {
+	err := config.AuthMod(w, r, 12003)
+	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -234,22 +248,23 @@ func (server *Server) DeleteEntidade(w http.ResponseWriter, r *http.Request) {
 	//	cnpj armazena a chave primaria da tabela entidade
 	cnpj := vars["cnpj"]
 
-	logEntidade.ConcatEntidade(server.DB, cnpj)
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logEntidade.LogEntidade(server.DB, cnpj, "entidade", "d", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
 
 	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	//	Caso nao seja possivel deletar o dado especificado tratamos o erro
-
-	_, err = entidade.DeleteEntidade(server.DB, cnpj)
-
+	err = entidade.DeleteEntidade(server.DB, cnpj)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	logEntidade.LogEntidade(server.DB, cnpj, "entidade", "d", tokenID)
-
-	w.Header().Set("Entity", fmt.Sprintf("%d", cnpj))
+	w.Header().Set("Entity", fmt.Sprintf("%v", cnpj))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

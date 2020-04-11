@@ -6,8 +6,18 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/*	=========================
+	STRUCT FATURA
+=========================	*/
+
+type Fatura struct {
+	NumNF   uint32 `gorm:"primary_key;not null" json:"num_nf"`
+	CodIbge uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	DtNf    string `gorm:"default:null" json:"dt_nf"`
+}
+
 /*  =========================
-	FUNCAO SALVAR FATURA NO BANCO DE DADOS
+	FUNCAO SALVAR FATURA
 =========================  */
 
 func (fatura *Fatura) SaveFatura(db *gorm.DB) (*Fatura, error) {
@@ -18,18 +28,17 @@ func (fatura *Fatura) SaveFatura(db *gorm.DB) (*Fatura, error) {
 		return &Fatura{}, err
 	}
 
-	return fatura, nil
+	return fatura, err
 }
 
 /*  =========================
 	FUNCAO LISTAR FATURA POR ID
 =========================  */
 
-func (fatura *Fatura) FindFaturaByID(db *gorm.DB, numNF, codIbge uint64) (*Fatura, error) {
+func (fatura *Fatura) FindFaturaByID(db *gorm.DB, numNF, codIbge uint32) (*Fatura, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Fatura{}).Where("num_nf = ? AND cod_ibge = ?", numNF, codIbge).Take(&fatura).Error
-
 	if err != nil {
 		return &Fatura{}, err
 	}
@@ -50,6 +59,7 @@ func (fatura *Fatura) FindAllFatura(db *gorm.DB) (*[]Fatura, error) {
 	if err != nil {
 		return &[]Fatura{}, err
 	}
+
 	return &allFatura, err
 }
 
@@ -57,41 +67,37 @@ func (fatura *Fatura) FindAllFatura(db *gorm.DB) (*[]Fatura, error) {
 	FUNCAO EDITAR FATURA
 ========================   */
 
-func (fatura *Fatura) UpdateFatura(db *gorm.DB, numNF, codIbge uint64) (*Fatura, error) {
+func (fatura *Fatura) UpdateFatura(db *gorm.DB, numNF, codIbge uint32) (*Fatura, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Exec("UPDATE fatura SET dt_nf = ? WHERE num_nf = ? AND cod_ibge = ?", fatura.DtNf, numNF, codIbge).Error
-
 	if db.Error != nil {
 		return &Fatura{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de suas chaves primarias
 	err = db.Debug().Model(&Fatura{}).Where("num_nf = ? AND cod_ibge = ?", numNF, codIbge).Take(fatura).Error
-
 	if err != nil {
 		return &Fatura{}, err
 	}
 
-	//	retorna o elemento que foi altaredo
 	return fatura, err
 }
 
 /*  =========================
-	FUNCAO DELETAR FATURA POR ID
+	FUNCAO DELETAR FATURA
 =========================  */
 
-func (fatura *Fatura) DeleteFatura(db *gorm.DB, numNF, codIbge uint64) (int64, error) {
+func (fatura *Fatura) DeleteFatura(db *gorm.DB, numNF, codIbge uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Fatura{}).Where("num_nf = ? AND cod_ibge = ?", numNF, codIbge).Take(&Fatura{}).Delete(&Fatura{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Fatura not found")
+			return errors.New("Fatura not found")
 		}
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }

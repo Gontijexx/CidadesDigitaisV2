@@ -1,12 +1,14 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/auth"
+	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/models"
+	"CidadesDigitaisV2/api/responses"
+	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -34,33 +36,43 @@ func (server *Server) CreateCD(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
 	}
 
-	//	Estrutura models.Cd{} "renomeada"
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	cd := models.CD{}
+	logCD := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct cd referenciada (&struct)
 	err = json.Unmarshal(body, &cd)
-
-	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(cd); err != nil {
+	//	Validacao de estrutura
+	err = validation.Validator.Struct(cd)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logCD.LogCD(server.DB, cd.CodIbge, "cd", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	SaveCD eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	cdCreated, err := cd.SaveCD(server.DB)
-
-	//	Retorna um erro caso nao seja possivel salvar cd no banco de dados
-	//	Status 500
 	if err != nil {
-
 		formattedError := config.FormatError(err.Error())
-
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database , %v\n", formattedError))
 		return
 	}
@@ -69,7 +81,6 @@ func (server *Server) CreateCD(w http.ResponseWriter, r *http.Request) {
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, cdCreated)
-
 }
 
 /*  =========================
@@ -97,7 +108,7 @@ func (server *Server) GetCDByID(w http.ResponseWriter, r *http.Request) {
 	cd := models.CD{}
 
 	//	cdGotten recebe o dado buscado no banco de dados
-	cdGotten, err := cd.FindCDByID(server.DB, codIbge)
+	cdGotten, err := cd.FindCDByID(server.DB, uint32(codIbge))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -119,6 +130,7 @@ func (server *Server) GetAllCD(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	cd := models.CD{}
 
 	//	allCD armazena os dados buscados no banco de dados
@@ -130,7 +142,6 @@ func (server *Server) GetAllCD(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, allCD)
-
 }
 
 /*  =========================
@@ -161,7 +172,15 @@ func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	cd := models.CD{}
+	logCD := models.Log{}
 
 	err = json.Unmarshal(body, &cd)
 	if err != nil {
@@ -169,14 +188,23 @@ func (server *Server) UpdateCD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = validation.Validator.Struct(cd); err != nil {
+	err = validation.Validator.Struct(cd)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logCD.LogCD(server.DB, uint32(codIbge), "cd", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	updateCD recebe a nova cd, a que foi alterada
-	updateCD, err := cd.UpdateCD(server.DB, codIbge)
+	updateCD, err := cd.UpdateCD(server.DB, uint32(codIbge))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -199,10 +227,19 @@ func (server *Server) DeleteCD(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
 	cd := models.CD{}
+	logCD := models.Log{}
+
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
 
 	//	codIbge armazena a chave primaria da tabela cd
 	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
@@ -211,9 +248,16 @@ func (server *Server) DeleteCD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logCD.LogCD(server.DB, uint32(codIbge), "cd", "d", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario.
-	//	Caso nao seja possivel deletar o dado especificado tratamos o erro
-	_, err = cd.DeleteCD(server.DB, codIbge)
+	err = cd.DeleteCD(server.DB, uint32(codIbge))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

@@ -1,8 +1,8 @@
 package control
 
 import (
-	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/middlewares"
+	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/middlewares"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -15,7 +15,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r = s.Router
 
 	//	HOME
-	r.HandleFunc("/", s.Home).Methods(http.MethodGet)
+	r.HandleFunc("/", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.Home))).Methods(http.MethodGet)
 
 	/*	=========================
 		ROTAS EM USUARIO
@@ -118,9 +118,6 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	/*	=========================
 		ROTAS EM CIDADE DIGITAL ITENS
 	=========================	*/
-
-	//	SALVA CD ITENS
-	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCDItens))).Methods(http.MethodPost)
 
 	//	LISTA CD ITENS
 	r.HandleFunc(config.CD_ITENS_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllCDItens))).Methods(http.MethodGet)

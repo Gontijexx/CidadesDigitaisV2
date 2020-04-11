@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
+	"CidadesDigitaisV2/api/responses"
 )
 
 func (server *Server) Home(w http.ResponseWriter, r *http.Request) {

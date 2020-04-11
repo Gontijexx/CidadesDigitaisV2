@@ -34,7 +34,7 @@ func (entidade *Entidade) SaveEntidade(db *gorm.DB) (*Entidade, error) {
 		return &Entidade{}, err
 	}
 
-	return entidade, nil
+	return entidade, err
 }
 
 /*  =========================
@@ -45,7 +45,6 @@ func (entidade *Entidade) FindEntidadeByID(db *gorm.DB, cnpj string) (*Entidade,
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Entidade{}).Where("cnpj = ?", cnpj).Take(&entidade).Error
-
 	if err != nil {
 		return &Entidade{}, err
 	}
@@ -66,6 +65,7 @@ func (entidade *Entidade) FindAllEntidade(db *gorm.DB) (*[]Entidade, error) {
 	if err != nil {
 		return &[]Entidade{}, err
 	}
+
 	return &allEntidade, err
 }
 
@@ -77,9 +77,8 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, cnpj string) (*Entidade, e
 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Exec("UPDATE entidade SET nome = ?, endereco = ?, numero = ?, bairro = ?, cep = ?, nome_municipio = ?, uf = ?, observacao = ? WHERE cnpj = ?", entidade.Nome, entidade.Endereco, entidade.Numero, entidade.Bairro, entidade.Cep, entidade.NomeMunicipio, entidade.UF, entidade.Observacao, cnpj).Error
-
-	if db.Error != nil {
-		return &Entidade{}, db.Error
+	if err != nil {
+		return &Entidade{}, err
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
@@ -88,7 +87,6 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, cnpj string) (*Entidade, e
 		return &Entidade{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return entidade, err
 }
 
@@ -96,19 +94,18 @@ func (entidade *Entidade) UpdateEntidade(db *gorm.DB, cnpj string) (*Entidade, e
 	FUNCAO DELETAR ENTIDADE POR ID
 =========================  */
 
-func (entidade *Entidade) DeleteEntidade(db *gorm.DB, cnpj string) (int64, error) {
+func (entidade *Entidade) DeleteEntidade(db *gorm.DB, cnpj string) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Entidade{}).Where("cnpj = ?", cnpj).Take(&Entidade{}).Delete(&Entidade{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Entidade not found")
+			return errors.New("Entidade not found")
 		}
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }
 
 /*  =========================

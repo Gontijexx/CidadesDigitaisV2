@@ -7,19 +7,19 @@ import (
 )
 
 /*  =========================
-	STRUCT DE ETAPAS_CD
+	STRUCT ETAPAS CD
 =========================  */
 
 type EtapasCD struct {
-	CodIbge     uint64 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge" `
-	CodEtapa    uint64 `gorm:"primary_key;foreign_key:CodEtapa;not null" json:"cod_etapa" `
+	CodIbge     uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge" `
+	CodEtapa    uint32 `gorm:"primary_key;foreign_key:CodEtapa;not null" json:"cod_etapa" `
 	DtInicio    string `gorm:"default: null" json:"dt_inicio" `
 	DtFim       string `gorm:"default: null" json:"dt_fim" `
 	Responsavel string `gorm:"default: null" json:"responsavel" `
 }
 
 /*  =========================
-	FUNCAO SALVAR ETAPAS CD NO BANCO DE DADOS
+	FUNCAO SALVAR ETAPAS CD
 =========================  */
 
 func (etapasCD *EtapasCD) SaveEtapasCD(db *gorm.DB) (*EtapasCD, error) {
@@ -36,10 +36,9 @@ func (etapasCD *EtapasCD) SaveEtapasCD(db *gorm.DB) (*EtapasCD, error) {
 	FUNCAO LISTAR ETAPAS CD POR ID
 =========================  */
 
-func (etapasCD *EtapasCD) FindEtapasCDByID(db *gorm.DB, codIbge, codEtapa uint64) (*EtapasCD, error) {
+func (etapasCD *EtapasCD) FindEtapasCDByID(db *gorm.DB, codIbge, codEtapa uint32) (*EtapasCD, error) {
 
 	err := db.Debug().Model(&EtapasCD{}).Where("cod_ibge = ? AND cod_etapa = ?", codIbge, codEtapa).Take(&etapasCD).Error
-
 	if err != nil {
 		return &EtapasCD{}, err
 	}
@@ -67,7 +66,7 @@ func (etapasCD *EtapasCD) FindAllEtapasCD(db *gorm.DB) (*[]EtapasCD, error) {
 	FUNCAO EDITAR ETAPAS CD
 =========================  */
 
-func (etapasCD *EtapasCD) UpdateEtapasCD(db *gorm.DB, codIbge, codEtapa uint64) (*EtapasCD, error) {
+func (etapasCD *EtapasCD) UpdateEtapasCD(db *gorm.DB, codIbge, codEtapa uint32) (*EtapasCD, error) {
 
 	err := db.Debug().Model(&EtapasCD{}).Exec("UPDATE etapas_cd SET dt_inicio = ?, dt_fim = ?, responsavel = ? WHERE cod_ibge = ? AND cod_etapa = ?", etapasCD.DtInicio, etapasCD.DtFim, etapasCD.Responsavel, codIbge, codEtapa).Error
 	if db.Error != nil {
@@ -86,19 +85,18 @@ func (etapasCD *EtapasCD) UpdateEtapasCD(db *gorm.DB, codIbge, codEtapa uint64) 
 	FUNCAO DELETAR ETAPAS CD
 =========================  */
 
-func (etapasCD *EtapasCD) DeleteEtapasCD(db *gorm.DB, codIbge, codEtapa uint64) (int64, error) {
+func (etapasCD *EtapasCD) DeleteEtapasCD(db *gorm.DB, codIbge, codEtapa uint32) error {
 
 	db = db.Debug().Model(&EtapasCD{}).Where("cod_ibge = ? AND cod_etapa = ?", codIbge, codEtapa).Take(&EtapasCD{}).Delete(&EtapasCD{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Etapas_CD not found")
+			return errors.New("Etapas_CD not found")
 		}
 
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }
 
 /*  =========================

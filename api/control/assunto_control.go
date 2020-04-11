@@ -2,15 +2,18 @@ package control
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
+
+	"CidadesDigitaisV2/api/auth"
+	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/models"
+	"CidadesDigitaisV2/api/responses"
+	"CidadesDigitaisV2/api/validation"
 
 	"github.com/gorilla/mux"
 )
@@ -27,6 +30,7 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -34,29 +38,41 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Estrutura models.Assunto{} "renomeada"
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	assunto := models.Assunto{}
+	logAssunto := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct assunto referenciada (&struct)
 	err = json.Unmarshal(body, &assunto)
-
-	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(assunto); err != nil {
+	//	Validacao de estrutura
+	err = validation.Validator.Struct(assunto)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logAssunto.LogAssunto(server.DB, assunto.CodAssunto, "assunto", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	SaveAssunto eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	assuntoCreated, err := assunto.SaveAssunto(server.DB)
-
-	/*	Retorna um erro caso nao seja possivel salvar assunto no banco de dados
-		Status 500	*/
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
@@ -67,7 +83,6 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, assuntoCreated)
-
 }
 
 /*  =========================
@@ -82,6 +97,7 @@ func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -95,8 +111,7 @@ func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 	assunto := models.Assunto{}
 
 	//	assuntoGotten recebe o dado buscado no banco de dados
-	assuntoGotten, err := assunto.FindAssuntoByID(server.DB, codAssunto)
-
+	assuntoGotten, err := assunto.FindAssuntoByID(server.DB, uint32(codAssunto))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -104,7 +119,6 @@ func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, assuntoGotten)
-
 }
 
 /*  =========================
@@ -119,6 +133,7 @@ func (server *Server) GetAllAssunto(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	assunto := models.Assunto{}
 
 	//	allAssunto armazena os dados buscados no banco de dados
@@ -145,6 +160,7 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -161,7 +177,15 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	assunto := models.Assunto{}
+	logAssunto := models.Log{}
 
 	err = json.Unmarshal(body, &assunto)
 	if err != nil {
@@ -169,14 +193,23 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = validation.Validator.Struct(assunto); err != nil {
+	err = validation.Validator.Struct(assunto)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logAssunto.LogAssunto(server.DB, uint32(codAssunto), "assunto", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	updateAssunto recebe o novo assunto, a que foi alterada
-	updateAssunto, err := assunto.UpdateAssunto(server.DB, codAssunto)
+	updateAssunto, err := assunto.UpdateAssunto(server.DB, uint32(codAssunto))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -199,10 +232,19 @@ func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	assunto := models.Assunto{}
+	logAssunto := models.Log{}
 
 	//	codAssunto armazena a chave primaria da tabela assunto
 	codAssunto, err := strconv.ParseUint(vars["cod_assunto"], 10, 64)
@@ -211,9 +253,16 @@ func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = assunto.DeleteAssunto(server.DB, codAssunto)
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logAssunto.LogAssunto(server.DB, uint32(codAssunto), "assunto", "d", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
+	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	err = assunto.DeleteAssunto(server.DB, uint32(codAssunto))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

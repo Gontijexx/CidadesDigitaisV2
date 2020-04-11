@@ -1,12 +1,14 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/auth"
+	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/models"
+	"CidadesDigitaisV2/api/responses"
+	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -27,42 +29,51 @@ func (server *Server) CreateContato(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
 	}
 
-	//	Estrutura models.Contato{} "renomeada"
-	contato := models.Contato{}
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
 
-	/*	O metodo Prepare deve ser chamado em metodos de POST e PUT
-		a fim de preparar os dados a serem recebidos pelo banco de dados	*/
-	//contato.Prepare()
+	contato := models.Contato{}
+	logContato := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct contato referenciada (&struct)
 	err = json.Unmarshal(body, &contato)
-
-	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(contato); err != nil {
+	//	Validacao de estrutura
+	err = validation.Validator.Struct(contato)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logContato.LogContato(server.DB, contato.CodContato, "contato", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	SaveContato eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	contatoCreated, err := contato.SaveContato(server.DB)
-
-	//	Retorna um erro caso nao seja possivel salvar entidado no banco de dados
-	//	Status 500
 	if err != nil {
-
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[Error] We couldn't save Contato, Check server details"))
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
 		return
 	}
 
@@ -70,7 +81,6 @@ func (server *Server) CreateContato(w http.ResponseWriter, r *http.Request) {
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, contatoCreated)
-
 }
 
 /*  =========================
@@ -85,9 +95,10 @@ func (server *Server) GetAllContato(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	contato := models.Contato{}
 
-	//	contatos armazena os dados buscados no banco de dados
+	//	allContato armazena os dados buscados no banco de dados
 	allContato, err := contato.FindAllContato(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
@@ -111,6 +122,7 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -127,9 +139,15 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	contato := models.Contato{}
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
 
-	//contato.Prepare()
+	contato := models.Contato{}
+	logContato := models.Log{}
 
 	err = json.Unmarshal(body, &contato)
 	if err != nil {
@@ -143,8 +161,16 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logContato.LogContato(server.DB, uint32(codContato), "contato", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	updateContato recebe a nova contato, a que foi alterada
-	updateContato, err := contato.UpdateContato(server.DB, codContato)
+	updateContato, err := contato.UpdateContato(server.DB, uint32(codContato))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -167,10 +193,19 @@ func (server *Server) DeleteContato(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	contato := models.Contato{}
+	logContato := models.Log{}
 
 	//	codContato armazena a chave primaria da tabela contato
 	codContato, err := strconv.ParseUint(vars["cod_contato"], 10, 64)
@@ -179,9 +214,16 @@ func (server *Server) DeleteContato(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = contato.DeleteContato(server.DB, codContato)
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logContato.LogContato(server.DB, uint32(codContato), "contato", "d", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
+	//	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	err = contato.DeleteContato(server.DB, uint32(codContato))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

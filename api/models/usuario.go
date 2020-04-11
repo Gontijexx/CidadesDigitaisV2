@@ -1,9 +1,9 @@
 package models
 
 import (
+	"CidadesDigitaisV2/api/auth"
 	"errors"
 	"fmt"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/auth"
 	"html"
 	"log"
 	"strings"

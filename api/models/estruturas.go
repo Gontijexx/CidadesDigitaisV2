@@ -128,16 +128,6 @@ type OTB struct {
 }
 
 /*	=========================
-		TABELA FATURA_OTB
-=========================	*/
-
-type FaturaOTB struct {
-	CodOtb  uint64 `gorm:"primary_key;foreign_key:CodOtb;not null" json:"cod_otb"`
-	NumNF   uint64 `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
-	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
-}
-
-/*	=========================
 		TABELA ITENS_OTB (PAGAMENTO)
 =========================	*/
 

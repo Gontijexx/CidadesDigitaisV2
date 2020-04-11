@@ -12,10 +12,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-/*	=========================
-		COMENTAR
-=========================	*/
-
 var server = control.Server{}
 
 func Run() {
@@ -31,6 +27,6 @@ func Run() {
 	server.Router = mux.NewRouter()
 
 	server.Initialize(os.Getenv("DB_DRIVER"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"))
-	server.Run()
 
+	server.Run()
 }

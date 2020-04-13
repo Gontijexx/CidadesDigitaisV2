@@ -169,3 +169,16 @@ func (log *Log) LogFatura(db *gorm.DB, numNF uint32, codIbge uint32, nomeTabela 
 
 	return err
 }
+
+/*  =========================
+	LOG FATURA OTB
+=========================  */
+
+func (log *Log) LogFaturaOTB(db *gorm.DB, codOtb uint32, numNF uint32, codIbge uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("fatura_otb").Select("CONCAT(IFNULL(cod_otb, ''), ';', IFNULL(num_nf, ''), ';', IFNULL(cod_ibge, ''))").Where("cod_otb = ? AND num_nf = ? AND cod_ibge =?", codOtb, numNF, codIbge).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_int_3) VALUES (?, ?, ?, ?, ?, ?, ?))", codUsuario, nomeTabela, operacao, log.Espelho, codOtb, numNF, codIbge).Error
+
+	return err
+}

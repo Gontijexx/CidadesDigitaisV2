@@ -1,13 +1,12 @@
 package api
 
 import (
+	"CidadesDigitaisV2/api/control"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/gorilla/mux"
-
-	"CidadesDigitaisV2/api/control"
 
 	"github.com/joho/godotenv"
 )

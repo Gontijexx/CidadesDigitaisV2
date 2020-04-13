@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Gontijexx/CidadesDigitaisV2/api/auth"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
+	"CidadesDigitaisV2/api/auth"
+	"CidadesDigitaisV2/api/responses"
 )
 
 /*	=========================

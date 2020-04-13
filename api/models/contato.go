@@ -7,6 +7,19 @@ import (
 )
 
 /*  =========================
+	STRUCT CONTATO
+=========================  */
+
+type Contato struct {
+	CodContato uint32 `gorm:"primary_key;auto_increment;not null" json:"cod_contato"`
+	Cnpj       string `gorm:"foreign_key:Cnpj;default:null;size:14" json:"cnpj"`
+	CodIbge    uint32 `gorm:"foreign_key:CodIbge;default:null" json:"cod_ibge"`
+	Nome       string `gorm:"default:null;size:50" json:"nome"`
+	Email      string `gorm:"default:null;size:100" json:"email"`
+	Funcao     string `gorm:"default:null" json:"funcao"`
+}
+
+/*  =========================
 	FUNCAO SALVAR CONTATO
 =========================  */
 
@@ -17,12 +30,12 @@ func (contato *Contato) SaveContato(db *gorm.DB) (*Contato, error) {
 	if err != nil {
 		return &Contato{}, err
 	}
-	return contato, nil
 
+	return contato, err
 }
 
 /*  =========================
-	FUNCAO LISTAR TODOS CONTATOS
+	FUNCAO LISTAR TODOS CONTATO
 =========================  */
 
 func (contato *Contato) FindAllContato(db *gorm.DB) (*[]Contato, error) {
@@ -34,6 +47,7 @@ func (contato *Contato) FindAllContato(db *gorm.DB) (*[]Contato, error) {
 	if err != nil {
 		return &[]Contato{}, err
 	}
+
 	return &allContato, err
 }
 
@@ -41,11 +55,10 @@ func (contato *Contato) FindAllContato(db *gorm.DB) (*[]Contato, error) {
 	FUNCAO EDITAR CONTATO
 =========================  */
 
-func (contato *Contato) UpdateContato(db *gorm.DB, codContato uint64) (*Contato, error) {
+func (contato *Contato) UpdateContato(db *gorm.DB, codContato uint32) (*Contato, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Exec("UPDATE contato SET cnpj =? , cod_ibge = ? , nome = ?, email = ?, funcao = ? WHERE cod_contato = ?", contato.Cnpj, contato.CodIbge, contato.Nome, contato.Email, contato.Funcao, codContato).Error
-
 	if db.Error != nil {
 		return &Contato{}, db.Error
 	}
@@ -56,25 +69,23 @@ func (contato *Contato) UpdateContato(db *gorm.DB, codContato uint64) (*Contato,
 		return &Contato{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return contato, err
 }
 
 /*  =========================
-	FUNCAO DELETAR ENTIDADE POR ID
+	FUNCAO DELETAR CONTATO
 =========================  */
 
-func (contato *Contato) DeleteContato(db *gorm.DB, codContato uint64) (int64, error) {
+func (contato *Contato) DeleteContato(db *gorm.DB, codContato uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Contato{}).Where("cod_contato = ?", codContato).Take(&Contato{}).Delete(&Contato{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Contato not found")
+			return errors.New("Contato not found")
 		}
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }

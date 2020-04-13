@@ -6,8 +6,17 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/*	=========================
+	STRUCT CATEGORIA
+=========================	*/
+
+type Categoria struct {
+	CodCategoria uint32 `gorm:"primary_key;auto_increment;not null" json:"cod_categoria"`
+	Descricao    string `gorm:"default:null" json:"descricao"`
+}
+
 /*  =========================
-	FUNCAO SALVAR CATGORIA NO BANCO DE DADOS
+	FUNCAO SALVAR CATEGORIA NO BANCO DE DADOS
 =========================  */
 
 func (categoria *Categoria) SaveCategoria(db *gorm.DB) (*Categoria, error) {
@@ -17,19 +26,18 @@ func (categoria *Categoria) SaveCategoria(db *gorm.DB) (*Categoria, error) {
 	if err != nil {
 		return &Categoria{}, err
 	}
-	return categoria, nil
 
+	return categoria, nil
 }
 
 /*  =========================
 	FUNCAO LISTAR CATEGORIA POR ID
 =========================  */
 
-func (categoria *Categoria) FindCategoriaByID(db *gorm.DB, codCategoria uint64) (*Categoria, error) {
+func (categoria *Categoria) FindCategoriaByID(db *gorm.DB, codCategoria uint32) (*Categoria, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Categoria{}).Where("cod_categoria = ?", codCategoria).Take(&categoria).Error
-
 	if err != nil {
 		return &Categoria{}, err
 	}
@@ -50,6 +58,7 @@ func (categoria *Categoria) FindAllCategoria(db *gorm.DB) (*[]Categoria, error) 
 	if err != nil {
 		return &[]Categoria{}, err
 	}
+
 	return &allCategoria, err
 }
 
@@ -57,13 +66,12 @@ func (categoria *Categoria) FindAllCategoria(db *gorm.DB) (*[]Categoria, error) 
 	FUNCAO EDITAR CATEGORIA
 =========================  */
 
-func (categoria *Categoria) UpdateCategoria(db *gorm.DB, codCategoria uint64) (*Categoria, error) {
+func (categoria *Categoria) UpdateCategoria(db *gorm.DB, codCategoria uint32) (*Categoria, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Exec("UPDATE categoria SET descricao = ? WHERE cod_categoria = ?", categoria.Descricao, codCategoria).Error
-
-	if db.Error != nil {
-		return &Categoria{}, db.Error
+	if err != nil {
+		return &Categoria{}, err
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
@@ -72,7 +80,6 @@ func (categoria *Categoria) UpdateCategoria(db *gorm.DB, codCategoria uint64) (*
 		return &Categoria{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return categoria, err
 }
 
@@ -80,17 +87,16 @@ func (categoria *Categoria) UpdateCategoria(db *gorm.DB, codCategoria uint64) (*
 	FUNCAO DELETAR CATEGORIA POR ID
 =========================  */
 
-func (categoria *Categoria) DeleteCategoria(db *gorm.DB, codCategoria uint64) (int64, error) {
+func (categoria *Categoria) DeleteCategoria(db *gorm.DB, codCategoria uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Categoria{}).Where("cod_categoria = ?", codCategoria).Take(&Categoria{}).Delete(&Categoria{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Categoria not found")
+			return errors.New("Categoria not found")
 		}
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }

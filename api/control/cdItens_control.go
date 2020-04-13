@@ -1,12 +1,14 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/auth"
+	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/models"
+	"CidadesDigitaisV2/api/responses"
+	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -14,53 +16,6 @@ import (
 
 	"github.com/gorilla/mux"
 )
-
-/*  =========================
-	FUNCAO ADICIONAR CD ITENS
-=========================  */
-
-func (server *Server) CreateCDItens(w http.ResponseWriter, r *http.Request) {
-
-	//	Autorizacao de Modulo
-	// err := config.AuthMod(w, r, 13021)
-	// if err != nil {
-	// 	responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-	// 	return
-	// }
-
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
-		return
-	}
-
-	cdItens := models.CDItens{}
-
-	err = json.Unmarshal(body, &cdItens)
-
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
-		return
-	}
-
-	if err = validation.Validator.Struct(cdItens); err != nil {
-		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
-		w.WriteHeader(http.StatusPreconditionFailed)
-		return
-	}
-
-	cdItensCreated, err := cdItens.SaveCDItens(server.DB)
-
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
-		return
-	}
-
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d/%d/%d", r.Host, r.RequestURI, cdItensCreated.CodIbge, cdItensCreated.CodItem, cdItensCreated.CodTipoItem))
-
-	responses.JSON(w, http.StatusCreated, cdItensCreated)
-}
 
 /*  =========================
 	FUNCAO LISTAR CD ITENS POR ID
@@ -74,6 +29,7 @@ func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna a rota das variaveis
 	vars := mux.Vars(r)
 
@@ -101,8 +57,7 @@ func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 	cdItens := models.CDItens{}
 
 	//	cdItensGotten recebe o dado buscado no banco de dados
-	cdItensGotten, err := cdItens.FindCDItensByID(server.DB, codIbge, codItem, codTipoItem)
-
+	cdItensGotten, err := cdItens.FindCDItensByID(server.DB, uint32(codIbge), uint32(codItem), uint32(codTipoItem))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -110,7 +65,6 @@ func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 
 	//retorna um JSON indicando que funcionou corretamente
 	responses.JSON(w, http.StatusOK, cdItensGotten)
-
 }
 
 /*  =========================
@@ -134,6 +88,7 @@ func (server *Server) GetAllCDItens(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
+
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, allCDItens)
 }
@@ -150,6 +105,7 @@ func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -181,8 +137,14 @@ func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cdItens := models.CDItens{}
+	logCDItens := models.Log{}
 
-	//cd_itens.Prepare()
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
 
 	err = json.Unmarshal(body, &cdItens)
 	if err != nil {
@@ -190,14 +152,23 @@ func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = validation.Validator.Struct(cdItens); err != nil {
+	err = validation.Validator.Struct(cdItens)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logCDItens.LogCDItens(server.DB, uint32(codIbge), uint32(codItem), uint32(codTipoItem), "cd_itens", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	updateCDItens recebe a nova cd_itens, a que foi alterada
-	updateCDItens, err := cdItens.UpdateCDItens(server.DB, codIbge, codItem, codTipoItem)
+	updateCDItens, err := cdItens.UpdateCDItens(server.DB, uint32(codIbge), uint32(codItem), uint32(codTipoItem))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

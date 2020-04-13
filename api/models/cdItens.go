@@ -1,47 +1,39 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
 /*  =========================
-	FUNCAO SALVAR CD_ITENS NO BANCO DE DADOS
+	STRUCT CD ITENS
 =========================  */
 
-func (cdItens *CDItens) SaveCDItens(db *gorm.DB) (*CDItens, error) {
-
-	//	Adiciona um novo elemento no banco de dados
-	err := db.Debug().Create(&cdItens).Error
-	if err != nil {
-		return &CDItens{}, err
-	}
-
-	return cdItens, nil
+type CDItens struct {
+	CodIbge                    uint32  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	CodItem                    uint32  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
+	CodTipoItem                uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
+	QuantidadePrevisto         uint32  `gorm:"default:null" json:"quantidade_previsto"`
+	QuantidadeProjetoExecutivo float32 `gorm:"default:null" json:"quantidade_projeto_executivo"`
+	QuantidadeTermoInstalacao  float32 `gorm:"default:null" json:"quantidade_termo_instalacao"`
 }
 
 /*  =========================
-	FUNCAO LISTAR CD_ITENS POR ID
+	FUNCAO LISTAR CD ITENS POR ID
 =========================  */
 
-func (cdItens *CDItens) FindCDItensByID(db *gorm.DB, codIbge, codItem, codTipoItem uint64) (*CDItens, error) {
+func (cdItens *CDItens) FindCDItensByID(db *gorm.DB, codIbge, codItem, codTipoItem uint32) (*CDItens, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", codIbge, codItem, codTipoItem).Take(&cdItens).Error
-
 	if err != nil {
 		return &CDItens{}, err
-	}
-	if gorm.IsRecordNotFoundError(err) {
-		return &CDItens{}, errors.New("Cd_itens Not Found")
 	}
 
 	return cdItens, err
 }
 
 /*  =========================
-	FUNCAO LISTAR TODOS CD_ITENS POR ID
+	FUNCAO LISTAR TODOS CD ITENS
 =========================  */
 
 func (cdItens *CDItens) FindAllCDItens(db *gorm.DB) (*[]CDItens, error) {
@@ -53,19 +45,19 @@ func (cdItens *CDItens) FindAllCDItens(db *gorm.DB) (*[]CDItens, error) {
 	if err != nil {
 		return &[]CDItens{}, err
 	}
+
 	return &allCDItens, err
 }
 
 /*  =========================
-	FUNCAO EDITAR CD_ITENS POR ID
+	FUNCAO EDITAR CD ITENS
 =========================  */
 
-func (cdItens *CDItens) UpdateCDItens(db *gorm.DB, codIbge, codItem, codTipoItem uint64) (*CDItens, error) {
+func (cdItens *CDItens) UpdateCDItens(db *gorm.DB, codIbge, codItem, codTipoItem uint32) (*CDItens, error) {
 
 	err := db.Debug().Exec("UPDATE cd_itens SET quantidade_previsto = ?, quantidade_projeto_executivo = ?, quantidade_termo_instalacao = ? WHERE cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", cdItens.QuantidadePrevisto, cdItens.QuantidadeProjetoExecutivo, cdItens.QuantidadeTermoInstalacao, codIbge, codItem, codTipoItem).Error
-
-	if db.Error != nil {
-		return &CDItens{}, db.Error
+	if err != nil {
+		return &CDItens{}, err
 	}
 
 	err = db.Debug().Model(&CDItens{}).Where("cod_ibge = ? AND cod_item = ? AND cod_tipo_item =?", codIbge, codItem, codTipoItem).Take(&cdItens).Error

@@ -6,6 +6,20 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/* =========================
+	STRUCT CD
+=========================  */
+
+type CD struct {
+	CodIbge       uint32 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
+	CodLote       uint32 `gorm:"foreign_key:CodLote;not null" json:"cod_lote"`
+	NomeMunicipio string `gorm:"default:null" json:"nome_municipio"`
+	OsPe          string `gorm:"size:10;default:null" json:"os_pe"`
+	DataPe        string `gorm:"default:null" json:"data_pe"`
+	OsImp         string `gorm:"size:10;default:null" json:"os_imp"`
+	DataImp       string `gorm:"default:null" json:"data_imp"`
+}
+
 /*  =========================
 	FUNCAO SALVAR CD
 =========================  */
@@ -17,24 +31,20 @@ func (cd *CD) SaveCD(db *gorm.DB) (*CD, error) {
 	if err != nil {
 		return &CD{}, err
 	}
-	return cd, nil
 
+	return cd, err
 }
 
 /*  =========================
 	FUNCAO LISTAR CD POR ID
 =========================  */
 
-func (cd *CD) FindCDByID(db *gorm.DB, codIbge uint64) (*CD, error) {
+func (cd *CD) FindCDByID(db *gorm.DB, codIbge uint32) (*CD, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(CD{}).Where("cod_ibge = ?", codIbge).Take(&cd).Error
-
 	if err != nil {
 		return &CD{}, err
-	}
-	if gorm.IsRecordNotFoundError(err) {
-		return &CD{}, errors.New("Cd Not Found")
 	}
 
 	return cd, err
@@ -54,6 +64,7 @@ func (cd *CD) FindAllCD(db *gorm.DB) (*[]CD, error) {
 	if err != nil {
 		return &[]CD{}, err
 	}
+
 	return &allCD, err
 }
 
@@ -61,11 +72,10 @@ func (cd *CD) FindAllCD(db *gorm.DB) (*[]CD, error) {
 	FUNCAO EDITAR CD
 =========================  */
 
-func (cd *CD) UpdateCD(db *gorm.DB, codIbge uint64) (*CD, error) {
+func (cd *CD) UpdateCD(db *gorm.DB, codIbge uint32) (*CD, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Exec("UPDATE cd SET cod_lote = ?, os_pe = ?, data_pe = ?, os_imp = ?, data_imp = ? WHERE cod_ibge = ?", cd.CodLote, cd.OsPe, cd.DataPe, cd.OsImp, cd.DataImp, codIbge).Error
-
 	if err != nil {
 		return &CD{}, err
 	}
@@ -76,26 +86,23 @@ func (cd *CD) UpdateCD(db *gorm.DB, codIbge uint64) (*CD, error) {
 		return &CD{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return cd, err
 }
 
 /*  =========================
 	FUNCAO DELETAR CD POR ID
-=========================
+=========================	*/
 
-func (cd *CD) DeleteCD(db *gorm.DB, codIbge uint64) (int64, error) {
+func (cd *CD) DeleteCD(db *gorm.DB, codIbge uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&CD{}).Where("cod_ibge = ?", codIbge).Take(&CD{}).Delete(&CD{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("CD not found")
+			return errors.New("CD not found")
 		}
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }
-*/

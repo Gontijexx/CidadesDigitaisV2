@@ -6,8 +6,17 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/*	=========================
+		STRUCT CLASSE EMPENHO
+=========================	*/
+
+type ClasseEmpenho struct {
+	CodClasseEmpenho uint32 `gorm:"primary_key;not null" json:"cod_classe_empenho"`
+	Descricao        string `gorm:"default:null" json:"descricao"`
+}
+
 /*  =========================
-	FUNCAO SALVAR CLASSE EMPENHO NO BANCO DE DADOS
+	FUNCAO SALVAR CLASSE EMPENHO
 =========================  */
 
 func (classeEmpenho *ClasseEmpenho) SaveClasseEmpenho(db *gorm.DB) (*ClasseEmpenho, error) {
@@ -17,19 +26,18 @@ func (classeEmpenho *ClasseEmpenho) SaveClasseEmpenho(db *gorm.DB) (*ClasseEmpen
 	if err != nil {
 		return &ClasseEmpenho{}, err
 	}
-	return classeEmpenho, nil
 
+	return classeEmpenho, err
 }
 
 /*  =========================
 	FUNCAO LISTAR CLASSE EMPENHO POR ID
 =========================  */
 
-func (classeEmpenho *ClasseEmpenho) FindClasseEmpenhoByID(db *gorm.DB, codClasseEmpenho uint64) (*ClasseEmpenho, error) {
+func (classeEmpenho *ClasseEmpenho) FindClasseEmpenhoByID(db *gorm.DB, codClasseEmpenho uint32) (*ClasseEmpenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(ClasseEmpenho{}).Where("cod_classe_empenho = ?", codClasseEmpenho).Take(&classeEmpenho).Error
-
 	if err != nil {
 		return &ClasseEmpenho{}, err
 	}
@@ -50,6 +58,7 @@ func (classeEmpenho *ClasseEmpenho) FindAllClasseEmpenho(db *gorm.DB) (*[]Classe
 	if err != nil {
 		return &[]ClasseEmpenho{}, err
 	}
+
 	return &allClasseEmpenho, err
 }
 
@@ -57,11 +66,10 @@ func (classeEmpenho *ClasseEmpenho) FindAllClasseEmpenho(db *gorm.DB) (*[]Classe
 	FUNCAO EDITAR CLASSE EMPENHO
 =========================  */
 
-func (classeEmpenho *ClasseEmpenho) UpdateClasseEmpenho(db *gorm.DB, codClasseEmpenho uint64) (*ClasseEmpenho, error) {
+func (classeEmpenho *ClasseEmpenho) UpdateClasseEmpenho(db *gorm.DB, codClasseEmpenho uint32) (*ClasseEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Exec("UPDATE classe_empenho SET descricao = ? WHERE cod_classe_empenho = ?", classeEmpenho.Descricao, codClasseEmpenho).Error
-
 	if db.Error != nil {
 		return &ClasseEmpenho{}, db.Error
 	}
@@ -72,7 +80,6 @@ func (classeEmpenho *ClasseEmpenho) UpdateClasseEmpenho(db *gorm.DB, codClasseEm
 		return &ClasseEmpenho{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return classeEmpenho, err
 }
 
@@ -80,17 +87,16 @@ func (classeEmpenho *ClasseEmpenho) UpdateClasseEmpenho(db *gorm.DB, codClasseEm
 	FUNCAO DELETAR CLASSE EMPENHO POR ID
 =========================  */
 
-func (classeEmpenho *ClasseEmpenho) DeleteClasseEmpenho(db *gorm.DB, codClasseEmpenho uint64) (int64, error) {
+func (classeEmpenho *ClasseEmpenho) DeleteClasseEmpenho(db *gorm.DB, codClasseEmpenho uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&ClasseEmpenho{}).Where("cod_classe_empenho = ?", codClasseEmpenho).Take(&ClasseEmpenho{}).Delete(&ClasseEmpenho{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Classe Empenho not found")
+			return errors.New("Classe Empenho not found")
 		}
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }

@@ -6,8 +6,21 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/*	=========================
+	STRUCT ETAPA
+=========================	*/
+
+type Etapa struct {
+	CodEtapa  uint32 `gorm:"primary_key;auto_increment;not null" json:"cod_etapa"`
+	Descricao string `gorm:"default:null" json:"descricao"`
+	Duracao   uint32 `gorm:"default:null" json:"duracao"`
+	Depende   uint32 `gorm:"default:null" json:"depende"`
+	Delay     uint32 `gorm:"default:null" json:"delay"`
+	SetorResp string `gorm:"default:null" json:"setor_resp"`
+}
+
 /*  =========================
-	FUNCAO SALVAR ETAPA NO BANCO DE DADOS
+	FUNCAO SALVAR ETAPA
 =========================  */
 
 func (etapa *Etapa) SaveEtapa(db *gorm.DB) (*Etapa, error) {
@@ -17,19 +30,18 @@ func (etapa *Etapa) SaveEtapa(db *gorm.DB) (*Etapa, error) {
 	if err != nil {
 		return &Etapa{}, err
 	}
-	return etapa, nil
 
+	return etapa, err
 }
 
 /*  =========================
 	FUNCAO LISTAR ETAPA POR ID
 =========================  */
 
-func (etapa *Etapa) FindEtapaByID(db *gorm.DB, codEtapa uint64) (*Etapa, error) {
+func (etapa *Etapa) FindEtapaByID(db *gorm.DB, codEtapa uint32) (*Etapa, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Etapa{}).Where("cod_etapa = ?", codEtapa).Take(&etapa).Error
-
 	if err != nil {
 		return &Etapa{}, err
 	}
@@ -50,6 +62,7 @@ func (etapa *Etapa) FindAllEtapa(db *gorm.DB) (*[]Etapa, error) {
 	if err != nil {
 		return &[]Etapa{}, err
 	}
+
 	return &allEtapa, err
 }
 
@@ -57,11 +70,10 @@ func (etapa *Etapa) FindAllEtapa(db *gorm.DB) (*[]Etapa, error) {
 	FUNCAO EDITAR ETAPA
 =========================  */
 
-func (etapa *Etapa) UpdateEtapa(db *gorm.DB, codEtapa uint64) (*Etapa, error) {
+func (etapa *Etapa) UpdateEtapa(db *gorm.DB, codEtapa uint32) (*Etapa, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	err := db.Debug().Exec("UPDATE etapa SET descricao = ?, duracao =?, depende = ?, delay = ?, setor_resp = ? WHERE cod_etapa = ?", etapa.Descricao, etapa.Duracao, etapa.Depende, etapa.Delay, etapa.SetorResp, codEtapa).Error
-
 	if db.Error != nil {
 		return &Etapa{}, db.Error
 	}
@@ -72,25 +84,23 @@ func (etapa *Etapa) UpdateEtapa(db *gorm.DB, codEtapa uint64) (*Etapa, error) {
 		return &Etapa{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return etapa, err
 }
 
 /*  =========================
-	FUNCAO DELETAR ETAPA POR ID
+	FUNCAO DELETAR ETAPA
 =========================  */
 
-func (etapa *Etapa) DeleteEtapa(db *gorm.DB, codEtapa uint64) (int64, error) {
+func (etapa *Etapa) DeleteEtapa(db *gorm.DB, codEtapa uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Etapa{}).Where("cod_etapa = ?", codEtapa).Take(&Etapa{}).Delete(&Etapa{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Etapa not found")
+			return errors.New("Etapa not found")
 		}
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }

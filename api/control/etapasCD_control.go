@@ -1,12 +1,14 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/auth"
+	"CidadesDigitaisV2/api/config"
+	"CidadesDigitaisV2/api/models"
+	"CidadesDigitaisV2/api/responses"
+	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/config"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/models"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/responses"
-	"github.com/Gontijexx/CidadesDigitaisV2/api/validation"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -27,6 +29,7 @@ func (server *Server) CreateEtapasCD(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -34,29 +37,41 @@ func (server *Server) CreateEtapasCD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Estrutura models.EtapasCD{} "renomeada"
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	etapasCD := models.EtapasCD{}
+	logEtapasCD := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct etapasCD referenciada (&struct)
 	err = json.Unmarshal(body, &etapasCD)
-
-	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(etapasCD); err != nil {
+	//	Validacao de estrutura
+	err = validation.Validator.Struct(etapasCD)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria nome_tabela, operacao, id_usuario)
+	err = logEtapasCD.LogEtapasCD(server.DB, etapasCD.CodIbge, etapasCD.CodEtapa, "etapas_cd", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	SaveEtapasCD eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	etapasCDCreated, err := etapasCD.SaveEtapasCD(server.DB)
-
-	//	Retorna um erro caso nao seja possivel salvar etapasCD no banco de dados
-	//	Status 500
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
@@ -67,7 +82,6 @@ func (server *Server) CreateEtapasCD(w http.ResponseWriter, r *http.Request) {
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, etapasCDCreated)
-
 }
 
 /*  =========================
@@ -82,6 +96,7 @@ func (server *Server) GetEtapasCDByID(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -102,8 +117,7 @@ func (server *Server) GetEtapasCDByID(w http.ResponseWriter, r *http.Request) {
 	etapasCD := models.EtapasCD{}
 
 	//	etapasCDGotten recebe o dado buscado no banco de dados
-	etapasCDGotten, err := etapasCD.FindEtapasCDByID(server.DB, codIbge, codEtapa)
-
+	etapasCDGotten, err := etapasCD.FindEtapasCDByID(server.DB, uint32(codIbge), uint32(codEtapa))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -111,7 +125,6 @@ func (server *Server) GetEtapasCDByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, etapasCDGotten)
-
 }
 
 /*  =========================
@@ -126,6 +139,7 @@ func (server *Server) GetAllEtapasCD(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	etapasCD := models.EtapasCD{}
 
 	//	allEtapasCD armazena os dados buscados no banco de dados
@@ -152,6 +166,7 @@ func (server *Server) UpdateEtapasCD(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -175,7 +190,15 @@ func (server *Server) UpdateEtapasCD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	etapasCD := models.EtapasCD{}
+	logEtapasCD := models.Log{}
 
 	err = json.Unmarshal(body, &etapasCD)
 	if err != nil {
@@ -183,14 +206,23 @@ func (server *Server) UpdateEtapasCD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = validation.Validator.Struct(etapasCD); err != nil {
+	err = validation.Validator.Struct(etapasCD)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria nome_tabela, operacao, id_usuario)
+	err = logEtapasCD.LogEtapasCD(server.DB, uint32(codIbge), uint32(codEtapa), "etapas_cd", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	updateEtapasCD recebe a nova etapasCD, a que foi alterada
-	updateEtapasCD, err := etapasCD.UpdateEtapasCD(server.DB, codIbge, codEtapa)
+	updateEtapasCD, err := etapasCD.UpdateEtapasCD(server.DB, uint32(codIbge), uint32(codEtapa))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -213,10 +245,19 @@ func (server *Server) DeleteEtapasCD(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	etapasCD := models.EtapasCD{}
+	logEtapasCD := models.Log{}
 
 	//	codIbge armazena a chave primaria da tabela etapasCD
 	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
@@ -232,9 +273,16 @@ func (server *Server) DeleteEtapasCD(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = etapasCD.DeleteEtapasCD(server.DB, codIbge, codEtapa)
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria nome_tabela, operacao, id_usuario)
+	err = logEtapasCD.LogEtapasCD(server.DB, uint32(codIbge), uint32(codEtapa), "etapas_cd", "d", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
+	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	err = etapasCD.DeleteEtapasCD(server.DB, uint32(codIbge), uint32(codEtapa))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

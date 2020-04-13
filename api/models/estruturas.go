@@ -1,19 +1,6 @@
 package models
 
 /*  =========================
-	TABELA CONTATO
-=========================  */
-
-type Contato struct {
-	CodContato uint64 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_contato"`
-	Cnpj       string `gorm:"foreign_key:Cnpj;default:null;size:14" json:"cnpj"`
-	CodIbge    uint64 `gorm:"foreign_key:CodIbge;default:null;size:7" json:"cod_ibge"`
-	Nome       string `gorm:"default:null;size:50" json:"nome"`
-	Email      string `gorm:"default:null;size:100" json:"email"`
-	Funcao     string `gorm:"default:null;size:45" json:"funcao"`
-}
-
-/*  =========================
 	TABELA TELEFONE
 =========================  */
 
@@ -22,33 +9,6 @@ type Telefone struct {
 	CodContato  uint64 `gorm:"foreign_key:CodContato;not null;size:11" json:"cod_contato"`
 	Telefone    string `gorm:"default:null;size:11" json:"telefone"`
 	Tipo        string `gorm:"default:null;size:10" json:"tipo"`
-}
-
-/* =========================
-	TABELA CD
-=========================  */
-
-type CD struct {
-	CodIbge       uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
-	CodLote       uint64 `gorm:"foreign_key:CodLote;not null" json:"cod_lote"`
-	NomeMunicipio string `gorm:"default:null" json:"nome_municipio"`
-	OsPe          string `gorm:"size:10;default:null" json:"os_pe"`
-	DataPe        string `gorm:"default:null" json:"data_pe"`
-	OsImp         string `gorm:"size:10;default:null" json:"os_imp"`
-	DataImp       string `gorm:"default:null" json:"data_imp"`
-}
-
-/*  =========================
-	TABELA CD ITENS
-=========================  */
-
-type CDItens struct {
-	CodIbge                    uint64  `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
-	CodItem                    uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
-	CodTipoItem                uint64  `gorm:"primary_key;foreign_key:CodTipo_item;not null" json:"cod_tipo_item"`
-	QuantidadePrevisto         uint64  `gorm:"default:null" json:"quantidade_previsto"`
-	QuantidadeProjetoExecutivo float64 `gorm:"default:null" json:"quantidade_projeto_executivo"`
-	QuantidadeTermoInstalacao  float64 `gorm:"default:null" json:"quantidade_termo_instalacao"`
 }
 
 /*  =========================
@@ -146,18 +106,6 @@ type LoteItens struct {
 }
 
 /*  =========================
-	TABELA EMPENHO
-=========================  */
-
-type Empenho struct {
-	IDEmpenho          uint64 `gorm:"primary_key;auto_increment;default:not null" json:""id_empenho`
-	CodPrevisaoEmpenho uint64 `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
-	CodEmpenho         string `gorm:"default:null;size:13" json:"cod_empenho"`
-	Data               string `gorm:"default:null" json:"data"`
-	Contador           uint64 `gorm:"default:null" json:"contador"`
-}
-
-/*  =========================
 	TABELA ITENS EMPENHO
 =========================  */
 
@@ -205,16 +153,6 @@ type ItensOTB struct {
 }
 
 /*	=========================
-		TABELA FATURA
-=========================	*/
-
-type Fatura struct {
-	NumNF   uint64 `gorm:"primary_key;not null" json:"num_nf"`
-	CodIbge uint64 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
-	DtNf    string `gorm:"default:null" json:"dt_nf"`
-}
-
-/*	=========================
 		TABELA ITENS FATURA
 =========================	*/
 
@@ -252,46 +190,6 @@ type ItensPrevisaoEmpenho struct {
 	CodLote            uint64  `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote"`
 	Valor              float64 `gorm:"default:null;size:12" json:"valor"`
 	Quantidade         uint64  `gorm:"default:null;size:11" json:"quantidade"`
-}
-
-/*	=========================
-		TABELA ASSUNTO
-=========================	*/
-
-type Assunto struct {
-	CodAssunto uint64 `gorm:"primary_key;auto_increment;not null;" json:"cod_assunto"`
-	Descricao  string `gorm:"default:null" json:"descricao"`
-}
-
-/*	=========================
-		TABELA CATEGORIA
-=========================	*/
-
-type Categoria struct {
-	CodCategoria uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_categoria"`
-	Descricao    string `gorm:"default:null" json:"descricao"`
-}
-
-/*	=========================
-		TABELA CLASSE EMPENHO
-=========================	*/
-
-type ClasseEmpenho struct {
-	CodClasseEmpenho uint64 `gorm:"primary_key;not null" json:"cod_classe_empenho"`
-	Descricao        string `gorm:"default:null" json:"descricao"`
-}
-
-/*	=========================
-		TABELA ETAPA
-=========================	*/
-
-type Etapa struct {
-	CodEtapa  uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_etapa"`
-	Descricao string `gorm:"default:null" json:"descricao"`
-	Duracao   uint64 `gorm:"default:null" json:"duracao"`
-	Depende   uint64 `gorm:"default:null" json:"depende"`
-	Delay     uint64 `gorm:"default:null" json:"delay"`
-	SetorResp string `gorm:"default:null" json:"setor_resp"`
 }
 
 /*	=========================

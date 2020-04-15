@@ -214,7 +214,7 @@ func (server *Server) UpdateEtapasCD(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria nome_tabela, operacao, id_usuario)
-	err = logEtapasCD.LogEtapasCD(server.DB, uint32(codIbge), uint32(codEtapa), "etapas_cd", "i", tokenID)
+	err = logEtapasCD.LogEtapasCD(server.DB, uint32(codIbge), uint32(codEtapa), "etapas_cd", "u", tokenID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))

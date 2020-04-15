@@ -68,12 +68,13 @@ func (etapasCD *EtapasCD) FindAllEtapasCD(db *gorm.DB) (*[]EtapasCD, error) {
 
 func (etapasCD *EtapasCD) UpdateEtapasCD(db *gorm.DB, codIbge, codEtapa uint32) (*EtapasCD, error) {
 
-	err := db.Debug().Model(&EtapasCD{}).Exec("UPDATE etapas_cd SET dt_inicio = ?, dt_fim = ?, responsavel = ? WHERE cod_ibge = ? AND cod_etapa = ?", etapasCD.DtInicio, etapasCD.DtFim, etapasCD.Responsavel, codIbge, codEtapa).Error
+	db = db.Debug().Model(&EtapasCD{}).Exec("UPDATE etapas_cd SET dt_inicio = ?, dt_fim = ?, responsavel = ? WHERE cod_ibge = ? AND cod_etapa = ?", etapasCD.DtInicio, etapasCD.DtFim, etapasCD.Responsavel, codIbge, codEtapa)
+
 	if db.Error != nil {
 		return &EtapasCD{}, db.Error
 	}
 
-	err = db.Debug().Model(&EtapasCD{}).Where("cod_ibge = ? AND cod_etapa = ?", codIbge, codEtapa).Take(&etapasCD).Error
+	err := db.Debug().Model(&EtapasCD{}).Where("cod_ibge = ? AND cod_etapa = ?", codIbge, codEtapa).Take(&etapasCD).Error
 	if err != nil {
 		return &EtapasCD{}, err
 	}

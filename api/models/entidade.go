@@ -76,13 +76,13 @@ func (entidade *Entidade) FindAllEntidade(db *gorm.DB) (*[]Entidade, error) {
 func (entidade *Entidade) UpdateEntidade(db *gorm.DB, cnpj string) (*Entidade, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE entidade SET nome = ?, endereco = ?, numero = ?, bairro = ?, cep = ?, nome_municipio = ?, uf = ?, observacao = ? WHERE cnpj = ?", entidade.Nome, entidade.Endereco, entidade.Numero, entidade.Bairro, entidade.Cep, entidade.NomeMunicipio, entidade.UF, entidade.Observacao, cnpj).Error
-	if err != nil {
-		return &Entidade{}, err
+	db = db.Debug().Exec("UPDATE entidade SET nome = ?, endereco = ?, numero = ?, bairro = ?, cep = ?, nome_municipio = ?, uf = ?, observacao = ? WHERE cnpj = ?", entidade.Nome, entidade.Endereco, entidade.Numero, entidade.Bairro, entidade.Cep, entidade.NomeMunicipio, entidade.UF, entidade.Observacao, cnpj)
+	if db.Error != nil {
+		return &Entidade{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Entidade{}).Where("cnpj = ?", cnpj).Take(&entidade).Error
+	err := db.Debug().Model(&Entidade{}).Where("cnpj = ?", cnpj).Take(&entidade).Error
 	if err != nil {
 		return &Entidade{}, err
 	}

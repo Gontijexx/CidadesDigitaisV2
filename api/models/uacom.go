@@ -60,14 +60,13 @@ func (uacom *Uacom) FindAllUacom(db *gorm.DB) (*[]Uacom, error) {
 func (uacom *Uacom) UpdateUacom(db *gorm.DB, codIbge uint64, data string) (*Uacom, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE uacom SET titulo = ?, relato = ? WHERE cod_ibge = ? AND data = ?", uacom.Titulo, uacom.Relato, codIbge, data).Error
-
+	db = db.Debug().Exec("UPDATE uacom SET titulo = ?, relato = ? WHERE cod_ibge = ? AND data = ?", uacom.Titulo, uacom.Relato, codIbge, data)
 	if db.Error != nil {
 		return &Uacom{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Uacom{}).Where("cod_ibge = ? AND data = ?", codIbge, data).Take(&uacom).Error
+	err := db.Debug().Model(&Uacom{}).Where("cod_ibge = ? AND data = ?", codIbge, data).Take(&uacom).Error
 	if err != nil {
 		return &Uacom{}, err
 	}

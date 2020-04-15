@@ -60,14 +60,13 @@ func (processo *Processo) FindAllProcesso(db *gorm.DB) (*[]Processo, error) {
 func (processo *Processo) UpdateProcesso(db *gorm.DB, codProcesso, codIbge uint64) (*Processo, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE processo SET descricao = ? WHERE cod_processo = ? AND cod_ibge = ?", processo.Descricao, codProcesso, codIbge).Error
-
+	db = db.Debug().Exec("UPDATE processo SET descricao = ? WHERE cod_processo = ? AND cod_ibge = ?", processo.Descricao, codProcesso, codIbge)
 	if db.Error != nil {
 		return &Processo{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge = ?", codProcesso, codIbge).Take(&processo).Error
+	err := db.Debug().Model(&Processo{}).Where("cod_processo = ? AND cod_ibge = ?", codProcesso, codIbge).Take(&processo).Error
 	if err != nil {
 		return &Processo{}, err
 	}

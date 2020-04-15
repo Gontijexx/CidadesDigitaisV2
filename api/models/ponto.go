@@ -60,14 +60,13 @@ func (ponto *Ponto) FindAllPonto(db *gorm.DB) (*[]Ponto, error) {
 func (ponto *Ponto) UpdatePonto(db *gorm.DB, codPonto, codCategoria, codIbge uint64) (*Ponto, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE ponto SET cod_pid = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, cep = ?, latitude = ?, longitude = ? WHERE cod_ponto = ? AND cod_categoria = ? AND cod_ibge = ?", ponto.CodPid, ponto.Endereco, ponto.Numero, ponto.Complemento, ponto.Bairro, ponto.Cep, ponto.Latitude, ponto.Longitude, codPonto, codCategoria, codIbge).Error
-
+	db = db.Debug().Exec("UPDATE ponto SET cod_pid = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, cep = ?, latitude = ?, longitude = ? WHERE cod_ponto = ? AND cod_categoria = ? AND cod_ibge = ?", ponto.CodPid, ponto.Endereco, ponto.Numero, ponto.Complemento, ponto.Bairro, ponto.Cep, ponto.Latitude, ponto.Longitude, codPonto, codCategoria, codIbge)
 	if db.Error != nil {
 		return &Ponto{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Ponto{}).Where("cod_ponto = ? AND cod_categoria =? AND cod_ibge = ?", codPonto, codCategoria, codIbge).Take(&ponto).Error
+	err := db.Debug().Model(&Ponto{}).Where("cod_ponto = ? AND cod_categoria =? AND cod_ibge = ?", codPonto, codCategoria, codIbge).Take(&ponto).Error
 	if err != nil {
 		return &Ponto{}, err
 	}

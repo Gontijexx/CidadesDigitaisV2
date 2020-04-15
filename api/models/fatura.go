@@ -70,13 +70,13 @@ func (fatura *Fatura) FindAllFatura(db *gorm.DB) (*[]Fatura, error) {
 func (fatura *Fatura) UpdateFatura(db *gorm.DB, numNF, codIbge uint32) (*Fatura, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE fatura SET dt_nf = ? WHERE num_nf = ? AND cod_ibge = ?", fatura.DtNf, numNF, codIbge).Error
+	db = db.Debug().Exec("UPDATE fatura SET dt_nf = ? WHERE num_nf = ? AND cod_ibge = ?", fatura.DtNf, numNF, codIbge)
 	if db.Error != nil {
 		return &Fatura{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de suas chaves primarias
-	err = db.Debug().Model(&Fatura{}).Where("num_nf = ? AND cod_ibge = ?", numNF, codIbge).Take(fatura).Error
+	err := db.Debug().Model(&Fatura{}).Where("num_nf = ? AND cod_ibge = ?", numNF, codIbge).Take(fatura).Error
 	if err != nil {
 		return &Fatura{}, err
 	}

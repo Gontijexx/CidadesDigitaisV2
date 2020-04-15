@@ -60,14 +60,13 @@ func (itens *Itens) FindAllItens(db *gorm.DB) (*[]Itens, error) {
 func (itens *Itens) UpdateItens(db *gorm.DB, codItem, codTipoItem uint64) (*Itens, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE itens SET cod_natureza_despesa = ?, cod_classe_empenho = ?, descricao = ?, unidade = ? WHERE cod_item = ? AND cod_tipo_item = ?", itens.CodNaturezaDespesa, itens.CodClasseEmpenho, itens.Descricao, itens.Unidade, codItem, codTipoItem).Error
-
+	db = db.Debug().Exec("UPDATE itens SET cod_natureza_despesa = ?, cod_classe_empenho = ?, descricao = ?, unidade = ? WHERE cod_item = ? AND cod_tipo_item = ?", itens.CodNaturezaDespesa, itens.CodClasseEmpenho, itens.Descricao, itens.Unidade, codItem, codTipoItem)
 	if db.Error != nil {
 		return &Itens{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Take(&itens).Error
+	err := db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Take(&itens).Error
 	if err != nil {
 		return &Itens{}, err
 	}

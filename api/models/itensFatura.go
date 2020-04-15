@@ -60,14 +60,13 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB) (*[]ItensFatura,
 func (itensFatura *ItensFatura) UpdateItensFatura(db *gorm.DB, numNF, codIbge, idEmpenho, codItem, codTipoItem uint64) (*ItensFatura, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE itens_fatura SET valor = ?, quantidade = ? WHERE num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", itensFatura.Valor, itensFatura.Quantidade, numNF, codIbge, idEmpenho, codItem, codTipoItem).Error
-
+	db = db.Debug().Exec("UPDATE itens_fatura SET valor = ?, quantidade = ? WHERE num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", itensFatura.Valor, itensFatura.Quantidade, numNF, codIbge, idEmpenho, codItem, codTipoItem)
 	if db.Error != nil {
 		return &ItensFatura{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&ItensFatura{}).Take(&itensFatura).Error
+	err := db.Debug().Model(&ItensFatura{}).Take(&itensFatura).Error
 	if err != nil {
 		return &ItensFatura{}, err
 	}

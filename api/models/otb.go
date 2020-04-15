@@ -60,14 +60,13 @@ func (otb *OTB) FindAllOTB(db *gorm.DB) (*[]OTB, error) {
 func (otb *OTB) UpdateOTB(db *gorm.DB, CodOTB uint64) (*OTB, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE otb SET dt_pgto = ? WHERE cod_otb = ?", otb.DtPgto, CodOTB).Error
-
+	db = db.Debug().Exec("UPDATE otb SET dt_pgto = ? WHERE cod_otb = ?", otb.DtPgto, CodOTB)
 	if db.Error != nil {
 		return &OTB{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&OTB{}).Where("cod_otb = ?", CodOTB).Take(&otb).Error
+	err := db.Debug().Model(&OTB{}).Where("cod_otb = ?", CodOTB).Take(&otb).Error
 	if err != nil {
 		return &OTB{}, err
 	}

@@ -59,14 +59,13 @@ func (reajuste *Reajuste) FindAllReajuste(db *gorm.DB) (*[]Reajuste, error) {
 func (reajuste *Reajuste) UpdateReajuste(db *gorm.DB, anoRef, codLote uint64) (*Reajuste, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE reajuste SET percentual = ? WHERE ano_ref = ? AND cod_lote = ?", reajuste.Percentual, anoRef, codLote).Error
-
+	db = db.Debug().Exec("UPDATE reajuste SET percentual = ? WHERE ano_ref = ? AND cod_lote = ?", reajuste.Percentual, anoRef, codLote)
 	if db.Error != nil {
 		return &Reajuste{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Reajuste{}).Where("ano_ref = ? AND cod_lote = ?", anoRef, codLote).Take(&reajuste).Error
+	err := db.Debug().Model(&Reajuste{}).Where("ano_ref = ? AND cod_lote = ?", anoRef, codLote).Take(&reajuste).Error
 	if err != nil {
 		return &Reajuste{}, err
 	}

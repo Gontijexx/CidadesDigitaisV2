@@ -61,14 +61,13 @@ func (tipologia *Tipologia) FindAllTipologia(db *gorm.DB) (*[]Tipologia, error) 
 func (tipologia *Tipologia) UpdateTipologia(db *gorm.DB, codTipologia uint64) (*Tipologia, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE tipologia SET descricao = ? WHERE cod_tipologia = ?", tipologia.Descricao, codTipologia).Error
-
+	db = db.Debug().Exec("UPDATE tipologia SET descricao = ? WHERE cod_tipologia = ?", tipologia.Descricao, codTipologia)
 	if db.Error != nil {
 		return &Tipologia{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Tipologia{}).Where("cod_tipologia = ?", codTipologia).Take(&tipologia).Error
+	err := db.Debug().Model(&Tipologia{}).Where("cod_tipologia = ?", codTipologia).Take(&tipologia).Error
 	if err != nil {
 		return &Tipologia{}, err
 	}

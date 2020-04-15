@@ -44,14 +44,13 @@ func (itensEmpenho *ItensEmpenho) FindItensEmpenhoByID(db *gorm.DB, idEmpenho, c
 func (itensEmpenho *ItensEmpenho) UpdateItensEmpenho(db *gorm.DB, idEmpenho, codItem, codTipoItem uint64) (*ItensEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE itens_empenho SET cod_previsao_empenho =?, valor = ?, quantidade = ? WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", itensEmpenho.CodPrevisaoEmpenho, itensEmpenho.Valor, itensEmpenho.Quantidade, idEmpenho, codItem, codTipoItem).Error
-
+	db = db.Debug().Exec("UPDATE itens_empenho SET cod_previsao_empenho =?, valor = ?, quantidade = ? WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", itensEmpenho.CodPrevisaoEmpenho, itensEmpenho.Valor, itensEmpenho.Quantidade, idEmpenho, codItem, codTipoItem)
 	if db.Error != nil {
 		return &ItensEmpenho{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&ItensEmpenho{}).Where("id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", idEmpenho, codItem, codTipoItem).Take(&itensEmpenho).Error
+	err := db.Debug().Model(&ItensEmpenho{}).Where("id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", idEmpenho, codItem, codTipoItem).Take(&itensEmpenho).Error
 	if err != nil {
 		return &ItensEmpenho{}, err
 	}

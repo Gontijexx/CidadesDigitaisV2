@@ -69,13 +69,13 @@ func (empenho *Empenho) FindAllEmpenho(db *gorm.DB) (*[]Empenho, error) {
 func (empenho *Empenho) UpdateEmpenho(db *gorm.DB, idEmpenho uint32) (*Empenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE empenho SET cod_previsao_empenho = ?, cod_empenho = ?, data = ?, contador = ? WHERE id_empenho = ?", empenho.CodPrevisaoEmpenho, empenho.CodEmpenho, empenho.Data, empenho.Contador, idEmpenho).Error
-	if err != nil {
+	db = db.Debug().Exec("UPDATE empenho SET cod_previsao_empenho = ?, cod_empenho = ?, data = ?, contador = ? WHERE id_empenho = ?", empenho.CodPrevisaoEmpenho, empenho.CodEmpenho, empenho.Data, empenho.Contador, idEmpenho)
+	if db.Error != nil {
 		return &Empenho{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Empenho{}).Where("id_empenho = ?", idEmpenho).Take(&empenho).Error
+	err := db.Debug().Model(&Empenho{}).Where("id_empenho = ?", idEmpenho).Take(&empenho).Error
 	if err != nil {
 		return &Empenho{}, err
 	}

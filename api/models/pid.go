@@ -38,14 +38,13 @@ func (pid *Pid) SavePID(db *gorm.DB) (*Pid, error) {
 func (pid *Pid) UpdatePID(db *gorm.DB, codPid uint64) (*Pid, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE pid SET cod_ibge = ?, nome = ?, inep = ? WHERE cod_pid = ?", pid.CodIbge, pid.Nome, pid.Inep, codPid).Error
-
+	db = db.Debug().Exec("UPDATE pid SET cod_ibge = ?, nome = ?, inep = ? WHERE cod_pid = ?", pid.CodIbge, pid.Nome, pid.Inep, codPid)
 	if db.Error != nil {
 		return &Pid{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Pid{}).Where("cod_pid = ?", codPid).Take(&pid).Error
+	err := db.Debug().Model(&Pid{}).Where("cod_pid = ?", codPid).Take(&pid).Error
 	if err != nil {
 		return &Pid{}, err
 	}

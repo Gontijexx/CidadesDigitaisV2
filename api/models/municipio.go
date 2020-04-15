@@ -60,14 +60,13 @@ func (municipio *Municipio) FindAllMunicipio(db *gorm.DB) (*[]Municipio, error) 
 func (municipio *Municipio) UpdateMunicipio(db *gorm.DB, codIbge uint64) (*Municipio, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE municipio SET nome_municipio = ?, populacao = ?, uf = ?, regiao = ?, cnpj = ?, dist_capital = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, idhm = ?, latitude = ?, longitude = ? WHERE cod_ibge = ?", municipio.NomeMunicipio, municipio.Populacao, municipio.UF, municipio.Regiao, municipio.Cnpj, municipio.DistCapital, municipio.Endereco, municipio.Numero, municipio.Complemento, municipio.Bairro, municipio.Idhm, municipio.Latitude, municipio.Longitude, codIbge).Error
-
+	db = db.Debug().Exec("UPDATE municipio SET nome_municipio = ?, populacao = ?, uf = ?, regiao = ?, cnpj = ?, dist_capital = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, idhm = ?, latitude = ?, longitude = ? WHERE cod_ibge = ?", municipio.NomeMunicipio, municipio.Populacao, municipio.UF, municipio.Regiao, municipio.Cnpj, municipio.DistCapital, municipio.Endereco, municipio.Numero, municipio.Complemento, municipio.Bairro, municipio.Idhm, municipio.Latitude, municipio.Longitude, codIbge)
 	if db.Error != nil {
 		return &Municipio{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Municipio{}).Where("cod_ibge = ?", codIbge).Take(&municipio).Error
+	err := db.Debug().Model(&Municipio{}).Where("cod_ibge = ?", codIbge).Take(&municipio).Error
 	if err != nil {
 		return &Municipio{}, err
 	}

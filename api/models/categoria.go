@@ -69,13 +69,13 @@ func (categoria *Categoria) FindAllCategoria(db *gorm.DB) (*[]Categoria, error) 
 func (categoria *Categoria) UpdateCategoria(db *gorm.DB, codCategoria uint32) (*Categoria, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE categoria SET descricao = ? WHERE cod_categoria = ?", categoria.Descricao, codCategoria).Error
-	if err != nil {
-		return &Categoria{}, err
+	db = db.Debug().Exec("UPDATE categoria SET descricao = ? WHERE cod_categoria = ?", categoria.Descricao, codCategoria)
+	if db.Error != nil {
+		return &Categoria{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&Categoria{}).Where("cod_categoria = ?", codCategoria).Take(&categoria).Error
+	err := db.Debug().Model(&Categoria{}).Where("cod_categoria = ?", codCategoria).Take(&categoria).Error
 	if err != nil {
 		return &Categoria{}, err
 	}

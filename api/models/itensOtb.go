@@ -45,14 +45,13 @@ func (itensOTB *ItensOTB) FindItensOTB(db *gorm.DB, codOTB uint64) (*[]ItensOTB,
 func (itensOTB *ItensOTB) UpdateItensOTB(db *gorm.DB, codOtb, numNf, codIbge, idEmpenho, codItem, codTipoItem uint64) (*ItensOTB, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE itens_otb SET valor = ?, quantidade = ? WHERE cod_otb = ? AND num_nf = ? AND  cod_ibge = ? AND id_empenho = ? AND cod_item = ?  AND cod_tipo_item = ?", itensOTB.Valor, itensOTB.Quantidade, codOtb, numNf, codIbge, idEmpenho, codItem, codTipoItem).Error
-
+	db = db.Debug().Exec("UPDATE itens_otb SET valor = ?, quantidade = ? WHERE cod_otb = ? AND num_nf = ? AND  cod_ibge = ? AND id_empenho = ? AND cod_item = ?  AND cod_tipo_item = ?", itensOTB.Valor, itensOTB.Quantidade, codOtb, numNf, codIbge, idEmpenho, codItem, codTipoItem)
 	if db.Error != nil {
 		return &ItensOTB{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&ItensOTB{}).Take(&itensOTB).Error
+	err := db.Debug().Model(&ItensOTB{}).Take(&itensOTB).Error
 	if err != nil {
 		return &ItensOTB{}, err
 	}

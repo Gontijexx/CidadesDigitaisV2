@@ -62,13 +62,12 @@ func (loteItens *LoteItens) FindAllLoteItens(db *gorm.DB) (*[]LoteItens, error) 
 
 func (loteItens *LoteItens) UpdateLoteItens(db *gorm.DB, codLote, codItem, codTipoItem uint64) (*LoteItens, error) {
 
-	err := db.Debug().Exec("UPDATE lote_itens SET preco = ? WHERE cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteItens.Preco, codLote, codItem, codTipoItem).Error
-
+	db = db.Debug().Exec("UPDATE lote_itens SET preco = ? WHERE cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", loteItens.Preco, codLote, codItem, codTipoItem)
 	if db.Error != nil {
 		return &LoteItens{}, db.Error
 	}
 
-	err = db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", codLote, codItem, codTipoItem).Take(&loteItens).Error
+	err := db.Debug().Model(&LoteItens{}).Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item =?", codLote, codItem, codTipoItem).Take(&loteItens).Error
 	if err != nil {
 		return &LoteItens{}, err
 	}

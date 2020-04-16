@@ -6,8 +6,21 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+/*	=========================
+		STRUCT ITENS
+=========================	*/
+
+type Itens struct {
+	CodItem            uint32 `gorm:"primary_key;not null" json:"cod_item"`
+	CodTipoItem        uint32 `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
+	CodNaturezaDespesa uint32 `gorm:"foreign_key:CodNaturezaDespesa;not null" json:"cod_natureza_despesa"`
+	CodClasseEmpenho   uint32 `gorm:"foreign_key:CodClasseEmpenho;not null" json:"cod_classe_empenho"`
+	Descricao          string `gorm:"default:null" json:"descricao"`
+	Unidade            string `gorm:"default:null" json:"unidade"`
+}
+
 /*  =========================
-	FUNCAO SALVAR ITENS NO BANCO DE DADOS
+	FUNCAO SALVAR ITENS
 =========================  */
 
 func (itens *Itens) SaveItens(db *gorm.DB) (*Itens, error) {
@@ -18,18 +31,17 @@ func (itens *Itens) SaveItens(db *gorm.DB) (*Itens, error) {
 		return &Itens{}, err
 	}
 
-	return itens, nil
+	return itens, err
 }
 
 /*  =========================
 	FUNCAO LISTAR ITENS POR ID
 =========================  */
 
-func (itens *Itens) FindItensByID(db *gorm.DB, codItem, codTipoItem uint64) (*Itens, error) {
+func (itens *Itens) FindItensByID(db *gorm.DB, codItem, codTipoItem uint32) (*Itens, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Itens{}).Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Take(&itens).Error
-
 	if err != nil {
 		return &Itens{}, err
 	}
@@ -50,6 +62,7 @@ func (itens *Itens) FindAllItens(db *gorm.DB) (*[]Itens, error) {
 	if err != nil {
 		return &[]Itens{}, err
 	}
+
 	return &allItens, err
 }
 
@@ -57,7 +70,7 @@ func (itens *Itens) FindAllItens(db *gorm.DB) (*[]Itens, error) {
 	FUNCAO EDITAR ITENS
 =========================  */
 
-func (itens *Itens) UpdateItens(db *gorm.DB, codItem, codTipoItem uint64) (*Itens, error) {
+func (itens *Itens) UpdateItens(db *gorm.DB, codItem, codTipoItem uint32) (*Itens, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Exec("UPDATE itens SET cod_natureza_despesa = ?, cod_classe_empenho = ?, descricao = ?, unidade = ? WHERE cod_item = ? AND cod_tipo_item = ?", itens.CodNaturezaDespesa, itens.CodClasseEmpenho, itens.Descricao, itens.Unidade, codItem, codTipoItem)
@@ -79,17 +92,16 @@ func (itens *Itens) UpdateItens(db *gorm.DB, codItem, codTipoItem uint64) (*Iten
 	FUNCAO DELETAR ITENS POR ID
 =========================  */
 
-func (itens *Itens) DeleteItens(db *gorm.DB, codItem, codTipoItem uint64) (int64, error) {
+func (itens *Itens) DeleteItens(db *gorm.DB, codItem, codTipoItem uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Itens{}).Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Take(&Itens{}).Delete(&Itens{})
-
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Itens not found")
+			return errors.New("Itens not found")
 		}
-		return 0, db.Error
+		return db.Error
 	}
 
-	return db.RowsAffected, nil
+	return db.Error
 }

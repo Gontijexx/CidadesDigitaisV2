@@ -1,11 +1,13 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/models"
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -27,6 +29,7 @@ func (server *Server) CreateItens(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -34,29 +37,42 @@ func (server *Server) CreateItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	//	Estrutura models.Itens{} "renomeada"
 	itens := models.Itens{}
+	logItens := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct itens referenciada (&struct)
 	err = json.Unmarshal(body, &itens)
-
-	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(itens); err != nil {
+	//	Validacao de estrutura
+	err = validation.Validator.Struct(itens)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primeario nome_tabela, operacao, id_usuario)
+	err = logItens.LogItens(server.DB, itens.CodItem, itens.CodTipoItem, "itens", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	SaveItens eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	itensCreated, err := itens.SaveItens(server.DB)
-
-	/*	Retorna um erro caso nao seja possivel salvar itens no banco de dados
-		Status 500	*/
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
@@ -67,7 +83,6 @@ func (server *Server) CreateItens(w http.ResponseWriter, r *http.Request) {
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, itensCreated)
-
 }
 
 /*  =========================
@@ -82,6 +97,7 @@ func (server *Server) GetItensByID(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -102,8 +118,7 @@ func (server *Server) GetItensByID(w http.ResponseWriter, r *http.Request) {
 	itens := models.Itens{}
 
 	//	itensGotten recebe o dado buscado no banco de dados
-	itensGotten, err := itens.FindItensByID(server.DB, codItem, codTipoItem)
-
+	itensGotten, err := itens.FindItensByID(server.DB, uint32(codItem), uint32(codTipoItem))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -111,7 +126,6 @@ func (server *Server) GetItensByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, itensGotten)
-
 }
 
 /*  =========================
@@ -126,6 +140,7 @@ func (server *Server) GetAllItens(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	itens := models.Itens{}
 
 	//	allItens armazena os dados buscados no banco de dados
@@ -152,6 +167,7 @@ func (server *Server) UpdateItens(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -175,7 +191,15 @@ func (server *Server) UpdateItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	itens := models.Itens{}
+	logItens := models.Log{}
 
 	err = json.Unmarshal(body, &itens)
 	if err != nil {
@@ -183,14 +207,23 @@ func (server *Server) UpdateItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = validation.Validator.Struct(itens); err != nil {
+	err = validation.Validator.Struct(itens)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primeario nome_tabela, operacao, id_usuario)
+	err = logItens.LogItens(server.DB, uint32(codItem), uint32(codTipoItem), "itens", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	updateItens recebe a nova itens, a que foi alterada
-	updateItens, err := itens.UpdateItens(server.DB, codItem, codTipoItem)
+	updateItens, err := itens.UpdateItens(server.DB, uint32(codItem), uint32(codTipoItem))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -213,10 +246,19 @@ func (server *Server) DeleteItens(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	itens := models.Itens{}
+	logItens := models.Log{}
 
 	//	codItem armazena a chave primaria da tabela itens
 	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
@@ -232,9 +274,16 @@ func (server *Server) DeleteItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = itens.DeleteItens(server.DB, codItem, codTipoItem)
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primeario nome_tabela, operacao, id_usuario)
+	err = logItens.LogItens(server.DB, uint32(codItem), uint32(codTipoItem), "itens", "d", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
+	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	err = itens.DeleteItens(server.DB, uint32(codItem), uint32(codTipoItem))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

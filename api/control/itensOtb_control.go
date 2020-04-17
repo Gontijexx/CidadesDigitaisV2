@@ -1,11 +1,13 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/models"
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -27,20 +29,11 @@ func (server *Server) GetItensOTB(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
-	//	Vars retorna as variaveis de rota
-	vars := mux.Vars(r)
-
-	//	codOTB armazena a chave primaria da tabela itens_otb
-	codOTB, err := strconv.ParseUint(vars["cod_otb"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
-		return
-	}
 
 	itensOTB := models.ItensOTB{}
 
 	//	allItensOTB armazena os dados buscados no banco de dados
-	allItensOTB, err := itensOTB.FindItensOTB(server.DB, codOTB)
+	allItensOTB, err := itensOTB.FindAllItensOTB(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
@@ -52,7 +45,7 @@ func (server *Server) GetItensOTB(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO EDITAR ITENS_OTB
+	FUNCAO EDITAR ITENS OTB
 =========================  */
 
 func (server *Server) UpdateItensOTB(w http.ResponseWriter, r *http.Request) {
@@ -114,7 +107,15 @@ func (server *Server) UpdateItensOTB(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	itensOTB := models.ItensOTB{}
+	logItensOTB := models.Log{}
 
 	err = json.Unmarshal(body, &itensOTB)
 	if err != nil {
@@ -122,14 +123,24 @@ func (server *Server) UpdateItensOTB(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = validation.Validator.Struct(itensOTB); err != nil {
+	//	Validacao de estrutura
+	err = validation.Validator.Struct(itensOTB)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, chave_primaria, chave_primaria, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logItensOTB.LogItensOTB(server.DB, uint32(codOtb), uint32(numNf), uint32(codIbge), uint32(idEmpenho), uint32(codItem), uint32(codTipoItem), "itens_otb", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	updateItensOTB recebe a nova itensOTB, a que foi alterada
-	updateItensOTB, err := itensOTB.UpdateItensOTB(server.DB, codOtb, numNf, codIbge, idEmpenho, codItem, codTipoItem)
+	updateItensOTB, err := itensOTB.UpdateItensOTB(server.DB, uint32(codOtb), uint32(numNf), uint32(codIbge), uint32(idEmpenho), uint32(codItem), uint32(codTipoItem))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))

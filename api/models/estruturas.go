@@ -105,19 +105,6 @@ type LoteItens struct {
 	Descricao   string  `gorm:"default:null" json:"descricao"`
 }
 
-/*  =========================
-	TABELA ITENS EMPENHO
-=========================  */
-
-type ItensEmpenho struct {
-	IDEmpenho          uint64  `gorm:"primary_key;foreign_key:IDEmpenho;not null;size:13" json:"id_empenho"`
-	CodItem            uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
-	CodTipoItem        uint64  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
-	CodPrevisaoEmpenho uint64  `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
-	Valor              float64 `gorm:"default:null" json:"valor"`
-	Quantidade         uint64  `gorm:"default:null" json:"quantidade"`
-}
-
 /*	=========================
 		TABELA OTB (PAGAMENTO)
 =========================	*/
@@ -125,35 +112,6 @@ type ItensEmpenho struct {
 type OTB struct {
 	CodOtb uint64 `gorm:"primary_key;not null" json:"cod_otb"`
 	DtPgto string `gorm:"default:null" json:"dt_pgto" `
-}
-
-/*	=========================
-		TABELA ITENS_OTB (PAGAMENTO)
-=========================	*/
-
-type ItensOTB struct {
-	CodOtb      uint64  `gorm:"primary_key;foreign_key:CodOtb;not null" json:"cod_otb"`
-	NumNF       uint64  `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
-	CodIbge     uint64  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
-	IDEmpenho   uint64  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
-	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
-	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoIte,;not null" json:"cod_tipo_item"`
-	Valor       float64 `gorm:"default:null" json:"valor"`
-	Quantidade  uint64  `gorm:"default:null" json:"quantidade"`
-}
-
-/*	=========================
-		TABELA ITENS FATURA
-=========================	*/
-
-type ItensFatura struct {
-	NumNF       uint64  `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
-	CodIbge     uint64  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
-	IDEmpenho   uint64  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
-	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
-	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoIte,;not null" json:"cod_tipo_item"`
-	Valor       float64 `gorm:"default:null" json:"valor"`
-	Quantidade  uint64  `gorm:"default:null" json:"quantidade"`
 }
 
 /*  =========================
@@ -180,19 +138,6 @@ type ItensPrevisaoEmpenho struct {
 	CodLote            uint64  `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote"`
 	Valor              float64 `gorm:"default:null;size:12" json:"valor"`
 	Quantidade         uint64  `gorm:"default:null;size:11" json:"quantidade"`
-}
-
-/*	=========================
-		TABELA ITENS
-=========================	*/
-
-type Itens struct {
-	CodItem            uint64 `gorm:"primary_key;not null" json:"cod_item"`
-	CodTipoItem        uint64 `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
-	CodNaturezaDespesa uint64 `gorm:"foreign_key:CodNaturezaDespesa;not null" json:"cod_natureza_despesa"`
-	CodClasseEmpenho   uint64 `gorm:"foreign_key:CodClasseEmpenho;not null" json:"cod_classe_empenho"`
-	Descricao          string `gorm:"default:null" json:"descricao"`
-	Unidade            string `gorm:"default:null" json:"unidade"`
 }
 
 /*  =========================

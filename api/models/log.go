@@ -208,3 +208,20 @@ func (log *Log) LogItensEmpenho(db *gorm.DB, idEmpenho uint32, codItem uint32, c
 
 	return err
 }
+
+/*  =========================
+	LOG ITENS FATURA
+=========================  */
+
+func (log *Log) LogItensFatura(db *gorm.DB, numNF uint32, codIbge uint32, idEmpenho uint32, codItem uint32, codTipoItem uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("itens_fatura").Select("CONCAT(IFNULL(num_nf, ''), ';', IFNULL(cod_ibge, ''), ';', IFNULL(id_empenho, ''), ';', IFNULL(cod_item, ''), ';', IFNULL(cod_tipo_item, ''), ';', IFNULL(valor, ''), ';', IFNULL(quantidade, ''))").Where("num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", numNF, codIbge, idEmpenho, codItem, codTipoItem).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_int_3, cod_int_4, cod_int_5) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, numNF, codIbge, idEmpenho, codItem, codTipoItem).Error
+
+	return err
+}
+
+/*  =========================
+	LOG ITENS OTB
+=========================  */

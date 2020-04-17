@@ -217,12 +217,12 @@ const (
 )
 
 /*	=========================
-	OTB ITENS PATH HTTP (PAGAMENTO ITENS)
+	ITENS OTB PATH HTTP
 =========================	*/
 
 const (
-	OTB_ITENS_PATH    = "/read/otbitens"
-	OTB_ITENS_ID_PATH = "/read/otbitens/{cod_otb}"
+	ITENS_OTB_PATH    = "/read/itensotb"
+	ITENS_OTB_ID_PATH = "/read/itensotb/{cod_otb}/{num_nf}/{cod_ibge}/{id_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*	=========================

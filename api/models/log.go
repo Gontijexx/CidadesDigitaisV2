@@ -234,3 +234,29 @@ func (log *Log) LogItensOTB(db *gorm.DB, codOtb uint32, numNF uint32, codIbge ui
 
 	return err
 }
+
+/*  =========================
+	LOG ITENS PREVISAO EMPENHO
+=========================  */
+
+func (log *Log) LogItensPrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint32, codItem uint32, codTipoItem uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("itens_previsao_empenho").Select("CONCAT(IFNULL(cod_previsao_empenho, ''), ';', IFNULL(cod_item, ''), ';', IFNULL(cod_tipo_item, ''), ';', IFNULL(cod_lote, ''), ';', IFNULL(valor, ''), ';', IFNULL(quantidade, ''))").Where("cod_previsao_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", codPrevisaoEmpenho, codItem, codTipoItem).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_int_3) VALUES (?, ?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codPrevisaoEmpenho, codItem, codTipoItem).Error
+
+	return err
+}
+
+/*  =========================
+	LOG LOTE
+=========================  */
+
+func (log *Log) LogLote(db *gorm.DB, codLote uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("lote").Select("CONCAT(IFNULL(cod_lote, ''), ';', IFNULL(cnpj, ''), ';', IFNULL(contrato, ''), ';', IFNULL(dt_inicio_vig, ''), ';', IFNULL(dt_final_vig, ''), ';', IFNULL(dt_reajuste, ''))").Where("cod_lote = ?", codLote).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codLote).Error
+
+	return err
+}

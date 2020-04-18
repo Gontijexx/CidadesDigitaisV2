@@ -70,20 +70,6 @@ type PIDTipologia struct {
 }
 
 /*  =========================
-	TABELA LOTE
-=========================  */
-
-type Lote struct {
-	CodLote     uint64 `gorm:"primary_key;not null;size:11" json:"cod_lote"`
-	Cnpj        string `gorm:"foreign_key:Cnpj;not null;size:14" json:"cnpj"`
-	Contrato    string `gorm:"default:null;size:10" json:"contrato"`
-	DtInicioVig string `gorm:"default:null;size:10" json:"dt_inicio_vig" `
-	DtFinalVig  string `gorm:"default:null;size:10" json:"dt_final_vig" `
-	DtReajuste  string `gorm:"default:null;size:10" json:"dt_reajuste" `
-	Nome        string `gorm:"default:null" json:"nome"`
-}
-
-/*  =========================
 	TABELA REAJUSTE
 =========================  */
 
@@ -125,19 +111,6 @@ type PrevisaoEmpenho struct {
 	Data               string `gorm:"default:null" json:"data"`
 	Tipo               string `gorm:"default:null;size:1" json:"tipo"`
 	Ano_referencia     uint64 `gorm:"default:null;size:11" json:"ano_referencia"`
-}
-
-/*  =========================
-	TABELA ITENS PREVISAO EMPENHO
-=========================  */
-
-type ItensPrevisaoEmpenho struct {
-	CodPrevisaoEmpenho uint64  `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
-	CodItem            uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item"`
-	CodTipoItem        uint64  `gorm:"primary_key;foreign_key:CodTipo_item;not null;size:11" json:"cod_tipo_item"`
-	CodLote            uint64  `gorm:"foreign_key:CodLote;not null;size:11" json:"cod_lote"`
-	Valor              float64 `gorm:"default:null;size:12" json:"valor"`
-	Quantidade         uint64  `gorm:"default:null;size:11" json:"quantidade"`
 }
 
 /*  =========================

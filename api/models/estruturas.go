@@ -79,18 +79,6 @@ type Reajuste struct {
 	Percentual float64 `gorm:"default:null" json:"percentual"`
 }
 
-/*  =========================
-	TABELA LOTE ITENS
-========================= */
-
-type LoteItens struct {
-	CodLote     uint64  `gorm:"primary_key;foreign_key:CodLote;not null;size:11" json:"cod_lote"`
-	CodItem     uint64  `gorm:"primary_key;foreign_key:CodItem;not null;size:11" json:"cod_item"`
-	CodTipoItem uint64  `gorm:"primary_key;foreign_key:CodTipoItem;not null;size:11" json:"cod_tipo_item"`
-	Preco       float64 `gorm:"default:null;size:12" json:"preco"`
-	Descricao   string  `gorm:"default:null" json:"descricao"`
-}
-
 /*	=========================
 		TABELA OTB (PAGAMENTO)
 =========================	*/
@@ -111,27 +99,6 @@ type PrevisaoEmpenho struct {
 	Data               string `gorm:"default:null" json:"data"`
 	Tipo               string `gorm:"default:null;size:1" json:"tipo"`
 	Ano_referencia     uint64 `gorm:"default:null;size:11" json:"ano_referencia"`
-}
-
-/*  =========================
-	TABELA MUNICIPIO
-=========================  */
-
-type Municipio struct {
-	CodIbge       uint64  `gorm:"primary_key;not null;size:7" json:"cod_ibge"`
-	NomeMunicipio string  `gorm:"default:null" json:"nome_municipio"`
-	Populacao     uint64  `gorm:"default:null" json:"populacao"`
-	UF            string  `gorm:"default:null;size:2" json:"uf"`
-	Regiao        string  `gorm:"default:null;size:15" json:"regiao"`
-	Cnpj          string  `gorm:"default:null;size:14" json:"cnpj"`
-	DistCapital   uint64  `gorm:"default:null" json:"dist_capital"`
-	Endereco      string  `gorm:"default:null" json:"endereco"`
-	Numero        string  `gorm:"default:null;size:10" json:"numero"`
-	Complemento   string  `gorm:"default:null" json:"complemento"`
-	Bairro        string  `gorm:"default:null" json:"bairro"`
-	Idhm          float64 `gorm:"default:null" json:"idhm"`
-	Latitude      float64 `gorm:"default:null" json:"latitude"`
-	Longitude     float64 `gorm:"default:null" json:"longitude"`
 }
 
 /*	=========================

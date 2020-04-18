@@ -260,3 +260,16 @@ func (log *Log) LogLote(db *gorm.DB, codLote uint32, nomeTabela string, operacao
 
 	return err
 }
+
+/*  =========================
+	LOG LOTE ITENS
+=========================  */
+
+func (log *Log) LogLoteItens(db *gorm.DB, codLote uint32, codItem uint32, codTipoItem uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("lote_itens").Select("CONCAT(IFNULL(cod_lote, ''), ';', IFNULL(cod_item, ''), ';', IFNULL(cod_tipo_item, ''), ';', IFNULL(preco, ''))").Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item = ?", codLote, codItem, codTipoItem).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_int_3) VALUES (?, ?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codLote, codItem, codTipoItem).Error
+
+	return err
+}

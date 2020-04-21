@@ -372,3 +372,16 @@ func (log *Log) LogProcesso(db *gorm.DB, codProcesso string, codIbge uint32, nom
 
 	return err
 }
+
+/*  =========================
+	LOG REAJUSTE
+=========================  */
+
+func (log *Log) LogReajuste(db *gorm.DB, anoRef uint32, codLote uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("reajuste").Select("CONCAT(IFNULL(ano_ref, ''), ';', IFNULL(cod_lote, ''), ';', IFNULL(percentual, ''))").Where("ano_ref = ? AND cod_lote = ?", anoRef, codLote).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2) VALUES (?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, anoRef, codLote).Error
+
+	return err
+}

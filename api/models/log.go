@@ -346,3 +346,16 @@ func (log *Log) LogPrefeitos(db *gorm.DB, codPrefeito uint32, nomeTabela string,
 
 	return err
 }
+
+/*  =========================
+	LOG PREVISAO EMPENHO
+=========================  */
+
+func (log *Log) LogPrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("previsao_empenho").Select("CONCAT(IFNULL(cod_previsao_empenho, ''), ';', IFNULL(cod_lote, ''), ';', IFNULL(cod_natureza_despesa, ''), ';', IFNULL(data, ''), ';', IFNULL(tipo, ''), ';', IFNULL(ano_referencia, ''))").Where("cod_previsao_empenho = ?", codPrevisaoEmpenho).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codPrevisaoEmpenho).Error
+
+	return err
+}

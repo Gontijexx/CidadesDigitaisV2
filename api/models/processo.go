@@ -3,7 +3,7 @@ package models
 import "github.com/jinzhu/gorm"
 
 /*  =========================
-	TABELA CD PROCESSO
+	STRUCT PROCESSO
 =========================  */
 
 type Processo struct {

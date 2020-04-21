@@ -182,3 +182,107 @@ func (log *Log) LogFaturaOTB(db *gorm.DB, codOtb uint32, numNF uint32, codIbge u
 
 	return err
 }
+
+/*  =========================
+	LOG ITENS
+=========================  */
+
+func (log *Log) LogItens(db *gorm.DB, codItem uint32, codTipoItem uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("itens").Select("CONCAT(IFNULL(cod_item, ''), ';', IFNULL(cod_tipo_item, ''), ';', IFNULL(cod_natureza_despesa, ''), ';', IFNULL(cod_classe_empenho, ''), ';', IFNULL(descricao, ''), ';', IFNULL(unidade, ''))").Where("cod_item = ? AND cod_tipo_item = ?", codItem, codTipoItem).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2) VALUES (?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codItem, codTipoItem).Error
+
+	return err
+}
+
+/*  =========================
+	LOG ITENS EMPENHO
+=========================  */
+
+func (log *Log) LogItensEmpenho(db *gorm.DB, idEmpenho uint32, codItem uint32, codTipoItem uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("itens_empenho").Select("CONCAT(IFNULL(id_empenho, ''), ';', IFNULL(cod_item, ''), ';', IFNULL(cod_tipo_item, ''), ';', IFNULL(cod_previsao_empenho, ''), ';', IFNULL(valor, ''), ';', IFNULL(quantidade, ''))").Where("id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", idEmpenho, codItem, codTipoItem).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_int_3) VALUES (?, ?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, idEmpenho, codItem, codTipoItem).Error
+
+	return err
+}
+
+/*  =========================
+	LOG ITENS FATURA
+=========================  */
+
+func (log *Log) LogItensFatura(db *gorm.DB, numNF uint32, codIbge uint32, idEmpenho uint32, codItem uint32, codTipoItem uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("itens_fatura").Select("CONCAT(IFNULL(num_nf, ''), ';', IFNULL(cod_ibge, ''), ';', IFNULL(id_empenho, ''), ';', IFNULL(cod_item, ''), ';', IFNULL(cod_tipo_item, ''), ';', IFNULL(valor, ''), ';', IFNULL(quantidade, ''))").Where("num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", numNF, codIbge, idEmpenho, codItem, codTipoItem).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_int_3, cod_int_4, cod_int_5) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, numNF, codIbge, idEmpenho, codItem, codTipoItem).Error
+
+	return err
+}
+
+/*  =========================
+	LOG ITENS OTB
+=========================  */
+
+func (log *Log) LogItensOTB(db *gorm.DB, codOtb uint32, numNF uint32, codIbge uint32, idEmpenho uint32, codItem uint32, codTipoItem uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("itens_otb").Select("CONCAT(IFNULL(cod_otb, ''), ';', IFNULL(num_nf, ''), ';', IFNULL(cod_ibge, ''), ';', IFNULL(id_empenho, ''), ';', IFNULL(cod_item, ''), ';', IFNULL(cod_tipo_item, ''), ';', IFNULL(valor, ''), ';', IFNULL(quantidade, ''))").Where("cod_otb = ? AND num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", codOtb, numNF, codIbge, idEmpenho, codItem, codTipoItem).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_int_3, cod_int_4, cod_int_5, cod_int_6) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codOtb, numNF, codIbge, idEmpenho, codItem, codTipoItem).Error
+
+	return err
+}
+
+/*  =========================
+	LOG ITENS PREVISAO EMPENHO
+=========================  */
+
+func (log *Log) LogItensPrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint32, codItem uint32, codTipoItem uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("itens_previsao_empenho").Select("CONCAT(IFNULL(cod_previsao_empenho, ''), ';', IFNULL(cod_item, ''), ';', IFNULL(cod_tipo_item, ''), ';', IFNULL(cod_lote, ''), ';', IFNULL(valor, ''), ';', IFNULL(quantidade, ''))").Where("cod_previsao_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", codPrevisaoEmpenho, codItem, codTipoItem).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_int_3) VALUES (?, ?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codPrevisaoEmpenho, codItem, codTipoItem).Error
+
+	return err
+}
+
+/*  =========================
+	LOG LOTE
+=========================  */
+
+func (log *Log) LogLote(db *gorm.DB, codLote uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("lote").Select("CONCAT(IFNULL(cod_lote, ''), ';', IFNULL(cnpj, ''), ';', IFNULL(contrato, ''), ';', IFNULL(dt_inicio_vig, ''), ';', IFNULL(dt_final_vig, ''), ';', IFNULL(dt_reajuste, ''))").Where("cod_lote = ?", codLote).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codLote).Error
+
+	return err
+}
+
+/*  =========================
+	LOG LOTE ITENS
+=========================  */
+
+func (log *Log) LogLoteItens(db *gorm.DB, codLote uint32, codItem uint32, codTipoItem uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("lote_itens").Select("CONCAT(IFNULL(cod_lote, ''), ';', IFNULL(cod_item, ''), ';', IFNULL(cod_tipo_item, ''), ';', IFNULL(preco, ''))").Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item = ?", codLote, codItem, codTipoItem).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_int_3) VALUES (?, ?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codLote, codItem, codTipoItem).Error
+
+	return err
+}
+
+/*  =========================
+	LOG MUNICIPIO
+=========================  */
+
+func (log *Log) LogMunicipio(db *gorm.DB, codIbge uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("municipio").Select("CONCAT(IFNULL(cod_ibge, ''), ';', IFNULL(nome_municipio, ''), ';', IFNULL(populacao, ''), ';', IFNULL(uf, ''), ';', IFNULL(regiao, ''), ';', IFNULL(cnpj, ''), ';', IFNULL(dist_capital, ''), ';', IFNULL(endereco, ''), ';', IFNULL(numero, ''), ';', IFNULL(complemento, ''), ';', IFNULL(bairro, ''), ';', IFNULL(idhm, ''), ';', IFNULL(latitude, ''), ';', IFNULL(longitude, ''))").Where("cod_ibge = ?", codIbge).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codIbge).Error
+
+	return err
+}

@@ -1,11 +1,13 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/models"
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -27,19 +29,19 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
 	//	codPrevisaoEmpenho armazena a chave primaria da tabela itens_previsao_empenho
 	codPrevisaoEmpenho, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
-
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
+
 	//	codItem armazena a chave primaria da tabela itens_previsao_empenho
 	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
-
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -56,8 +58,7 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
 
 	//	itensPrevisaoEmpenhoGotten recebe o dado buscado no banco de dados
-	itensPrevisaoEmpenhoGotten, err := itensPrevisaoEmpenho.FindItensPrevisaoEmpenhoByID(server.DB, codPrevisaoEmpenho, codItem, codTipoItem)
-
+	itensPrevisaoEmpenhoGotten, err := itensPrevisaoEmpenho.FindItensPrevisaoEmpenhoByID(server.DB, uint32(codPrevisaoEmpenho), uint32(codItem), uint32(codTipoItem))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -78,19 +79,19 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
 	//	codPrevisaoEmpenho armazena a chave primaria da tabela itens_previsao_empenho
 	codPrevisaoEmpenho, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
-
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
+
 	//	codItem armazena a chave primaria da tabela itens_previsao_empenho
 	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
-
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -98,7 +99,6 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 
 	//	codTipoItem armazena a chave primaria da tabela itens_previsao_empenho
 	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
-
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -110,16 +110,35 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
+	logItensPrevisaoEmpenho := models.Log{}
+
 	err = json.Unmarshal(body, &itensPrevisaoEmpenho)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(itensPrevisaoEmpenho); err != nil {
+	//	Validacao de estrutura
+	err = validation.Validator.Struct(itensPrevisaoEmpenho)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logItensPrevisaoEmpenho.LogItensPrevisaoEmpenho(server.DB, uint32(codPrevisaoEmpenho), uint32(codItem), uint32(codTipoItem), "itens_previsao_empenho", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 

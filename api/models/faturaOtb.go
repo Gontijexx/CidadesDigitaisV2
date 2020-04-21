@@ -3,7 +3,7 @@ package models
 import "github.com/jinzhu/gorm"
 
 /*	=========================
-		TABELA FATURA_OTB
+		TABELA FATURA OTB
 =========================	*/
 
 type FaturaOTB struct {
@@ -13,7 +13,7 @@ type FaturaOTB struct {
 }
 
 /*  =========================
-	FUNCAO SALVAR FATURA OTB NO BANCO DE DADOS
+	FUNCAO SALVAR FATURA OTB
 =========================  */
 
 func (faturaOTB *FaturaOTB) SaveFaturaOTB(db *gorm.DB) (*FaturaOTB, error) {
@@ -34,7 +34,7 @@ func (faturaOTB *FaturaOTB) SaveFaturaOTB(db *gorm.DB) (*FaturaOTB, error) {
 func (faturaOTB *FaturaOTB) FindFaturaOTB(db *gorm.DB, codOtb, numNF, codIbge uint32) (*FaturaOTB, error) {
 
 	//	Busca todos elementos contidos no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(FaturaOTB{}).Where("cod_otb = ? ANF num_nf = ? AND cod_ibge = ?", codOtb, numNF, codIbge).Take(&faturaOTB).Error
+	err := db.Debug().Model(FaturaOTB{}).Where("cod_otb = ? AND num_nf = ? AND cod_ibge = ?", codOtb, numNF, codIbge).Take(&faturaOTB).Error
 	if err != nil {
 		return &FaturaOTB{}, err
 	}

@@ -385,3 +385,16 @@ func (log *Log) LogReajuste(db *gorm.DB, anoRef uint32, codLote uint32, nomeTabe
 
 	return err
 }
+
+/*  =========================
+	LOG TELEFONE
+=========================  */
+
+func (log *Log) LogTelefone(db *gorm.DB, codTelefone uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("telefone").Select("CONCAT(IFNULL(cod_telefone, ''), ';', IFNULL(cod_contato, ''), ';', IFNULL(telefone, ''), ';', IFNULL(tipo, ''))").Where("cod_telefone = ?", codTelefone).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codTelefone).Error
+
+	return err
+}

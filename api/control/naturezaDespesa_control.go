@@ -1,11 +1,13 @@
 package control
 
 import (
+	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/models"
 	"CidadesDigitaisV2/api/responses"
 	"CidadesDigitaisV2/api/validation"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -16,7 +18,7 @@ import (
 )
 
 /*  =========================
-	FUNCAO ADICIONAR NATUREZA_DESPESA
+	FUNCAO ADICIONAR NATUREZA DESPESA
 =========================  */
 
 func (server *Server) CreateNaturezaDespesa(w http.ResponseWriter, r *http.Request) {
@@ -27,6 +29,7 @@ func (server *Server) CreateNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -34,29 +37,42 @@ func (server *Server) CreateNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	//	Estrutura models.NaturezaDespesa{} "renomeada"
 	naturezaDespesa := models.NaturezaDespesa{}
+	logNaturezaDespesa := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct natureza_despesa referenciada (&struct)
 	err = json.Unmarshal(body, &naturezaDespesa)
-
-	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	if err = validation.Validator.Struct(naturezaDespesa); err != nil {
+	//	Validacao de estrutura
+	err = validation.Validator.Struct(naturezaDespesa)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logNaturezaDespesa.LogNaturezaDespesa(server.DB, naturezaDespesa.CodNaturezaDespesa, "natureza_despesa", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	SaveNaturezaDespesa eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	naturezaDespesaCreated, err := naturezaDespesa.SaveNaturezaDespesa(server.DB)
-
-	/*	Retorna um erro caso nao seja possivel salvar natureza_despesa no banco de dados
-		Status 500	*/
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
@@ -67,11 +83,10 @@ func (server *Server) CreateNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, naturezaDespesaCreated)
-
 }
 
 /*  =========================
-	FUNCAO LISTAR NATUREZA_DESPESA POR ID
+	FUNCAO LISTAR NATUREZA DESPESA POR ID
 =========================  */
 
 func (server *Server) GetNaturezaDespesaByID(w http.ResponseWriter, r *http.Request) {
@@ -82,6 +97,7 @@ func (server *Server) GetNaturezaDespesaByID(w http.ResponseWriter, r *http.Requ
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -95,8 +111,7 @@ func (server *Server) GetNaturezaDespesaByID(w http.ResponseWriter, r *http.Requ
 	naturezaDespesa := models.NaturezaDespesa{}
 
 	//	naturezaDespesaGotten recebe o dado buscado no banco de dados
-	naturezaDespesaGotten, err := naturezaDespesa.FindNaturezaDespesaByID(server.DB, codNaturezaDespesa)
-
+	naturezaDespesaGotten, err := naturezaDespesa.FindNaturezaDespesaByID(server.DB, uint32(codNaturezaDespesa))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -104,11 +119,10 @@ func (server *Server) GetNaturezaDespesaByID(w http.ResponseWriter, r *http.Requ
 
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, naturezaDespesaGotten)
-
 }
 
 /*  =========================
-	FUNCAO LISTAR TODAS NATUREZA_DESPESA
+	FUNCAO LISTAR TODAS NATUREZA DESPESA
 =========================  */
 
 func (server *Server) GetAllNaturezaDespesa(w http.ResponseWriter, r *http.Request) {
@@ -119,6 +133,7 @@ func (server *Server) GetAllNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	naturezaDespesa := models.NaturezaDespesa{}
 
 	//	allNaturezaDespesa armazena os dados buscados no banco de dados
@@ -134,7 +149,7 @@ func (server *Server) GetAllNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 }
 
 /*  =========================
-	FUNCAO EDITAR NATUREZA_DESPESA
+	FUNCAO EDITAR NATUREZA DESPESA
 =========================  */
 
 func (server *Server) UpdateNaturezaDespesa(w http.ResponseWriter, r *http.Request) {
@@ -145,6 +160,7 @@ func (server *Server) UpdateNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -161,7 +177,15 @@ func (server *Server) UpdateNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	naturezaDespesa := models.NaturezaDespesa{}
+	logNaturezaDespesa := models.Log{}
 
 	err = json.Unmarshal(body, &naturezaDespesa)
 	if err != nil {
@@ -169,14 +193,23 @@ func (server *Server) UpdateNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if err = validation.Validator.Struct(naturezaDespesa); err != nil {
+	err = validation.Validator.Struct(naturezaDespesa)
+	if err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logNaturezaDespesa.LogNaturezaDespesa(server.DB, uint32(codNaturezaDespesa), "natureza_despesa", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	updateNaturezaDespesa recebe a nova natureza_despesa, a que foi alterada
-	updateNaturezaDespesa, err := naturezaDespesa.UpdateNaturezaDespesa(server.DB, codNaturezaDespesa)
+	updateNaturezaDespesa, err := naturezaDespesa.UpdateNaturezaDespesa(server.DB, uint32(codNaturezaDespesa))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -188,7 +221,7 @@ func (server *Server) UpdateNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 }
 
 /*  =========================
-	FUNCAO DELETAR NATUREZA_DESPESA
+	FUNCAO DELETAR NATUREZA DESPESA
 =========================  */
 
 func (server *Server) DeleteNaturezaDespesa(w http.ResponseWriter, r *http.Request) {
@@ -199,10 +232,19 @@ func (server *Server) DeleteNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	naturezaDespesa := models.NaturezaDespesa{}
+	logNaturezaDespesa := models.Log{}
 
 	//	codNaturezaDespesa armazena a chave primaria da tabela natureza_despesa
 	codNaturezaDespesa, err := strconv.ParseUint(vars["cod_natureza_despesa"], 10, 64)
@@ -211,9 +253,16 @@ func (server *Server) DeleteNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = naturezaDespesa.DeleteNaturezaDespesa(server.DB, codNaturezaDespesa)
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logNaturezaDespesa.LogNaturezaDespesa(server.DB, uint32(codNaturezaDespesa), "natureza_despesa", "d", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
+	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	err = naturezaDespesa.DeleteNaturezaDespesa(server.DB, uint32(codNaturezaDespesa))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

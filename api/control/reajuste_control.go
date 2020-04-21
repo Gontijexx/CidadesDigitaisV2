@@ -231,6 +231,16 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
+	reajuste := models.Reajuste{}
+	logReajuste := models.Log{}
+
 	//	anoRef armazena a chave primaria da tabela reajuste
 	anoRef, err := strconv.ParseUint(vars["ano_ref"], 10, 64)
 	if err != nil {
@@ -244,16 +254,6 @@ func (server *Server) DeleteReajuste(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
 	}
-
-	//	Extrai o cod_usuario do body
-	tokenID, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
-
-	reajuste := models.Reajuste{}
-	logReajuste := models.Log{}
 
 	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
 	err = logReajuste.LogReajuste(server.DB, uint32(anoRef), uint32(codLote), "reajuste", "d", tokenID)

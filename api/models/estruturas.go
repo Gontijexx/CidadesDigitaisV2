@@ -83,20 +83,6 @@ type PrevisaoEmpenho struct {
 	Ano_referencia     uint64 `gorm:"default:null;size:11" json:"ano_referencia"`
 }
 
-/*  =========================
-	TABELA PREFEITOS
-=========================  */
-
-type Prefeitos struct {
-	CodPrefeito uint64 `gorm:"primary_key;auto_increment;not null" json:"cod_prefeito"`
-	CodIbge     uint64 `gorm:"foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
-	Nome        string `gorm:"default:null" json:"nome"`
-	Cpf         string `gorm:"default:null" json:"cpf"`
-	RG          string `gorm:"default:null" json:"rg"`
-	Partido     string `gorm:"default:null" json:"partido"`
-	Exercicio   string `gorm:"default:null" json:"exercicio"`
-}
-
 /*	=========================
 		TABELA TIPOLOGIAS
 =========================	*/

@@ -286,3 +286,16 @@ func (log *Log) LogMunicipio(db *gorm.DB, codIbge uint32, nomeTabela string, ope
 
 	return err
 }
+
+/*  =========================
+	LOG NATUREZA DESPESA
+=========================  */
+
+func (log *Log) LogNaturezaDespesa(db *gorm.DB, codNaturezaDespesa uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("natureza_despesa").Select("CONCAT(IFNULL(cod_natureza_despesa, ''), ';', IFNULL(descricao, ''))").Where("cod_natureza_despesa = ?", codNaturezaDespesa).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codNaturezaDespesa).Error
+
+	return err
+}

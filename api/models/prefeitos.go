@@ -3,7 +3,7 @@ package models
 import "github.com/jinzhu/gorm"
 
 /*  =========================
-	TABELA PREFEITOS
+	STRUCT PREFEITOS
 =========================  */
 
 type Prefeitos struct {

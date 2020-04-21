@@ -1,13 +1,24 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
 /*  =========================
-	FUNCAO SALVAR PREVISAO EMPENHO	NO BANCO DE DADOS
+	STRUCT PREVISAO EMPENHO
+=========================  */
+
+type PrevisaoEmpenho struct {
+	CodPrevisaoEmpenho uint32 `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;auto_increment;not null" json:"cod_previsao_empenho"`
+	CodLote            uint32 `gorm:"foreign_key:CodLote;not null" json:"cod_lote"`
+	CodNaturezaDespesa uint32 `gorm:"foreign_key:CodNaturezaDespesa;not null" json:"cod_natureza_despesa"`
+	Data               string `gorm:"default:null" json:"data"`
+	Tipo               string `gorm:"default:null" json:"tipo"`
+	Ano_referencia     uint32 `gorm:"default:null" json:"ano_referencia"`
+}
+
+/*  =========================
+	FUNCAO SALVAR PREVISAO EMPENHO
 =========================  */
 
 func (previsaoEmpenho *PrevisaoEmpenho) SavePrevisaoEmpenho(db *gorm.DB) (*PrevisaoEmpenho, error) {
@@ -17,24 +28,20 @@ func (previsaoEmpenho *PrevisaoEmpenho) SavePrevisaoEmpenho(db *gorm.DB) (*Previ
 	if err != nil {
 		return &PrevisaoEmpenho{}, err
 	}
-	return previsaoEmpenho, nil
 
+	return previsaoEmpenho, err
 }
 
 /*  =========================
 	FUNCAO LISTAR PREVISAO EMPENHO POR ID
 =========================  */
 
-func (previsaoEmpenho *PrevisaoEmpenho) FindPrevisaoEmpenhoByID(db *gorm.DB, codPrevisaoEmpenho uint64) (*PrevisaoEmpenho, error) {
+func (previsaoEmpenho *PrevisaoEmpenho) FindPrevisaoEmpenhoByID(db *gorm.DB, codPrevisaoEmpenho uint32) (*PrevisaoEmpenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", codPrevisaoEmpenho).Take(&previsaoEmpenho).Error
-
 	if err != nil {
 		return &PrevisaoEmpenho{}, err
-	}
-	if gorm.IsRecordNotFoundError(err) {
-		return &PrevisaoEmpenho{}, errors.New("Previsao_empenho Not Found")
 	}
 
 	return previsaoEmpenho, err
@@ -54,6 +61,7 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]
 	if err != nil {
 		return &[]PrevisaoEmpenho{}, err
 	}
+
 	return &allPrevisaoEmpenho, err
 }
 
@@ -61,20 +69,20 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]
 	FUNCAO EDITAR PREVISAO EMPENHO
 =========================  */
 
-func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint64) (*PrevisaoEmpenho, error) {
+func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint32) (*PrevisaoEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Exec("UPDATE previsao_empenho SET cod_lote = ?, cod_natureza_despesa = ? ,data = ?, tipo = ?, ano_referencia = ? WHERE cod_previsao_empenho = ?", previsaoEmpenho.CodLote, previsaoEmpenho.CodNaturezaDespesa, previsaoEmpenho.Data, previsaoEmpenho.Tipo, previsaoEmpenho.Ano_referencia, codPrevisaoEmpenho)
 	if db.Error != nil {
 		return &PrevisaoEmpenho{}, db.Error
 	}
+
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", codPrevisaoEmpenho).Take(&previsaoEmpenho).Error
 	if err != nil {
 		return &PrevisaoEmpenho{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return previsaoEmpenho, err
 }
 
@@ -82,19 +90,12 @@ func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, codPr
 	FUNCAO DELETAR PREVISAO EMPENHO
 =========================
 
-func (previsaoEmpenho *PrevisaoEmpenho) DeletePrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint64) (int64, error) {
+func (previsaoEmpenho *PrevisaoEmpenho) DeletePrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&PrevisaoEmpenho{}).Where("cod_previsao_empenho = ?", codPrevisaoEmpenho).Take(&PrevisaoEmpenho{}).Delete(&PrevisaoEmpenho{})
 
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Previsao_Empenho not found")
-		}
-		return 0, db.Error
-	}
-
-	return db.RowsAffected, nil
+	return db.Error
 }
 
 */

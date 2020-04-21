@@ -1,11 +1,9 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-)
+import "github.com/jinzhu/gorm"
 
 /*  =========================
-	TABELA EMPENHO
+	STRUCT EMPENHO
 =========================  */
 
 type Empenho struct {

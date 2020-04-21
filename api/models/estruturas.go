@@ -61,15 +61,6 @@ type Ponto struct {
 }
 
 /*  =========================
-	TABELA PID TIPOLOGIA (CD)
-=========================  */
-
-type PIDTipologia struct {
-	CodPID       uint64 `gorm:"primary_key;foreign_key:CodPID;not null" json:"cod_pid"`
-	CodTipologia uint64 `gorm:"primary_key;foreign_key:CodTipologia;not null" json:"cod_tipologia"`
-}
-
-/*  =========================
 	TABELA REAJUSTE
 =========================  */
 
@@ -77,15 +68,6 @@ type Reajuste struct {
 	AnoRef     uint64  `gorm:"primary_key;not null;size:11" json:"ano_ref"`
 	CodLote    uint64  `gorm:"primary key;foreign_key:CodLote;not null;size:11" json:"cod_lote"`
 	Percentual float64 `gorm:"default:null" json:"percentual"`
-}
-
-/*	=========================
-		TABELA OTB (PAGAMENTO)
-=========================	*/
-
-type OTB struct {
-	CodOtb uint64 `gorm:"primary_key;not null" json:"cod_otb"`
-	DtPgto string `gorm:"default:null" json:"dt_pgto" `
 }
 
 /*  =========================
@@ -99,15 +81,6 @@ type PrevisaoEmpenho struct {
 	Data               string `gorm:"default:null" json:"data"`
 	Tipo               string `gorm:"default:null;size:1" json:"tipo"`
 	Ano_referencia     uint64 `gorm:"default:null;size:11" json:"ano_referencia"`
-}
-
-/*	=========================
-	TABELA NATUREZA DE DESPESA
-=========================	*/
-
-type NaturezaDespesa struct {
-	CodNaturezaDespesa uint64 `gorm:"primary_key;not null" json:"cod_natureza_despesa"`
-	Descricao          string `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================

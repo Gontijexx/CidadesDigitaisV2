@@ -1,13 +1,23 @@
 package models
 
-import (
-	"errors"
-
-	"github.com/jinzhu/gorm"
-)
+import "github.com/jinzhu/gorm"
 
 /*  =========================
-	FUNCAO SALVAR PREFEITOS NO BANCO DE DADOS
+	TABELA PREFEITOS
+=========================  */
+
+type Prefeitos struct {
+	CodPrefeito uint32 `gorm:"primary_key;auto_increment;not null" json:"cod_prefeito"`
+	CodIbge     uint32 `gorm:"foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
+	Nome        string `gorm:"default:null" json:"nome"`
+	Cpf         string `gorm:"default:null" json:"cpf"`
+	RG          string `gorm:"default:null" json:"rg"`
+	Partido     string `gorm:"default:null" json:"partido"`
+	Exercicio   string `gorm:"default:null" json:"exercicio"`
+}
+
+/*  =========================
+	FUNCAO SALVAR PREFEITOS
 =========================  */
 
 func (prefeitos *Prefeitos) SavePrefeitos(db *gorm.DB) (*Prefeitos, error) {
@@ -17,20 +27,21 @@ func (prefeitos *Prefeitos) SavePrefeitos(db *gorm.DB) (*Prefeitos, error) {
 	if err != nil {
 		return &Prefeitos{}, err
 	}
-	return prefeitos, nil
+	return prefeitos, err
 }
 
 /*  =========================
 	FUNCAO LISTAR PREFEITOS POR ID
 =========================  */
 
-func (prefeitos *Prefeitos) FindPrefeitosByID(db *gorm.DB, codPrefeito uint64) (*Prefeitos, error) {
+func (prefeitos *Prefeitos) FindPrefeitosByID(db *gorm.DB, codPrefeito uint32) (*Prefeitos, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Prefeitos{}).Where("cod_prefeito = ?", codPrefeito).Take(&prefeitos).Error
 	if err != nil {
 		return &Prefeitos{}, err
 	}
+
 	return prefeitos, err
 }
 
@@ -55,7 +66,7 @@ func (prefeitos *Prefeitos) FindAllPrefeitos(db *gorm.DB) (*[]Prefeitos, error) 
 	FUNCAO EDITAR PREFEITOS
 =========================  */
 
-func (prefeitos *Prefeitos) UpdatePrefeitos(db *gorm.DB, codPrefeito uint64) (*Prefeitos, error) {
+func (prefeitos *Prefeitos) UpdatePrefeitos(db *gorm.DB, codPrefeito uint32) (*Prefeitos, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Exec("UPDATE prefeitos SET cod_ibge = ?, nome = ?, cpf = ?, rg = ?, partido = ?, exercicio = ? WHERE cod_prefeito = ?", prefeitos.CodIbge, prefeitos.Nome, prefeitos.Cpf, prefeitos.RG, prefeitos.Partido, prefeitos.Exercicio, codPrefeito)
@@ -69,24 +80,17 @@ func (prefeitos *Prefeitos) UpdatePrefeitos(db *gorm.DB, codPrefeito uint64) (*P
 		return &Prefeitos{}, err
 	}
 
-	//	retorna o elemento que foi alterado
 	return prefeitos, err
 }
 
 /*  =========================
-	FUNCAO DELETAR PREFEITOS POR ID
+	FUNCAO DELETAR PREFEITOS
 =========================  */
 
-func (prefeitos *Prefeitos) DeletePrefeitos(db *gorm.DB, codPrefeito uint64) (int64, error) {
+func (prefeitos *Prefeitos) DeletePrefeitos(db *gorm.DB, codPrefeito uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(&Prefeitos{}).Where("cod_prefeito = ?", codPrefeito).Take(&Prefeitos{}).Delete(&Prefeitos{})
-	if err != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Prefeito not found")
-		}
-		return 0, db.Error
-	}
+	db = db.Debug().Model(&Prefeitos{}).Where("cod_prefeito = ?", codPrefeito).Take(&Prefeitos{}).Delete(&Prefeitos{})
 
-	return db.RowsAffected, nil
+	return db.Error
 }

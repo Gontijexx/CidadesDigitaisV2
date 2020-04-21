@@ -359,3 +359,16 @@ func (log *Log) LogPrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint32, nomeT
 
 	return err
 }
+
+/*  =========================
+	LOG PROCESSO
+=========================  */
+
+func (log *Log) LogProcesso(db *gorm.DB, codProcesso string, codIbge uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("processo").Select("CONCAT(IFNULL(cod_processo, ''), ';', IFNULL(cod_ibge, ''), ';', IFNULL(descricao, ''))").Where("cod_processo = ? AND cod_ibge = ?", codProcesso, codIbge).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_processo) VALUES (?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codIbge, codProcesso).Error
+
+	return err
+}

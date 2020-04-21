@@ -1,13 +1,18 @@
 package models
 
-import (
-	"errors"
+import "github.com/jinzhu/gorm"
 
-	"github.com/jinzhu/gorm"
-)
+/*	=========================
+	STRUCT TIPO ITEM
+=========================	*/
+
+type TipoItem struct {
+	CodTipoItem uint32 `gorm:"primary_key;not null" json:"cod_tipo_item"`
+	Descricao   string `gorm:"default:null" json:"descricao"`
+}
 
 /*  =========================
-	FUNCAO SALVAR TIPO_ITEM NO BANCO DE DADOS
+	FUNCAO SALVAR TIPO ITEM
 =========================  */
 
 func (tipoItem *TipoItem) SaveTipoItem(db *gorm.DB) (*TipoItem, error) {
@@ -18,18 +23,17 @@ func (tipoItem *TipoItem) SaveTipoItem(db *gorm.DB) (*TipoItem, error) {
 		return &TipoItem{}, err
 	}
 
-	return tipoItem, nil
+	return tipoItem, err
 }
 
 /*  =========================
-	FUNCAO LISTAR TIPO_ITEM POR ID
+	FUNCAO LISTAR TIPO ITEM POR ID
 =========================  */
 
-func (tipoItem *TipoItem) FindTipoItemByID(db *gorm.DB, codTipoItem uint64) (*TipoItem, error) {
+func (tipoItem *TipoItem) FindTipoItemByID(db *gorm.DB, codTipoItem uint32) (*TipoItem, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(TipoItem{}).Where("cod_tipo_item = ?", codTipoItem).Take(&tipoItem).Error
-
 	if err != nil {
 		return &TipoItem{}, err
 	}
@@ -38,7 +42,7 @@ func (tipoItem *TipoItem) FindTipoItemByID(db *gorm.DB, codTipoItem uint64) (*Ti
 }
 
 /*  =========================
-	FUNCAO LISTAR TODAS TIPO_ITEM
+	FUNCAO LISTAR TODAS TIPO ITEM
 =========================  */
 
 func (tipoItem *TipoItem) FindAllTipoItem(db *gorm.DB) (*[]TipoItem, error) {
@@ -50,14 +54,15 @@ func (tipoItem *TipoItem) FindAllTipoItem(db *gorm.DB) (*[]TipoItem, error) {
 	if err != nil {
 		return &[]TipoItem{}, err
 	}
+
 	return &allTipoItem, err
 }
 
 /*  =========================
-	FUNCAO EDITAR TIPO_ITEM
+	FUNCAO EDITAR TIPO ITEM
 =========================  */
 
-func (tipoItem *TipoItem) UpdateTipoItem(db *gorm.DB, codTipoItem uint64) (*TipoItem, error) {
+func (tipoItem *TipoItem) UpdateTipoItem(db *gorm.DB, codTipoItem uint32) (*TipoItem, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Exec("UPDATE tipo_item SET descricao = ? WHERE cod_tipo_item = ?", tipoItem.Descricao, codTipoItem)
@@ -76,20 +81,13 @@ func (tipoItem *TipoItem) UpdateTipoItem(db *gorm.DB, codTipoItem uint64) (*Tipo
 }
 
 /*  =========================
-	FUNCAO DELETAR TIPO_ITEM POR ID
+	FUNCAO DELETAR TIPO ITEM
 =========================  */
 
-func (tipoItem *TipoItem) DeleteTipoItem(db *gorm.DB, codTipoItem uint64) (int64, error) {
+func (tipoItem *TipoItem) DeleteTipoItem(db *gorm.DB, codTipoItem uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&TipoItem{}).Where("cod_tipo_item = ?", codTipoItem).Take(&TipoItem{}).Delete(&TipoItem{})
 
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("TipoItem not found")
-		}
-		return 0, db.Error
-	}
-
-	return db.RowsAffected, nil
+	return db.Error
 }

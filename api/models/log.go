@@ -411,3 +411,16 @@ func (log *Log) LogTipoItem(db *gorm.DB, codTipoItem uint32, nomeTabela string, 
 
 	return err
 }
+
+/*  =========================
+	LOG TIPOLOGIA
+=========================  */
+
+func (log *Log) LogTipologia(db *gorm.DB, codTipologia uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("tipologia").Select("CONCAT(IFNULL(cod_tipologia, ''), ';', IFNULL(descricao, ''))").Where("cod_tipologia = ?", codTipologia).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codTipologia).Error
+
+	return err
+}

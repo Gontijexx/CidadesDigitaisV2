@@ -193,11 +193,17 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePonto))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM CIDADE DIGITAL PID_TIPOLOGIA
+		ROTAS EM CIDADE DIGITAL PID TIPOLOGIA
 	=========================	*/
 
-	//	APAGA PID_TIPOLOGIA (cod_ponto, cod_categoria, cod_ibge, cod_tipologia)
-	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePIDTipologia))).Methods(http.MethodDelete)
+	//	LISTA PID TIPOLOGIA
+	r.HandleFunc(config.PID_TOPOLOGIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPIDTipologia))).Methods(http.MethodGet)
+
+	//	SALVA PID TIPOLOGIA
+	r.HandleFunc(config.PID_TOPOLOGIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePIDTipologia))).Methods(http.MethodPost)
+
+	//	APAGA PID TIPOLOGIA (cod_pid, cod_tipologia)
+	r.HandleFunc(config.PID_TOPOLOGIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePIDTipologia))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM LOTE

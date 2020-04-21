@@ -329,3 +329,20 @@ func (log *Log) LogPIDTipologia(db *gorm.DB, codPID uint32, codTipologia uint32,
 
 	return err
 }
+
+/*  =========================
+	LOG PONTO
+=========================  */
+
+/*  =========================
+	LOG PREFEITOS
+=========================  */
+
+func (log *Log) LogPrefeitos(db *gorm.DB, codPrefeito uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("prefeitos").Select("CONCAT(IFNULL(cod_prefeito, ''), ';', IFNULL(cod_ibge, ''), ';', IFNULL(nome, ''), ';', IFNULL(cpf, ''), ';', IFNULL(rg, ''), ';', IFNULL(partido, ''), ';', IFNULL(exercicio, ''))").Where("cod_prefeito = ?", codPrefeito).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codPrefeito).Error
+
+	return err
+}

@@ -1,13 +1,25 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
+/*	=========================
+	STRUCT ITENS FATURA
+=========================	*/
+
+type ItensFatura struct {
+	NumNF       uint32  `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
+	CodIbge     uint32  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	IDEmpenho   uint32  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
+	CodItem     uint32  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
+	CodTipoItem uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
+	Valor       float32 `gorm:"default:null" json:"valor"`
+	Quantidade  uint32  `gorm:"default:null" json:"quantidade"`
+}
+
 /*  =========================
-	FUNCAO SALVAR ITENS FATURA NO BANCO DE DADOS
+	FUNCAO SALVAR ITENS FATURA
 =========================  */
 
 func (itensFatura *ItensFatura) SaveItensFatura(db *gorm.DB) (*ItensFatura, error) {
@@ -18,18 +30,17 @@ func (itensFatura *ItensFatura) SaveItensFatura(db *gorm.DB) (*ItensFatura, erro
 		return &ItensFatura{}, err
 	}
 
-	return itensFatura, nil
+	return itensFatura, err
 }
 
 /*  =========================
 	FUNCAO LISTAR ITENS FATURA POR ID
 =========================  */
 
-func (itensFatura *ItensFatura) FindItensFaturaByID(db *gorm.DB, numNF, codIbge, idEmpenho, codItem, codTipoItem uint64) (*ItensFatura, error) {
+func (itensFatura *ItensFatura) FindItensFaturaByID(db *gorm.DB, numNF, codIbge, idEmpenho, codItem, codTipoItem uint32) (*ItensFatura, error) {
 
 	//	Busca um elemento no banco de dados de acordo com suas chaves primarias
 	err := db.Debug().Model(ItensEmpenho{}).Where("num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", numNF, codIbge, idEmpenho, codItem, codTipoItem).Take(&itensFatura).Error
-
 	if err != nil {
 		return &ItensFatura{}, err
 	}
@@ -50,6 +61,7 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB) (*[]ItensFatura,
 	if err != nil {
 		return &[]ItensFatura{}, err
 	}
+
 	return &allItensFatura, err
 }
 
@@ -57,22 +69,20 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB) (*[]ItensFatura,
 	FUNCAO EDITAR ITENS FATURA
 =========================  */
 
-func (itensFatura *ItensFatura) UpdateItensFatura(db *gorm.DB, numNF, codIbge, idEmpenho, codItem, codTipoItem uint64) (*ItensFatura, error) {
+func (itensFatura *ItensFatura) UpdateItensFatura(db *gorm.DB, numNF, codIbge, idEmpenho, codItem, codTipoItem uint32) (*ItensFatura, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE itens_fatura SET valor = ?, quantidade = ? WHERE num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", itensFatura.Valor, itensFatura.Quantidade, numNF, codIbge, idEmpenho, codItem, codTipoItem).Error
-
+	db = db.Debug().Exec("UPDATE itens_fatura SET valor = ?, quantidade = ? WHERE num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", itensFatura.Valor, itensFatura.Quantidade, numNF, codIbge, idEmpenho, codItem, codTipoItem)
 	if db.Error != nil {
 		return &ItensFatura{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&ItensFatura{}).Take(&itensFatura).Error
+	err := db.Debug().Model(&ItensFatura{}).Take(&itensFatura).Error
 	if err != nil {
 		return &ItensFatura{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return itensFatura, err
 }
 
@@ -80,17 +90,10 @@ func (itensFatura *ItensFatura) UpdateItensFatura(db *gorm.DB, numNF, codIbge, i
 	FUNCAO DELETAR ITENS OTB POR ID
 =========================  */
 
-func (itensFatura *ItensFatura) DeleteItensFatura(db *gorm.DB, numNF, cod_ibge, idEmpenho, codItem, codTipoItem uint64) (int64, error) {
+func (itensFatura *ItensFatura) DeleteItensFatura(db *gorm.DB, numNF, cod_ibge, idEmpenho, codItem, codTipoItem uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&ItensFatura{}).Where("num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", numNF, cod_ibge, idEmpenho, codItem, codTipoItem).Take(&ItensFatura{}).Delete(&ItensFatura{})
 
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("ItensFatura not found")
-		}
-		return 0, db.Error
-	}
-
-	return db.RowsAffected, nil
+	return db.Error
 }

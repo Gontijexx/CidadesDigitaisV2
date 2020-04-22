@@ -75,13 +75,13 @@ func (cd *CD) FindAllCD(db *gorm.DB) (*[]CD, error) {
 func (cd *CD) UpdateCD(db *gorm.DB, codIbge uint32) (*CD, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	err := db.Debug().Exec("UPDATE cd SET cod_lote = ?, os_pe = ?, data_pe = ?, os_imp = ?, data_imp = ? WHERE cod_ibge = ?", cd.CodLote, cd.OsPe, cd.DataPe, cd.OsImp, cd.DataImp, codIbge).Error
-	if err != nil {
-		return &CD{}, err
+	db = db.Debug().Exec("UPDATE cd SET cod_lote = ?, os_pe = ?, data_pe = ?, os_imp = ?, data_imp = ? WHERE cod_ibge = ?", cd.CodLote, cd.OsPe, cd.DataPe, cd.OsImp, cd.DataImp, codIbge)
+	if db.Error != nil {
+		return &CD{}, db.Error
 	}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err = db.Debug().Model(&CD{}).Where("cod_ibge = ?", codIbge).Take(&cd).Error
+	err := db.Debug().Model(&CD{}).Where("cod_ibge = ?", codIbge).Take(&cd).Error
 	if err != nil {
 		return &CD{}, err
 	}

@@ -1,10 +1,6 @@
 package models
 
-import (
-	"errors"
-
-	"github.com/jinzhu/gorm"
-)
+import "github.com/jinzhu/gorm"
 
 /*  =========================
 	STRUCT ETAPAS CD
@@ -89,13 +85,6 @@ func (etapasCD *EtapasCD) UpdateEtapasCD(db *gorm.DB, codIbge, codEtapa uint32) 
 func (etapasCD *EtapasCD) DeleteEtapasCD(db *gorm.DB, codIbge, codEtapa uint32) error {
 
 	db = db.Debug().Model(&EtapasCD{}).Where("cod_ibge = ? AND cod_etapa = ?", codIbge, codEtapa).Take(&EtapasCD{}).Delete(&EtapasCD{})
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return errors.New("Etapas_CD not found")
-		}
-
-		return db.Error
-	}
 
 	return db.Error
 }

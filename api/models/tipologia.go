@@ -1,13 +1,18 @@
 package models
 
-import (
-	"errors"
+import "github.com/jinzhu/gorm"
 
-	"github.com/jinzhu/gorm"
-)
+/*	=========================
+		TABELA TIPOLOGIA
+=========================	*/
+
+type Tipologia struct {
+	CodTipologia uint32 `gorm:"primary_key;auto_increment;not null" json:"cod_tipologia"`
+	Descricao    string `gorm:"default:null" json:"descricao"`
+}
 
 /*  =========================
-	FUNCAO SALVAR TIPOLOGIA NO BANCO DE DADOS
+	FUNCAO SALVAR TIPOLOGIA
 =========================  */
 
 func (tipologia *Tipologia) SaveTipologia(db *gorm.DB) (*Tipologia, error) {
@@ -18,14 +23,14 @@ func (tipologia *Tipologia) SaveTipologia(db *gorm.DB) (*Tipologia, error) {
 		return &Tipologia{}, err
 	}
 
-	return tipologia, nil
+	return tipologia, err
 }
 
 /*  =========================
 	FUNCAO LISTAR TIPOLOGIA POR ID
 =========================  */
 
-func (tipologia *Tipologia) FindTipologiaByID(db *gorm.DB, codTipologia uint64) (*Tipologia, error) {
+func (tipologia *Tipologia) FindTipologiaByID(db *gorm.DB, codTipologia uint32) (*Tipologia, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Tipologia{}).Where("cod_tipologia = ?", codTipologia).Take(&tipologia).Error
@@ -58,7 +63,7 @@ func (tipologia *Tipologia) FindAllTipologia(db *gorm.DB) (*[]Tipologia, error) 
 	FUNCAO EDITAR TIPOLOGIA
 =========================  */
 
-func (tipologia *Tipologia) UpdateTipologia(db *gorm.DB, codTipologia uint64) (*Tipologia, error) {
+func (tipologia *Tipologia) UpdateTipologia(db *gorm.DB, codTipologia uint32) (*Tipologia, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Exec("UPDATE tipologia SET descricao = ? WHERE cod_tipologia = ?", tipologia.Descricao, codTipologia)
@@ -72,7 +77,6 @@ func (tipologia *Tipologia) UpdateTipologia(db *gorm.DB, codTipologia uint64) (*
 		return &Tipologia{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return tipologia, err
 }
 
@@ -80,17 +84,10 @@ func (tipologia *Tipologia) UpdateTipologia(db *gorm.DB, codTipologia uint64) (*
 	FUNCAO DELETAR TIPOLOGIA POR ID
 =========================  */
 
-func (tipologia *Tipologia) DeleteTipologia(db *gorm.DB, codTipologia uint64) (int64, error) {
+func (tipologia *Tipologia) DeleteTipologia(db *gorm.DB, codTipologia uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Tipologia{}).Where("cod_tipologia = ?", codTipologia).Take(&Tipologia{}).Delete(&Tipologia{})
 
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Tipologia not found")
-		}
-		return 0, db.Error
-	}
-
-	return db.RowsAffected, nil
+	return db.Error
 }

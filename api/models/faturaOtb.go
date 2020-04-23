@@ -3,7 +3,7 @@ package models
 import "github.com/jinzhu/gorm"
 
 /*	=========================
-		TABELA FATURA OTB
+	STRUCT FATURA OTB
 =========================	*/
 
 type FaturaOTB struct {

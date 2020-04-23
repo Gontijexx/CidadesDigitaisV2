@@ -2,12 +2,14 @@ package control
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 
+	"CidadesDigitaisV2/api/auth"
 	"CidadesDigitaisV2/api/config"
 	"CidadesDigitaisV2/api/models"
 	"CidadesDigitaisV2/api/responses"
@@ -35,29 +37,34 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Struct's necessarias
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	pid := models.Pid{}
 	ponto := models.Ponto{}
+	logPid := models.Log{}
+	logPonto := models.Log{}
 
-	//	Unmarshal analisa o JSON recebido e armazena na struct ponto referenciada (&struct)
-	err = json.Unmarshal(body, &pid)
-
-	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
-	if err != nil {
+	//	Unmarshal pid
+	if err = json.Unmarshal(body, &pid); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	err = json.Unmarshal(body, &ponto)
-
-	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
-		return
-	}
+	//	Validacao de estrutura
 	if err = validation.Validator.Struct(pid); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	//	Unmarshal ponto
+	if err = json.Unmarshal(body, &ponto); err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
@@ -67,23 +74,35 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pidCreated, err := pid.SavePID(server.DB)
-
+	pidCreated, err := pid.SavePid(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logPid.LogPid(server.DB, pid.CodPid, "pid", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	ponto.CodPid = pidCreated.CodPid
+
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logPonto.LogPonto(server.DB, ponto.CodPonto, ponto.CodCategoria, ponto.CodIbge, "ponto", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
 
 	//	SavePonto eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	pontoCreated, err := ponto.SavePonto(server.DB)
-
-	//	Retorna um erro caso nao seja possivel salvar ponto no banco de dados
-	//	Status 500
 	if err != nil {
-		_, _ = pid.DeletePID(server.DB, pidCreated.CodPid)
+		pid.DeletePid(server.DB, pidCreated.CodPid)
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
 		return
@@ -93,7 +112,6 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, pontoCreated)
-
 }
 
 /*  =========================
@@ -103,11 +121,11 @@ func (server *Server) CreatePonto(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetPontoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 13012)
-	if err != nil {
+	if err := config.AuthMod(w, r, 13012); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -135,8 +153,7 @@ func (server *Server) GetPontoByID(w http.ResponseWriter, r *http.Request) {
 	ponto := models.Ponto{}
 
 	//	pontoGotten recebe o dado buscado no banco de dados
-	pontoGotten, err := ponto.FindPontoByID(server.DB, codPonto, codCategoria, codIbge)
-
+	pontoGotten, err := ponto.FindPontoByID(server.DB, uint32(codPonto), uint32(codCategoria), uint32(codIbge))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
@@ -144,7 +161,6 @@ func (server *Server) GetPontoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, pontoGotten)
-
 }
 
 /*  =========================
@@ -154,11 +170,11 @@ func (server *Server) GetPontoByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllPonto(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 13012)
-	if err != nil {
+	if err := config.AuthMod(w, r, 13012); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	ponto := models.Ponto{}
 
 	//	allPonto armazena os dados buscados no banco de dados
@@ -180,11 +196,11 @@ func (server *Server) GetAllPonto(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdatePonto(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 13013)
-	if err != nil {
+	if err := config.AuthMod(w, r, 13013); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	//	Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
@@ -215,10 +231,17 @@ func (server *Server) UpdatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ponto := models.Ponto{}
-
-	err = json.Unmarshal(body, &ponto)
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
 	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
+	ponto := models.Ponto{}
+	logPonto := models.Log{}
+
+	if err = json.Unmarshal(body, &ponto); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
@@ -229,8 +252,16 @@ func (server *Server) UpdatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logPonto.LogPonto(server.DB, uint32(codPonto), uint32(codCategoria), uint32(codIbge), "ponto", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	updatePonto recebe a nova ponto, a que foi alterada
-	updatePonto, err := ponto.UpdatePonto(server.DB, codPonto, codCategoria, codIbge)
+	updatePonto, err := ponto.UpdatePonto(server.DB, uint32(codPonto), uint32(codCategoria), uint32(codIbge))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
@@ -248,15 +279,23 @@ func (server *Server) UpdatePonto(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeletePonto(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 13013)
-	if err != nil {
+	if err := config.AuthMod(w, r, 13013); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
+
 	// Vars retorna as variaveis de rota
 	vars := mux.Vars(r)
 
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	ponto := models.Ponto{}
+	logPonto := models.Log{}
 
 	//	codPonto armazena a chave primaria da tabela ponto
 	codPonto, err := strconv.ParseUint(vars["cod_ponto"], 10, 64)
@@ -279,9 +318,16 @@ func (server *Server) DeletePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/* 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	Caso nao seja possivel deletar o dado especificado tratamos o erro*/
-	_, err = ponto.DeletePonto(server.DB, codPonto, codCategoria, codIbge)
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logPonto.LogPonto(server.DB, uint32(codPonto), uint32(codCategoria), uint32(codIbge), "ponto", "d", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
+	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	err = ponto.DeletePonto(server.DB, uint32(codPonto), uint32(codCategoria), uint32(codIbge))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))

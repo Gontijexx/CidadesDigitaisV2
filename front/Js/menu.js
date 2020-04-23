@@ -2,10 +2,10 @@ document.write(`
 		<section>
 			<div class="container-fluid">
 				<header class="cd-header"><!--Barra Menu-->
-			<div id="cd-logo">
-				<a href=""><img src="img/cd-logo.svg" alt="Logo"></a>
-			</div>
-				 <a class="cd-menu-trigger" href="#main-nav">Menu<span></span></a>
+					<div id="cd-logo">
+						<a href=""><img src="img/cd-logo.svg" alt="Logo"><input value="Sair" onclick="logoff()" type="button"></a>
+					</div>
+				 	<a class="cd-menu-trigger" href="#main-nav">Menu<span></span></a>
 				</header>
 			</div>
 			<div class="cd-blurred-bg"></div>
@@ -18,7 +18,6 @@ document.write(`
 				<li><a href="./usuario.html"><span>Usuario</span></a></li>
 				<li><a href="./administracao.html"><span>Administração</span></a></li>
 				<li><a href="./fiscalizacao.html"><span>Fiscalização</span></a></li>
-				<input value="Sair" onclick="logoff()" type="button">
 				</ul>
 				<a href="#0" class="cd-close-menu">Close<span></span></a>
 			</nav>

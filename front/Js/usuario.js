@@ -1,7 +1,12 @@
 //Fazer Tabela
 let listaModulo = [];
+
 //pega o token do login
 let meuToken = localStorage.getItem("token");
+
+//pega o usuario logado
+let userLogado = localStorage.getItem("logado");
+
 //organizar os modulos
 let userCriado,
   userTotal = [],
@@ -19,13 +24,13 @@ let info = {
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
-    window.location.replace("./errors/400.html");
+    window.location.href="./errors/400.html";
   } else if (value == 401) {
-    window.location.replace("./errors/401.html");
+    window.location.href="./errors/401.html";
   } else if (value == 403) {
-    window.location.replace("./errors/403.html");
+    window.location.href="./errors/403.html";
   } else if (value == 404) {
-    window.location.replace("./errors/404.html");
+    window.location.href="./errors/404.html";
   } else if (value == 409) {
     alert("Erro: Lote já existente.");
   } else if (value == 412) {
@@ -33,9 +38,9 @@ function erros(value) {
   } else if (value == 422) {
     alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
-    window.location.replace("./errors/500.html");
+    window.location.href="./errors/500.html";
   } else if (value == 504) {
-    window.location.replace("./errors/504.html");
+    window.location.href="./errors/504.html";
   } else {
     alert("ERRO DESCONHECIDO");
   }
@@ -126,6 +131,9 @@ function paginacao() {
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td> </tr>`);
+            if(jsonDeStatus[i]["login"]==userLogado){
+              localStorage.setItem("codigoLogado", jsonDeStatus[i]["cod_usuario"]);
+            }
           }
 
         } else if (selecao == 2) {
@@ -158,6 +166,9 @@ function paginacao() {
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td> </tr>`);
+            if(jsonDeStatus[i]["login"]==userLogado){
+              localStorage.setItem("codigoLogado", jsonDeStatus[i]["cod_usuario"]);
+            }
           }
 
         } else {
@@ -179,6 +190,9 @@ function paginacao() {
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td> </tr>`);
+            if(json[i]["login"]==userLogado){
+              localStorage.setItem("codigoLogado", json[i]["cod_usuario"]);
+            }
           }
         }
         tabela += (`</tbody>`);
@@ -194,6 +208,7 @@ function paginacao() {
 
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+        //apenas aciona se precisar de paginação
         if (json.length > porPagina) {
           //caso seja apenas 10 paginas
           if (totalPaginas < 10) {

@@ -10,32 +10,23 @@ document.getElementById("nome_municipio").disabled = true;
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
-    console.log(response.statusText);
-    window.location.replace("./errors/400.html");
+    window.location.href="./errors/400.html";
   } else if (value == 401) {
-    console.log(response.statusText);
-    window.location.replace("./errors/401.html");
+    window.location.href="./errors/401.html";
   } else if (value == 403) {
-    console.log(response.statusText);
-    window.location.replace("./errors/403.html");
+    window.location.href="./errors/403.html";
   } else if (value == 404) {
-    console.log(response.statusText);
-    window.location.replace("./errors/404.html");
+    window.location.href="./errors/404.html";
   } else if (value == 409) {
-    console.log(response.statusText);
     alert("Erro: Lote já existente.");
   } else if (value == 412) {
-    console.log(response.statusText);
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
-    console.log(response.statusText);
     alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
-    console.log(response.statusText);
-    window.location.replace("./errors/500.html");
+    window.location.href="./errors/500.html";
   } else if (value == 504) {
-    console.log(response.statusText);
-    window.location.replace("./errors/504.html");
+    window.location.href="./errors/504.html";
   } else {
     alert("ERRO DESCONHECIDO");
   }
@@ -56,23 +47,18 @@ let info = {
   "observacao": " "
 };
 
-
-
 function enabler() {
-  let uf1 = document.getElementById("uf");
-  info.uf = uf1.value;
+  let uf1 = document.getElementById("uf").value;
   document.getElementById("nome_municipio").disabled = false;
   let i, y = [];
   for (i = 0; i < cidades.length; i++) {
-    if (cidades[i].uf == info.uf) {
+    if (cidades[i].uf == uf1) {
       y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
     }
   }
   y.sort();
   document.getElementById("nome_municipio").innerHTML = y;
 }
-
-
 
 //sistema de paginação
 let contador = 0;
@@ -172,6 +158,7 @@ function paginacao() {
 
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+        //apenas aciona se precisar de paginação
         if (json.length > porPagina) {
           //caso seja apenas 10 paginas
           if(totalPaginas<10){
@@ -350,7 +337,7 @@ function enviar() {
   info.bairro = e.value;
   let f = document.getElementById("cep");
   info.cep = f.value;
-  let g = document.getElementById("obs");
+  let g = document.getElementById("observacao");
   info.observacao = g.value;
   let h = document.getElementById("nome_municipio");
   info.nome_municipio = h.value;
@@ -371,7 +358,7 @@ function enviar() {
     if (response.status == 201) {
       alert("Entidade criada com sucesso");
       return response.json().then(function (json) {
-        console.log(json);
+        //console.log(json);
         window.location.replace("./entidade.html");
       });
     } else {

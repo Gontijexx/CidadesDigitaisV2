@@ -1,7 +1,7 @@
 package config
 
 /*  =========================
-	Server HTTP
+	SERVER HTTP
 =========================  */
 
 const (
@@ -102,7 +102,7 @@ const (
 )
 
 /*  =========================
-	CD PROCESSO PATHS HTTP
+	PROCESSO PATHS HTTP
 =========================  */
 
 const (
@@ -111,7 +111,7 @@ const (
 )
 
 /*  =========================
-	CD UACOM PATHS HTTP
+	UACOM PATHS HTTP
 =========================  */
 
 const (
@@ -120,7 +120,7 @@ const (
 )
 
 /*  =========================
-	CD UACOM_ASSUNTO PATHS HTTP
+	UACOM ASSUNTO PATHS HTTP
 =========================  */
 
 const (
@@ -138,7 +138,7 @@ const (
 )
 
 /*  =========================
-	ETAPAS_CD PATHS HTTP
+	ETAPAS CD PATHS HTTP
 =========================  */
 
 const (
@@ -156,12 +156,21 @@ const (
 )
 
 /*  =========================
-	CD PONTO PATHS HTTP
+	PONTO PATHS HTTP
 =========================  */
 
 const (
 	PONTO_PATH    = "/read/ponto"
 	PONTO_ID_PATH = "/read/ponto/{cod_ponto}/{cod_categoria}/{cod_ibge}"
+)
+
+/*  =========================
+	PID PATHS HTTP
+=========================  */
+
+const (
+	PID_PATH    = "/read/pid"
+	PID_ID_PATH = "/read/pid/{cod_pid}"
 )
 
 /*	=========================
@@ -173,7 +182,7 @@ const (
 )
 
 /*  =========================
-	CD PID_TIPOLOGIA PATHS HTTP
+	PID TIPOLOGIA PATHS HTTP
 =========================  */
 
 const (
@@ -209,7 +218,7 @@ const (
 )
 
 /*	=========================
-	OTB PATH HTTP (PAGAMENTO)
+	OTB PATH HTTP
 =========================	*/
 
 const (
@@ -236,7 +245,7 @@ const (
 )
 
 /*	=========================
-	FATURA OTB PATH HTTP (FATURA PAGAMENTO)
+	FATURA OTB PATH HTTP
 =========================	*/
 const (
 	FATURA_OTB_PATH    = "/read/faturaotb"
@@ -244,7 +253,7 @@ const (
 )
 
 /*	=========================
-	FATURA ITENS PATH HTTP (ITENS FATURA)
+	ITENS FATURA PATH HTTP
 =========================	*/
 
 const (

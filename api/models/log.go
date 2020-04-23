@@ -437,3 +437,16 @@ func (log *Log) LogUacom(db *gorm.DB, codIbge uint32, data string, nomeTabela st
 
 	return err
 }
+
+/*  =========================
+	LOG UACOM ASSUNTO
+=========================  */
+
+func (log *Log) LogUacomAssunto(db *gorm.DB, codIbge uint32, data string, codAssunto uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("uacom_assunto").Select("CONCAT(IFNULL(cod_ibge, ''), ';', IFNULL(data, ''), ';', IFNULL(cod_assunto, '')").Where("cod_ibge = ? AND data = ? AND cod_assunto", codIbge, data, codAssunto).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2, cod_data) VALUES (?, ?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codIbge, codAssunto, data).Error
+
+	return err
+}

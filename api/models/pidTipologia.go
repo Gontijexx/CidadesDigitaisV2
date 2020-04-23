@@ -1,26 +1,56 @@
 package models
 
-import (
-	"errors"
-
-	"github.com/jinzhu/gorm"
-)
+import "github.com/jinzhu/gorm"
 
 /*  =========================
-	FUNCAO DELETAR PID_TIPOLOGIA POR ID
+	PID TIPOLOGIA
 =========================  */
 
-func (pidTipologia *PIDTipologia) DeletePIDTipologia(db *gorm.DB, codPonto, codCategoria, codIbge, codTipologia uint64) (int64, error) {
+type PidTipologia struct {
+	CodPid       uint32 `gorm:"primary_key;foreign_key:CodPID;not null" json:"cod_pid"`
+	CodTipologia uint32 `gorm:"primary_key;foreign_key:CodTipologia;not null" json:"cod_tipologia"`
+}
 
-	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
-	db = db.Debug().Model(&PIDTipologia{}).Where("cod_ponto = ? AND cod_categoria = ? AND cod_ibge = ? AND cod_tipologia = ?", codPonto, codCategoria, codIbge, codTipologia).Take(&PIDTipologia{}).Delete(&PIDTipologia{})
+/*  =========================
+	FUNCAO SALVAR PID TIPOLOGIA
+=========================  */
 
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("PIDTipologia not found")
-		}
-		return 0, db.Error
+func (pidTipologia *PidTipologia) SavePIDTipologia(db *gorm.DB) (*PidTipologia, error) {
+
+	//	Adiciona um novo elemento ao banco de dados
+	err := db.Debug().Create(&pidTipologia).Error
+	if err != nil {
+		return &PidTipologia{}, err
 	}
 
-	return db.RowsAffected, nil
+	return pidTipologia, err
+}
+
+/*  =========================
+	FUNCAO LISTAR TODAS PID TIPOLOGIA
+=========================  */
+
+func (pidTipologia *PidTipologia) FindAllPIDTipologia(db *gorm.DB) (*[]PidTipologia, error) {
+
+	allPIDTipologia := []PidTipologia{}
+
+	// Busca todos elementos contidos no banco de dados
+	err := db.Debug().Model(&PidTipologia{}).Find(&allPIDTipologia).Error
+	if err != nil {
+		return &[]PidTipologia{}, err
+	}
+
+	return &allPIDTipologia, err
+}
+
+/*  =========================
+	FUNCAO DELETAR PID TIPOLOGIA
+=========================  */
+
+func (pidTipologia *PidTipologia) DeletePIDTipologia(db *gorm.DB, codPID, codTipologia uint32) error {
+
+	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
+	db = db.Debug().Model(&PidTipologia{}).Where("cod_pid = ? AND cod_tipologia = ?", codPID, codTipologia).Take(&PidTipologia{}).Delete(&PidTipologia{})
+
+	return db.Error
 }

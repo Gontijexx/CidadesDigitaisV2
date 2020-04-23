@@ -177,7 +177,8 @@ const (
 =========================  */
 
 const (
-	PID_TOPOLOGIA_ID_PATH = "/read/pidtipologia/{cod_ponto}/{cod_categoria}/{cod_ibge}/{cod_tipologia}"
+	PID_TOPOLOGIA_PATH    = "/read/pidtipologia"
+	PID_TOPOLOGIA_ID_PATH = "/read/pidtipologia/{cod_pid}/{cod_tipologia}"
 )
 
 /*	=========================

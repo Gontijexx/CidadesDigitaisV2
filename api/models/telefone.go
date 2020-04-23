@@ -1,10 +1,17 @@
 package models
 
-import (
-	"errors"
+import "github.com/jinzhu/gorm"
 
-	"github.com/jinzhu/gorm"
-)
+/*  =========================
+	STRUCT TELEFONE
+=========================  */
+
+type Telefone struct {
+	CodTelefone uint32 `gorm:"primary_key;auto_increment;not null;size:11" json:"cod_telefone"`
+	CodContato  uint32 `gorm:"foreign_key:CodContato;not null;size:11" json:"cod_contato"`
+	Telefone    string `gorm:"default:null;size:11" json:"telefone"`
+	Tipo        string `gorm:"default:null;size:10" json:"tipo"`
+}
 
 /*  =========================
 	FUNCAO SALVAR TELEFONE
@@ -17,8 +24,8 @@ func (telefone *Telefone) SaveTelefone(db *gorm.DB) (*Telefone, error) {
 	if err != nil {
 		return &Telefone{}, err
 	}
-	return telefone, nil
 
+	return telefone, err
 }
 
 /*  =========================
@@ -34,24 +41,18 @@ func (telefone *Telefone) FindAllTelefone(db *gorm.DB) (*[]Telefone, error) {
 	if err != nil {
 		return &[]Telefone{}, err
 	}
+
 	return &allTelefone, err
 }
 
 /*  =========================
-	FUNCAO DELETAR TELEFONE POR ID
+	FUNCAO DELETAR TELEFONE
 =========================  */
 
-func (telefone *Telefone) DeleteTelefone(db *gorm.DB, codTelefone uint64) (int64, error) {
+func (telefone *Telefone) DeleteTelefone(db *gorm.DB, codTelefone uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Telefone{}).Where("cod_telefone = ?", codTelefone).Take(&Telefone{}).Delete(&Telefone{})
 
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Telefone not found")
-		}
-		return 0, db.Error
-	}
-
-	return db.RowsAffected, nil
+	return db.Error
 }

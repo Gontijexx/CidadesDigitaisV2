@@ -1,10 +1,17 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
+
+/*	=========================
+		STRUCT OTB
+=========================	*/
+
+type OTB struct {
+	CodOtb uint32 `gorm:"primary_key;not null" json:"cod_otb"`
+	DtPgto string `gorm:"default:null" json:"dt_pgto" `
+}
 
 /*  =========================
 	FUNCAO SALVAR OTB NO BANCO DE DADOS
@@ -18,18 +25,17 @@ func (otb *OTB) SaveOTB(db *gorm.DB) (*OTB, error) {
 		return &OTB{}, err
 	}
 
-	return otb, nil
+	return otb, err
 }
 
 /*  =========================
 	FUNCAO LISTAR OTB POR ID
 =========================  */
 
-func (otb *OTB) FindOTBByID(db *gorm.DB, CodOTB uint64) (*OTB, error) {
+func (otb *OTB) FindOTBByID(db *gorm.DB, CodOTB uint32) (*OTB, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(OTB{}).Where("cod_otb = ?", CodOTB).Take(&otb).Error
-
 	if err != nil {
 		return &OTB{}, err
 	}
@@ -50,6 +56,7 @@ func (otb *OTB) FindAllOTB(db *gorm.DB) (*[]OTB, error) {
 	if err != nil {
 		return &[]OTB{}, err
 	}
+
 	return &allOTB, err
 }
 
@@ -57,7 +64,7 @@ func (otb *OTB) FindAllOTB(db *gorm.DB) (*[]OTB, error) {
 	FUNCAO EDITAR OTB
 =========================  */
 
-func (otb *OTB) UpdateOTB(db *gorm.DB, CodOTB uint64) (*OTB, error) {
+func (otb *OTB) UpdateOTB(db *gorm.DB, CodOTB uint32) (*OTB, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Exec("UPDATE otb SET dt_pgto = ? WHERE cod_otb = ?", otb.DtPgto, CodOTB)
@@ -71,25 +78,17 @@ func (otb *OTB) UpdateOTB(db *gorm.DB, CodOTB uint64) (*OTB, error) {
 		return &OTB{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return otb, err
 }
 
 /*  =========================
-	FUNCAO DELETAR OTB POR ID
+	FUNCAO DELETAR OTB
 =========================  */
 
-func (otb *OTB) DeleteOTB(db *gorm.DB, CodOTB uint64) (int64, error) {
+func (otb *OTB) DeleteOTB(db *gorm.DB, CodOTB uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&OTB{}).Where("cod_otb = ?", CodOTB).Take(&OTB{}).Delete(&OTB{})
 
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("OTB not found")
-		}
-		return 0, db.Error
-	}
-
-	return db.RowsAffected, nil
+	return db.Error
 }

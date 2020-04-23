@@ -21,7 +21,7 @@ import (
 	FUNCAO ADICIONAR PID TIPOLOGIA
 =========================  */
 
-func (server *Server) CreatePIDTipologia(w http.ResponseWriter, r *http.Request) {
+func (server *Server) CreatePidTipologia(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 13011)
@@ -45,7 +45,7 @@ func (server *Server) CreatePIDTipologia(w http.ResponseWriter, r *http.Request)
 	}
 
 	pidTipologia := models.PidTipologia{}
-	logPIDTipologia := models.Log{}
+	logPidTipologia := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct pidTipologia referenciada (&struct)
 	err = json.Unmarshal(body, &pidTipologia)
@@ -63,15 +63,15 @@ func (server *Server) CreatePIDTipologia(w http.ResponseWriter, r *http.Request)
 	}
 
 	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logPIDTipologia.LogPIDTipologia(server.DB, pidTipologia.CodPid, pidTipologia.CodTipologia, "pid_tipologia", "i", tokenID)
+	err = logPidTipologia.LogPidTipologia(server.DB, pidTipologia.CodPid, pidTipologia.CodTipologia, "pid_tipologia", "i", tokenID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 
-	//	SavePIDTipologia eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
-	pidTipologiaCreated, err := pidTipologia.SavePIDTipologia(server.DB)
+	//	SavePidTipologia eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
+	pidTipologiaCreated, err := pidTipologia.SavePidTipologia(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
@@ -88,7 +88,7 @@ func (server *Server) CreatePIDTipologia(w http.ResponseWriter, r *http.Request)
 	FUNCAO LISTAR TODAS PID TIPOLOGIA
 =========================  */
 
-func (server *Server) GetAllPIDTipologia(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetAllPidTipologia(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
 	err := config.AuthMod(w, r, 13012)
@@ -99,8 +99,8 @@ func (server *Server) GetAllPIDTipologia(w http.ResponseWriter, r *http.Request)
 
 	pidTipologia := models.PidTipologia{}
 
-	//	allPIDTipologia armazena os dados buscados no banco de dados
-	allPIDTipologia, err := pidTipologia.FindAllPIDTipologia(server.DB)
+	//	allPidTipologia armazena os dados buscados no banco de dados
+	allPidTipologia, err := pidTipologia.FindAllPidTipologia(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
@@ -108,14 +108,14 @@ func (server *Server) GetAllPIDTipologia(w http.ResponseWriter, r *http.Request)
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, allPIDTipologia)
+	responses.JSON(w, http.StatusOK, allPidTipologia)
 }
 
 /*  =========================
 	FUNCAO DELETAR PID TIPOLOGIA
 =========================  */
 
-func (server *Server) DeletePIDTipologia(w http.ResponseWriter, r *http.Request) {
+func (server *Server) DeletePidTipologia(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
 	err := config.AuthMod(w, r, 13013)
@@ -135,10 +135,10 @@ func (server *Server) DeletePIDTipologia(w http.ResponseWriter, r *http.Request)
 	}
 
 	pidTipologia := models.PidTipologia{}
-	logPIDTipologia := models.Log{}
+	logPidTipologia := models.Log{}
 
-	//	codPID armazena a chave primaria da tabela ponto
-	codPID, err := strconv.ParseUint(vars["cod_pid"], 10, 64)
+	//	codPid armazena a chave primaria da tabela ponto
+	codPid, err := strconv.ParseUint(vars["cod_pid"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
 		return
@@ -152,7 +152,7 @@ func (server *Server) DeletePIDTipologia(w http.ResponseWriter, r *http.Request)
 	}
 
 	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logPIDTipologia.LogPIDTipologia(server.DB, uint32(codPID), uint32(codTipologia), "pid_tipologia", "d", tokenID)
+	err = logPidTipologia.LogPidTipologia(server.DB, uint32(codPid), uint32(codTipologia), "pid_tipologia", "d", tokenID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
@@ -160,14 +160,14 @@ func (server *Server) DeletePIDTipologia(w http.ResponseWriter, r *http.Request)
 	}
 
 	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	err = pidTipologia.DeletePIDTipologia(server.DB, uint32(codPID), uint32(codTipologia))
+	err = pidTipologia.DeletePidTipologia(server.DB, uint32(codPid), uint32(codTipologia))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d/%d", codPID, codTipologia))
+	w.Header().Set("Entity", fmt.Sprintf("%d/%d", codPid, codTipologia))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

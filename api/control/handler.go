@@ -11,7 +11,6 @@ import (
 func (s *Server) CreateHandler() (r *mux.Router) {
 
 	//	CRIA UM ROTEADOR
-
 	r = s.Router
 
 	//	HOME
@@ -100,6 +99,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	/*	=========================
 		ROTAS EM CIDADE DIGITAL
 	=========================	*/
+
 	//	SALVA CD
 	r.HandleFunc(config.CD_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateCD))).Methods(http.MethodPost)
 
@@ -129,7 +129,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.CD_ITENS_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetCDItensByID))).Methods(http.MethodGet)
 
 	/*	=========================
-		ROTAS EM CIDADE DIGITAL PROCESSO
+		ROTAS EM PROCESSO
 	=========================	*/
 
 	//	LISTA PROCESSO
@@ -148,7 +148,7 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.PROCESSO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteProcesso))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM CIDADE DIGITAL UACOM
+		ROTAS EM UACOM
 	=========================	*/
 
 	//	LISTA UACOM
@@ -167,14 +167,14 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.UACOM_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeleteUacom))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM CIDADE DIGITAL UACOM ASSUNTO
+		ROTAS EM UACOM ASSUNTO
 	=========================	*/
 
 	//	SALVA UACOM ASSUNTO
 	r.HandleFunc(config.UACOM_ASSUNTO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateUacomAssunto))).Methods(http.MethodPost)
 
 	/*	=========================
-		ROTAS EM CIDADE DIGITAL PONTO
+		ROTAS EM PONTO
 	=========================	*/
 
 	//	LISTA PONTO
@@ -193,17 +193,33 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	r.HandleFunc(config.PONTO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePonto))).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM CIDADE DIGITAL PID TIPOLOGIA
+		ROTAS EM PID
+	=========================	*/
+
+	//	LISTA PID
+	r.HandleFunc(config.PID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPid))).Methods(http.MethodGet)
+
+	//	EDITA PID (cod_pid)
+	r.HandleFunc(config.PID_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdatePid))).Methods(http.MethodPut)
+
+	//	LISTA PID (cod_pid)
+	r.HandleFunc(config.PID_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetPidByID))).Methods(http.MethodGet)
+
+	//	APAGA PID (cod_pid)
+	r.HandleFunc(config.PID_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePid))).Methods(http.MethodDelete)
+
+	/*	=========================
+		ROTAS EM PID TIPOLOGIA
 	=========================	*/
 
 	//	LISTA PID TIPOLOGIA
-	r.HandleFunc(config.PID_TOPOLOGIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPIDTipologia))).Methods(http.MethodGet)
+	r.HandleFunc(config.PID_TOPOLOGIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllPidTipologia))).Methods(http.MethodGet)
 
 	//	SALVA PID TIPOLOGIA
-	r.HandleFunc(config.PID_TOPOLOGIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePIDTipologia))).Methods(http.MethodPost)
+	r.HandleFunc(config.PID_TOPOLOGIA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreatePidTipologia))).Methods(http.MethodPost)
 
 	//	APAGA PID TIPOLOGIA (cod_pid, cod_tipologia)
-	r.HandleFunc(config.PID_TOPOLOGIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePIDTipologia))).Methods(http.MethodDelete)
+	r.HandleFunc(config.PID_TOPOLOGIA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.DeletePidTipologia))).Methods(http.MethodDelete)
 
 	/*	=========================
 		ROTAS EM LOTE

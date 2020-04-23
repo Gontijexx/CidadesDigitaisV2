@@ -1,13 +1,20 @@
 package models
 
-import (
-	"errors"
-
-	"github.com/jinzhu/gorm"
-)
+import "github.com/jinzhu/gorm"
 
 /*  =========================
-	FUNCAO SALVAR UACOM NO BANCO DE DADOS
+	STRUCT UACOM
+=========================  */
+
+type Uacom struct {
+	CodIbge uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	Data    string `gorm:"primary_key;not null" json:"data"`
+	Titulo  string `gorm:"default:null" json:"titulo"`
+	Relato  string `gorm:"default:null" json:"relato"`
+}
+
+/*  =========================
+	FUNCAO SALVAR UACOM
 =========================  */
 
 func (uacom *Uacom) SaveUacom(db *gorm.DB) (*Uacom, error) {
@@ -18,18 +25,17 @@ func (uacom *Uacom) SaveUacom(db *gorm.DB) (*Uacom, error) {
 		return &Uacom{}, err
 	}
 
-	return uacom, nil
+	return uacom, err
 }
 
 /*  =========================
 	FUNCAO LISTAR UACOM POR ID
 =========================  */
 
-func (uacom *Uacom) FindUacomByID(db *gorm.DB, codIbge uint64, data string) (*Uacom, error) {
+func (uacom *Uacom) FindUacomByID(db *gorm.DB, codIbge uint32, data string) (*Uacom, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Uacom{}).Where("cod_ibge = ? AND data = ?", codIbge, data).Take(&uacom).Error
-
 	if err != nil {
 		return &Uacom{}, err
 	}
@@ -50,6 +56,7 @@ func (uacom *Uacom) FindAllUacom(db *gorm.DB) (*[]Uacom, error) {
 	if err != nil {
 		return &[]Uacom{}, err
 	}
+
 	return &allUacom, err
 }
 
@@ -57,7 +64,7 @@ func (uacom *Uacom) FindAllUacom(db *gorm.DB) (*[]Uacom, error) {
 	FUNCAO EDITAR UACOM
 =========================  */
 
-func (uacom *Uacom) UpdateUacom(db *gorm.DB, codIbge uint64, data string) (*Uacom, error) {
+func (uacom *Uacom) UpdateUacom(db *gorm.DB, codIbge uint32, data string) (*Uacom, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Exec("UPDATE uacom SET titulo = ?, relato = ? WHERE cod_ibge = ? AND data = ?", uacom.Titulo, uacom.Relato, codIbge, data)
@@ -71,7 +78,6 @@ func (uacom *Uacom) UpdateUacom(db *gorm.DB, codIbge uint64, data string) (*Uaco
 		return &Uacom{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return uacom, err
 }
 
@@ -79,17 +85,10 @@ func (uacom *Uacom) UpdateUacom(db *gorm.DB, codIbge uint64, data string) (*Uaco
 	FUNCAO DELETAR UACOM
 =========================  */
 
-func (uacom *Uacom) DeleteUacom(db *gorm.DB, codIbge uint64, data string) (int64, error) {
+func (uacom *Uacom) DeleteUacom(db *gorm.DB, codIbge uint32, data string) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Uacom{}).Where("cod_ibge = ? AND data = ?", codIbge, data).Take(&Uacom{}).Delete(&Uacom{})
 
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Uacom not found")
-		}
-		return 0, db.Error
-	}
-
-	return db.RowsAffected, nil
+	return db.Error
 }

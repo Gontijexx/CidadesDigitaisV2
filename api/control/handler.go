@@ -36,11 +36,15 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	r.HandleFunc(config.USER_PATH_DELETEUSER, middlewares.SetMiddleAuth(s.DeleteUsuario)).Methods(http.MethodDelete)
 
 	/*	=========================
-		ROTAS EM MODULOS
+		ROTAS EM MODULO
 	=========================	*/
 
-	//	LISTA MODULOS
+	//	LISTA MODULO
 	r.HandleFunc(config.MODULO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllModulo))).Methods(http.MethodGet)
+
+	/*	=========================
+		ROTAS EM USUARIO MODULO
+	=========================	*/
 
 	//	ADICIONAR MODULO
 	r.HandleFunc(config.MODULO_USERLIST_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.AddModulo))).Methods(http.MethodPost)

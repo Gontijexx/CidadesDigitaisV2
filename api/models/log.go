@@ -468,3 +468,29 @@ func (log *Log) LogUacomAssunto(db *gorm.DB, codIbge uint32, data string, codAss
 
 	return err
 }
+
+/*  =========================
+	LOG USUARIO
+=========================  */
+
+func (log *Log) LogUsuario(db *gorm.DB, codNewUsuario uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("usuario").Select("CONCAT(IFNULL(cod_usuario, ''), ';', IFNULL(nome, ''), ';', IFNULL(email, ''), ';', IFNULL(status, ''), ';', IFNULL(login, ''), ';', IFNULL(senha, '')").Where("cod_usuario = ?", codNewUsuario).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codNewUsuario).Error
+
+	return err
+}
+
+/*  =========================
+	LOG USUARIO MODULO
+=========================  */
+
+func (log *Log) LogUsuarioModulo(db *gorm.DB, codUser uint32, codModulo uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("usuario_modulo").Select("CONCAT(IFNULL(cod_usuario, ''), ';', IFNULL(cod_modulo, ''))").Where("cod_usuario = ? AND cod_modulo = ?", codUser, codModulo).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1, cod_int_2) VALUES (?, ?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codUser, codModulo).Error
+
+	return err
+}

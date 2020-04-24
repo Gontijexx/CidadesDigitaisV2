@@ -1,13 +1,27 @@
 package models
 
-import (
-	"errors"
-
-	"github.com/jinzhu/gorm"
-)
+import "github.com/jinzhu/gorm"
 
 /*  =========================
-	FUNCAO SALVAR PONTO NO BANCO DE DADOS
+	STRUCT PONTO
+=========================  */
+
+type Ponto struct {
+	CodPonto     uint32 `gorm:"primary_key;not null" json:"cod_ponto"`
+	CodCategoria uint32 `gorm:"primary_key;foreign_key:CodCategoria;not null" json:"cod_categoria"`
+	CodIbge      uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	CodPid       uint32 `gorm:"foreign_key:CodPid;not null" json:"cod_pid"`
+	Endereco     string `gorm:"default:null" json:"endereco"`
+	Numero       string `gorm:"default:null" json:"numero"`
+	Complemento  string `gorm:"default:null" json:"complemento"`
+	Bairro       string `gorm:"default:null" json:"bairro"`
+	Cep          string `gorm:"default:null" json:"cep"`
+	Latitude     uint32 `gorm:"default:null" json:"latitude"`
+	Longitude    uint32 `gorm:"default:null" json:"longitude"`
+}
+
+/*  =========================
+	FUNCAO SALVAR PONTO
 =========================  */
 
 func (ponto *Ponto) SavePonto(db *gorm.DB) (*Ponto, error) {
@@ -18,18 +32,17 @@ func (ponto *Ponto) SavePonto(db *gorm.DB) (*Ponto, error) {
 		return &Ponto{}, err
 	}
 
-	return ponto, nil
+	return ponto, err
 }
 
 /*  =========================
 	FUNCAO LISTAR PONTO POR ID
 =========================  */
 
-func (ponto *Ponto) FindPontoByID(db *gorm.DB, codPonto, codCategoria, codIbge uint64) (*Ponto, error) {
+func (ponto *Ponto) FindPontoByID(db *gorm.DB, codPonto, codCategoria, codIbge uint32) (*Ponto, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Ponto{}).Where("cod_ponto = ? AND cod_categoria =? AND cod_ibge = ?", codPonto, codCategoria, codIbge).Take(&ponto).Error
-
 	if err != nil {
 		return &Ponto{}, err
 	}
@@ -50,6 +63,7 @@ func (ponto *Ponto) FindAllPonto(db *gorm.DB) (*[]Ponto, error) {
 	if err != nil {
 		return &[]Ponto{}, err
 	}
+
 	return &allPonto, err
 }
 
@@ -57,7 +71,7 @@ func (ponto *Ponto) FindAllPonto(db *gorm.DB) (*[]Ponto, error) {
 	FUNCAO EDITAR PONTO
 =========================  */
 
-func (ponto *Ponto) UpdatePonto(db *gorm.DB, codPonto, codCategoria, codIbge uint64) (*Ponto, error) {
+func (ponto *Ponto) UpdatePonto(db *gorm.DB, codPonto, codCategoria, codIbge uint32) (*Ponto, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Exec("UPDATE ponto SET cod_pid = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, cep = ?, latitude = ?, longitude = ? WHERE cod_ponto = ? AND cod_categoria = ? AND cod_ibge = ?", ponto.CodPid, ponto.Endereco, ponto.Numero, ponto.Complemento, ponto.Bairro, ponto.Cep, ponto.Latitude, ponto.Longitude, codPonto, codCategoria, codIbge)
@@ -71,25 +85,17 @@ func (ponto *Ponto) UpdatePonto(db *gorm.DB, codPonto, codCategoria, codIbge uin
 		return &Ponto{}, err
 	}
 
-	// retorna o elemento que foi alterado
 	return ponto, err
 }
 
 /*  =========================
-	FUNCAO DELETAR PONTO POR ID
+	FUNCAO DELETAR PONTO
 =========================  */
 
-func (ponto *Ponto) DeletePonto(db *gorm.DB, codPonto, codCategoria, codIbge uint64) (int64, error) {
+func (ponto *Ponto) DeletePonto(db *gorm.DB, codPonto, codCategoria, codIbge uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Ponto{}).Where("cod_ponto = ? AND cod_categoria =? AND cod_ibge = ?", codPonto, codCategoria, codIbge).Take(&Ponto{}).Delete(&Ponto{})
 
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Ponto not found")
-		}
-		return 0, db.Error
-	}
-
-	return db.RowsAffected, nil
+	return db.Error
 }

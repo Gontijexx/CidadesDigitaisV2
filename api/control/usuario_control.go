@@ -21,11 +21,11 @@ import (
 /*  =========================
 	FUNCAO ADICIONAR USUARIO
 =========================  */
+
 func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 11001)
-	if err != nil {
+	if err := config.AuthMod(w, r, 11001); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -36,14 +36,18 @@ func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
 	}
 
-	//	Estrutura models.Usuario{} "renomeada"
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
 	usuario := models.Usuario{}
+	logUsuario := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct usuario referenciada (&struct)
-	err = json.Unmarshal(body, &usuario)
-
-	//	Se ocorrer algum tipo de erro retorna-se o Status 422 mais o erro ocorrido
-	if err != nil {
+	if err = json.Unmarshal(body, &usuario); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
@@ -58,10 +62,7 @@ func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 	newUsuario := usuario.Login
 
 	//	Verifica se o login ja esta em uso
-	err = usuario.VerifyLogin(server.DB, newUsuario)
-
-	//	Tratamento do err, caso 'err != nil' pode-se criar o usuario
-	if err == nil {
+	if err = usuario.VerifyLogin(server.DB, newUsuario); err == nil {
 		w.WriteHeader(http.StatusConflict)
 		w.Write([]byte(`{"Error": "Existent Login"}`))
 		return
@@ -70,11 +71,16 @@ func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 	//	Prepara algumas informacoes a serem salvas no banco de dados
 	usuario.Prepare()
 
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logUsuario.LogUsuario(server.DB, usuario.CodUsuario, "usuario", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
 	//	SaveUsuario eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	usuarioCreated, err := usuario.SaveUsuario(server.DB)
-
-	//	Retorna um erro caso nao seja possivel salvar entidade no banco de dados
-	//	Status 500
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
@@ -85,7 +91,6 @@ func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
 	responses.JSON(w, http.StatusCreated, usuarioCreated)
-
 }
 
 /*  =========================
@@ -95,8 +100,7 @@ func (server *Server) CreateUsuario(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetUsuarioByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 11002)
-	if err != nil {
+	if err := config.AuthMod(w, r, 11002); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -115,7 +119,6 @@ func (server *Server) GetUsuarioByID(w http.ResponseWriter, r *http.Request) {
 
 	//	usuarioGotten recebe o dado buscado no banco de dados
 	usuarioGotten, err := usuario.FindUsuarioByID(server.DB, uint32(codUsuario))
-
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -123,7 +126,6 @@ func (server *Server) GetUsuarioByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct buscada
 	responses.JSON(w, http.StatusOK, usuarioGotten)
-
 }
 
 /*  =========================
@@ -133,8 +135,7 @@ func (server *Server) GetUsuarioByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllUsuario(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 11002)
-	if err != nil {
+	if err := config.AuthMod(w, r, 11002); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -154,14 +155,13 @@ func (server *Server) GetAllUsuario(w http.ResponseWriter, r *http.Request) {
 }
 
 /*  =========================
-	FUNCAO PARA ATUALIZAR USUARIO
+	FUNCAO PARA EDITAR USUARIO
 =========================  */
 
 func (server *Server) UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 11003)
-	if err != nil {
+	if err := config.AuthMod(w, r, 11003); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -182,10 +182,17 @@ func (server *Server) UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usuario := models.Usuario{}
-
-	err = json.Unmarshal(body, &usuario)
+	//	Extrai o cod_usuario do body
+	tokenID, err := auth.ExtractTokenID(r)
 	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
+	usuario := models.Usuario{}
+	logUsuario := models.Log{}
+
+	if err = json.Unmarshal(body, &usuario); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
@@ -196,16 +203,17 @@ func (server *Server) UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Extrai o cod_usuario do body
-	tokenID, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
-
 	//	Verifica se o cod_usuario extraido do token eh igual ao extraido do handler
 	if tokenID != uint32(codUsuario) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logUsuario.LogUsuario(server.DB, usuario.CodUsuario, "usuario", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 
@@ -219,123 +227,4 @@ func (server *Server) UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updatedUsuario)
-
-}
-
-/*  ============================
-    FUNCAO PARA DELETAR USUARIOS
-=============================
-func (server *Server) DeleteUsuario(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-
-	usuario := models.Usuario{}
-
-	uid, err := strconv.ParseUint(vars["cod_usuario"], 10, 32)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-	tokenID, err := auth.ExtractTokenID(r)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
-	if tokenID != 0 && tokenID != uint32(uid) {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
-		return
-	}
-	_, err = usuario.DeleteUsuario(server.DB, uint32(uid))
-	if err != nil {
-		responses.ERROR(w, http.StatusInternalServerError, err)
-		return
-	}
-	w.Header().Set("Entity", fmt.Sprintf("%d", uid))
-	responses.JSON(w, http.StatusNoContent, "")
-}
-*/
-
-/*  =========================
-	FUNCAO LISTAR TODOS MODULOS
-=========================  */
-
-func (server *Server) GetAllModulo(w http.ResponseWriter, r *http.Request) {
-
-	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 11002)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-		return
-	}
-
-	modulo := models.Modulo{}
-
-	//	allModulo armazena os dados buscados no banco de dados
-	allModulo, err := modulo.FindAllModulo(server.DB)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in datebase, %v\n", formattedError))
-		return
-	}
-
-	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, allModulo)
-}
-
-/*  =========================
-	FUNCAO PARA ADICIONAR MODULO
-=========================  */
-
-func (server *Server) AddModulo(w http.ResponseWriter, r *http.Request) {
-
-	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 11003)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-		return
-	}
-
-	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the body, %v\n", err))
-		return
-	}
-
-	//	Declara usarioModulo como um Array da struct UsuarioModulo
-	var usuarioModulo []models.UsuarioModulo
-
-	//	Unmarshal analisa o JSON recebido e armazena na struct usuarioModulo referenciada
-	err = json.Unmarshal(body, &usuarioModulo)
-
-	//	Caso err seja diferente de nil retorna o Status 422 mais o erro ocorrido
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
-		return
-	}
-
-	//	range le o tamanho do Array usuarioModulo
-	//	data recebe os dados de cada posicao do array
-	for _, data := range usuarioModulo {
-
-		//	SaveModulo salva as informacoes contidas em 'data' no banco de dados
-		//	usuarioMod recebe a struct salva no banco de dados
-		usuarioMod, err := data.SaveModulo(server.DB)
-
-		//	Retorna o erro caso nao seja possivel salvar o modulo no banco de dados
-		if err != nil {
-			formattedError := config.FormatError(err.Error())
-			responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
-			return
-		}
-
-		//	A cada posicao do Array usuarioModulo salva no banco de dados retorna o JSON da struct
-		fmt.Printf("CodModulo adicionado: %v\n", usuarioMod.CodModulo)
-	}
-
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, usuarioModulo))
-
-	//	Retorna o Status 201 e o JSON do Array adicionado
-	responses.JSON(w, http.StatusCreated, usuarioModulo)
-
 }

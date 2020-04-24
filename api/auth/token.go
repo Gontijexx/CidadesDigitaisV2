@@ -17,7 +17,7 @@ import (
 	FUNCAO CRIAR TOKEN AO REALIZAR LOGIN
 =========================  */
 
-func CreateToken(userID uint32, userMod []int64) (string, error) {
+func CreateToken(userID uint32, userMod []uint32) (string, error) {
 
 	//	Cria um mapa de informações sobre o user
 	claims := jwt.MapClaims{}

@@ -7,7 +7,7 @@ import "github.com/jinzhu/gorm"
 =========================  */
 
 type PidTipologia struct {
-	CodPid       uint32 `gorm:"primary_key;foreign_key:CodPID;not null" json:"cod_pid"`
+	CodPid       uint32 `gorm:"primary_key;foreign_key:CodPid;not null" json:"cod_pid"`
 	CodTipologia uint32 `gorm:"primary_key;foreign_key:CodTipologia;not null" json:"cod_tipologia"`
 }
 
@@ -15,7 +15,7 @@ type PidTipologia struct {
 	FUNCAO SALVAR PID TIPOLOGIA
 =========================  */
 
-func (pidTipologia *PidTipologia) SavePIDTipologia(db *gorm.DB) (*PidTipologia, error) {
+func (pidTipologia *PidTipologia) SavePidTipologia(db *gorm.DB) (*PidTipologia, error) {
 
 	//	Adiciona um novo elemento ao banco de dados
 	err := db.Debug().Create(&pidTipologia).Error
@@ -30,7 +30,7 @@ func (pidTipologia *PidTipologia) SavePIDTipologia(db *gorm.DB) (*PidTipologia, 
 	FUNCAO LISTAR TODAS PID TIPOLOGIA
 =========================  */
 
-func (pidTipologia *PidTipologia) FindAllPIDTipologia(db *gorm.DB) (*[]PidTipologia, error) {
+func (pidTipologia *PidTipologia) FindAllPidTipologia(db *gorm.DB) (*[]PidTipologia, error) {
 
 	allPIDTipologia := []PidTipologia{}
 
@@ -47,7 +47,7 @@ func (pidTipologia *PidTipologia) FindAllPIDTipologia(db *gorm.DB) (*[]PidTipolo
 	FUNCAO DELETAR PID TIPOLOGIA
 =========================  */
 
-func (pidTipologia *PidTipologia) DeletePIDTipologia(db *gorm.DB, codPID, codTipologia uint32) error {
+func (pidTipologia *PidTipologia) DeletePidTipologia(db *gorm.DB, codPID, codTipologia uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&PidTipologia{}).Where("cod_pid = ? AND cod_tipologia = ?", codPID, codTipologia).Take(&PidTipologia{}).Delete(&PidTipologia{})

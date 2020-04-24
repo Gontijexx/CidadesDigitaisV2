@@ -24,8 +24,7 @@ import (
 func (server *Server) CreateContato(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12001)
-	if err != nil {
+	if config.AuthMod(w, r, 12001) != nil && config.AuthMod(w, r, 13081) != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -90,8 +89,7 @@ func (server *Server) CreateContato(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllContato(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12002)
-	if err != nil {
+	if config.AuthMod(w, r, 12002) != nil && config.AuthMod(w, r, 13082) != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -117,8 +115,7 @@ func (server *Server) GetAllContato(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 12003)
-	if err != nil {
+	if config.AuthMod(w, r, 12003) != nil && config.AuthMod(w, r, 13083) != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -187,9 +184,8 @@ func (server *Server) UpdateContato(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) DeleteContato(w http.ResponseWriter, r *http.Request) {
 
-	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 12003)
-	if err != nil {
+	//	Autorizacao de Modulo
+	if config.AuthMod(w, r, 12003) != nil && config.AuthMod(w, r, 13083) != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}

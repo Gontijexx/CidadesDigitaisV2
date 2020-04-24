@@ -24,7 +24,7 @@ import (
 func (server *Server) CreateTelefone(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	if err := config.AuthMod(w, r, 12001); err != nil {
+	if config.AuthMod(w, r, 12001) != nil && config.AuthMod(w, r, 13081) != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -86,7 +86,7 @@ func (server *Server) CreateTelefone(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllTelefone(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	if err := config.AuthMod(w, r, 12002); err != nil {
+	if config.AuthMod(w, r, 12002) != nil && config.AuthMod(w, r, 13082) != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -111,9 +111,8 @@ func (server *Server) GetAllTelefone(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) DeleteTelefone(w http.ResponseWriter, r *http.Request) {
 
-	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 12003)
-	if err != nil {
+	//	Autorizacao de Modulo
+	if config.AuthMod(w, r, 12003) != nil && config.AuthMod(w, r, 13083) != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}

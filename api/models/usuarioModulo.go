@@ -15,7 +15,7 @@ type UsuarioModulo struct {
 	FUNCAO SALVAR USUARIO MODULO
 =========================  */
 
-func (usuarioModulo *UsuarioModulo) SaveModulo(db *gorm.DB) (*UsuarioModulo, error) {
+func (usuarioModulo *UsuarioModulo) SaveUsuarioModulo(db *gorm.DB) (*UsuarioModulo, error) {
 
 	//	Adiciona um novo elemento no banco de dados
 	err := db.Debug().Create(&usuarioModulo).Error

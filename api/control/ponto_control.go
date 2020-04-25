@@ -307,6 +307,9 @@ func (server *Server) UpdatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	updatePonto.Nome = updatePid.Nome
+	updatePonto.Inep = updatePid.Inep
+
 	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updatePonto)
 }

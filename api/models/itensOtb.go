@@ -16,7 +16,7 @@ type ItensOTB struct {
 	CodItem     uint32  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
 	CodTipoItem uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
 	Valor       float32 `gorm:"default:null" json:"valor"`
-	Quantidade  uint32  `gorm:"default:null" json:"quantidade"`
+	Quantidade  float32  `gorm:"default:null" json:"quantidade"`
 }
 
 /*  =========================

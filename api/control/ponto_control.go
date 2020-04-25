@@ -225,6 +225,13 @@ func (server *Server) UpdatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	codPid armazena a chave primaria da tabela municipio
+	codPid, err := strconv.ParseUint(vars["cod_pid"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] it couldn't read the 'body', %v\n", err))
@@ -238,9 +245,25 @@ func (server *Server) UpdatePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	pid := models.Pid{}
 	ponto := models.Ponto{}
+	logPid := models.Log{}
 	logPonto := models.Log{}
 
+	//	Unmarshal pid
+	if err = json.Unmarshal(body, &pid); err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
+		return
+	}
+
+	//	Validacao de estrutura
+	if err = validation.Validator.Struct(pid); err != nil {
+		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
+		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	//	Unmarshal ponto
 	if err = json.Unmarshal(body, &ponto); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
@@ -249,6 +272,22 @@ func (server *Server) UpdatePonto(w http.ResponseWriter, r *http.Request) {
 	if err = validation.Validator.Struct(ponto); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logPid.LogPid(server.DB, uint32(codPid), "pid", "u", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
+	//	updatePid recebe a nova pid, a que foi alterada
+	updatePid, err := pid.UpdatePid(server.DB, uint32(codPid))
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't update in database , %v\n", formattedError))
 		return
 	}
 
@@ -294,7 +333,9 @@ func (server *Server) DeletePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	pid := models.Pid{}
 	ponto := models.Ponto{}
+	logPid := models.Log{}
 	logPonto := models.Log{}
 
 	//	codPonto armazena a chave primaria da tabela ponto
@@ -318,6 +359,29 @@ func (server *Server) DeletePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	codPid armazena a chave primaria da tabela municipio
+	codPid, err := strconv.ParseUint(vars["cod_pid"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logPid.LogPid(server.DB, uint32(codPid), "pid", "d", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
+		return
+	}
+
+	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
+	err = pid.DeletePid(server.DB, uint32(codPid))
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
+		return
+	}
+
 	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
 	err = logPonto.LogPonto(server.DB, uint32(codPonto), uint32(codCategoria), uint32(codIbge), "ponto", "d", tokenID)
 	if err != nil {
@@ -334,7 +398,7 @@ func (server *Server) DeletePonto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d/%d/%d", codPonto, codCategoria, codIbge))
+	w.Header().Set("Entity", fmt.Sprintf("%d/%d/%d/%d", codPonto, codCategoria, codIbge, codPid))
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")

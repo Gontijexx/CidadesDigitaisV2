@@ -14,7 +14,7 @@ type ItensEmpenho struct {
 	CodTipoItem        uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
 	CodPrevisaoEmpenho uint32  `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
 	Valor              float32 `gorm:"default:null" json:"valor"`
-	Quantidade         uint32  `gorm:"default:null" json:"quantidade"`
+	Quantidade         float32  `gorm:"default:null" json:"quantidade"`
 }
 
 /*  =========================

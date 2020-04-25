@@ -160,8 +160,9 @@ const (
 =========================  */
 
 const (
-	PONTO_PATH    = "/read/ponto"
-	PONTO_ID_PATH = "/read/ponto/{cod_ponto}/{cod_categoria}/{cod_ibge}"
+	PONTO_PATH        = "/read/ponto"
+	PONTO_ID_PATH     = "/read/ponto/{cod_ponto}/{cod_categoria}/{cod_ibge}"
+	PONTO_PID_ID_PATH = "/read/ponto/{cod_ponto}/{cod_categoria}/{cod_ibge}/{cod_pid}"
 )
 
 /*  =========================

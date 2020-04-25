@@ -11,6 +11,8 @@ type Ponto struct {
 	CodCategoria uint32 `gorm:"primary_key;foreign_key:CodCategoria;not null" json:"cod_categoria"`
 	CodIbge      uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
 	CodPid       uint32 `gorm:"foreign_key:CodPid;not null" json:"cod_pid"`
+	Nome         string `gorm:"default:null" json:"nome"`
+	Inep         string `gorm:"default:null" json:"inep"`
 	Endereco     string `gorm:"default:null" json:"endereco"`
 	Numero       string `gorm:"default:null" json:"numero"`
 	Complemento  string `gorm:"default:null" json:"complemento"`

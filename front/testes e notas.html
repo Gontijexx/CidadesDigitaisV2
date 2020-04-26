@@ -61,7 +61,7 @@
   if (response.status == 200) {
   window.location.replace("./entidade.html");
 } else if (response.status == 201) {
-  alert("Usuário criado com sucesso");
+  alert("ALGO criado com sucesso");
   window.location.replace("./entidade.html");
 } else if (response.status == 204) {
   alert("Apagado com sucesso.");
@@ -75,11 +75,11 @@
 } else if (response.status == 404) {
   window.location.replace("./errors/404.html");
 } else if (response.status == 409) {
-  alert("Erro: Usuário já existente.");
+  alert("Erro: ALGO já existente.");
 } else if (response.status == 412) {
   alert("Erro: Informação colocada é incorreta.");
 } else if (response.status == 422) {
-  alert("Erro: Usuário ou senha inválidos.");
+  alert("Erro: ALGO ou senha inválidos.");
 } else if (response.status == 500) {
   window.location.replace("./errors/500.html");
 } else if (response.status == 504) {
@@ -92,7 +92,7 @@
 
 
 futuros deletes:
-entidade não usa.
+(entidade não usa)
 
 <button onclick="apagarEntidade(` + i + `)" class="btn btn-danger">
 <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>

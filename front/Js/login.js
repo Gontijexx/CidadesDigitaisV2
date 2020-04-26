@@ -1,22 +1,23 @@
-function erros(value){
+//tratamento de erros
+function erros(value) {
   if (value == 400) {
-    window.location.replace("./errors/400.html");
+    window.location.href="./errors/400.html";
   } else if (value == 401) {
-    window.location.replace("./errors/401.html");
+    window.location.href="./errors/401.html";
   } else if (value == 403) {
-    window.location.replace("./errors/403.html");
+    window.location.href="./errors/403.html";
   } else if (value == 404) {
-    window.location.replace("./errors/404.html");
+    window.location.href="./errors/404.html";
   } else if (value == 409) {
-    alert("Erro: Usuário já existente.");
+    alert("Erro: Lote já existente.");
   } else if (value == 412) {
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
-    alert("Erro: Usuário ou senha incorretos.");
+    alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
-    window.location.replace("./errors/500.html");
+    window.location.href="./errors/500.html";
   } else if (value == 504) {
-    window.location.replace("./errors/504.html");
+    window.location.href="./errors/504.html";
   } else {
     alert("ERRO DESCONHECIDO");
   }
@@ -49,20 +50,15 @@ let info = {
   "senha": " ",
 };
 
-//função que altera as informações do json, capturando do html
-function changer() {
-  //captura o valor
-  let a = document.getElementById("login");
-  //guarda o valor no JSON
-  info.login = a.value;
-  //captura o valor
-  let b = document.getElementById("senha");
-  //guarda o valor no JSON
-  info.senha = b.value;
-}
-
 function entrar() {
-  //transforma as informações do login em json
+  //captura o valor e guarda o valor no info
+  info.login = document.getElementById("login").value;
+  info.senha = document.getElementById("senha").value;
+
+  //guarda o login para futuras referencias
+  localStorage.setItem("logado", info.login);
+
+  //transforma as informações do login em algo utilizavel
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar o login e receber o token
@@ -72,17 +68,14 @@ function entrar() {
   }).then(function (response) {
 
     //checar o status do pedido
-    console.log(corpo);
+    //console.log(corpo);
     //tratamento dos erros
 
     if (response.status == 200 || response.status == 202) {
       response.json().then(function (json) {
-       
         localStorage.setItem("token", json);
         window.location.replace("./home.html");
       })
- 
-      
     } else{
       erros(response.status);
     }

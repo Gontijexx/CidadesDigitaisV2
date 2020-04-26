@@ -1,7 +1,12 @@
 //Fazer Tabela
 let listaModulo = [];
+
 //pega o token do login
 let meuToken = localStorage.getItem("token");
+
+//pega o usuario logado
+let userLogado = localStorage.getItem("logado");
+
 //organizar os modulos
 let userCriado,
   userTotal = [],
@@ -13,19 +18,19 @@ let info = {
   "nome": "",
   "email": "",
   "login": "",
-  "senha": ""
+  "senha": "",
 };
 
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
-    window.location.replace("./errors/400.html");
+    window.location.href="./errors/400.html";
   } else if (value == 401) {
-    window.location.replace("./errors/401.html");
+    window.location.href="./errors/401.html";
   } else if (value == 403) {
-    window.location.replace("./errors/403.html");
+    window.location.href="./errors/403.html";
   } else if (value == 404) {
-    window.location.replace("./errors/404.html");
+    window.location.href="./errors/404.html";
   } else if (value == 409) {
     alert("Erro: Lote já existente.");
   } else if (value == 412) {
@@ -33,9 +38,9 @@ function erros(value) {
   } else if (value == 422) {
     alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
-    window.location.replace("./errors/500.html");
+    window.location.href="./errors/500.html";
   } else if (value == 504) {
-    window.location.replace("./errors/504.html");
+    window.location.href="./errors/504.html";
   } else {
     alert("ERRO DESCONHECIDO");
   }
@@ -109,23 +114,26 @@ function paginacao() {
             }
           }
           for (let i = comeco; i < fim && i < jsonDeStatus.length; i++) {
-            userTotal[i] = json[i];
+            userTotal[i] = jsonDeStatus[i];
             tabela += (`<tr> <td>`);
-            tabela += json[i]["cod_usuario"];
+            tabela += jsonDeStatus[i]["cod_usuario"];
             tabela += (`</td> <td>`);
-            tabela += json[i]["nome"]
+            tabela += jsonDeStatus[i]["nome"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["email"]
+            tabela += jsonDeStatus[i]["email"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["login"]
+            tabela += jsonDeStatus[i]["login"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["status"]
+            tabela += jsonDeStatus[i]["status"]
             tabela += (`</td> <td> 
                   <span class="d-flex">
                   <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td> </tr>`);
+            if(jsonDeStatus[i]["login"]==userLogado){
+              localStorage.setItem("codigoLogado", jsonDeStatus[i]["cod_usuario"]);
+            }
           }
 
         } else if (selecao == 2) {
@@ -134,32 +142,33 @@ function paginacao() {
           let j = 0;
           let jsonDeStatus =[];
           for (let i = 0; i < json.length; i++) {
-            console.log(json[i]["status"])
             if (json[i]["status"] == 0) {
               jsonDeStatus[j] = json[i];
-              console.log(json[i]["status"])
               j++;
             }
           }
 
           for (let i = comeco; i < fim && i < jsonDeStatus.length; i++) {
-            userTotal[i] = json[i];
+            userTotal[i] = jsonDeStatus[i];
             tabela += (`<tr> <td>`);
-            tabela += json[i]["cod_usuario"];
+            tabela += jsonDeStatus[i]["cod_usuario"];
             tabela += (`</td> <td>`);
-            tabela += json[i]["nome"]
+            tabela += jsonDeStatus[i]["nome"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["email"]
+            tabela += jsonDeStatus[i]["email"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["login"]
+            tabela += jsonDeStatus[i]["login"]
             tabela += (`</td> <td>`);
-            tabela += json[i]["status"]
+            tabela += jsonDeStatus[i]["status"]
             tabela += (`</td> <td> 
                   <span class="d-flex">
                   <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td> </tr>`);
+            if(jsonDeStatus[i]["login"]==userLogado){
+              localStorage.setItem("codigoLogado", jsonDeStatus[i]["cod_usuario"]);
+            }
           }
 
         } else {
@@ -181,6 +190,9 @@ function paginacao() {
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td> </tr>`);
+            if(json[i]["login"]==userLogado){
+              localStorage.setItem("codigoLogado", json[i]["cod_usuario"]);
+            }
           }
         }
         tabela += (`</tbody>`);
@@ -196,6 +208,7 @@ function paginacao() {
 
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+        //apenas aciona se precisar de paginação
         if (json.length > porPagina) {
           //caso seja apenas 10 paginas
           if (totalPaginas < 10) {
@@ -414,6 +427,7 @@ function editarUsuario(valor) {
   localStorage.setItem("email", userTotal[valor].email);
   localStorage.setItem("login", userTotal[valor].login);
   localStorage.setItem("status", userTotal[valor].status);
+  localStorage.setItem("senha", userTotal[valor].senha);
   window.location.href = "./gerenciaUsuario.html";
 }
 

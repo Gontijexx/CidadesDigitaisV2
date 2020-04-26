@@ -3,27 +3,27 @@ let meuToken = localStorage.getItem("token");
 
 //tratamento de erros
 function erros(value) {
-    if (value == 400) {
-      window.location.replace("./errors/400.html");
-    } else if (value == 401) {
-      window.location.replace("./errors/401.html");
-    } else if (value == 403) {
-      window.location.replace("./errors/403.html");
-    } else if (value == 404) {
-      window.location.replace("./errors/404.html");
-    } else if (value == 409) {
-      alert("Erro: Lote já existente.");
-    } else if (value == 412) {
-      alert("Erro: Informação colocada é incorreta.");
-    } else if (value == 422) {
-      alert("Erro: Formato de informação não aceito.");
-    } else if (value == 500) {
-      window.location.replace("./errors/500.html");
-    } else if (value == 504) {
-      window.location.replace("./errors/504.html");
-    } else {
-      alert("ERRO DESCONHECIDO");
-    }
+  if (value == 400) {
+    window.location.href="./errors/400.html";
+  } else if (value == 401) {
+    window.location.href="./errors/401.html";
+  } else if (value == 403) {
+    window.location.href="./errors/403.html";
+  } else if (value == 404) {
+    window.location.href="./errors/404.html";
+  } else if (value == 409) {
+    alert("Erro: Lote já existente.");
+  } else if (value == 412) {
+    alert("Erro: Informação colocada é incorreta.");
+  } else if (value == 422) {
+    alert("Erro: Formato de informação não aceito.");
+  } else if (value == 500) {
+    window.location.href="./errors/500.html";
+  } else if (value == 504) {
+    window.location.href="./errors/504.html";
+  } else {
+    alert("ERRO DESCONHECIDO");
+  }
 }
 
 window.onload = function () {
@@ -123,6 +123,7 @@ function paginacao() {
 
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+        //apenas aciona se precisar de paginação
         if (json.length > porPagina) {
           //caso seja apenas 10 paginas
           if(totalPaginas<10){

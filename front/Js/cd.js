@@ -12,23 +12,23 @@ document.getElementById("cod_ibge").disabled = true;
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
-    window.location.replace("./errors/400.html");
+    window.location.href="./errors/400.html";
   } else if (value == 401) {
-    window.location.replace("./errors/401.html");
+    window.location.href="./errors/401.html";
   } else if (value == 403) {
-    window.location.replace("./errors/403.html");
+    window.location.href="./errors/403.html";
   } else if (value == 404) {
-    window.location.replace("./errors/404.html");
+    window.location.href="./errors/404.html";
   } else if (value == 409) {
-    alert("Erro: Lote já existente.");
+    alert("Erro: Cidade Digital já existente.");
   } else if (value == 412) {
     alert("Erro: Informação colocada é incorreta.");
   } else if (value == 422) {
     alert("Erro: Formato de informação não aceito.");
   } else if (value == 500) {
-    window.location.replace("./errors/500.html");
+    window.location.href="./errors/500.html";
   } else if (value == 504) {
-    window.location.replace("./errors/504.html");
+    window.location.href="./errors/504.html";
   } else {
     alert("ERRO DESCONHECIDO");
   }
@@ -49,7 +49,7 @@ let info = {
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
-let totalPaginas = cdTotal.length/porPagina;
+let totalPaginas;
 
 
 function antes() {
@@ -70,9 +70,6 @@ function pagina(valor) {
 }
 
 function paginacao() {
-  if(cdTotal.length%porPagina!=0){
-    totalPaginas++;
-  }
 
   porPagina = document.getElementById("quantos").value;
   let comeco = contador * porPagina;
@@ -92,7 +89,8 @@ function paginacao() {
       response.json().then(function (json) {
 
         cdTotal = json;
-        totalPaginas = json.length / porPagina;
+        totalPaginas = Math.floor(json.length / porPagina);
+        console.log(totalPaginas);
         
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
@@ -147,6 +145,7 @@ function paginacao() {
 
         //conta quantas paginas é necessário
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+        //apenas aciona se precisar de paginação
         if (json.length > porPagina) {
           //caso seja apenas 10 paginas
           if(totalPaginas<10){
@@ -339,11 +338,15 @@ window.onload = function () {
 function enabler() {
   document.getElementById("cod_ibge").disabled = false;
   let uf = document.getElementById("uf");
-  let i, x = [];
+  let i,j=0, x = [], cidadesFinal=[];
   for (i = 0; i < cidades.length; i++) {
     if (cidades[i].uf == uf.value) {
-      x[i] = "<option value='"+cidades[i].cod_ibge+"'>" + cidades[i].nome_municipio + "</option>"
+      cidadesFinal[j]=cidades[i];
+      j++;
     }
+  }
+  for (i = 0; i < cidadesFinal.length; i++) {
+    x[i] = "<option value='"+cidadesFinal[i].cod_ibge+"'>" + cidadesFinal[i].nome_municipio + "</option>";
   }
   x.sort();
   document.getElementById("cod_ibge").innerHTML = x;
@@ -368,18 +371,12 @@ function editarCd(valor) {
 
 function enviar() {
 
-  let a = document.getElementById("cod_ibge");
-  info.cod_ibge = parseInt(a.value);
-  let b = document.getElementById("cod_lote");
-  info.cod_lote = parseInt(b.value);
-  let c = document.getElementById("os_pe");
-  info.os_pe = c.value;
-  let d = document.getElementById("data_pe");
-  info.data_pe = d.value;
-  let e = document.getElementById("os_imp");
-  info.os_imp = e.value;
-  let f = document.getElementById("data_imp");
-  info.data_imp = f.value;
+  info.cod_ibge = parseInt(document.getElementById("cod_ibge").value);
+  info.cod_lote = parseInt(document.getElementById("cod_lote").value);
+  info.os_pe = document.getElementById("os_pe").value;
+  info.data_pe = document.getElementById("data_pe").value;
+  info.os_imp  = document.getElementById("os_imp").value;
+  info.data_imp = document.getElementById("data_imp").value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

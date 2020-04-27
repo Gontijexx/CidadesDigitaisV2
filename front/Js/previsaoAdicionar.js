@@ -1,7 +1,7 @@
-//pega o token do login
+//  pega o token do login
 let meuToken = localStorage.getItem("token");
 
-//tratamento de erros
+//  tratamento de erros
 function erros(value) {
   if (value == 400) {
     window.location.href="./errors/400.html";
@@ -26,7 +26,7 @@ function erros(value) {
   }
 }
 
-//JSON usado para mandar as informações no fetch
+//  JSON usado para mandar as informações no fetch
 let info = {
     "cod_lote": "",
     "cod_natureza_despesa": "",
@@ -51,7 +51,6 @@ function lote(){
         for (i = 0; i < json.length; i++) {
           x[i] += "<option >" + json[i].cod_lote + "</option>";
         }
-        x.sort();
         document.getElementById("cod_lote").innerHTML = x;
       });
     } else {
@@ -60,7 +59,7 @@ function lote(){
   });
 }
 
-function natureza(){
+function naturezaDespesa(){
   fetch('http://localhost:8080/read/naturezadespesa', {
     method: 'GET',
     headers: {
@@ -77,7 +76,6 @@ function natureza(){
           // o valor pego é o codigo, mas o campo mostra a descrição
           x[i] += "<option value=" + json[i].cod_natureza_despesa + ">" + json[i].descricao + "</option>";
         }
-        x.sort();
         document.getElementById("cod_natureza_despesa").innerHTML = x;
       });
 
@@ -90,7 +88,7 @@ function natureza(){
 
 window.onload = function () {
   lote();
-  natureza();
+  naturezaDespesa();
 }
 
 function enviar() {

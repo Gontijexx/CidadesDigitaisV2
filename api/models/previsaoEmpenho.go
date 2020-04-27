@@ -57,7 +57,7 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]
 
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("previsao_empenho").Select("natureza_despesa.descricao, previsao_empenho.*").
-		Joins("JOIN natureza_despesa ON previsao_empenho.cod_natureza_despesa = natureza_despesa.cod_natureza_despesa").Scan(&allPrevisaoEmpenho).Error
+		Joins("JOIN natureza_despesa ON previsao_empenho.cod_natureza_despesa = natureza_despesa.cod_natureza_despesa ORDER BY previsao_empenho.cod_previsao_empenho ASC").Scan(&allPrevisaoEmpenho).Error
 	if err != nil {
 		return &[]PrevisaoEmpenho{}, err
 	}

@@ -275,6 +275,19 @@ func (log *Log) LogLoteItens(db *gorm.DB, codLote uint32, codItem uint32, codTip
 }
 
 /*  =========================
+	LOG MODULO
+=========================  */
+
+func (log *Log) LogModulo(db *gorm.DB, codModulo uint32, nomeTabela string, operacao string, codUsuario uint32) error {
+
+	db.Table("modulo").Select("CONCAT(IFNULL(cod_modulo, ''), ';', IFNULL(categoria_1, ''), ';', IFNULL(categoria_2, ''), ';', IFNULL(categoria_3, ''), ';', IFNULL(descricao, ''))").Where("cod_modulo = ?", codModulo).Row().Scan(&log.Espelho)
+
+	err := db.Debug().Exec("INSERT INTO log(cod_usuario, nome_tabela, operacao, espelho, cod_int_1) VALUES (?, ?, ?, ?, ?)", codUsuario, nomeTabela, operacao, log.Espelho, codModulo).Error
+
+	return err
+}
+
+/*  =========================
 	LOG MUNICIPIO
 =========================  */
 

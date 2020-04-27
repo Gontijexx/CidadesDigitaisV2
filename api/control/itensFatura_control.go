@@ -24,11 +24,10 @@ import (
 func (server *Server) CreateItensFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	/*err := config.AuthMod(w, r, 17021)
-	if err != nil {
+	if err := config.AuthMod(w, r, 17021); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
-	}*/
+	}
 
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)
@@ -49,15 +48,13 @@ func (server *Server) CreateItensFatura(w http.ResponseWriter, r *http.Request) 
 	logItensFatura := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct itensFatura referenciada (&struct)
-	err = json.Unmarshal(body, &itensFatura)
-	if err != nil {
+	if err = json.Unmarshal(body, &itensFatura); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	//	Validacao de estrutura
-	err = validation.Validator.Struct(itensFatura)
-	if err != nil {
+	if err = validation.Validator.Struct(itensFatura); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
@@ -92,8 +89,7 @@ func (server *Server) CreateItensFatura(w http.ResponseWriter, r *http.Request) 
 func (server *Server) GetItensFaturaByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 17022)
-	if err != nil {
+	if err := config.AuthMod(w, r, 17022); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -156,8 +152,7 @@ func (server *Server) GetItensFaturaByID(w http.ResponseWriter, r *http.Request)
 func (server *Server) GetAllItensFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 17022)
-	if err != nil {
+	if err := config.AuthMod(w, r, 17022); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -183,8 +178,7 @@ func (server *Server) GetAllItensFatura(w http.ResponseWriter, r *http.Request) 
 func (server *Server) UpdateItensFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 17023)
-	if err != nil {
+	if err := config.AuthMod(w, r, 17023); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -205,8 +199,7 @@ func (server *Server) UpdateItensFatura(w http.ResponseWriter, r *http.Request) 
 	itensFatura := models.ItensFatura{}
 	logItensFatura := models.Log{}
 
-	err = json.Unmarshal(body, &itensFatura)
-	if err != nil {
+	if err = json.Unmarshal(body, &itensFatura); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
@@ -249,8 +242,7 @@ func (server *Server) UpdateItensFatura(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	err = validation.Validator.Struct(itensFatura)
-	if err != nil {
+	if err = validation.Validator.Struct(itensFatura); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
@@ -283,8 +275,7 @@ func (server *Server) UpdateItensFatura(w http.ResponseWriter, r *http.Request) 
 func (server *Server) DeleteItensFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 17023)
-	if err != nil {
+	if err := config.AuthMod(w, r, 17023); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}

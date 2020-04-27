@@ -15,6 +15,21 @@ type Modulo struct {
 }
 
 /*  =========================
+	FUNCAO SALVAR MODULO
+=========================  */
+
+func (modulo *Modulo) SaveModulo(db *gorm.DB) (*Modulo, error) {
+
+	//	Adiciona um novo elemento no banco de dados
+	err := db.Debug().Create(&modulo).Error
+	if err != nil {
+		return &Modulo{}, err
+	}
+
+	return modulo, err
+}
+
+/*  =========================
 	FUNCAO LISTAR TODOS MODULOS
 =========================  */
 

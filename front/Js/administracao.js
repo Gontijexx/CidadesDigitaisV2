@@ -184,6 +184,7 @@ function selectNatureza(){
   });
 
 }
+
 function selectClasse(){
 
   fetch('http://localhost:8080/read/classeempenho', {

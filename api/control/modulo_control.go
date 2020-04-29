@@ -15,7 +15,7 @@ import (
 )
 
 /*  =========================
-	FUNCAO ADICIONAR ENTIDADE
+	FUNCAO ADICIONAR MODULO
 =========================  */
 
 func (server *Server) CreateModulo(w http.ResponseWriter, r *http.Request) {

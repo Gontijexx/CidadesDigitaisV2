@@ -20,6 +20,11 @@
             <a class="btn btn-primary btn-lg" onclick="window.history.back();" role="button">Clique aqui para retornar.</a>
         </div>
     </div>
-
+    <script>
+        if (setupTime == null) {
+            localStorage.clear();
+            window.location.replace("./index.html");
+        }
+        </script>
 </body>
 </html>

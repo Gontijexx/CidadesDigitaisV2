@@ -1,4 +1,8 @@
-<!--<img src="http://cidadesdigitais.c3sl.ufpr.br/wp-content/uploads/sites/6/2018/04/marca-01.png" class="img-responsive" style="width:50%;"/>-->
+
+<!--
+  essaimagem foi util ants
+  <img src="http://cidadesdigitais.c3sl.ufpr.br/wp-content/uploads/sites/6/2018/04/marca-01.png" class="img-responsive" style="width:50%;"/>
+-->
 
 <!--
 
@@ -56,49 +60,10 @@
 
 
 <!--
-  
-  tratamento de todos os erros (base) 
-  if (response.status == 200) {
-  window.location.replace("./entidade.html");
-} else if (response.status == 201) {
-  alert("ALGO criado com sucesso");
-  window.location.replace("./entidade.html");
-} else if (response.status == 204) {
-  alert("Apagado com sucesso.");
-  window.location.replace("./entidade.html");
-} else if (response.status == 400) {
-  window.location.replace("./errors/400.html");
-} else if (response.status == 401) {
-  window.location.replace("./errors/401.html");
-} else if (response.status == 403) {
-  window.location.replace("./errors/403.html");
-} else if (response.status == 404) {
-  window.location.replace("./errors/404.html");
-} else if (response.status == 409) {
-  alert("Erro: ALGO já existente.");
-} else if (response.status == 412) {
-  alert("Erro: Informação colocada é incorreta.");
-} else if (response.status == 422) {
-  alert("Erro: ALGO ou senha inválidos.");
-} else if (response.status == 500) {
-  window.location.replace("./errors/500.html");
-} else if (response.status == 504) {
-  window.location.replace("./errors/504.html");
-} else {
-  alert("ERRO DESCONHECIDO");
-
-
-
-
-
 futuros deletes:
 (entidade não usa)
 
-<button onclick="apagarEntidade(` + i + `)" class="btn btn-danger">
-<i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
-</button>
-
-
+javascript:
 
 //apaga a entidade selecionada
 function apagarEntidade(valor) {
@@ -124,6 +89,12 @@ function apagarEntidade(valor) {
   });
 }
 
+resto:
+
+<button onclick="apagarEntidade(` + i + `)" class="btn btn-danger">
+<i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
+</button>
+
 <!- Delete Modal HTML ->
 <div id="deleteEmployeeModal" class="modal fade">
   <div class="modal-dialog modal-confirm">
@@ -146,5 +117,52 @@ function apagarEntidade(valor) {
       </div>
   </div>
 </div>
-
 -->
+
+
+
+<!-- 
+tratamento de todos os erros (base) 
+if (response.status == 200) {
+window.location.replace("./entidade.html");
+} else if (response.status == 201) {
+alert("ALGO criado com sucesso");
+window.location.replace("./entidade.html");
+} else if (response.status == 204) {
+alert("Apagado com sucesso.");
+window.location.replace("./entidade.html");
+} else if (response.status == 400) {
+window.location.replace("./errors/400.html");
+} else if (response.status == 401) {
+window.location.replace("./errors/401.html");
+} else if (response.status == 403) {
+window.location.replace("./errors/403.html");
+} else if (response.status == 404) {
+window.location.replace("./errors/404.html");
+} else if (response.status == 409) {
+alert("Erro: ALGO já existente.");
+} else if (response.status == 412) {
+alert("Erro: Informação colocada é incorreta.");
+} else if (response.status == 422) {
+alert("Erro: ALGO ou senha inválidos.");
+} else if (response.status == 500) {
+window.location.replace("./errors/500.html");
+} else if (response.status == 504) {
+window.location.replace("./errors/504.html");
+} else {
+alert("ERRO DESCONHECIDO");
+-->
+
+
+
+<!-- caso ainda seja necessário no futuro:
+
+if(caminho=="itens" && j==2){
+  tabela += (`<td>`);
+  for(let k=0;k<adicao.length;k++){
+    if(adicao[k]["cod_tipo_item"]==json[i]["cod_tipo_item"]){
+      tabela += adicao[k]["descricao"];
+    }
+  }
+  tabela += (`</td>`);
+} -->

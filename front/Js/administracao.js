@@ -45,7 +45,7 @@ window.onload = function () {
 function addAssunto() {
 
   let formulario = (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="1000"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioAssunto()" title="Next">Adicionar</button>`);
@@ -70,7 +70,7 @@ function visAssunto() {
 function addCategoria() {
 
   let formulario = (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="1000"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
   
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioCategoria()" title="Next">Adicionar</button>`);
@@ -97,7 +97,7 @@ function addClasseEmpenho() {
   let formulario = (`<label for="cod_classe_empenho">Código da Classe</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_classe_empenho" id="cod_classe_empenho"></input>`);
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="1000"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioClasseEmpenho()" title="Next">Adicionar</button>`);
@@ -123,7 +123,7 @@ function visClasseEmpenho() {
 function addEtapa() {
 
   let formulario = (`<label for="descricao">Descrição</label>`);
-  formulario +=(`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="1000"></textarea>`);
+  formulario +=(`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   formulario += (`<label for="duracao">Duração</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="duracao" id="duracao"></input>`);
   formulario += (`<label for="depende">Depende</label>`);
@@ -227,7 +227,7 @@ function addItem() {
 
   formulario += (`</select>`);
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="200"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></textarea>`);
   formulario += (`<label for="unidade">Unidade</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="unidade" id="unidade" maxlength="45"></input>`);
 
@@ -328,9 +328,9 @@ function addMunicipio() {
   formulario += (`<label for="idhm">IDHM</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="idhm" id="idhm"></input>`);
   formulario += (`<label for="latitude">Latitude</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="latitude" id="latitude" maxlength="10,8"></input>`);
+  formulario += (`<input class="multisteps-form__input form-control" name="latitude" id="latitude"></input>`);
   formulario += (`<label for="longitude">Longitude</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="longitude" id="longitude" maxlength="10,8"></input>`);
+  formulario += (`<input class="multisteps-form__input form-control" name="longitude" id="longitude"></input>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioMunicipio()" title="Next">Adicionar</button>`);
@@ -382,7 +382,7 @@ function addNaturezaDespesa() {
   let formulario = (`<label for="cod_natureza_despesa">Código da Natureza</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_natureza_despesa" id="cod_natureza_despesa"></input>`);
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="1000"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioNaturezaDespesa()" title="Next">Adicionar</button>`);
@@ -485,7 +485,7 @@ function addTipoItem() {
   let formulario = (`<label for="cod_tipo_item">Código do Tipo de Item</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_tipo_item" id="cod_tipo_item" maxlength="100"></input>`);
   formulario += (`<label for="descricao">Descrição</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></input>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioTipoItem()" title="Next">Adicionar</button>`);
@@ -511,7 +511,7 @@ function visTipoItem() {
 function addTipologia() {
 
   let formulario = (`<label for="descricao">Descrição</label>`);
-  formulario += (`<input class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="100"></input>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioTipologia()" title="Next">Adicionar</button>`);

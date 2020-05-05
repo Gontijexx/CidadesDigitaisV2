@@ -46,6 +46,110 @@ let info = {
 };
 
 
+
+function fetchMunicipio(){
+
+  document.getElementById("cod_ibge").innerHTML = "<option value=''>Cidade</option>";
+  document.getElementById("cod_ibge").disabled = true;
+
+  //preenche os campos para estado e municipio
+  let answer = fetch('http://localhost:8080/read/municipio', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //pegando valores para usar em municipios
+        cidades = json;
+        //cria variaveis
+        let i, j = 0;
+        let x = [],
+          valorUF = [],
+          valorFinalUF = [];
+
+        //faz a ligação entre variaveis e valores do banco
+        for (i = 0; i < json.length; i++) {
+          valorUF[i] = json[i].uf;
+          if (i!=0 && valorUF[i] != valorUF[i - 1]) {
+            valorFinalUF[j] = valorUF[i];
+            j++;
+          }
+        }
+        x[0] += "<option value=''>Estado</option>";
+        for (i = 0; i < j; i++) {
+          x[i+1] += "<option>" + valorFinalUF[i] + "</option>";
+        }
+        x.sort();
+        document.getElementById("uf").innerHTML = x;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+function fetchLote(){
+  //preenche os cod_lotes
+  fetch('http://localhost:8080/read/lote', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //cria variaveis
+        let i = 0;
+        let x = [];
+        for (i = 0; i < json.length; i++) {
+          x[i+1] += "<option>" + json[i].cod_lote + "</option>";
+        }
+        x[0] += "<option value=''>Código do Lote</option>";
+        document.getElementById("cod_lote").innerHTML = x;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+function enabler() {
+  
+  document.getElementById("cod_ibge").disabled = false;
+  let uf = document.getElementById("uf");
+  let i,j=0, x = [], cidadesFinal=[];
+  for (i = 0; i < cidades.length; i++) {
+    if (cidades[i].uf == uf.value) {
+      cidadesFinal[j]=cidades[i];
+      j++;
+    }
+  }
+  for (i = 0; i < cidadesFinal.length; i++) {
+    x[i] = "<option value="+cidadesFinal[i].cod_ibge+">" + cidadesFinal[i].nome_municipio + "</option>";
+  }
+  x.sort();
+  document.getElementById("cod_ibge").innerHTML = x;
+}
+
+
+
+window.onload = function () {
+  this.fetchMunicipio();
+  this.paginacao();
+}
+
+
+
+
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
@@ -111,7 +215,11 @@ function paginacao() {
           tabela += (`<td>`);
           tabela += json[i]["cod_ibge"];
           tabela += (`</td> <td>`);
-          tabela += cidades[i]["nome_municipio"] + " - " + cidades[i]["uf"];
+          for(let j=0; j < cidades.length;j++){
+            if(cidades[j]["cod_ibge"]==json[i]["cod_ibge"]){
+              tabela += cidades[j]["nome_municipio"] + " - " + cidades[j]["uf"];
+            }
+          }
           tabela += (`</td> <td>`);
           tabela += json[i]["cod_lote"]
           tabela += (`</td> <td>`);
@@ -134,7 +242,8 @@ function paginacao() {
                 </span> </td>`);
           tabela += (`</tr>`);
         }
-        tabela += (`</tr> </tbody>`);
+
+        tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
         //mostra quanto do total aparece na tela
@@ -266,94 +375,6 @@ function paginacao() {
 
 
 
-window.onload = function () {
-
-  fetch('http://localhost:8080/read/municipio', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //pegando valores para usar em municipios
-        cidades = json;
-        //cria variaveis
-        let i, j = 0;
-        let x = [],
-          valorUF = [],
-          valorFinalUF = [];
-
-        //faz a ligação entre variaveis e valores do banco
-        for (i = 0; i < json.length; i++) {
-          valorUF[i] = json[i].uf;
-          if (i!=0 && valorUF[i] != valorUF[i - 1]) {
-            valorFinalUF[j] = valorUF[i];
-            j++;
-          }
-        }
-        for (i = 0; i < j; i++) {
-          x[i] += "<option>" + valorFinalUF[i] + "</option>";
-        }
-        x.sort();
-        document.getElementById("uf").innerHTML = x;
-      });
-    } else {
-      erros(response.status);
-    }
-    this.paginacao();
-  });
-
-  //preenche os cod_lotes
-  fetch('http://localhost:8080/read/lote', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //cria variaveis
-        let i = 0;
-        let x = [];
-        x[0] += "<option value='00000000000000'>Código do Lote</option>";
-        for (i = 0; i < json.length; i++) {
-          x[i + 1] += "<option>" + json[i].cod_lote + "</option>";
-        }
-        x.sort();
-        document.getElementById("cod_lote").innerHTML = x;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-
-}
-
-
-function enabler() {
-  document.getElementById("cod_ibge").disabled = false;
-  let uf = document.getElementById("uf");
-  let i,j=0, x = [], cidadesFinal=[];
-  for (i = 0; i < cidades.length; i++) {
-    if (cidades[i].uf == uf.value) {
-      cidadesFinal[j]=cidades[i];
-      j++;
-    }
-  }
-  for (i = 0; i < cidadesFinal.length; i++) {
-    x[i] = "<option value='"+cidadesFinal[i].cod_ibge+"'>" + cidadesFinal[i].nome_municipio + "</option>";
-  }
-  x.sort();
-  document.getElementById("cod_ibge").innerHTML = x;
-}
-
-
-
 function editarCd(valor) {
   localStorage.setItem("cod_ibge", cdTotal[valor].cod_ibge);
   localStorage.setItem("cod_lote", cdTotal[valor].cod_lote);
@@ -365,7 +386,6 @@ function editarCd(valor) {
   localStorage.setItem("uf", cidades[valor].uf);
   window.location.href = "./gerenciaCd.html";
 }
-
 
 
 

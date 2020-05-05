@@ -85,6 +85,7 @@ function fetchMunicipio(){
         }
         x.sort();
         document.getElementById("uf").innerHTML = x;
+        paginacao();
       });
     } else {
       erros(response.status);
@@ -144,7 +145,6 @@ function enabler() {
 
 window.onload = function () {
   this.fetchMunicipio();
-  this.paginacao();
 }
 
 
@@ -221,15 +221,15 @@ function paginacao() {
             }
           }
           tabela += (`</td> <td>`);
-          tabela += json[i]["cod_lote"]
+          tabela += json[i]["cod_lote"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["os_pe"]
+          tabela += json[i]["os_pe"];
           tabela += (`</td> <td>`);
           let data1 = new Date(json[i]["data_pe"]);
           let dataf1 = String(data1.getDate()).padStart(2, '0') + '/' + String(data1.getMonth()+1).padStart(2, '0') + '/' + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataf1;
           tabela += (`</td> <td>`);
-          tabela += json[i]["os_imp"]
+          tabela += json[i]["os_imp"];
           tabela += (`</td> <td>`);
           let data2 = new Date(json[i]["data_imp"]);
           let dataf2 = String(data2.getDate()).padStart(2, '0') + '/' + String(data2.getMonth()+1).padStart(2, '0') + '/' + String(data2.getFullYear()).padStart(4, '0');

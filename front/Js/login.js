@@ -62,7 +62,7 @@ function entrar() {
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar o login e receber o token
-  fetch('http://localhost:8080/read/usuario/login', {
+  fetch(servidor + 'read/usuario/login', {
     method: 'POST',
     body: corpo,
   }).then(function (response) {

@@ -1,6 +1,3 @@
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
@@ -71,7 +68,7 @@ function enviar() {
   let corpo = JSON.stringify(info);
   console.log(corpo);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario/' + parseInt(codigoLogado), {
+  fetch(servidor + 'read/usuario/' + parseInt(codigoLogado), {
     method: 'PUT',
     body: corpo,
     headers: {

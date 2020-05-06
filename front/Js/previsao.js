@@ -7,7 +7,7 @@ function previsao() {
     document.getElementById("editar2").innerHTML = (`<br>`);
   
     //função fetch para chamar os itens de previsão da tabela
-    fetch('http://localhost:8080/read/previsaoempenho', {
+    fetch(servidor + 'read/previsaoempenho', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + meuToken

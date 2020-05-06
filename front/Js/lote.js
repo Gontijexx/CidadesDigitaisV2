@@ -1,6 +1,3 @@
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //capturar chave primaria
 let loteTotal = [];
 
@@ -74,7 +71,7 @@ function paginacao() {
   let fim = (contador + 1) * porPagina;
 
   //função fetch para chamar itens da tabela
-  fetch('http://localhost:8080/read/lote', {
+  fetch(servidor + 'read/lote', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -270,7 +267,7 @@ function paginacao() {
 window.onload = function () {
   this.paginacao();
   //preenche os CNPJs
-  fetch('http://localhost:8080/read/entidade', {
+  fetch(servidor + 'read/entidade', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -314,7 +311,7 @@ function enviar() {
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/lote', {
+  fetch(servidor + 'read/lote', {
     method: 'POST',
     body: corpo,
     headers: {

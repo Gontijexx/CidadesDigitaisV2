@@ -1,7 +1,5 @@
 //capturar itens para mandar no gerenciaEstrutura
 let entTotal = [];
-//pega o token do login
-let meuToken = localStorage.getItem("token");
 //pega o JSON de municípios para uso em "adicionar entidades"
 let cidades = [];
 document.getElementById("nome_municipio").disabled = true;
@@ -88,7 +86,7 @@ function paginacao() {
   let fim = (contador + 1) * porPagina;
 
   //função fetch para mandar itens 
-  fetch('http://localhost:8080/read/entidade', {
+  fetch(servidor + 'read/entidade', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -282,7 +280,7 @@ function paginacao() {
 window.onload = function () {
   this.paginacao();
 
-  fetch('http://localhost:8080/read/municipio', {
+  fetch(servidor + 'read/municipio', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -346,7 +344,7 @@ function enviar() {
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/entidade', {
+  fetch(servidor + 'read/entidade', {
     method: 'POST',
     body: corpo,
     headers: {

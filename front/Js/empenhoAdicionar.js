@@ -1,6 +1,3 @@
-//  pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //  tratamento de erros
 function erros(value) {
   if (value == 400) {
@@ -35,7 +32,7 @@ let info = {
 };
 
 function previsao(){
-  fetch('http://localhost:8080/read/previsaoempenho', {
+  fetch(servidor + 'read/previsaoempenho', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -73,7 +70,7 @@ function enviar() {
   let corpo = JSON.stringify(info);
   console.log(corpo);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/empenho', {
+  fetch(servidor + 'read/empenho', {
     method: 'POST',
     body: corpo,
     headers: {

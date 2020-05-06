@@ -1,6 +1,3 @@
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //pega o CNPJ escolhido anteriormente
 let meuLote = localStorage.getItem("cod_lote");
 document.getElementById("cod_lote").value = meuLote;
@@ -57,7 +54,7 @@ let info = {
 
 window.onload = function () {
 
-  fetch('http://localhost:8080/read/entidadeget', {
+  fetch(servidor + 'read/entidadeget', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -118,7 +115,7 @@ function enviar() {
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/lote/' + meuLote, {
+  fetch(servidor + 'read/lote/' + meuLote, {
     method: 'PUT',
     body: corpo,
     headers: {
@@ -155,7 +152,7 @@ function itens() {
   document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Salvar Alterações em Itens</button>`);
 
   //função fetch para chamar itens da tabela
-  fetch('http://localhost:8080/read/loteitens', {
+  fetch(servidor + 'read/loteitens', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -228,7 +225,7 @@ function editarItem() {
       //transforma as informações em string para mandar
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar
-      fetch('http://localhost:8080/read/loteitens/' + meuLote + '/' + meuItem[i] + '/' + meuTipo[i], {
+      fetch(servidor + 'read/loteitens/' + meuLote + '/' + meuItem[i] + '/' + meuTipo[i], {
         method: 'PUT',
         body: corpo,
         headers: {
@@ -267,7 +264,7 @@ function reajuste() {
   document.getElementById("editar2").innerHTML = (`<button onclick="editarReajuste()" class="btn btn-success">Salvar Alterações em Reajustes</button>`);
 
   //função fetch para chamar reajustes da tabela
-  fetch('http://localhost:8080/read/reajuste', {
+  fetch(servidor + 'read/reajuste', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -344,7 +341,7 @@ function editarReajuste() {
       //transforma as informações em string para mandar
       let corpo = JSON.stringify(edicaoReajuste[i]);
       //função fetch para mandar
-      fetch('http://localhost:8080/read/reajuste/' + listaReajuste[i]["ano_ref"] + '/' + meuLote, {
+      fetch(servidor + 'read/reajuste/' + listaReajuste[i]["ano_ref"] + '/' + meuLote, {
         method: 'PUT',
         body: corpo,
         headers: {
@@ -379,7 +376,7 @@ function novoReajuste() {
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(infoReajuste);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/reajuste', {
+  fetch(servidor + 'read/reajuste', {
     method: 'POST',
     body: corpo,
     headers: {
@@ -402,7 +399,7 @@ function novoReajuste() {
 function apagarReajuste(valor) {
 
   //função fetch para deletar
-  fetch('http://localhost:8080/read/reajuste/' + valor + "/" + meuLote, {
+  fetch(servidor + 'read/reajuste/' + valor + "/" + meuLote, {
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + meuToken

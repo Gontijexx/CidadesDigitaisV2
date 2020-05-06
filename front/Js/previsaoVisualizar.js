@@ -1,6 +1,3 @@
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //tratamento de erros
 function erros(value) {
   if (value == 400) {
@@ -60,7 +57,7 @@ function paginacao() {
   let fim = (contador + 1) * porPagina;
 
     //função fetch para chamar os itens de previsão da tabela
-  fetch('http://localhost:8080/read/previsaoempenho', {
+  fetch(servidor + 'read/previsaoempenho', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken

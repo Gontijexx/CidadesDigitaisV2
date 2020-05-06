@@ -7,7 +7,7 @@ import "github.com/jinzhu/gorm"
 =========================  */
 
 type Empenho struct {
-	IDEmpenho          uint32 `gorm:"primary_key;auto_increment;default:not null" json:""id_empenho`
+	IDEmpenho          uint32 `gorm:"primary_key;auto_increment;default:not null" json:"id_empenho"`
 	CodPrevisaoEmpenho uint32 `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
 	CodEmpenho         string `gorm:"not null;size:13" json:"cod_empenho"`
 	Data               string `gorm:"default:null" json:"data"`

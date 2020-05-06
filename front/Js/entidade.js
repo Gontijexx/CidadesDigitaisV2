@@ -5,33 +5,6 @@ let cidades = [];
 document.getElementById("nome_municipio").disabled = true;
 
 
-//tratamento de erros
-function erros(value) {
-  if (value == 400) {
-    window.location.href="./errors/400.html";
-  } else if (value == 401) {
-    window.location.href="./errors/401.html";
-  } else if (value == 403) {
-    window.location.href="./errors/403.html";
-  } else if (value == 404) {
-    window.location.href="./errors/404.html";
-  } else if (value == 409) {
-    alert("Erro: Lote já existente.");
-  } else if (value == 412) {
-    alert("Erro: Informação colocada é incorreta.");
-  } else if (value == 422) {
-    alert("Erro: Formato de informação não aceito.");
-  } else if (value == 500) {
-    window.location.href="./errors/500.html";
-  } else if (value == 504) {
-    window.location.href="./errors/504.html";
-  } else {
-    alert("ERRO DESCONHECIDO");
-  }
-}
-
-
-
 //JSON usado para mandar as informações no fetch
 let info = {
   "cnpj": " ",
@@ -45,6 +18,8 @@ let info = {
   "observacao": " "
 };
 
+
+
 function enabler() {
   let uf1 = document.getElementById("uf").value;
   document.getElementById("nome_municipio").disabled = false;
@@ -57,6 +32,56 @@ function enabler() {
   y.sort();
   document.getElementById("nome_municipio").innerHTML = y;
 }
+
+
+
+function pegarMunicipio(){
+  fetch(servidor + 'read/municipio', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //pegando valores para usar em municipios
+        cidades = json;
+        //cria letiaveis
+        let i, j = 0;
+        let x = [],
+          valorUF = [],
+          valorFinalUF = [];
+
+        //faz a ligação entre variaveis e valores do banco
+        for (i = 0; i < json.length; i++) {
+          valorUF[i] = json[i].uf;
+          if (valorUF[i] != valorUF[i - 1]) {
+            valorFinalUF[j] = valorUF[i];
+            j++;
+          }
+        }
+        for (i = 0; i < j; i++) {
+          x[i] += "<option>" + valorFinalUF[i] + "</option>";
+        }
+        x.sort();
+        document.getElementById("uf").innerHTML = x;
+        paginacao();
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+window.onload = function () {
+  this.pegarMunicipio();
+}
+
+
 
 //sistema de paginação
 let contador = 0;
@@ -275,49 +300,6 @@ function paginacao() {
     }
   });
 }
-
-
-window.onload = function () {
-  this.paginacao();
-
-  fetch(servidor + 'read/municipio', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //pegando valores para usar em municipios
-        cidades = json;
-        //cria letiaveis
-        let i, j = 0;
-        let x = [],
-          valorUF = [],
-          valorFinalUF = [];
-
-        //faz a ligação entre variaveis e valores do banco
-        for (i = 0; i < json.length; i++) {
-          valorUF[i] = json[i].uf;
-          if (valorUF[i] != valorUF[i - 1]) {
-            valorFinalUF[j] = valorUF[i];
-            j++;
-          }
-        }
-        for (i = 0; i < j; i++) {
-          x[i] += "<option>" + valorFinalUF[i] + "</option>";
-        }
-        x.sort();
-        document.getElementById("uf").innerHTML = x;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
 
 
 

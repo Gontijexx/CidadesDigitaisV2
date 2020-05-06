@@ -5,31 +5,6 @@ let meuItem = [],
 let edicaoItem = [];
 let itemMudado = [];
 
-//tratamento de erros
-function erros(value) {
-  if (value == 400) {
-    window.location.href="./errors/400.html";
-  } else if (value == 401) {
-    window.location.href="./errors/401.html";
-  } else if (value == 403) {
-    window.location.href="./errors/403.html";
-  } else if (value == 404) {
-    window.location.href="./errors/404.html";
-  } else if (value == 409) {
-    alert("Erro: Lote já existente.");
-  } else if (value == 412) {
-    alert("Erro: Informação colocada é incorreta.");
-  } else if (value == 422) {
-    alert("Erro: Formato de informação não aceito.");
-  } else if (value == 500) {
-    window.location.href="./errors/500.html";
-  } else if (value == 504) {
-    window.location.href="./errors/504.html";
-  } else {
-    alert("ERRO DESCONHECIDO");
-  }
-}
-
 
 //JSON usado para mandar as informações no fetch
 let info = {
@@ -62,13 +37,13 @@ let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(dat
 
 window.onload = function () {
 
-// inserindo os valores no html
-document.getElementById("nome_municipio").value = meuMunicipio + " - " + meuUF;
-document.getElementById("cod_lote").value = meuLote;
-document.getElementById("os_pe").value = os_pe1;
-document.getElementById("os_imp").value = os_imp1;
-document.getElementById("data_pe").value = dataFinal1;
-document.getElementById("data_imp").value = dataFinal2;
+  // inserindo os valores no html
+  document.getElementById("nome_municipio").value = meuMunicipio + " - " + meuUF;
+  document.getElementById("cod_lote").value = meuLote;
+  document.getElementById("os_pe").value = os_pe1;
+  document.getElementById("os_imp").value = os_imp1;
+  document.getElementById("data_pe").value = dataFinal1;
+  document.getElementById("data_imp").value = dataFinal2;
 
 }
 
@@ -210,7 +185,7 @@ function editarItem() {
 
   for (let i = 0; i < listaItem.length; i++) {
 
-    if (itemMudado[i]!=null) {
+    if (itemMudado[i] != null) {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar

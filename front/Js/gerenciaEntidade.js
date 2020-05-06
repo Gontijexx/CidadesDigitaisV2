@@ -7,32 +7,8 @@ let meuBairro = localStorage.getItem("bairro");
 let meuCep = localStorage.getItem("cep");
 let meuMunicipio = localStorage.getItem("nome_municipio");
 let meuObs = localStorage.getItem("observacao");
-let cidades=[];
+let cidades = [];
 
-//tratamento de erros
-function erros(value) {
-  if (value == 400) {
-    window.location.href="./errors/400.html";
-  } else if (value == 401) {
-    window.location.href="./errors/401.html";
-  } else if (value == 403) {
-    window.location.href="./errors/403.html";
-  } else if (value == 404) {
-    window.location.href="./errors/404.html";
-  } else if (value == 409) {
-    alert("Erro: Lote já existente.");
-  } else if (value == 412) {
-    alert("Erro: Informação colocada é incorreta.");
-  } else if (value == 422) {
-    alert("Erro: Formato de informação não aceito.");
-  } else if (value == 500) {
-    window.location.href="./errors/500.html";
-  } else if (value == 504) {
-    window.location.href="./errors/504.html";
-  } else {
-    alert("ERRO DESCONHECIDO");
-  }
-}
 
 window.onload = function () {
 
@@ -42,12 +18,12 @@ window.onload = function () {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-    
+
     //tratamento dos erros
     if (response.status == 200) {
       return response.json().then(function (json) {
         //pegando valores para usar em municipios
-        cidades=json;
+        cidades = json;
         //cria variaveis
         let i, j = 0;
         let x = [],
@@ -105,19 +81,19 @@ function enabler() {
   document.getElementById("nome_municipio").innerHTML = y;
 }
 
-function enviar(){
+function enviar() {
 
   //estrutura para o JSON usado no fetch
   let info = {
-    "nome" : "",
-    "endereco" : "",
-    "numero" : "",
-    "bairro" : "",
-    "cep" : "",
-    "nome_municipio" : "",
-    "observacao" : "",
+    "nome": "",
+    "endereco": "",
+    "numero": "",
+    "bairro": "",
+    "cep": "",
+    "nome_municipio": "",
+    "observacao": "",
   };
-  
+
   let a = document.getElementById("nome").value;
   let b = document.getElementById("endereco").value;
   let c = document.getElementById("numero").value;

@@ -15,31 +15,6 @@ let edicaoReajuste = [];
 let meuAno = [];
 let reajusteMudado = [];
 
-//tratamento de erros
-function erros(value) {
-  if (value == 400) {
-    window.location.href="./errors/400.html";
-  } else if (value == 401) {
-    window.location.href="./errors/401.html";
-  } else if (value == 403) {
-    window.location.href="./errors/403.html";
-  } else if (value == 404) {
-    window.location.href="./errors/404.html";
-  } else if (value == 409) {
-    alert("Erro: Lote já existente.");
-  } else if (value == 412) {
-    alert("Erro: Informação colocada é incorreta.");
-  } else if (value == 422) {
-    alert("Erro: Formato de informação não aceito.");
-  } else if (value == 500) {
-    window.location.href="./errors/500.html";
-  } else if (value == 504) {
-    window.location.href="./errors/504.html";
-  } else {
-    alert("ERRO DESCONHECIDO");
-  }
-}
-
 
 //JSON usado para mandar as informações no fetch
 let info = {
@@ -71,7 +46,7 @@ window.onload = function () {
           x[i] += "<option value=" + json[i].cnpj + ">" + json[i].nome + "</option>";
         }
         x.sort();
-        
+
         document.getElementById("cnpj").innerHTML = x;
 
         let cnpj1 = document.getElementById("cnpj");
@@ -216,12 +191,12 @@ function itens() {
 
 function mudaItem(valor) {
   edicaoItem[valor].preco = parseFloat(document.getElementById("preco" + valor).value);
-  itemMudado[valor]=valor;
+  itemMudado[valor] = valor;
 }
 
 function editarItem() {
   for (i = 0; i < listaItem.length; i++) {
-    if (itemMudado[i]!=null) {
+    if (itemMudado[i] != null) {
       //transforma as informações em string para mandar
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar
@@ -332,12 +307,12 @@ function reajuste() {
 
 function mudaReajuste(valor) {
   edicaoReajuste[valor].percentual = parseFloat(document.getElementById("percentual" + valor).value);
-  reajusteMudado[valor]=valor;
+  reajusteMudado[valor] = valor;
 }
 
 function editarReajuste() {
   for (i = 0; i < listaReajuste.length; i++) {
-    if (reajusteMudado[i]!=null) {
+    if (reajusteMudado[i] != null) {
       //transforma as informações em string para mandar
       let corpo = JSON.stringify(edicaoReajuste[i]);
       //função fetch para mandar

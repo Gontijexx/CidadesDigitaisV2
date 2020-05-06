@@ -28,7 +28,9 @@ window
 
 //função usada pelo botão de logoff
 function logoff() {
-	window.location.replace("./index.html");
+
+  window.location.replace = ("/index.html");
+  
 	localStorage.clear();
 }
 
@@ -41,18 +43,25 @@ if (setupTime == null) {
 	localStorage.setItem('setupTime', now);
 } else {
 	if (now - setupTime > hours * 60 * 60 * 1000) {
-		window.location.replace("./index.html");
+
+		window.location.replace = ("./index.html");
 		localStorage.clear();
 	}
 }
 
 //adcionar as classes depois
 $(document).ready(function () {
-    $('.cep').mask('00000-000');
-    $('.telefone').mask('(00) 00000-0000');
-    $('.cpf').mask('000.000.000-00', {reverse: true});
-    $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
-    $('.preco').mask('0.000.000.000,00', {reverse: true});
+	$('.cep').mask('00000-000');
+	$('.telefone').mask('(00) 00000-0000');
+	$('.cpf').mask('000.000.000-00', {
+		reverse: true
+	});
+	$('.cnpj').mask('00.000.000/0000-00', {
+		reverse: true
+	});
+	$('.preco').mask('0.000.000.000,00', {
+		reverse: true
+	});
 });
 
 //para definir o ip do servidor (ou algo do tipo, podem corrigir)
@@ -61,3 +70,28 @@ let servidor = "http://localhost:8080/";
 
 //pega o token do login
 let meuToken = localStorage.getItem("token");
+
+//tratamento de erros
+function erros(value) {
+	if (value == 400) {
+		window.location.href = "./errors/400.html";
+	} else if (value == 401) {
+		window.location.href = "./errors/401.html";
+	} else if (value == 403) {
+		window.location.href = "./errors/403.html";
+	} else if (value == 404) {
+		window.location.href = "./errors/404.html";
+	} else if (value == 409) {
+		alert("Erro: Adição já existente.");
+	} else if (value == 412) {
+		alert("Erro: Informação colocada é incorreta.");
+	} else if (value == 422) {
+		alert("Erro: Formato de informação não aceito.");
+	} else if (value == 500) {
+		window.location.href = "./errors/500.html";
+	} else if (value == 504) {
+		window.location.href = "./errors/504.html";
+	} else {
+		alert("ERRO DESCONHECIDO");
+	}
+}

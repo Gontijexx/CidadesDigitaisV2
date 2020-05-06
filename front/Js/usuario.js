@@ -18,31 +18,6 @@ let info = {
   "senha": "",
 };
 
-//tratamento de erros
-function erros(value) {
-  if (value == 400) {
-    window.location.href="./errors/400.html";
-  } else if (value == 401) {
-    window.location.href="./errors/401.html";
-  } else if (value == 403) {
-    window.location.href="./errors/403.html";
-  } else if (value == 404) {
-    window.location.href="./errors/404.html";
-  } else if (value == 409) {
-    alert("Erro: Lote já existente.");
-  } else if (value == 412) {
-    alert("Erro: Informação colocada é incorreta.");
-  } else if (value == 422) {
-    alert("Erro: Formato de informação não aceito.");
-  } else if (value == 500) {
-    window.location.href="./errors/500.html";
-  } else if (value == 504) {
-    window.location.href="./errors/504.html";
-  } else {
-    alert("ERRO DESCONHECIDO");
-  }
-}
-
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
@@ -103,7 +78,7 @@ function paginacao() {
 
           //para quando o status for inativo
           let j = 0;
-          let jsonDeStatus =[];
+          let jsonDeStatus = [];
           for (let i = 0; i < json.length; i++) {
             if (json[i]["status"] == 1) {
               jsonDeStatus[j] = json[i];
@@ -128,7 +103,7 @@ function paginacao() {
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td> </tr>`);
-            if(jsonDeStatus[i]["login"]==userLogado){
+            if (jsonDeStatus[i]["login"] == userLogado) {
               localStorage.setItem("codigoLogado", jsonDeStatus[i]["cod_usuario"]);
             }
           }
@@ -137,7 +112,7 @@ function paginacao() {
 
           //para quando o status for inativo
           let j = 0;
-          let jsonDeStatus =[];
+          let jsonDeStatus = [];
           for (let i = 0; i < json.length; i++) {
             if (json[i]["status"] == 0) {
               jsonDeStatus[j] = json[i];
@@ -163,7 +138,7 @@ function paginacao() {
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td> </tr>`);
-            if(jsonDeStatus[i]["login"]==userLogado){
+            if (jsonDeStatus[i]["login"] == userLogado) {
               localStorage.setItem("codigoLogado", jsonDeStatus[i]["cod_usuario"]);
             }
           }
@@ -187,7 +162,7 @@ function paginacao() {
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                   </button>
                   </span> </td> </tr>`);
-            if(json[i]["login"]==userLogado){
+            if (json[i]["login"] == userLogado) {
               localStorage.setItem("codigoLogado", json[i]["cod_usuario"]);
             }
           }
@@ -490,8 +465,6 @@ function enviarModulo() {
       j++;
     }
   }
-  console.log(j);
-
 
   //transforma as informações do token em json
   let infoModulo = JSON.stringify(modulo);

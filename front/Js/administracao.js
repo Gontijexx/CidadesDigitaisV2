@@ -1,31 +1,6 @@
 //guarda info pra ser usado assim depois
 let info = {};
 
-//tratamento de erros
-function erros(value) {
-  if (value == 400) {
-    window.location.href="./errors/400.html";
-  } else if (value == 401) {
-    window.location.href="./errors/401.html";
-  } else if (value == 403) {
-    window.location.href="./errors/403.html";
-  } else if (value == 404) {
-    window.location.href="./errors/404.html";
-  } else if (value == 409) {
-    alert("Erro: Adição já existente.");
-  } else if (value == 412) {
-    alert("Erro: Informação colocada é incorreta.");
-  } else if (value == 422) {
-    alert("Erro: Formato de informação não aceito.");
-  } else if (value == 500) {
-    window.location.href="./errors/500.html";
-  } else if (value == 504) {
-    window.location.href="./errors/504.html";
-  } else {
-    alert("ERRO DESCONHECIDO");
-  }
-}
-
 
 //captura valores para os "selects" futuros
 let resultadoClasse;
@@ -69,7 +44,7 @@ function addCategoria() {
   let formulario = (`<label for="descricao">Descrição</label>`);
   formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
-  
+
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioCategoria()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
@@ -103,8 +78,8 @@ function addClasseEmpenho() {
 
 function envioClasseEmpenho() {
   info = {
-    "cod_classe_empenho" : parseInt(document.getElementById("cod_classe_empenho").value),
-    "descricao" : document.getElementById("descricao").value,
+    "cod_classe_empenho": parseInt(document.getElementById("cod_classe_empenho").value),
+    "descricao": document.getElementById("descricao").value,
   };
   mandar("classeempenho");
 }
@@ -120,7 +95,7 @@ function visClasseEmpenho() {
 function addEtapa() {
 
   let formulario = (`<label for="descricao">Descrição</label>`);
-  formulario +=(`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
+  formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   formulario += (`<label for="duracao">Duração</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="duracao" id="duracao"></input>`);
   formulario += (`<label for="depende">Depende</label>`);
@@ -159,7 +134,7 @@ function visEtapa() {
 
 //informaçãoes para itens
 
-function selectNatureza(){
+function selectNatureza() {
 
   fetch(servidor + 'read/naturezadespesa', {
     method: 'GET',
@@ -167,12 +142,12 @@ function selectNatureza(){
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-    
+
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
         for (let i = 0; i < json.length; i++) {
-          resultadoNatureza += "<option value="+ json[i]["cod_natureza_despesa"] +">" + json[i]["descricao"] + "</option>";
+          resultadoNatureza += "<option value=" + json[i]["cod_natureza_despesa"] + ">" + json[i]["descricao"] + "</option>";
         }
       });
     } else {
@@ -182,7 +157,7 @@ function selectNatureza(){
 
 }
 
-function selectClasse(){
+function selectClasse() {
 
   fetch(servidor + 'read/classeempenho', {
     method: 'GET',
@@ -190,12 +165,12 @@ function selectClasse(){
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-    
+
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
         for (let i = 0; i < json.length; i++) {
-          resultadoClasse += "<option value="+ json[i]["cod_classe_empenho"] +">" + json[i]["descricao"] + "</option>";
+          resultadoClasse += "<option value=" + json[i]["cod_classe_empenho"] + ">" + json[i]["descricao"] + "</option>";
         }
       });
     } else {
@@ -270,7 +245,7 @@ function addModulo() {
   formulario += (`<input class="multisteps-form__input form-control" name="categoria_3" id="categoria_3" maxlength="45"></input>`);
   formulario += (`<label for="descricao">Descrição</label>`);
   formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="200"></textarea>`);
-  
+
   document.getElementById("modalAdicao").innerHTML = formulario;
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioModulo()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
@@ -301,7 +276,7 @@ function visModulo() {
 function addMunicipio() {
 
   let formulario = (`<label for="cod_ibge">Código do IBGE</label>`);
-  formulario +=(`<input class="multisteps-form__input form-control" name="cod_ibge" id="cod_ibge"></input>`);
+  formulario += (`<input class="multisteps-form__input form-control" name="cod_ibge" id="cod_ibge"></input>`);
   formulario += (`<label for="nome_municipio">Nome do Município</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="nome_municipio" id="nome_municipio" maxlength="50"></input>`);
   formulario += (`<label for="populacao">População</label>`);
@@ -403,7 +378,7 @@ function visNaturezaDespesa() {
 
 //informaçãoes para prefeitos
 
-function selectPrefeitos(){
+function selectPrefeitos() {
 
   fetch(servidor + 'read/municipio', {
     method: 'GET',
@@ -411,7 +386,7 @@ function selectPrefeitos(){
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-    
+
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
@@ -450,7 +425,7 @@ function addPrefeitos() {
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioPrefeitos()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
-      
+
 }
 
 function envioPrefeitos() {

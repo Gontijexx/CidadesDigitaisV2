@@ -3,7 +3,7 @@ document.write(`
 		<div class="container-fluid">
 			<header class="cd-header"><!--Barra Menu-->
 				<div id="cd-logo">
-					<a href=""><img src="img/cd-logo.svg" alt="Logo"><input value="Sair" onclick="logoff()" type="button"></a>
+					<a onclick="logoff()"><img src="img/cd-logo.svg" alt="Logo"></a>
 				</div>
 				<a class="cd-menu-trigger" href="#main-nav">Menu<span></span></a>
 			</header>
@@ -29,9 +29,9 @@ window
 //função usada pelo botão de logoff
 function logoff() {
 
-  window.location.replace = ("/index.html");
+  window.location.replace("./index.html");
   
-	localStorage.clear();
+  localStorage.clear();
 }
 
 //define o total de horas para o login atual
@@ -44,7 +44,7 @@ if (setupTime == null) {
 } else {
 	if (now - setupTime > hours * 60 * 60 * 1000) {
 
-		window.location.replace = ("./index.html");
+		window.location.replace("./index.html");
 		localStorage.clear();
 	}
 }

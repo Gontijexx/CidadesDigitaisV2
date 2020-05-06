@@ -67,7 +67,7 @@ function paginacao() {
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += json[i]["id_empenho"]; //está sendo enviado assim por algum motivo
+          tabela += json[i]["id_empenho"];
           tabela += (`</td><td>`);
           tabela += json[i]["cod_previsao_empenho"];
           tabela += (`</td><td>`);

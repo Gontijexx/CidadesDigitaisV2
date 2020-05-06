@@ -28,7 +28,7 @@ window
 
 //função usada pelo botão de logoff
 function logoff() {
-	window.location.replace=("/index.html");
+	window.location.replace("./index.html");
 	localStorage.clear();
 }
 
@@ -41,7 +41,7 @@ if (setupTime == null) {
 	localStorage.setItem('setupTime', now);
 } else {
 	if (now - setupTime > hours * 60 * 60 * 1000) {
-		window.location.replace=("./index.html");
+		window.location.replace("./index.html");
 		localStorage.clear();
 	}
 }

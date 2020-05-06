@@ -36,7 +36,7 @@ let info = {
 };
 
 function lote(){
-  fetch('http://localhost:8080/read/lote', {
+  fetch(servidor + 'read/lote', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -60,7 +60,7 @@ function lote(){
 }
 
 function naturezaDespesa(){
-  fetch('http://localhost:8080/read/naturezadespesa', {
+  fetch(servidor + 'read/naturezadespesa', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -103,7 +103,7 @@ function enviar() {
   let corpo = JSON.stringify(info);
   console.log(corpo);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/previsaoempenho', {
+  fetch(servidor + 'read/previsaoempenho', {
     method: 'POST',
     body: corpo,
     headers: {

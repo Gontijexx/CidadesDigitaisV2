@@ -1,6 +1,3 @@
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //Fazer Tabela
 let cdTotal = [];
 let meuLote;
@@ -53,7 +50,7 @@ function fetchMunicipio(){
   document.getElementById("cod_ibge").disabled = true;
 
   //preenche os campos para estado e municipio
-  let answer = fetch('http://localhost:8080/read/municipio', {
+  let answer = fetch(servidor + 'read/municipio', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -96,7 +93,7 @@ function fetchMunicipio(){
 
 function fetchLote(){
   //preenche os cod_lotes
-  fetch('http://localhost:8080/read/lote', {
+  fetch(servidor + 'read/lote', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -180,7 +177,7 @@ function paginacao() {
   let fim = (contador + 1) * porPagina;
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/cd', {
+  fetch(servidor + 'read/cd', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -401,7 +398,7 @@ function enviar() {
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/cd', {
+  fetch(servidor + 'read/cd', {
     method: 'POST',
     body: corpo,
     headers: {

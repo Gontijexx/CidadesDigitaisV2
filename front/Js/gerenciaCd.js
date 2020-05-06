@@ -1,6 +1,3 @@
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //estruturas para as tabelas de Itens
 let listaItem = [];
 let meuItem = [],
@@ -92,7 +89,7 @@ function enviar() {
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/cd/' + meuCD, {
+  fetch(servidor + 'read/cd/' + meuCD, {
     method: 'PUT',
     body: corpo,
     headers: {
@@ -130,7 +127,7 @@ function itens() {
   document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
 
   //função fetch para chamar itens da tabela
-  fetch('http://localhost:8080/read/cditens', {
+  fetch(servidor + 'read/cditens', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -217,7 +214,7 @@ function editarItem() {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar
-      fetch('http://localhost:8080/read/cditens/' + meuCD + '/' + meuItem[i] + '/' + meuTipo[i], {
+      fetch(servidor + 'read/cditens/' + meuCD + '/' + meuItem[i] + '/' + meuTipo[i], {
         method: 'PUT',
         body: corpo,
         headers: {

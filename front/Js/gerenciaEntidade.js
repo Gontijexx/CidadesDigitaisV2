@@ -1,6 +1,3 @@
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //pega o CNPJ escolhido anteriormente
 let meuCNPJ = localStorage.getItem("cnpj");
 let meuNome = localStorage.getItem("nome");
@@ -39,7 +36,7 @@ function erros(value) {
 
 window.onload = function () {
 
-  fetch('http://localhost:8080/read/municipio', {
+  fetch(servidor + 'read/municipio', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -141,7 +138,7 @@ function enviar(){
   let corpo = JSON.stringify(info);
   console.log(corpo);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/entidade/' + meuCNPJ, {
+  fetch(servidor + 'read/entidade/' + meuCNPJ, {
     method: 'PUT',
     body: corpo,
     headers: {

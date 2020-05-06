@@ -69,7 +69,7 @@ javascript:
 function apagarEntidade(valor) {
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/entidade/' + entQuery[valor].cnpj, {
+  fetch(servidor + 'read/entidade/' + entQuery[valor].cnpj, {
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + meuToken

@@ -54,3 +54,10 @@ $(document).ready(function () {
     $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
     $('.preco').mask('0.000.000.000,00', {reverse: true});
 });
+
+//para definir o ip do servidor (ou algo do tipo, podem corrigir)
+let servidor = "http://localhost:8080/";
+
+
+//pega o token do login
+let meuToken = localStorage.getItem("token");

@@ -1,9 +1,6 @@
 //Fazer Tabela
 let listaModulo = [];
 
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //pega o usuario logado
 let userLogado = localStorage.getItem("logado");
 
@@ -74,7 +71,7 @@ function paginacao() {
   let fim = (contador + 1) * porPagina;
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario', {
+  fetch(servidor + 'read/usuario', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -328,7 +325,7 @@ window.onload = function () {
   //Fazer Tabela para Modulos
 
   //função fetch para mandar itens do modulo
-  fetch('http://localhost:8080/read/modulo', {
+  fetch(servidor + 'read/modulo', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -457,7 +454,7 @@ function enviar() {
   let corpo = JSON.stringify(info);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario/createuser', {
+  fetch(servidor + 'read/usuario/createuser', {
     method: 'POST',
     body: corpo,
     headers: {
@@ -500,7 +497,7 @@ function enviarModulo() {
   let infoModulo = JSON.stringify(modulo);
 
   //função fetch para mandar
-  fetch('http://localhost:8080/read/usuario/' + 1 + '/modulo', {
+  fetch(servidor + 'read/usuario/' + 1 + '/modulo', {
     method: 'POST',
     body: infoModulo,
     headers: {

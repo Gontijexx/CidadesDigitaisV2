@@ -1,6 +1,3 @@
-//pega o token do login
-let meuToken = localStorage.getItem("token");
-
 //guarda info pra ser usado assim depois
 let info = {};
 
@@ -164,7 +161,7 @@ function visEtapa() {
 
 function selectNatureza(){
 
-  fetch('http://localhost:8080/read/naturezadespesa', {
+  fetch(servidor + 'read/naturezadespesa', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -187,7 +184,7 @@ function selectNatureza(){
 
 function selectClasse(){
 
-  fetch('http://localhost:8080/read/classeempenho', {
+  fetch(servidor + 'read/classeempenho', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -408,7 +405,7 @@ function visNaturezaDespesa() {
 
 function selectPrefeitos(){
 
-  fetch('http://localhost:8080/read/municipio', {
+  fetch(servidor + 'read/municipio', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -536,7 +533,7 @@ function mandar(caminho) {
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch('http://localhost:8080/read/' + caminho, {
+  fetch(servidor + 'read/' + caminho, {
     method: 'POST',
     body: corpo,
     headers: {
@@ -563,7 +560,7 @@ function mandar(caminho) {
 
 function visualizar(caminho, estrutura) {
   //função fetch para chamar os itens de previsão da tabela
-  fetch('http://localhost:8080/read/' + caminho, {
+  fetch(servidor + 'read/' + caminho, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken

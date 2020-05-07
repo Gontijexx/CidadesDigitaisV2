@@ -43,18 +43,20 @@ function paginacao() {
     if (response.status == 200) {
       //console.log(response.statusText);
 
-      //pegar o json que possui a tabela
       response.json().then(function (json) {
-
+        
         totalPaginas = json.length / porPagina;
+
+        //pegar o json
+        //console.log(json);
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
-        <th style="width:10%" scope="col">Código do Lote</th>
         <th style="width:10%" scope="col">Código de Previsão de Empenho</th>
+        <th style="width:10%" scope="col">Código do Lote</th>
         <th style="width:40%" scope="col">Natureza da despesa</th>
-        <th style="width:10%" scope="col">Tipo</th>
-        <th style="width:20%" scope="col">Data</th>
+        <th style="width:20%" scope="col">Tipo</th>
+        <th style="width:10%" scope="col">Data</th>
         <th style="width:10%" scope="col">Ano de Referência</th>
         </tr>
         </thead>`);
@@ -65,11 +67,11 @@ function paginacao() {
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += json[i]["cod_lote"];
-          tabela += (`</td><td>`);
           tabela += json[i]["cod_previsao_empenho"];
           tabela += (`</td><td>`);
-          tabela += json[i]["cod_natureza_despesa"];
+          tabela += json[i]["cod_lote"];
+          tabela += (`</td><td>`);
+          tabela += json[i]["natureza_despesa"];
           tabela += (`</td><td>`);
           tabela += json[i]["tipo"];
           tabela += (`</td><td>`);
@@ -79,6 +81,11 @@ function paginacao() {
           tabela += (`</td><td>`);
           tabela += json[i]["ano_referencia"];
           tabela += (`</td>`);
+          tabela += (`<td>
+          <button onclick="apagarReajuste(` + listaReajuste[i]["ano_ref"] + `)" class="btn btn-danger">
+          <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
+          </button>
+          </td>`);
           tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);

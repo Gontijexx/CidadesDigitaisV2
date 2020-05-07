@@ -171,9 +171,10 @@ function reajuste() {
           tabela += listaReajuste[i]["ano_ref"];
           tabela += (`</td>`);
           tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="number">`) + "%";
-          tabela += (`<td>
-          <button onclick="apagarReajuste(` + listaReajuste[i]["ano_ref"] + `)" class="btn btn-danger">
-          <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
+          tabela += (`<td> 
+          <span class="d-flex">
+          <button onclick="editarPrevisao(` + i + `)" class="btn btn-success">
+          <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
           </button>
           </td>`);
           tabela += (`</tr>`);

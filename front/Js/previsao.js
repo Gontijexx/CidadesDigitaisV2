@@ -69,7 +69,7 @@ function paginacao() {
           tabela += (`</td><td>`);
           tabela += json[i]["cod_previsao_empenho"];
           tabela += (`</td><td>`);
-          tabela += json[i]["cod_natureza_despesa"];
+          tabela += json[i]["natureza_despesa"];
           tabela += (`</td><td>`);
           tabela += json[i]["tipo"];
           tabela += (`</td><td>`);

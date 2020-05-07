@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Visualizar Empenho</title>
+    <title>Empenho</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -33,11 +33,12 @@
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <h2>Visualizar Lista de Empenho</h2>
+                                    <h2>Empenho</h2>
                                 </div>
                                 <div class="col-sm-8">
                                     <a href="./empenhoVisualizar.html" class="btn btn-primary">
                                         <i class="material-icons">&#xE863;</i><span>Atualizar Lista</span></a>
+                                        <a href="#addEmployeeModal" class="btn btn-success" onclick="pegarPrevisao()" data-toggle="modal"><i class="material-icons">&#xE147;</i><span>Adicionar</span></a>
                                 </div>
                             </div>
                         </div>
@@ -79,12 +80,61 @@
             </div>
         </section>
     </main>
+    
+    <!-- ADD Modal HTML -->
+    <div id="addEmployeeModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Adicionar uma Cidade Digital</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="multisteps-form">
+                        <div class="row">
+                            <div class="col-12 col-lg-12 m-auto">
+                                <form class="multisteps-form__form" style="height: 307px;">
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3 class="multisteps-form__title">Informações do Empenho</h3>
+
+                                        <div class="multisteps-form__content">
+                                            <div class="form-row mt-4">
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input type="text" class="multisteps-form__input form-control" id="cod_empenho" maxlength="13" value="Código de Empenho"></input>
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <select type="text" class="multisteps-form__input form-control" id="uf"></select>
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <select type="text" class="multisteps-form__input form-control" id="nome_municipio"></select>
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input type="text" class="form-control" id="data" value="Data"></input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="button-row d-flex mt-4">
+                                        <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                            type="button" onclick="enviar()" title="Next">Cadastrar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Menu de cabeçalho -->
     <div class="fixed-bottom">
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 </body>
-<script src="./Js/empenhoVisualizar.js"></script>
+<script src="./Js/empenho.js"></script>
 <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 

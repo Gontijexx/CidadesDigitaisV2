@@ -98,8 +98,8 @@ function enviar() {
 function itens() {
 
   //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
-  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Editar</button>`);
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Salvar Alterações em Itens</button>`);
+  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Salvar Alterações em Itens</button>`);
 
   //função fetch para chamar itens da tabela
   fetch(servidor + 'read/cditens', {

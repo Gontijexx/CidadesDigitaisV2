@@ -1,17 +1,11 @@
 window.onload = function () {
-  lote();
-  naturezaDespesa();
-
-  +
   paginacao();
 }
-
 
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
 let totalPaginas;
-
 
 function antes() {
   contador--;
@@ -24,7 +18,6 @@ function depois() {
 }
 
 //garantindo o limite de paginação
-
 function pagina(valor) {
   contador = valor;
   paginacao();
@@ -214,21 +207,8 @@ function paginacao() {
 
 
 
-
-
-
-
-
-//  JSON usado para mandar as informações no fetch
-let info = {
-  "cod_lote": "",
-  "cod_natureza_despesa": "",
-  "data": "",
-  "tipo": "",
-  "ano_referencia": "",
-};
-
-function lote() {
+//funções para enviar
+function pegarLote() {
   fetch(servidor + 'read/lote', {
     method: 'GET',
     headers: {
@@ -252,7 +232,7 @@ function lote() {
   });
 }
 
-function naturezaDespesa() {
+function pegarNaturezaDespesa() {
   fetch(servidor + 'read/naturezadespesa', {
     method: 'GET',
     headers: {
@@ -271,8 +251,6 @@ function naturezaDespesa() {
         }
         document.getElementById("cod_natureza_despesa").innerHTML = x;
       });
-
-
     } else {
       erros(response.status);
     }
@@ -281,6 +259,15 @@ function naturezaDespesa() {
 
 
 function enviar() {
+
+  //  JSON usado para mandar as informações no fetch
+  let info = {
+    "cod_lote": "",
+    "cod_natureza_despesa": "",
+    "data": "",
+    "tipo": "",
+    "ano_referencia": "",
+  };
 
   info.cod_lote = parseInt(document.getElementById("cod_lote").value);
   info.cod_natureza_despesa = parseInt(document.getElementById("cod_natureza_despesa").value);

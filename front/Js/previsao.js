@@ -81,9 +81,10 @@ function paginacao() {
           tabela += (`</td><td>`);
           tabela += json[i]["ano_referencia"];
           tabela += (`</td>`);
-          tabela += (`<td>
-          <button onclick="apagarReajuste(` + listaReajuste[i]["ano_ref"] + `)" class="btn btn-danger">
-          <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
+          tabela += (`<td> 
+          <span class="d-flex">
+          <button onclick="editarLote(` + i + `)" class="btn btn-success">
+          <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
           </button>
           </td>`);
           tabela += (`</tr>`);

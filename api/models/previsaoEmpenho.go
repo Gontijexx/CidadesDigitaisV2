@@ -12,6 +12,7 @@ type PrevisaoEmpenho struct {
 	CodPrevisaoEmpenho uint32 `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;auto_increment;not null" json:"cod_previsao_empenho"`
 	CodLote            uint32 `gorm:"foreign_key:CodLote;not null" json:"cod_lote"`
 	CodNaturezaDespesa uint32 `gorm:"foreign_key:CodNaturezaDespesa;not null" json:"cod_natureza_despesa"`
+	NaturezaDespesa    string `gorm:"default:null" json:"natureza_despesa"`
 	Data               string `gorm:"default:null" json:"data"`
 	Tipo               string `gorm:"default:null" json:"tipo"`
 	Ano_referencia     uint32 `gorm:"default:null" json:"ano_referencia"`
@@ -56,7 +57,7 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]
 	allPrevisaoEmpenho := []PrevisaoEmpenho{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Table("previsao_empenho").Select("natureza_despesa.descricao, previsao_empenho.*").
+	err := db.Debug().Table("previsao_empenho").Select("CONCAT(natureza_despesa.cod_natureza_despesa, ' - ',natureza_despesa.descricao) AS natureza_despesa, previsao_empenho.*").
 		Joins("JOIN natureza_despesa ON previsao_empenho.cod_natureza_despesa = natureza_despesa.cod_natureza_despesa ORDER BY previsao_empenho.cod_previsao_empenho ASC").Scan(&allPrevisaoEmpenho).Error
 	if err != nil {
 		return &[]PrevisaoEmpenho{}, err

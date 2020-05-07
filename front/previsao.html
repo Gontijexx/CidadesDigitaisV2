@@ -36,8 +36,8 @@
                                     <h2>Previsão de Empenho</h2>
                                 </div>
                                 <div class="col-sm-8">
-                                    <a href="./previsaoVisualizar.html" class="btn btn-primary">
-                                        <i class="material-icons">&#xE863;</i><span>Atualizar Lista</span></a>
+                                    <a href="./previsaoVisualizar.html" class="btn btn-primary"><i class="material-icons">&#xE863;</i><span>Atualizar Lista</span></a>
+                                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal" onclick="pegarLote();pegarNaturezaDespesa();"><i class="material-icons">&#xE147;</i><span>Adicionar</span></a>
                                 </div>
                             </div>
                         </div>
@@ -100,24 +100,27 @@
 
                                         <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-6 mt-4">
-                                                    <input type="text" class="multisteps-form__input form-control" id="cod_empenho" maxlength="13" value="Código de Empenho"></input>
+                                                <div class="col-12 col-sm-3 mt-4">
+                                                    <select type="text" class="multisteps-form__input form-control" id="cod_lote" maxlength="13" value="Código do Lote"></select>
+                                                </div>
+                                                <div class="col-12 col-sm-3 mt-4">
+                                                    <input type="text" class="multisteps-form__input form-control" id="data" value="Data"></input>
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
-                                                    <select type="text" class="multisteps-form__input form-control" id="uf"></select>
+                                                    <select type="text" class="multisteps-form__input form-control" id="cod_natureza_despesa"></select>
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
-                                                    <select type="text" class="multisteps-form__input form-control" id="nome_municipio"></select>
+                                                    <input type="text" class="form-control" id="tipo" value="Tipo"></input>
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
-                                                    <input type="text" class="form-control" id="data" value="Data"></input>
+                                                    <input type="text" class="form-control" id="ano_referencia" value="Ano de Referência"></input>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="button-row d-flex mt-4">
-                                        <button class="btn btn-primary multi-button ml-auto js-btn-next"
-                                            type="button" onclick="enviar()" title="Next">Cadastrar</button>
+                                        <div class="button-row d-flex mt-4">
+                                            <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                type="button" onclick="enviar()" title="Next">Cadastrar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>

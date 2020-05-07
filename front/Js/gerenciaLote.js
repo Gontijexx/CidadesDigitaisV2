@@ -18,16 +18,6 @@ let reajusteMudado = [];
 //cuida de previsao de empenho
 let listaPrevisao = [];
 
-//JSON usado para mandar as informações no fetch
-let info = {
-  "cod_lote": "",
-  "cnpj": "",
-  "contrato": "",
-  "dt_inicio_vig": "",
-  "dt_final_vig": "",
-  "dt_reajuste": "",
-};
-
 function pegarEntidade(){
   fetch(servidor + 'read/entidadeget', {
     method: 'GET',
@@ -39,6 +29,7 @@ function pegarEntidade(){
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
+        //pegar o json
         //console.log(json);
         let x = [];
         for (i = 0; i < json.length; i++) {
@@ -84,6 +75,16 @@ window.onload = function () {
 }
 
 function enviar() {
+
+  //JSON usado para mandar as informações no fetch
+  let info = {
+    "cod_lote": "",
+    "cnpj": "",
+    "contrato": "",
+    "dt_inicio_vig": "",
+    "dt_final_vig": "",
+    "dt_reajuste": "",
+  };
 
   info.cod_lote = parseFloat(meuLote);
   info.cnpj = document.getElementById("cnpj").value;

@@ -333,7 +333,7 @@ function previsao() {
           tabela += (`<td>`);
           tabela += listaPrevisao[i]["cod_previsao_empenho"];
           tabela += (`</td><td>`);
-          tabela += listaPrevisao[i]["cod_natureza_despesa"];
+          tabela += listaPrevisao[i]["natureza_despesa"];
           tabela += (`</td><td>`);
           tabela += listaPrevisao[i]["tipo"];
           tabela += (`</td><td>`);

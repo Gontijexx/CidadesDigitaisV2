@@ -45,8 +45,9 @@ function paginacao() {
     if (response.status == 200) {
 
       response.json().then(function (json) {
-        //pegar o json que possui a tabela
-        console.log(json);
+
+        //pegar o json
+        //console.log(json);
 
         totalPaginas = json.length / porPagina;
 

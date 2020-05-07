@@ -10,7 +10,6 @@ import (
 
 type NaturezaDespesa struct {
 	CodNaturezaDespesa uint32 `gorm:"primary_key;not null" json:"cod_natureza_despesa"`
-	NaturezaDespesa    string `gorm:"default:null" json:"natureza_despesa"`
 	Descricao          string `gorm:"default:null" json:"descricao"`
 }
 
@@ -53,7 +52,7 @@ func (naturezaDespesa *NaturezaDespesa) FindAllNaturezaDespesa(db *gorm.DB) (*[]
 	allNaturezaDespesa := []NaturezaDespesa{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Table("natureza_despesa").Select("CONCAT(cod_natureza_despesa, ' - ', descricao) AS natureza_despesa, natureza_despesa.*").Scan(&allNaturezaDespesa).Error
+	err := db.Debug().Model(&NaturezaDespesa{}).Find(&allNaturezaDespesa).Error
 	if err != nil {
 		return &[]NaturezaDespesa{}, err
 	}

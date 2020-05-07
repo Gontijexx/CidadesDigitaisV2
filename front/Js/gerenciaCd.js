@@ -121,8 +121,7 @@ function itens() {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
                 <tr>
-                <th scope="col">Código do item</th>
-                <th scope="col">Código do tipo de item</th>
+                <th scope="col">Descrição</th>
                 <th scope="col">Quantidade prevista</th>
                 <th scope="col">Quantidade do projeto executivo</th>
                 <th scope="col">Quantidade de termo de instalação </th>
@@ -146,9 +145,7 @@ function itens() {
 
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += listaItem[i]["cod_item"];
-          tabela += (`</td> <td>`);
-          tabela += listaItem[i]["cod_tipo_item"];
+          tabela += listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `" onchange="mudaItem(` + i + `)" id="quantidade_previsto` + i + `" type="text">`);
           tabela += (`</td> <td>`);

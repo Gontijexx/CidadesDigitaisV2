@@ -7,120 +7,10 @@ let cidades = [];
 document.getElementById("cod_ibge").disabled = true;
 
 
-//Fazer Entidade
-let info = {
-  "cod_ibge": " ",
-  "cod_lote": " ",
-  "os_pe": " ",
-  "data_pe": " ",
-  "os_imp": " ",
-  "data_imp": " "
-};
-
-
-
-function pegarLote() {
-  //preenche os cod_lotes
-  fetch(servidor + 'read/lote', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //cria variaveis
-        let i = 0;
-        let x = [];
-        for (i = 0; i < json.length; i++) {
-          x[i + 1] += "<option>" + json[i].cod_lote + "</option>";
-        }
-        x[0] += "<option value=''>Código do Lote</option>";
-        document.getElementById("cod_lote").innerHTML = x;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
-
-
-function pegarMunicipio() {
-
-  document.getElementById("cod_ibge").innerHTML = "<option value=''>Cidade</option>";
-  document.getElementById("cod_ibge").disabled = true;
-
-  //preenche os campos para estado e municipio
-  let answer = fetch(servidor + 'read/municipio', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //pegando valores para usar em municipios
-        cidades = json;
-        //cria variaveis
-        let i, j = 0;
-        let x = [],
-          valorUF = [],
-          valorFinalUF = [];
-
-        //faz a ligação entre variaveis e valores do banco
-        for (i = 0; i < json.length; i++) {
-          valorUF[i] = json[i].uf;
-          if (i != 0 && valorUF[i] != valorUF[i - 1]) {
-            valorFinalUF[j] = valorUF[i];
-            j++;
-          }
-        }
-        x[0] += "<option value=''>Estado</option>";
-        for (i = 0; i < j; i++) {
-          x[i + 1] += "<option>" + valorFinalUF[i] + "</option>";
-        }
-        x.sort();
-        document.getElementById("uf").innerHTML = x;
-        paginacao();
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
-
-function enabler() {
-
-  document.getElementById("cod_ibge").disabled = false;
-  let uf = document.getElementById("uf");
-  let i, j = 0,
-    x = [],
-    cidadesFinal = [];
-  for (i = 0; i < cidades.length; i++) {
-    if (cidades[i].uf == uf.value) {
-      cidadesFinal[j] = cidades[i];
-      j++;
-    }
-  }
-  for (i = 0; i < cidadesFinal.length; i++) {
-    x[i] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
-  }
-  x.sort();
-  document.getElementById("cod_ibge").innerHTML = x;
-}
-
-
-
 window.onload = function () {
+  this.paginacao();
   this.pegarMunicipio();
 }
-
 
 
 //sistema de paginação
@@ -169,6 +59,9 @@ function paginacao() {
         totalPaginas = Math.floor(json.length / porPagina);
         console.log(totalPaginas);
 
+        //testar o json
+        //console.log(json);
+
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th scope="col">Código IBGE do Município</th>
@@ -188,7 +81,7 @@ function paginacao() {
           tabela += (`<td>`);
           tabela += json[i]["cod_ibge"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["nome_municipio"] + " - " + json[i]["uf"];
+          tabela += json[i]["nome_municipio"];
           tabela += (`</td> <td>`);
           tabela += json[i]["cod_lote"];
           tabela += (`</td> <td>`);
@@ -351,7 +244,118 @@ function editarCd(valor) {
 
 
 
+
+
+//funções para preencher os selects corretamente
+
+function pegarLote() {
+  //preenche os cod_lotes
+  fetch(servidor + 'read/lote', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //cria variaveis
+        let i = 0;
+        let x = [];
+        for (i = 0; i < json.length; i++) {
+          x[i + 1] += "<option>" + json[i].cod_lote + "</option>";
+        }
+        x[0] += "<option value=''>Código do Lote</option>";
+        document.getElementById("cod_lote").innerHTML = x;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+function pegarMunicipio() {
+
+  document.getElementById("cod_ibge").innerHTML = "<option value=''>Cidade</option>";
+  document.getElementById("cod_ibge").disabled = true;
+
+  //preenche os campos para estado e municipio
+  let answer = fetch(servidor + 'read/municipio', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //pegando valores para usar em municipios
+        cidades = json;
+        //cria variaveis
+        let i, j = 0;
+        let x = [],
+          valorUF = [],
+          valorFinalUF = [];
+
+        //faz a ligação entre variaveis e valores do banco
+        for (i = 0; i < json.length; i++) {
+          valorUF[i] = json[i].uf;
+          if (i != 0 && valorUF[i] != valorUF[i - 1]) {
+            valorFinalUF[j] = valorUF[i];
+            j++;
+          }
+        }
+        x[0] += "<option value=''>Estado</option>";
+        for (i = 0; i < j; i++) {
+          x[i + 1] += "<option>" + valorFinalUF[i] + "</option>";
+        }
+        x.sort();
+        document.getElementById("uf").innerHTML = x;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+function enabler() {
+
+  document.getElementById("cod_ibge").disabled = false;
+  let uf = document.getElementById("uf");
+  let i, j = 0,
+    x = [],
+    cidadesFinal = [];
+  for (i = 0; i < cidades.length; i++) {
+    if (cidades[i].uf == uf.value) {
+      cidadesFinal[j] = cidades[i];
+      j++;
+    }
+  }
+  for (i = 0; i < cidadesFinal.length; i++) {
+    x[i] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
+  }
+  x.sort();
+  document.getElementById("cod_ibge").innerHTML = x;
+}
+
+
+
 function enviar() {
+
+  //Fazer Cidade
+  let info = {
+    "cod_ibge": " ",
+    "cod_lote": " ",
+    "os_pe": " ",
+    "data_pe": " ",
+    "os_imp": " ",
+    "data_imp": " "
+  };
 
   info.cod_ibge = parseInt(document.getElementById("cod_ibge").value);
   info.cod_lote = parseInt(document.getElementById("cod_lote").value);

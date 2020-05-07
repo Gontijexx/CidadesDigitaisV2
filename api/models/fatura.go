@@ -11,9 +11,10 @@ import (
 =========================	*/
 
 type Fatura struct {
-	NumNF   uint32 `gorm:"primary_key;not null" json:"num_nf"`
-	CodIbge uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
-	DtNf    string `gorm:"default:null" json:"dt_nf"`
+	NumNF     uint32 `gorm:"primary_key;not null" json:"num_nf"`
+	CodIbge   uint32 `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	Municipio string `gorm:"default:null" json:"municipio"`
+	DtNf      string `gorm:"default:null" json:"dt_nf"`
 }
 
 /*  =========================
@@ -55,7 +56,8 @@ func (fatura *Fatura) FindAllFatura(db *gorm.DB) (*[]Fatura, error) {
 	allFatura := []Fatura{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Fatura{}).Find(&allFatura).Error
+	err := db.Debug().Table("fatura").Select("CONCAT(municipio.nome_municipio, ' - ', municipio.uf, ' - ', fatura.cod_ibge) AS municipio, fatura.*").
+		Joins("JOIN municipio ON fatura.cod_ibge = municipio.cod_ibge").Scan(&allFatura).Error
 	if err != nil {
 		return &[]Fatura{}, err
 	}

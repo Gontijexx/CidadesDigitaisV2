@@ -2,7 +2,6 @@ window.onload = function () {
   paginacao();
 }
 
-
 //sistema de paginação
 let contador = 0;
 let porPagina = 5;
@@ -53,11 +52,9 @@ function paginacao() {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
-        <th style="width:20%" scope="col">ID do Empenho</th>
-        <th style="width:20%" scope="col">Código da Previsão de Empenho</th>
-        <th style="width:20%" scope="col">Código do Empenho</th>
+        <th style="width:40%" scope="col">Código de Empenho</th>
+        <th style="width:40%" scope="col">Código do Lote</th>
         <th style="width:20%" scope="col">Data</th>
-        <th style="width:20%" scope="col">Contador</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
@@ -67,17 +64,13 @@ function paginacao() {
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += json[i]["id_empenho"];
-          tabela += (`</td><td>`);
-          tabela += json[i]["cod_previsao_empenho"];
-          tabela += (`</td><td>`);
           tabela += json[i]["cod_empenho"];
+          tabela += (`</td><td>`);
+          tabela += json[i]["cod_lote"];
           tabela += (`</td><td>`);
           let data1 = new Date(json[i]["data"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
-          tabela += (`</td><td>`);
-          tabela += json[i]["contador"];
           tabela += (`</td>`);
           tabela += (`</tr>`);
         }
@@ -199,6 +192,74 @@ function paginacao() {
         }
 
       });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+//no botão de adicionar
+function pegarPrevisao() {
+  fetch(servidor + 'read/previsaoempenho', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //console.log(json);
+        let x = [];
+        for (i = 0; i < json.length; i++) {
+          x[i] += "<option >" + json[i].cod_previsao_empenho + "</option>";
+        }
+        document.getElementById("cod_previsao_empenho").innerHTML = x;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function enviar() {
+
+  //  JSON usado para mandar as informações no fetch
+  let info = {
+    "cod_previsao_empenho": "",
+    "cod_empenho": "",
+    "data": "",
+  };
+
+  info.cod_previsao_empenho = parseInt(document.getElementById("cod_previsao_empenho").value);
+  info.cod_empenho = document.getElementById("cod_empenho").value;
+  info.data = document.getElementById("data").value;
+
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(info);
+  console.log(corpo);
+  //função fetch para mandar
+  fetch(servidor + 'read/empenho', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar o status do pedido
+    //console.log(response);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      //checar o json
+      //response.json().then(function (json) {
+      //console.log(json);
+      //});
+      window.location.replace("./fiscalizacao.html");
     } else {
       erros(response.status);
     }

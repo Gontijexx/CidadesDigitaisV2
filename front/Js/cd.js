@@ -188,11 +188,7 @@ function paginacao() {
           tabela += (`<td>`);
           tabela += json[i]["cod_ibge"];
           tabela += (`</td> <td>`);
-          for (let j = 0; j < cidades.length; j++) {
-            if (cidades[j]["cod_ibge"] == json[i]["cod_ibge"]) {
-              tabela += cidades[j]["nome_municipio"] + " - " + cidades[j]["uf"];
-            }
-          }
+          tabela += json[i]["nome_municipio"] + " - " + json[i]["uf"];
           tabela += (`</td> <td>`);
           tabela += json[i]["cod_lote"];
           tabela += (`</td> <td>`);

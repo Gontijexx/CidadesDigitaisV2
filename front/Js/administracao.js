@@ -1,7 +1,6 @@
 //guarda info pra ser usado assim depois
 let info = {};
 
-
 //captura valores para os "selects" futuros
 let resultadoClasse;
 let resultadoNatureza;

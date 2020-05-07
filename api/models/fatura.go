@@ -57,7 +57,7 @@ func (fatura *Fatura) FindAllFatura(db *gorm.DB) (*[]Fatura, error) {
 
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("fatura").Select("CONCAT(municipio.nome_municipio, ' - ', municipio.uf, ' - ', fatura.cod_ibge) AS municipio, fatura.*").
-		Joins("JOIN municipio ON fatura.cod_ibge = municipio.cod_ibge ORDER BY municipio.uf, municipio.nome_municipio ASC ").Scan(&allFatura).Error
+		Joins("JOIN municipio ON fatura.cod_ibge = municipio.cod_ibge ORDER BY municipio.uf, municipio.nome_municipio, fatura.num_nf ASC ").Scan(&allFatura).Error
 	if err != nil {
 		return &[]Fatura{}, err
 	}

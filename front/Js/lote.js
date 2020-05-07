@@ -94,7 +94,7 @@ function paginacao() {
           let dataf3 = String(data3.getDate()).padStart(2, '0') + '/' + String(data3.getMonth() + 1).padStart(2, '0') + '/' + String(data3.getFullYear()).padStart(4, '0');
           tabela += dataf3;
 
-          tabela += (`</td> <td> 
+          tabela += (`</td><td> 
                   <span class="d-flex">
                   <button onclick="editarLote(` + i + `)" class="btn btn-success">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>

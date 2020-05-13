@@ -10,6 +10,7 @@ type Empenho struct {
 	IDEmpenho          uint32 `gorm:"primary_key;auto_increment;default:not null" json:"id_empenho"`
 	CodPrevisaoEmpenho uint32 `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
 	CodEmpenho         string `gorm:"not null;size:13" json:"cod_empenho"`
+	CodLote            uint32 `gorm:"default:null" json:"cod_lote"`
 	Data               string `gorm:"default:null" json:"data"`
 	Contador           uint32 `gorm:"default:null" json:"contador"`
 }
@@ -53,7 +54,8 @@ func (empenho *Empenho) FindAllEmpenho(db *gorm.DB) (*[]Empenho, error) {
 	allEmpenho := []Empenho{}
 
 	//	Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Empenho{}).Find(&allEmpenho).Error
+	err := db.Debug().Table("empenho").Select("previsao_empenho.cod_lote, empenho.*").
+		Joins("JOIN previsao_empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho ORDER BY empenho.id_empenho ASC").Scan(&allEmpenho).Error
 	if err != nil {
 		return &[]Empenho{}, err
 	}

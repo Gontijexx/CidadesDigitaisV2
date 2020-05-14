@@ -1,9 +1,11 @@
-let previsaoTotal = [];
+//variaveis globais
+let faturaTotal = [];
+let cdTotal = [];
+let cidades = [];
 
 window.onload = function () {
   paginacao();
-  //altera o campo tipos como pedido, pode alterar aqui se necessário
-  document.getElementById("tipo").innerHTML = "<option value=''>Tipo</option><option value='o'>Original</option><option value='r'>Reajuste</option>";
+  pegarCD();
 }
 
 //sistema de paginação
@@ -22,6 +24,7 @@ function depois() {
 }
 
 //garantindo o limite de paginação
+
 function pagina(valor) {
   contador = valor;
   paginacao();
@@ -33,7 +36,7 @@ function paginacao() {
   let fim = (contador + 1) * porPagina;
 
   //função fetch para chamar os itens de previsão da tabela
-  fetch(servidor + 'read/previsaoempenho', {
+  fetch(servidor + 'read/fatura', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -41,31 +44,23 @@ function paginacao() {
   }).then(function (response) {
 
     //checar os status de pedidos
-    //console.log(response)
+    //console.log(response);
 
     //tratamento dos erros
     if (response.status == 200) {
-      //console.log(response.statusText);
 
       response.json().then(function (json) {
-        
-        totalPaginas = json.length / porPagina;
-
-        //para edição
-        previsaoTotal=json;
-
-        //pegar o json
+        //pegar o json que possui a tabela
         //console.log(json);
+
+        totalPaginas = json.length / porPagina;
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
-        <th style="width:10%" scope="col">Código de Previsão de Empenho</th>
-        <th style="width:10%" scope="col">Código do Lote</th>
-        <th style="width:45%" scope="col">Natureza da despesa</th>
-        <th style="width:10%" scope="col">Tipo</th>
-        <th style="width:10%" scope="col">Data</th>
-        <th style="width:10%" scope="col">Ano de Referência</th>
-        <th style="width:5%" scope="col">Opções</th>
+        <th style="width:20%" scope="col">Número da Fatura</th>
+        <th style="width:50%" scope="col">Município</th>
+        <th style="width:20%" scope="col">Data</th>
+        <th style="width:10%" scope="col">Opções</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
@@ -75,36 +70,17 @@ function paginacao() {
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += json[i]["cod_previsao_empenho"];
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          tabela += json[i]["cod_lote"];
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          tabela += json[i]["natureza_despesa"];
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          if(json[i]["tipo"]=="o"){
-            tabela += "Original";
-          }
-          else if(json[i]["tipo"]=="r"){
-            tabela += "Reajuste";
-          }
-          else{
-            tabela += "";
-          }
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          let data1 = new Date(json[i]["data"]);
+          tabela += json[i]["num_nf"]; //está sendo enviado assim por algum motivo
+          tabela += (`</td><td>`);
+          tabela += json[i]["municipio"];
+          tabela += (`</td><td>`);
+          let data1 = new Date(json[i]["dt_nf"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
           tabela += (`</td>`);
-          tabela += (`<td>`);
-          tabela += json[i]["ano_referencia"];
-          tabela += (`</td>`);
           tabela += (`<td> 
           <span class="d-flex">
-          <button onclick="editarPrevisao(` + i + `)" class="btn btn-success">
+          <button onclick="editarFatura(` + i + `)" class="btn btn-success">
           <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
           </button>
           </td>`);
@@ -226,7 +202,6 @@ function paginacao() {
         } else {
           document.getElementById("proximo").style.visibility = "hidden";
         }
-
       });
     } else {
       erros(response.status);
@@ -236,10 +211,8 @@ function paginacao() {
 
 
 
-//funções para enviar
-
-function pegarLote() {
-  fetch(servidor + 'read/lote', {
+function pegarCD() {
+  fetch(servidor + 'read/cd', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -249,13 +222,7 @@ function pegarLote() {
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
-        //console.log(json);
-        let x = [];
-        x[0] = "<option value=''>Lote</option>";
-        for (i = 0; i < json.length; i++) {
-          x[i+1] += "<option >" + json[i].cod_lote + "</option>";
-        }
-        document.getElementById("cod_lote").innerHTML = x;
+        cdTotal=json;
       });
     } else {
       erros(response.status);
@@ -263,8 +230,13 @@ function pegarLote() {
   });
 }
 
-function pegarNaturezaDespesa() {
-  fetch(servidor + 'read/naturezadespesa', {
+function pegarMunicipio() {
+
+  document.getElementById("cod_ibge").innerHTML = "<option value=''>Cidade</option>";
+  document.getElementById("cod_ibge").disabled = true;
+
+  //preenche os campos para estado e municipio
+  let answer = fetch(servidor + 'read/municipio', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -274,43 +246,84 @@ function pegarNaturezaDespesa() {
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
-        //console.log(json);
-        let x = [];
+        //cria variaveis
+        let i, j = 0;
+        let x = [],
+          valorUF = [];
+
+        //impede que haja repetição
         for (i = 0; i < json.length; i++) {
-          // o valor pego é o codigo, mas o campo mostra a descrição
-          x[i] += "<option value=" + json[i].cod_natureza_despesa + ">" + json[i].descricao + "</option>";
+          if (i>0 && json[i].uf != json[i-1].uf) {
+            valorUF[j] = json[i];
+            j++;
+          }
         }
-        document.getElementById("cod_natureza_despesa").innerHTML = x;
+
+        //faz a ligação entre variaveis e valores do banco
+        let k = 0;
+        for (i = 0; i < valorUF.length; i++) {
+          for (j = 0; j < cdTotal.length; j++) {
+            if (cdTotal[j].uf == valorUF[i].uf) {
+              console.log("um");
+              cidades[k] = cdTotal[j];
+              k++;
+            }
+          }
+        }
+        x[0] += "<option value=''>Estado</option>";
+        for (i = 0; i < j; i++) {
+          x[i + 1] += "<option>" + cidades[i] + "</option>";
+        }
+        x.sort();
+        document.getElementById("uf").innerHTML = x;
       });
     } else {
       erros(response.status);
     }
   });
 }
+
+
+function enabler() {
+
+  document.getElementById("cod_ibge").disabled = false;
+  let uf = document.getElementById("uf");
+  let i, j = 0,
+    x = [],
+    cidadesFinal = [];
+  for (i = 0; i < cidades.length; i++) {
+    if (cidades[i].uf == uf.value) {
+      cidadesFinal[j] = cidades[i];
+      j++;
+    }
+  }
+  for (i = 0; i < cidadesFinal.length; i++) {
+    x[i] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
+  }
+  x.sort();
+  document.getElementById("cod_ibge").innerHTML = x;
+}
+
 
 
 function enviar() {
 
   //  JSON usado para mandar as informações no fetch
   let info = {
-    "cod_lote": "",
-    "cod_natureza_despesa": "",
-    "data": "",
-    "tipo": "",
-    "ano_referencia": "",
+    "num_nf": "",
+    "cod_ibge": "",
+    "dt_nf": "",
   };
 
-  info.cod_lote = parseInt(document.getElementById("cod_lote").value);
-  info.cod_natureza_despesa = parseInt(document.getElementById("cod_natureza_despesa").value);
-  info.data = document.getElementById("data").value;
-  info.tipo = document.getElementById("tipo").value;
-  info.ano_referencia = parseInt(document.getElementById("ano_referencia").value);
-
+  info.num_nf = parseInt(document.getElementById("num_nf").value);
+  info.cod_ibge = parseInt(document.getElementById("cod_ibge").value);
+  info.dt_nf = document.getElementById("dt_nf").value;
+  
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
   console.log(corpo);
   //função fetch para mandar
-  fetch(servidor + 'read/previsaoempenho', {
+  fetch(servidor + 'read/fatura', {
     method: 'POST',
     body: corpo,
     headers: {
@@ -327,7 +340,7 @@ function enviar() {
       //response.json().then(function (json) {
       //console.log(json);
       //});
-      window.location.replace("./fiscalizacao.html");
+      window.location.replace("./fatura.html");
     } else {
       erros(response.status);
     }
@@ -337,12 +350,9 @@ function enviar() {
 
 
 //leva para o editor do campo selecionado
-function editarPrevisao(valor) {
-  localStorage.setItem("cod_previsao_empenho", previsaoTotal[valor].cod_previsao_empenho);
-  localStorage.setItem("cod_lote", previsaoTotal[valor].cod_lote);
-  localStorage.setItem("cod_natureza_despesa", previsaoTotal[valor].cod_natureza_despesa);
-  localStorage.setItem("data", previsaoTotal[valor].data);
-  localStorage.setItem("tipo", previsaoTotal[valor].tipo);
-  localStorage.setItem("ano_referencia", previsaoTotal[valor].ano_referencia);
-  window.location.href = "./gerenciaPrevisao.html";
+function editarFatura(valor) {
+  localStorage.setItem("num_nf", faturaTotal[valor].num_nf);
+  localStorage.setItem("cod_ibge", faturaTotal[valor].cod_ibge);
+  localStorage.setItem("dt_nf", faturaTotal[valor].dt_nf);
+  window.location.href = "./gerenciaFatura.html";
 }

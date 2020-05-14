@@ -304,13 +304,9 @@ function enviar() {
   });
 }
 
-document.getElementById("cod_lote").oninput = function () {
-  if (this.value.length > 0) {
-    this.value = this.value.slice(0, 9);
-  }
-}
 
-//leva para o editor da lote selecionada
+
+//leva para o editor do campo selecionado
 function editarLote(valor) {
   localStorage.setItem("cod_lote", loteTotal[valor].cod_lote);
   localStorage.setItem("cnpj", loteTotal[valor].cnpj);

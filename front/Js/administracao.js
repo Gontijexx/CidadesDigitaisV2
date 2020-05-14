@@ -5,6 +5,7 @@ let info = {};
 let resultadoClasse;
 let resultadoNatureza;
 let resultadoPrefeitos;
+
 window.onload = function () {
   selectClasse();
   selectNatureza();
@@ -12,9 +13,9 @@ window.onload = function () {
 }
 
 
+
 //informaçãoes para assunto
 function addAssunto() {
-
   let formulario = (`<label for="descricao">Descrição</label>`);
   formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
@@ -22,14 +23,12 @@ function addAssunto() {
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioAssunto()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
-
 function envioAssunto() {
   info = {
     "descricao": document.getElementById("descricao").value,
   };
   mandar("assunto");
 }
-
 function visAssunto() {
   visualizar("assunto", [`<th style="width:20%" scope="col">Código do Assunto</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_assunto", "descricao"]);
@@ -39,7 +38,6 @@ function visAssunto() {
 
 //informaçãoes para categoria
 function addCategoria() {
-
   let formulario = (`<label for="descricao">Descrição</label>`);
   formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
@@ -47,14 +45,12 @@ function addCategoria() {
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioCategoria()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
-
 function envioCategoria() {
   info = {
     "descricao": document.getElementById("descricao").value,
   };
   mandar("categoria");
 }
-
 function visCategoria() {
   visualizar("categoria", [`<th style="width:20%" scope="col">Código da Categoria</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_categoria", "descricao"]);
@@ -64,7 +60,6 @@ function visCategoria() {
 
 //informaçãoes para classe de empenho
 function addClasseEmpenho() {
-
   let formulario = (`<label for="cod_classe_empenho">Código da Classe</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_classe_empenho" id="cod_classe_empenho"></input>`);
   formulario += (`<label for="descricao">Descrição</label>`);
@@ -74,7 +69,6 @@ function addClasseEmpenho() {
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioClasseEmpenho()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
-
 function envioClasseEmpenho() {
   info = {
     "cod_classe_empenho": parseInt(document.getElementById("cod_classe_empenho").value),
@@ -82,7 +76,6 @@ function envioClasseEmpenho() {
   };
   mandar("classeempenho");
 }
-
 function visClasseEmpenho() {
   visualizar("classeempenho", [`<th style="width:20%" scope="col">Código de Classe de Empenho</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_classe_empenho", "descricao"]);
@@ -92,7 +85,6 @@ function visClasseEmpenho() {
 
 //informaçãoes para etapas
 function addEtapa() {
-
   let formulario = (`<label for="descricao">Descrição</label>`);
   formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   formulario += (`<label for="duracao">Duração</label>`);
@@ -108,7 +100,6 @@ function addEtapa() {
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioEtapa()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
-
 function envioEtapa() {
   info = {
     "descricao": document.getElementById("descricao").value,
@@ -119,7 +110,6 @@ function envioEtapa() {
   };
   mandar("etapa");
 }
-
 function visEtapa() {
   visualizar("etapa", [`<th style="width:10%" scope="col">Código de Etapas</th>
   <th style="width:40%" scope="col">Descrição</th>
@@ -132,9 +122,7 @@ function visEtapa() {
 
 
 //informaçãoes para itens
-
 function selectNatureza() {
-
   fetch(servidor + 'read/naturezadespesa', {
     method: 'GET',
     headers: {
@@ -153,11 +141,8 @@ function selectNatureza() {
       erros(response.status);
     }
   });
-
 }
-
 function selectClasse() {
-
   fetch(servidor + 'read/classeempenho', {
     method: 'GET',
     headers: {
@@ -176,11 +161,8 @@ function selectClasse() {
       erros(response.status);
     }
   });
-
 }
-
 function addItem() {
-
   let formulario = (`<label for="cod_item">Código do Item</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_item" id="cod_item"></input>`);
   formulario += (`<label for="cod_tipo_item">Código do Tipo de Item</label>`);
@@ -205,9 +187,7 @@ function addItem() {
   document.getElementById("modalAdicao").innerHTML = formulario;
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioItem()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
-
 }
-
 function envioItem() {
   info = {
     "cod_item": parseInt(document.getElementById("cod_item").value),
@@ -219,9 +199,8 @@ function envioItem() {
   };
   mandar("itens");
 }
-
 function visItem() {
-  visualizar("itens", [`<th style="width:20%" scope="col">Código do Item</th>
+  visualizar("itens", [`<th style="width:10%" scope="col">Código do Item</th>
   <th style="width:10%" scope="col">Código do Tipo de Item</th>
   <th style="width:10%" scope="col">Código da Natureza</th>
   <th style="width:10%" scope="col">Código da Classe</th>
@@ -233,7 +212,6 @@ function visItem() {
 
 //informaçãoes para modulo
 function addModulo() {
-
   let formulario = (`<label for="cod_modulo">Código do Módulo</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_modulo" id="cod_modulo"></input>`);
   formulario += (`<label for="categoria_1">Categoria 1</label>`);
@@ -249,7 +227,6 @@ function addModulo() {
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioModulo()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
-
 function envioModulo() {
   info = {
     "cod_modulo": parseInt(document.getElementById("cod_modulo").value),
@@ -260,7 +237,6 @@ function envioModulo() {
   };
   mandar("modulo");
 }
-
 function visModulo() {
   visualizar("modulo", [`<th style="width:20%" scope="col">Código de Modulo</th>
   <th style="width:10%" scope="col">Categoria 1</th>
@@ -273,7 +249,6 @@ function visModulo() {
 
 //informaçãoes para municipio
 function addMunicipio() {
-
   let formulario = (`<label for="cod_ibge">Código do IBGE</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_ibge" id="cod_ibge"></input>`);
   formulario += (`<label for="nome_municipio">Nome do Município</label>`);
@@ -307,7 +282,6 @@ function addMunicipio() {
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioMunicipio()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
-
 function envioMunicipio() {
   info = {
     "cod_ibge": document.getElementById("cod_ibge").value,
@@ -327,7 +301,6 @@ function envioMunicipio() {
   };
   mandar("municipio");
 }
-
 function visMunicipio() {
   visualizar("municipio", [`<th style="width:5%" scope="col">Código do IBGE</th>
   <th style="width:10%" scope="col">Nome domunicípio</th>
@@ -349,7 +322,6 @@ function visMunicipio() {
 
 //informaçãoes para natureza de despesas
 function addNaturezaDespesa() {
-
   let formulario = (`<label for="cod_natureza_despesa">Código da Natureza</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_natureza_despesa" id="cod_natureza_despesa"></input>`);
   formulario += (`<label for="descricao">Descrição</label>`);
@@ -359,7 +331,6 @@ function addNaturezaDespesa() {
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioNaturezaDespesa()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
-
 function envioNaturezaDespesa() {
   info = {
     "cod_natureza_despesa": parseInt(document.getElementById("cod_natureza_despesa").value),
@@ -367,7 +338,6 @@ function envioNaturezaDespesa() {
   };
   mandar("naturezadespesa");
 }
-
 function visNaturezaDespesa() {
   visualizar("naturezadespesa", [`<th style="width:20%" scope="col">Código da Natureza da Despesa</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_natureza_despesa", "descricao"]);
@@ -376,9 +346,7 @@ function visNaturezaDespesa() {
 
 
 //informaçãoes para prefeitos
-
 function selectPrefeitos() {
-
   fetch(servidor + 'read/municipio', {
     method: 'GET',
     headers: {
@@ -398,10 +366,7 @@ function selectPrefeitos() {
     }
   });
 }
-
 function addPrefeitos() {
-
-  //estruturei este dentro do fetch para pegar mais facilmente o valor dentro do "for" a seguir
   let formulario = (`<label for="cod_prefeito">Código do Prefeito</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_prefeito" id="cod_prefeito"></input>`);
   formulario += (`<label for="cod_ibge">Código do IBGE</label>`);
@@ -424,9 +389,7 @@ function addPrefeitos() {
 
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioPrefeitos()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
-
 }
-
 function envioPrefeitos() {
   info = {
     "cod_ibge": parseInt(document.getElementById("cod_ibge").value),
@@ -438,21 +401,19 @@ function envioPrefeitos() {
   };
   mandar("prefeitos");
 }
-
 function visPrefeitos() {
-  visualizar("prefeitos", [`<th style="width:20%" scope="col">Código do IBGE</th>
-  <th style="width:80%" scope="col">Nome</th>
-  <th style="width:80%" scope="col">CPF</th>
-  <th style="width:80%" scope="col">RG</th>
-  <th style="width:80%" scope="col">Partido</th>
-  <th style="width:80%" scope="col">Exercício</th>`, "cod_ibge", "nome", "cpf", "rg", "partido", "exercicio"]);
+  visualizar("prefeitos", [`<th style="width:10%" scope="col">Código do IBGE</th>
+  <th style="width:10%" scope="col">Nome</th>
+  <th style="width:20%" scope="col">CPF</th>
+  <th style="width:20%" scope="col">RG</th>
+  <th style="width:20%" scope="col">Partido</th>
+  <th style="width:20%" scope="col">Exercício</th>`, "cod_ibge", "nome", "cpf", "rg", "partido", "exercicio"]);
 }
 
 
 
 //informaçãoes para Tipo de item
 function addTipoItem() {
-
   let formulario = (`<label for="cod_tipo_item">Código do Tipo de Item</label>`);
   formulario += (`<input class="multisteps-form__input form-control" name="cod_tipo_item" id="cod_tipo_item" maxlength="100"></input>`);
   formulario += (`<label for="descricao">Descrição</label>`);
@@ -462,7 +423,6 @@ function addTipoItem() {
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioTipoItem()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
-
 function envioTipoItem() {
   info = {
     "cod_tipo_item": parseInt(document.getElementById("cod_tipo_item").value),
@@ -470,7 +430,6 @@ function envioTipoItem() {
   };
   mandar("tipoitem");
 }
-
 function visTipoItem() {
   visualizar("tipoitem", [`<th style="width:20%" scope="col">Código de Tipo de Item</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_tipo_item", "descricao"]);
@@ -480,7 +439,6 @@ function visTipoItem() {
 
 //informaçãoes para Tipologia
 function addTipologia() {
-
   let formulario = (`<label for="descricao">Descrição</label>`);
   formulario += (`<textarea class="multisteps-form__input form-control" name="descricao" id="descricao" maxlength="45"></textarea>`);
   document.getElementById("modalAdicao").innerHTML = formulario;
@@ -488,14 +446,12 @@ function addTipologia() {
   let botao = (`<button class="btn btn-primary multi-button ml-auto js-btn-next" type="button" onclick="envioTipologia()" title="Next">Adicionar</button>`);
   document.getElementById("botaoEnvio").innerHTML = botao;
 }
-
 function envioTipologia() {
   info = {
     "descricao": document.getElementById("descricao").value,
   };
   mandar("tipologia");
 }
-
 function visTipologia() {
   visualizar("tipologia", [`<th style="width:20%" scope="col">Código de Tipologia</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_tipologia", "descricao"]);

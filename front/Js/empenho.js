@@ -51,11 +51,15 @@ function paginacao() {
 
         totalPaginas = json.length / porPagina;
 
+        //para edição
+        empenhoTotal=json;
+
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
         <th style="width:40%" scope="col">Código de Empenho</th>
-        <th style="width:40%" scope="col">Código do Lote</th>
+        <th style="width:30%" scope="col">Código do Lote</th>
         <th style="width:20%" scope="col">Data</th>
+        <th style="width:10%" scope="col">Opções</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
@@ -66,13 +70,21 @@ function paginacao() {
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += json[i]["cod_empenho"];
-          tabela += (`</td><td>`);
+          tabela += (`</td>`);
+          tabela += (`<td>`);
           tabela += json[i]["cod_lote"];
-          tabela += (`</td><td>`);
+          tabela += (`</td>`);
+          tabela += (`<td>`);
           let data1 = new Date(json[i]["data"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
           tabela += (`</td>`);
+          tabela += (`<td> 
+          <span class="d-flex">
+          <button onclick="editarEmpenho(` + i + `)" class="btn btn-success">
+          <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+          </button>
+          </td>`);
           tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);
@@ -215,8 +227,9 @@ function pegarPrevisao() {
       response.json().then(function (json) {
         //console.log(json);
         let x = [];
+        x[0] += "<option >Código do Lote da Previsão</option>";
         for (i = 0; i < json.length; i++) {
-          x[i] += "<option >" + json[i].cod_previsao_empenho + "</option>";
+          x[i+1] += "<option>" + json[i].cod_previsao_empenho + "</option>";
         }
         document.getElementById("cod_previsao_empenho").innerHTML = x;
       });
@@ -230,8 +243,8 @@ function enviar() {
 
   //  JSON usado para mandar as informações no fetch
   let info = {
-    "cod_previsao_empenho": "",
     "cod_empenho": "",
+    "cod_previsao_empenho": "",
     "data": "",
   };
 
@@ -241,7 +254,9 @@ function enviar() {
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
-  console.log(corpo);
+
+  //console.log(corpo);
+  
   //função fetch para mandar
   fetch(servidor + 'read/empenho', {
     method: 'POST',
@@ -256,13 +271,24 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
+      response.json().then(function (json) {
       //checar o json
-      //response.json().then(function (json) {
       //console.log(json);
-      //});
-      window.location.replace("./fiscalizacao.html");
+      });
+      window.location.replace("./empenho.html");
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
+}
+
+
+
+//leva para o editor do campo selecionado
+function editarEmpenho(valor) {
+  localStorage.setItem("id_empenho", empenhoTotal[valor].id_empenho);
+  localStorage.setItem("cod_empenho", empenhoTotal[valor].cod_empenho);
+  localStorage.setItem("cod_previsao_empenho", empenhoTotal[valor].cod_previsao_empenho);
+  localStorage.setItem("data", empenhoTotal[valor].data);
+  window.location.href = "./gerenciaEmpenho.html";
 }

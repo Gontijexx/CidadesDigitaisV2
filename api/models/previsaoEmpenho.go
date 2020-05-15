@@ -15,7 +15,7 @@ type PrevisaoEmpenho struct {
 	NaturezaDespesa    string `gorm:"default:null" json:"natureza_despesa"`
 	Data               string `gorm:"default:null" json:"data"`
 	Tipo               string `gorm:"default:null" json:"tipo"`
-	Ano_referencia     uint32 `gorm:"default:null" json:"ano_referencia"`
+	AnoReferencia      uint32 `gorm:"default:null" json:"ano_referencia"`
 }
 
 /*  =========================
@@ -73,7 +73,7 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]
 func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint32) (*PrevisaoEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Exec("UPDATE previsao_empenho SET cod_lote = ?, cod_natureza_despesa = ? ,data = ?, tipo = ?, ano_referencia = ? WHERE cod_previsao_empenho = ?", previsaoEmpenho.CodLote, previsaoEmpenho.CodNaturezaDespesa, previsaoEmpenho.Data, previsaoEmpenho.Tipo, previsaoEmpenho.Ano_referencia, codPrevisaoEmpenho)
+	db = db.Debug().Exec("UPDATE previsao_empenho SET cod_lote = ?, cod_natureza_despesa = ? ,data = ?, tipo = ?, ano_referencia = ? WHERE cod_previsao_empenho = ?", previsaoEmpenho.CodLote, previsaoEmpenho.CodNaturezaDespesa, previsaoEmpenho.Data, previsaoEmpenho.Tipo, previsaoEmpenho.AnoReferencia, codPrevisaoEmpenho)
 	if db.Error != nil {
 		return &PrevisaoEmpenho{}, db.Error
 	}
@@ -100,3 +100,53 @@ func (previsaoEmpenho *PrevisaoEmpenho) DeletePrevisaoEmpenho(db *gorm.DB, codPr
 }
 
 */
+
+/*  =========================
+	FUNCAO CALCULAR VALOR EM ITENS PREVISAO EMPENHO
+=========================  */
+
+func (previsaoEmpenho *PrevisaoEmpenho) CalculoValorItensPrevisaoEmpenho(db *gorm.DB) {
+
+	itensPrevisaoEmpenho := []ItensPrevisaoEmpenho{}
+	loteItens := LoteItens{}
+	reajuste := []Reajuste{}
+	var perCentoOrig float32 = 1.00
+	var perCentoReaj float32 = 1.00
+
+	//	Armazena todos os ItensPrevisaoEmpenho criados pela trigger em itensPrevisaoEmpenho
+	db.Debug().Table("itens_previsao_empenho").Select("cod_previsao_empenho, cod_item, cod_tipo_item, cod_lote, valor").Where("cod_previsao_empenho = ?", previsaoEmpenho.CodPrevisaoEmpenho).Scan(&itensPrevisaoEmpenho)
+
+	//	Armazena todos os Reajustes que possuem o CodLote igual ao PrevisaoEmpenho criado
+	db.Debug().Table("reajuste").Select("ano_ref, percentual").Where("cod_lote = ?", previsaoEmpenho.CodLote).Scan(&reajuste)
+
+	//	Calcula os percentuais do tipo Original e do tipo Reajuste
+	for i, data := range reajuste {
+		if data.AnoRef < previsaoEmpenho.AnoReferencia {
+			perCentoOrig = perCentoOrig * (1.00 + (data.Percentual / 100.00))
+			if i > 0 {
+				perCentoReaj = perCentoReaj * (1.00 + (reajuste[i-1].Percentual / 100.00))
+			}
+		}
+	}
+
+	//	Atualiza o campo Valor em ItensPrevisaoEmpenho de acordo com o tipo da operacao: Original ou Reajuste ('o' ou 'r')
+	if previsaoEmpenho.Tipo == "o" {
+		for i := 0; i < len(itensPrevisaoEmpenho); i++ {
+
+			db.Debug().Table("lote_itens").Select("preco").Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item = ?", itensPrevisaoEmpenho[i].CodLote, itensPrevisaoEmpenho[i].CodItem, itensPrevisaoEmpenho[i].CodTipoItem).Scan(&loteItens)
+
+			itensPrevisaoEmpenho[i].Valor = perCentoOrig * loteItens.Preco
+			db.Debug().Exec("UPDATE itens_previsao_empenho SET valor = ? WHERE cod_previsao_empenho = ? AND cod_item = ? AND cod_tipo_item = ? AND cod_lote = ?", itensPrevisaoEmpenho[i].Valor, itensPrevisaoEmpenho[i].CodPrevisaoEmpenho, itensPrevisaoEmpenho[i].CodItem, itensPrevisaoEmpenho[i].CodTipoItem, itensPrevisaoEmpenho[i].CodLote)
+		}
+	} else if previsaoEmpenho.Tipo == "r" {
+		for i := 0; i < len(itensPrevisaoEmpenho); i++ {
+
+			db.Debug().Table("lote_itens").Select("preco").Where("cod_lote = ? AND cod_item = ? AND cod_tipo_item = ?", itensPrevisaoEmpenho[i].CodLote, itensPrevisaoEmpenho[i].CodItem, itensPrevisaoEmpenho[i].CodTipoItem).Scan(&loteItens)
+
+			itensPrevisaoEmpenho[i].Valor = perCentoOrig*loteItens.Preco - perCentoReaj*loteItens.Preco
+			db.Debug().Exec("UPDATE itens_previsao_empenho SET valor = ? WHERE cod_previsao_empenho = ? AND cod_item = ? AND cod_tipo_item = ? AND cod_lote = ?", itensPrevisaoEmpenho[i].Valor, itensPrevisaoEmpenho[i].CodPrevisaoEmpenho, itensPrevisaoEmpenho[i].CodItem, itensPrevisaoEmpenho[i].CodTipoItem, itensPrevisaoEmpenho[i].CodLote)
+		}
+	}
+
+	return
+}

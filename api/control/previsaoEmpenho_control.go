@@ -74,6 +74,13 @@ func (server *Server) CreatePrevisaoEmpenho(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	//	O INSERT em PrevisaoEmpenho dispara uma trigger em ItensPrevisaoEmpenho, a funcao abaixo atualiza o campo 'valor' dos Itens criados
+	ch := make(chan int)
+	go func() {
+		previsaoEmpenhoCreated.CalculoValorItensPrevisaoEmpenho(server.DB)
+		<-ch
+	}()
+
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, previsaoEmpenhoCreated.CodPrevisaoEmpenho))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada

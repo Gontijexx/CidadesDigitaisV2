@@ -12,55 +12,23 @@ function pegarCD() {
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
-        cdTotal=json;
-      });
-      pegarMunicipio();
-    } else {
-      erros(response.status);
-    }
-  });
-}
 
-function pegarMunicipio() {
+        //variaveis
+        let i, j=0;
+        let x = [];
 
-  //preenche os campos para estado e municipio
-  fetch(servidor + 'read/municipio', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //cria variaveis
-        let i, j = 0;
-        let x = [],
-          valorUF = [];
-
-        //impede que haja repetição
-        for (i = 0; i < json.length; i++) {
-          if (i>0 && json[i].uf != json[i-1].uf) {
-            valorUF[j] = json[i];
+        //para tirar repetições
+        for(i=0; i<json.length;i++){
+          if(i != 0 && json[i].uf != json[i-1].uf){
+            ufCD[j] = json[i].uf;
             j++;
           }
         }
-        console.log(cdTotal);
-        //faz a ligação entre variaveis e valores do banco
-        let k = 0;
-        for (i = 0; i < valorUF.length; i++) {
-          for (j = 0; j < cdTotal.length; j++) {
-            if (valorUF[i].uf == cdTotal[j].uf) {
-              cidades[k] = cdTotal[j].uf;
-              k++;
-            }
-          }
-        }
 
-        x[0] += "<option value=''>Estado</option>";
-        for (i = 0; i < j; i++) {
-          x[i + 1] += "<option>" + cidades[i] + "</option>";
+        //preenche "uf"
+        x[0] += "<option value='AA'>Estado</option>";
+        for (i = 0; i < ufCD.length; i++) {
+          x[i + 1] += "<option>" + ufCD[i] + "</option>";
         }
         x.sort();
         document.getElementById("uf").innerHTML = x;
@@ -70,6 +38,7 @@ function pegarMunicipio() {
     }
   });
 }
+
 
 
 function enabler() {

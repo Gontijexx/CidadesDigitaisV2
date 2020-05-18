@@ -1,6 +1,6 @@
 //variaveis globais
 let faturaTotal = [];
-let ufCD = [];
+let cidades = [];
 
 window.onload = function () {
   paginacao();
@@ -226,23 +226,26 @@ function pegarCD() {
         //variaveis
         let i, j=0;
         let x = [];
+        let ufCD = [];
+
+        //para usar em enabler()
+        cidades=json;
 
         //para tirar repetições
         for(i=0; i<json.length;i++){
           if(i != 0 && json[i].uf != json[i-1].uf){
-            ufCD[j] = json[i].uf;
+            ufCD[j] = json[i];
             j++;
           }
         }
 
         //preenche "uf"
-        x[0] += "<option value='AA'>Estado</option>";
+        x[0] = "<option value='A'>Estado</option>";
         for (i = 0; i < ufCD.length; i++) {
-          x[i + 1] += "<option>" + ufCD[i] + "</option>";
+          x[i+1] += "<option>" + ufCD[i].uf + "</option>";
         }
         x.sort();
         document.getElementById("uf").innerHTML = x;
-        
       });
     } else {
       erros(response.status);
@@ -253,20 +256,25 @@ function pegarCD() {
 
 
 function enabler() {
-
   document.getElementById("cod_ibge").disabled = false;
+
+  //variaveis
   let uf = document.getElementById("uf");
-  let i, j = 0,
-    x = [],
-    cidadesFinal = [];
+  let i, j = 0;
+  let x = [], cidadesFinal = [];
+
+  //para tirar repetições
   for (i = 0; i < cidades.length; i++) {
     if (cidades[i].uf == uf.value) {
       cidadesFinal[j] = cidades[i];
       j++;
     }
   }
+
+  //preenche "cod_ibge"
+  x[0] = "<option value='A'>Cidade</option>";
   for (i = 0; i < cidadesFinal.length; i++) {
-    x[i] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
+    x[i+1] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
   }
   x.sort();
   document.getElementById("cod_ibge").innerHTML = x;
@@ -289,7 +297,6 @@ function enviar() {
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
-  console.log(corpo);
   //função fetch para mandar
   fetch(servidor + 'read/fatura', {
     method: 'POST',

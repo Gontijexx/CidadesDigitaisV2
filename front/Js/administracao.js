@@ -14,6 +14,10 @@ window.onload = function () {
 
 
 
+
+
+
+
 //informaçãoes para assunto
 function addAssunto() {
   let formulario = (`<label for="descricao">Descrição</label>`);
@@ -33,6 +37,10 @@ function visAssunto() {
   visualizar("assunto", [`<th style="width:20%" scope="col">Código do Assunto</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_assunto", "descricao"]);
 }
+
+
+
+
 
 
 
@@ -58,6 +66,10 @@ function visCategoria() {
 
 
 
+
+
+
+
 //informaçãoes para classe de empenho
 function addClasseEmpenho() {
   let formulario = (`<label for="cod_classe_empenho">Código da Classe</label>`);
@@ -80,6 +92,10 @@ function visClasseEmpenho() {
   visualizar("classeempenho", [`<th style="width:20%" scope="col">Código de Classe de Empenho</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_classe_empenho", "descricao"]);
 }
+
+
+
+
 
 
 
@@ -118,6 +134,10 @@ function visEtapa() {
   <th style="width:10%" scope="col">Delay</th>
   <th style="width:20%" scope="col">Setor Responsável</th>`, "cod_etapa", "descricao", "duracao", "depende", "delay", "setor_resp"]);
 }
+
+
+
+
 
 
 
@@ -210,6 +230,10 @@ function visItem() {
 
 
 
+
+
+
+
 //informaçãoes para modulo
 function addModulo() {
   let formulario = (`<label for="cod_modulo">Código do Módulo</label>`);
@@ -244,6 +268,10 @@ function visModulo() {
   <th style="width:10%" scope="col">Categoria 3</th>
   <th style="width:50%" scope="col">Descrição</th>`, "cod_modulo", "categoria_1", "categoria_2", "categoria_3", "descricao"]);
 }
+
+
+
+
 
 
 
@@ -320,6 +348,10 @@ function visMunicipio() {
 
 
 
+
+
+
+
 //informaçãoes para natureza de despesas
 function addNaturezaDespesa() {
   let formulario = (`<label for="cod_natureza_despesa">Código da Natureza</label>`);
@@ -342,6 +374,10 @@ function visNaturezaDespesa() {
   visualizar("naturezadespesa", [`<th style="width:20%" scope="col">Código da Natureza da Despesa</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_natureza_despesa", "descricao"]);
 }
+
+
+
+
 
 
 
@@ -412,6 +448,10 @@ function visPrefeitos() {
 
 
 
+
+
+
+
 //informaçãoes para Tipo de item
 function addTipoItem() {
   let formulario = (`<label for="cod_tipo_item">Código do Tipo de Item</label>`);
@@ -437,6 +477,10 @@ function visTipoItem() {
 
 
 
+
+
+
+
 //informaçãoes para Tipologia
 function addTipologia() {
   let formulario = (`<label for="descricao">Descrição</label>`);
@@ -456,6 +500,10 @@ function visTipologia() {
   visualizar("tipologia", [`<th style="width:20%" scope="col">Código de Tipologia</th>
   <th style="width:80%" scope="col">Descrição</th>`, "cod_tipologia", "descricao"]);
 }
+
+
+
+
 
 
 
@@ -485,6 +533,10 @@ function mandar(caminho) {
     }
   });
 }
+
+
+
+
 
 
 

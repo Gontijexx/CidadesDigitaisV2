@@ -1,7 +1,6 @@
 //variaveis globais
 let faturaTotal = [];
-let cdTotal = [];
-let cidades = [];
+let ufCD = [];
 
 window.onload = function () {
   paginacao();
@@ -54,6 +53,7 @@ function paginacao() {
         //console.log(json);
 
         totalPaginas = json.length / porPagina;
+        faturaTotal = json;
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
@@ -78,7 +78,7 @@ function paginacao() {
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
           tabela += (`</td>`);
-          tabela += (`<td> 
+          tabela += (`<td>
           <span class="d-flex">
           <button onclick="editarFatura(` + i + `)" class="btn btn-success">
           <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
@@ -222,66 +222,34 @@ function pegarCD() {
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
-        cdTotal=json;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
 
-function pegarMunicipio() {
+        //variaveis
+        let i, j=0;
+        let x = [];
 
-  document.getElementById("cod_ibge").innerHTML = "<option value=''>Cidade</option>";
-  document.getElementById("cod_ibge").disabled = true;
-
-  //preenche os campos para estado e municipio
-  let answer = fetch(servidor + 'read/municipio', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //cria variaveis
-        let i, j = 0;
-        let x = [],
-          valorUF = [];
-
-        //impede que haja repetição
-        for (i = 0; i < json.length; i++) {
-          if (i>0 && json[i].uf != json[i-1].uf) {
-            valorUF[j] = json[i];
+        //para tirar repetições
+        for(i=0; i<json.length;i++){
+          if(i != 0 && json[i].uf != json[i-1].uf){
+            ufCD[j] = json[i].uf;
             j++;
           }
         }
 
-        //faz a ligação entre variaveis e valores do banco
-        let k = 0;
-        for (i = 0; i < valorUF.length; i++) {
-          for (j = 0; j < cdTotal.length; j++) {
-            if (cdTotal[j].uf == valorUF[i].uf) {
-              console.log("um");
-              cidades[k] = cdTotal[j];
-              k++;
-            }
-          }
-        }
-        x[0] += "<option value=''>Estado</option>";
-        for (i = 0; i < j; i++) {
-          x[i + 1] += "<option>" + cidades[i] + "</option>";
+        //preenche "uf"
+        x[0] += "<option value='AA'>Estado</option>";
+        for (i = 0; i < ufCD.length; i++) {
+          x[i + 1] += "<option>" + ufCD[i] + "</option>";
         }
         x.sort();
         document.getElementById("uf").innerHTML = x;
+        
       });
     } else {
       erros(response.status);
     }
   });
 }
+
 
 
 function enabler() {
@@ -318,7 +286,7 @@ function enviar() {
   info.num_nf = parseInt(document.getElementById("num_nf").value);
   info.cod_ibge = parseInt(document.getElementById("cod_ibge").value);
   info.dt_nf = document.getElementById("dt_nf").value;
-  
+
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
   console.log(corpo);
@@ -351,8 +319,8 @@ function enviar() {
 
 //leva para o editor do campo selecionado
 function editarFatura(valor) {
-  localStorage.setItem("num_nf", faturaTotal[valor].num_nf);
-  localStorage.setItem("cod_ibge", faturaTotal[valor].cod_ibge);
-  localStorage.setItem("dt_nf", faturaTotal[valor].dt_nf);
+  localStorage.setItem("num_nf", faturaTotal[valor][num_nf]);
+  localStorage.setItem("cod_ibge", faturaTotal[valor][cod_ibge]);
+  localStorage.setItem("dt_nf", faturaTotal[valor][dt_nf]);
   window.location.href = "./gerenciaFatura.html";
 }

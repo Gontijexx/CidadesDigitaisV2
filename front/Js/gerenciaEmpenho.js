@@ -33,8 +33,6 @@ function pegarPrevisao(){
 
 window.onload = function () {
 
-    console.log(meuEmpenho);
-
   //preenche os campos
   this.document.getElementById("cod_empenho").value = localStorage.getItem("cod_empenho");
 

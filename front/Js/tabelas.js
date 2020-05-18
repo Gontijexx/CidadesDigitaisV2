@@ -1,4 +1,5 @@
-//lote Itens:
+//até agora só foi adaptado para lote
+//adapte para CD João. Use administracao.js como exemplo
 
 function itens() {
 

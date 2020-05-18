@@ -4,7 +4,6 @@ let meuLote;
 
 //pega o JSON de municípios para uso na tabela e para adcionar "CD"s
 let cidades = [];
-document.getElementById("cod_ibge").disabled = true;
 
 
 window.onload = function () {
@@ -51,13 +50,14 @@ function paginacao() {
   }).then(function (response) {
     //tratamento dos erros
     if (response.status == 200) {
-      console.log(response.statusText);
+      //console.log(response.statusText);
+
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
         cdTotal = json;
         totalPaginas = Math.floor(json.length / porPagina);
-        console.log(totalPaginas);
+        //console.log(totalPaginas);
 
         //testar o json
         //console.log(json);
@@ -81,7 +81,7 @@ function paginacao() {
           tabela += (`<td>`);
           tabela += json[i]["cod_ibge"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["nome_municipio"];
+          tabela += json[i]["nome_municipio"] + ` - ` + json[i]["uf"];
           tabela += (`</td> <td>`);
           tabela += json[i]["cod_lote"];
           tabela += (`</td> <td>`);

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Gerencia Previsão de Empenho</title>
+    <title>Gerência Previsão de Empenho</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,8 +19,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
-
-
 </head>
 
 <body>
@@ -37,7 +35,8 @@
                                     <h2 class="text-align:center">Gerenciar <b>Previsão de Empenho</b></h2>
                                 </div>
                                 <div class="col-sm-8">
-                                    <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar Listas</span></a>
+                                    <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i>
+                                        <span>Atualizar Listas</span></a>
                                 </div>
                             </div>
                         </div>
@@ -45,19 +44,34 @@
                         <form enctype='application/json'>
                             <div class="form-row" style=" padding: 30px;">
 
-                                <div class="form-group col-md-4">
-                                    <label for="cod_empenho">Código do Empenho:</label>
-                                    <input type="text" class="form-control" id="cod_empenho" maxlength="13">
-                                </div>
-
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="cod_previsao_empenho">Previsão de Empenho:</label>
-                                    <select type="text" class="form-control" id="cod_previsao_empenho"></select>
+                                    <input type="text" class="form-control" id="cod_previsao_empenho" readonly></input>
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="cod_lote">Lote:</label>
+                                    <select type="text" class="form-control" id="cod_lote"></select>
+                                </div>
+
+                                <div class="form-group col-md-8">
+                                    <label for="cod_natureza_despesa">Natureza de Despesa:</label>
+                                    <select type="text" class="form-control" id="cod_natureza_despesa"></select>
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label for="data">Data</label>
+                                    <label for="data">Data:</label>
                                     <input type="date" class="form-control" id="data">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="tipo">Tipo:</label>
+                                    <select type="text" class="form-control" id="tipo"></select>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="ano_referencia">Ano de Referência:</label>
+                                    <input type="text" class="form-control" id="ano_referencia" maxlength="13">
                                 </div>
 
 
@@ -104,7 +118,7 @@
     </div>
 
 </body>
-<script src="./Js/gerenciaEmpenho.js"></script>
+<script src="./Js/gerenciaPrevisao.js"></script>
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 
 </html>

@@ -14,6 +14,7 @@ type CD struct {
 	CodIbge       uint32 `gorm:"primary_key;foreign_key:CodIbge;not null;size:7" json:"cod_ibge"`
 	CodLote       uint32 `gorm:"foreign_key:CodLote;not null" json:"cod_lote"`
 	NomeMunicipio string `gorm:"default:null" json:"nome_municipio"`
+	Uf            string `gorm:"default:null" json:"uf"`
 	OsPe          string `gorm:"size:10;default:null" json:"os_pe"`
 	DataPe        string `gorm:"default:null" json:"data_pe"`
 	OsImp         string `gorm:"size:10;default:null" json:"os_imp"`
@@ -59,7 +60,7 @@ func (cd *CD) FindAllCD(db *gorm.DB) (*[]CD, error) {
 	allCD := []CD{}
 
 	// Busca todos elementos contidos no banco de dados e faz join com a tabela municipio
-	err := db.Debug().Table("cd").Select("CONCAT(municipio.nome_municipio, ' - ', municipio.uf) AS nome_municipio, cd.*").
+	err := db.Debug().Table("cd").Select("municipio.nome_municipio, municipio.uf, cd.*").
 		Joins("JOIN municipio ON cd.cod_ibge = municipio.cod_ibge").Scan(&allCD).Error
 	if err != nil {
 		return &[]CD{}, err

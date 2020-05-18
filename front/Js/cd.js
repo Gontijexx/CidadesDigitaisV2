@@ -278,7 +278,6 @@ function pegarLote() {
 
 
 function pegarMunicipio() {
-
   document.getElementById("cod_ibge").innerHTML = "<option value=''>Cidade</option>";
   document.getElementById("cod_ibge").disabled = true;
 
@@ -293,25 +292,26 @@ function pegarMunicipio() {
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
-        //pegando valores para usar em municipios
+
+        //pegando valores para usar em enabler()
         cidades = json;
+
         //cria variaveis
         let i, j = 0;
         let x = [],
-          valorUF = [],
-          valorFinalUF = [];
+          valorUF = [];
 
-        //faz a ligação entre variaveis e valores do banco
+        //para tirar repetições
         for (i = 0; i < json.length; i++) {
-          valorUF[i] = json[i].uf;
-          if (i != 0 && valorUF[i] != valorUF[i - 1]) {
-            valorFinalUF[j] = valorUF[i];
+          if (i != 0 && json[i].uf != json[i - 1].uf) {
+            valorUF[j] = json[i].uf;
             j++;
           }
         }
-        x[0] += "<option value=''>Estado</option>";
+        //preenche "uf"
+        x[0] += "<option value='A'>Estado</option>";
         for (i = 0; i < j; i++) {
-          x[i + 1] += "<option>" + valorFinalUF[i] + "</option>";
+          x[i + 1] += "<option>" + valorUF[i] + "</option>";
         }
         x.sort();
         document.getElementById("uf").innerHTML = x;
@@ -322,22 +322,26 @@ function pegarMunicipio() {
   });
 }
 
-
 function enabler() {
-
   document.getElementById("cod_ibge").disabled = false;
+
+  //variaveis
   let uf = document.getElementById("uf");
-  let i, j = 0,
-    x = [],
-    cidadesFinal = [];
+  let i, j = 0;
+  let x = [], cidadesFinal = [];
+
+  //para tirar repetições
   for (i = 0; i < cidades.length; i++) {
     if (cidades[i].uf == uf.value) {
       cidadesFinal[j] = cidades[i];
       j++;
     }
   }
+
+  //preenche "cod_ibge"
+  x[0] = "<option value='A'>Cidade</option>";
   for (i = 0; i < cidadesFinal.length; i++) {
-    x[i] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
+    x[i+1] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
   }
   x.sort();
   document.getElementById("cod_ibge").innerHTML = x;

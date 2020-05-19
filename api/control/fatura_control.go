@@ -24,8 +24,7 @@ import (
 func (server *Server) CreateFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 17001)
-	if err != nil {
+	if err := config.AuthMod(w, r, 17001); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -62,6 +61,13 @@ func (server *Server) CreateFatura(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//	SaveFatura eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
+	if err = fatura.SaveFatura(server.DB); err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
 	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
 	err = logFatura.LogFatura(server.DB, fatura.NumNF, fatura.CodIbge, "fatura", "i", tokenID)
 	if err != nil {
@@ -70,18 +76,10 @@ func (server *Server) CreateFatura(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	SaveFatura eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
-	faturaCreated, err := fatura.SaveFatura(server.DB)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
-		return
-	}
-
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, faturaCreated.NumNF))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, fatura.NumNF))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
-	responses.JSON(w, http.StatusCreated, faturaCreated)
+	responses.JSON(w, http.StatusCreated, fatura)
 }
 
 /*  =========================
@@ -91,8 +89,7 @@ func (server *Server) CreateFatura(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetFaturaByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 17002)
-	if err != nil {
+	if err := config.AuthMod(w, r, 17002); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -116,15 +113,14 @@ func (server *Server) GetFaturaByID(w http.ResponseWriter, r *http.Request) {
 
 	fatura := models.Fatura{}
 
-	//	faturaGotten recebe o dado buscado no banco de dados
-	faturaGotten, err := fatura.FindFaturaByID(server.DB, uint32(numNF), uint32(codIbge))
-	if err != nil {
+	//	Recebe o dado buscado no banco de dados
+	if err = fatura.FindFaturaByID(server.DB, uint32(numNF), uint32(codIbge)); err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, faturaGotten)
+	responses.JSON(w, http.StatusOK, fatura)
 }
 
 /*  =========================
@@ -134,8 +130,7 @@ func (server *Server) GetFaturaByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 17002)
-	if err != nil {
+	if err := config.AuthMod(w, r, 17002); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -163,6 +158,7 @@ func (server *Server) UpdateFatura(w http.ResponseWriter, r *http.Request) {
 	//	Autorizacao de Modulo
 	if err := config.AuthMod(w, r, 17003); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
 	}
 
 	//	Vars retorna as variaveis de rota
@@ -203,8 +199,7 @@ func (server *Server) UpdateFatura(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = validation.Validator.Struct(fatura)
-	if err != nil {
+	if err = validation.Validator.Struct(fatura); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
@@ -218,15 +213,14 @@ func (server *Server) UpdateFatura(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	updateFatura recebe a nova fatura alterada
-	updateFatura, err := fatura.UpdateFatura(server.DB, uint32(numNF), uint32(codIbge))
-	if err != nil {
+	// Altera a fatura solicitada
+	if err = fatura.UpdateFatura(server.DB, uint32(numNF), uint32(codIbge)); err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] It couldn't update in database, %v\n", formattedError))
 		return
 	}
 
-	responses.JSON(w, http.StatusOK, updateFatura)
+	responses.JSON(w, http.StatusOK, fatura)
 }
 
 /*  =========================
@@ -236,8 +230,7 @@ func (server *Server) UpdateFatura(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeleteFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 17003)
-	if err != nil {
+	if err := config.AuthMod(w, r, 17003); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -278,8 +271,7 @@ func (server *Server) DeleteFatura(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	err = fatura.DeleteFatura(server.DB, uint32(numNF), uint32(codIbge))
-	if err != nil {
+	if err = fatura.DeleteFatura(server.DB, uint32(numNF), uint32(codIbge)); err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return

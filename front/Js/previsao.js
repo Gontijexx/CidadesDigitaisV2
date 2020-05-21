@@ -90,9 +90,6 @@ function paginacao() {
           else if(json[i]["tipo"]=="r"){
             tabela += "Reajuste";
           }
-          else{
-            tabela += "";
-          }
           tabela += (`</td>`);
           tabela += (`<td>`);
           let data1 = new Date(json[i]["data"]);

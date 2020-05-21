@@ -1,3 +1,6 @@
+//ATENÇÃO
+//este js é utilizado para contenção de estruturas que possam ser utilizadas em qualquer tabel1a
+
 document.write(`
 	<section>
 		<div class="container-fluid">
@@ -24,14 +27,10 @@ document.write(`
 	</section>
 <div class="cd-shadow-layer"></div>`);
 
-window
-
 //função usada pelo botão de logoff
 function logoff() {
-
-  window.location.replace("./index.html");
-  
-  localStorage.clear();
+	window.location.replace("./index.html");
+	localStorage.clear();
 }
 
 //define o total de horas para o login atual
@@ -43,7 +42,6 @@ if (setupTime == null) {
 	localStorage.setItem('setupTime', now);
 } else {
 	if (now - setupTime > hours * 60 * 60 * 1000) {
-
 		window.location.replace("./index.html");
 		localStorage.clear();
 	}
@@ -66,7 +64,6 @@ $(document).ready(function () {
 
 //para definir o ip do servidor (ou algo do tipo, podem corrigir)
 let servidor = "http://localhost:8080/";
-
 
 //pega o token do login
 let meuToken = localStorage.getItem("token");

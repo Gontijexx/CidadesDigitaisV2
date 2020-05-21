@@ -1,100 +1,38 @@
 //pega o CNPJ escolhido anteriormente
-let meuFatura = localStorage.getItem("id_fatura");
-
-function pegarCD() {
-  fetch(servidor + 'read/cd', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-
-        //variaveis
-        let i, j=0;
-        let x = [];
-
-        //para tirar repetições
-        for(i=0; i<json.length;i++){
-          if(i != 0 && json[i].uf != json[i-1].uf){
-            ufCD[j] = json[i].uf;
-            j++;
-          }
-        }
-
-        //preenche "uf"
-        x[0] += "<option value='AA'>Estado</option>";
-        for (i = 0; i < ufCD.length; i++) {
-          x[i + 1] += "<option>" + ufCD[i] + "</option>";
-        }
-        x.sort();
-        document.getElementById("uf").innerHTML = x;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
-
-
-function enabler() {
-
-  document.getElementById("cod_ibge").disabled = false;
-  let uf = document.getElementById("uf");
-  let i, j = 0,
-    x = [],
-    cidadesFinal = [];
-  for (i = 0; i < cidades.length; i++) {
-    if (cidades[i].uf == uf.value) {
-      cidadesFinal[j] = cidades[i];
-      j++;
-    }
-  }
-  for (i = 0; i < cidadesFinal.length; i++) {
-    x[i] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
-  }
-  x.sort();
-  document.getElementById("cod_ibge").innerHTML = x;
-}
-
+let meuFatura = localStorage.getItem("num_nf");
+let meuIBGE = localStorage.getItem("cod_ibge");
+let cidades = [];
 
 window.onload = function () {
 
   //preenche os campos
-  this.document.getElementById("num_nf").value = localStorage.getItem("num_nf");
+  document.getElementById("num_nf").value = localStorage.getItem("num_nf");
 
-  //esta função preenche os campos de municipio
-  pegarCD();
+  //esta função preenche o campo de municipio
+  document.getElementById("cod_ibge").value = localStorage.getItem("nome_municipio") + " - " + localStorage.getItem("uf") + " - " + localStorage.getItem("cod_ibge");
 
-  //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd
-
-  let data = new Date(localStorage.getItem("dt_nf"));
-  let dataFinal = String(data.getFullYear()).padStart(4, '0') + "-" + String(data.getMonth() + 1).padStart(2, '0') + "-" + String(data.getDate()).padStart(2, '0');
-  document.getElementById("dt_nf").value = dataFinal;
-  
+  //estes campos precisam de adaptações para serem aceitos com o padrão yyyy-MM-dd
+  let data1 = new Date(localStorage.getItem("dt_nf"));
+  let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
+  document.getElementById("dt_nf").value = dataFinal1;
 }
+
+
 
 function enviar() {
 
-  //JSON usado para mandar as informações no fetch
+  //estrutura usada para mandar as informações no fetch
   let info = {
-    "num_nf": "",
-    "cod_ibge": "",
     "dt_nf": "",
   };
 
-  info.num_nf = document.getElementById("num_nf").value;
-  info.cod_ibge = parseInt(document.getElementById("cod_ibge").value);
+  //capturando o valor
   info.dt_nf = document.getElementById("dt_nf").value;
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch(servidor + 'read/fatura/' + meuFatura, {
+  fetch(servidor + 'read/fatura/' + meuFatura + '/' + meuIBGE, {
     method: 'PUT',
     body: corpo,
     headers: {

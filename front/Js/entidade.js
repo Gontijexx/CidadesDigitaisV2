@@ -337,10 +337,7 @@ function enviar() {
     //tratamento dos erros
     if (response.status == 201) {
       alert("Entidade criada com sucesso");
-      return response.json().then(function (json) {
-        //console.log(json);
-        window.location.replace("./entidade.html");
-      });
+      location.reload();
     } else {
       erros(response.status);
     }

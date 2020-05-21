@@ -50,7 +50,7 @@
 
                                 <div class="form-group col-md-4">
                                     <label for="cod_previsao_empenho">Previsão de Empenho:</label>
-                                    <select type="text" class="form-control" id="cod_previsao_empenho"></select>
+                                    <input type="text" class="form-control" id="cod_previsao_empenho" readonly></input>
                                 </div>
 
                                 <div class="form-group col-md-4">
@@ -70,7 +70,7 @@
                         </form>
 
                         <div class="p-4 form-group col-sm-2">
-                            <button onclick="itensFinanceamento('read/itensempenho')" type="button" style="background-color:#959595"
+                            <button onclick="itensFinanceamento('itensempenho','id_empenho')" type="button" style="background-color:#959595"
                                 class="btn btn-primary">Itens</button>
                         </div>
 
@@ -96,6 +96,7 @@
 
 </body>
 <script src="./Js/gerenciaEmpenho.js"></script>
+<script src="./Js/tabelas.js"></script>
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 
 </html>

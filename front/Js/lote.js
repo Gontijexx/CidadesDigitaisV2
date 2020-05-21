@@ -294,10 +294,7 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 201) {
-      return response.json().then(function (json) {
-        //console.log(json);
-        window.location.replace("./lote.html");
-      });
+      location.reload();
     } else {
       erros(response.status);
     }

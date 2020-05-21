@@ -14,9 +14,8 @@ function pegarLote() {
       response.json().then(function (json) {
         //console.log(json);
         let x = [];
-        x[0] = "<option value=''>Lote</option>";
         for (i = 0; i < json.length; i++) {
-          x[i + 1] += "<option value=" + json[i].cod_lote + ">" + json[i].cod_lote + "</option>";
+          x[i] += "<option value=" + json[i].cod_lote + ">" + json[i].cod_lote + "</option>";
         }
         document.getElementById("cod_lote").innerHTML = x;
         document.getElementById("cod_lote").value = localStorage.getItem("cod_lote");
@@ -54,9 +53,7 @@ function pegarNaturezaDespesa() {
   });
 }
 
-
 window.onload = function () {
-
 
   //esta função preenche os campos de lote e natureza de despesa
   pegarLote();
@@ -65,15 +62,13 @@ window.onload = function () {
   document.getElementById("cod_previsao_empenho").value = localStorage.getItem("cod_previsao_empenho");
   document.getElementById("ano_referencia").value = localStorage.getItem("ano_referencia");
 
-  document.getElementById("tipo").innerHTML = "<option value='o'>Original</option><option value='r'>Reajuste</option><option value=''></option>";
+  document.getElementById("tipo").innerHTML = "<option value='o'>Original</option><option value='r'>Reajuste</option>";
   document.getElementById("tipo").value = localStorage.getItem("tipo");
 
   //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd
-
   let data1 = new Date(localStorage.getItem("data"));
   let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
   document.getElementById("data").value = dataFinal1;
-
 
 }
 

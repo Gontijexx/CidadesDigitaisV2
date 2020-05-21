@@ -1,10 +1,9 @@
 //estruturas para as tabelas de Itens
 let listaItem = [];
-let meuItem = [],
-  meuTipo = [];
+let meuItem = [];
+let meuTipo = [];
 let edicaoItem = [];
 let itemMudado = [];
-
 
 //JSON usado para mandar as informações no fetch
 let info = {
@@ -13,7 +12,7 @@ let info = {
   "os_pe": " ",
   "data_pe": " ",
   "os_imp": " ",
-  "data_imp": " "
+  "data_imp": " ",
 };
 
 //usado para mostrar a cidade selecionada
@@ -22,7 +21,7 @@ let meuUF = localStorage.getItem("uf");
 
 
 //pega os valores corretos das variaveis
-let meuCD = localStorage.getItem("cod_ibge");
+let meuCodigo = localStorage.getItem("cod_ibge");
 let meuLote = localStorage.getItem("cod_lote");
 let os_pe1 = localStorage.getItem("os_pe");
 let os_imp1 = localStorage.getItem("os_imp");
@@ -50,7 +49,7 @@ window.onload = function () {
 
 function enviar() {
 
-  info.cod_ibge = parseInt(meuCD);
+  info.cod_ibge = parseInt(meuCodigo);
   info.cod_lote = parseInt(meuLote.value);
   let os_pe1 = document.getElementById("os_pe");
   info.os_pe = os_pe1.value;
@@ -64,7 +63,7 @@ function enviar() {
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch(servidor + 'read/cd/' + meuCD, {
+  fetch(servidor + 'read/cd/' + meuCodigo, {
     method: 'PUT',
     body: corpo,
     headers: {
@@ -90,10 +89,11 @@ function enviar() {
 
 
 
+
+
+
+
 //CD Itens
-
-
-
 
 function itens() {
 
@@ -120,19 +120,19 @@ function itens() {
       response.json().then(function (json) {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-                <tr>
-                <th scope="col">Descrição</th>
-                <th scope="col">Quantidade prevista</th>
-                <th scope="col">Quantidade do projeto executivo</th>
-                <th scope="col">Quantidade de termo de instalação </th>
-                </tr>
-                </thead>`);
+        <tr>
+        <th scope="col">Descrição</th>
+        <th scope="col">Quantidade prevista</th>
+        <th scope="col">Quantidade do projeto executivo</th>
+        <th scope="col">Quantidade de termo de instalação </th>
+        </tr>
+        </thead>`);
         tabela += (`<tbody>`);
 
         //cria uma lista apenas com os itens do lote selecionado
         let j = 0;
         for (let i = 0; i < json.length; i++) {
-          if (json[i]["cod_ibge"] == meuCD) {
+          if (json[i]["cod_ibge"] == meuCodigo) {
             listaItem[j] = json[i];
             j++;
           }
@@ -193,14 +193,12 @@ function editarItem() {
           'Authorization': 'Bearer ' + meuToken
         },
       }).then(function (response) {
-
         //checar o status do pedido
         //console.log(response.statusText);
 
         //tratamento dos erros
         if (response.status == 200 || response.status == 201) {
-          //checar a resposta do pedido
-          //console.log(json);
+          location.reload();
         } else {
           //erros(response.status);
         }
@@ -208,5 +206,4 @@ function editarItem() {
       });
     }
   }
-
 }

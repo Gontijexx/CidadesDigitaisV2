@@ -72,7 +72,7 @@ function paginacao() {
           tabela += (`<td>`);
           tabela += json[i]["num_nf"]; //está sendo enviado assim por algum motivo
           tabela += (`</td><td>`);
-          tabela += json[i]["municipio"];
+          tabela += json[i]["nome_municipio"] + " - " + json[i]["uf"] + " - " + json[i]["cod_ibge"];
           tabela += (`</td><td>`);
           let data1 = new Date(json[i]["dt_nf"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
@@ -326,8 +326,10 @@ function enviar() {
 
 //leva para o editor do campo selecionado
 function editarFatura(valor) {
-  localStorage.setItem("num_nf", faturaTotal[valor][num_nf]);
-  localStorage.setItem("cod_ibge", faturaTotal[valor][cod_ibge]);
-  localStorage.setItem("dt_nf", faturaTotal[valor][dt_nf]);
+  localStorage.setItem("num_nf", faturaTotal[valor]["num_nf"]);
+  localStorage.setItem("cod_ibge", faturaTotal[valor]["cod_ibge"]);
+  localStorage.setItem("dt_nf", faturaTotal[valor]["dt_nf"]);
+  localStorage.setItem("uf", faturaTotal[valor]["uf"]);
+  localStorage.setItem("nome_municipio", faturaTotal[valor]["nome_municipio"]);
   window.location.href = "./gerenciaFatura.html";
 }

@@ -1,6 +1,6 @@
 //pega o CNPJ escolhido anteriormente
-let meuLote = localStorage.getItem("cod_lote");
-document.getElementById("cod_lote").value = meuLote;
+let meuCodigo = localStorage.getItem("cod_lote");
+document.getElementById("cod_lote").value = meuCodigo;
 
 //cuida de lote_itens
 let edicaoItem = [];
@@ -8,15 +8,6 @@ let listaItem = [];
 let meuItem = [];
 let meuTipo = [];
 let itemMudado = [];
-
-//cuida de reajuste
-let listaReajuste = [];
-let edicaoReajuste = [];
-let meuAno = [];
-let reajusteMudado = [];
-
-//cuida de previsao de empenho
-let listaPrevisao = [];
 
 function pegarEntidade(){
   fetch(servidor + 'read/entidadeget', {
@@ -86,7 +77,7 @@ function enviar() {
     "dt_reajuste": "",
   };
 
-  info.cod_lote = parseFloat(meuLote);
+  info.cod_lote = parseFloat(document.getElementById("cod_lote").value);
   info.cnpj = document.getElementById("cnpj").value;
   info.contrato = document.getElementById("contrato").value;
   info.dt_inicio_vig = document.getElementById("dt_inicio_vig").value;
@@ -96,7 +87,7 @@ function enviar() {
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch(servidor + 'read/lote/' + meuLote, {
+  fetch(servidor + 'read/lote/' + meuCodigo, {
     method: 'PUT',
     body: corpo,
     headers: {
@@ -117,5 +108,292 @@ function enviar() {
     } else {
       erros(response.status);
     }
+  });
+}
+
+
+
+
+
+
+
+//lote itens
+
+function itensLote() {
+
+  //cria o botão para editar
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemLote()" class="btn btn-success">Salvar Alterações</button>`);
+  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemLote()" class="btn btn-success">Salvar Alterações</button>`);
+
+  //função fetch para chamar itens da tabela
+  fetch(servidor + 'read/loteitens', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        let j = 0;
+        //cria uma lista apenas com os itens do lote selecionado
+        for (let i = 0; i < json.length; i++) {
+          if (json[i]["cod_lote"] == meuCodigo) {
+            listaItem[j] = json[i];
+            j++;
+          }
+        }
+
+        //cria o cabeçalho da tabela
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+                <tr>
+                <th scope="col">Código do Item, Tipo de Item e Descrição do item</th>
+                <th scope="col">Valor</th>
+                </tr>
+                </thead>`);
+        tabela += (`<tbody>`);
+
+        for (i = 0; i < listaItem.length; i++) {
+
+          //salva os valores para edição
+          meuItem[i] = listaItem[i]["cod_item"];
+          meuTipo[i] = listaItem[i]["cod_tipo_item"];
+
+          //cria json para edição
+          edicaoItem[i] = {
+            "preco": "",
+          };
+
+          //captura itens para tabela
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + listaItem[i]["descricao"];
+          tabela += (`</td> <td>`);
+          tabela += "R$ " + (`<input value="` + listaItem[i]["preco"] + `" onchange="mudaItemLote(` + i + `)" id="preco` + i + `" type="text" class="preco">`);
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function mudaItemLote(valor) {
+  edicaoItem[valor].preco = parseFloat(document.getElementById("preco" + valor).value);
+  itemMudado[valor] = valor;
+}
+
+function editarItemLote() {
+  for (i = 0; i < listaItem.length; i++) {
+    if (itemMudado[i] != null) {
+      //transforma as informações em string para mandar
+      let corpo = JSON.stringify(edicaoItem[i]);
+      //função fetch para mandar
+      fetch(servidor + 'read/loteitens/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        //console.log(response.statusText);
+
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          location.reload();
+        } else {
+          //erros(response.status);
+        }
+      });
+    }
+  }
+}
+
+
+
+
+
+
+
+//lote reajustes
+
+//variaveis de reajuste
+let listaReajuste = [];
+let edicaoReajuste = [];
+let meuAno = [];
+let reajusteMudado = [];
+
+function reajuste() {
+
+  document.getElementById("cod_lote1").value = meuCodigo;
+  document.getElementById("cod_lote1").disabled = true;
+
+  document.getElementById("editar").innerHTML = (`<button onclick="editarReajuste()" class="btn btn-success" >Salvar Alterações em Reajustes</button>
+                                                  <button class="btn btn-success" data-toggle="modal" data-target="#adicionarReajuste">Novo Reajuste</button>`);
+  document.getElementById("editar2").innerHTML = (`<button onclick="editarReajuste()" class="btn btn-success" >Salvar Alterações em Reajustes</button>
+                                                  <button class="btn btn-success" data-toggle="modal" data-target="#adicionarReajuste">Novo Reajuste</button>`);
+
+  //função fetch para chamar reajustes da tabela
+  fetch(servidor + 'read/reajuste', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar os status de pedidos
+    //console.log(response)
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+        <tr>
+        <th style="width:46%" scope="col">Ano de Referência</th>
+        <th style="width:46%" scope="col">Percentual de Reajuste</th>
+        <th style="width:8%" scope="col">Apagar</th>
+        </tr>
+        </thead>`);
+        tabela += (`<tbody>`);
+
+        let j = 0;
+        for (let i = 0; i < json.length; i++) {
+          if (json[i].cod_lote == meuCodigo) {
+            listaReajuste[j] = json[i];
+            j++;
+          }
+        }
+
+        for (i = 0; i < listaReajuste.length; i++) {
+
+          //salva os valores para edição
+          meuAno[i] = listaReajuste[i]["ano_ref"];
+
+          //cria json para edição
+          edicaoReajuste[i] = {
+            "percentual": "",
+          };
+
+          //captura itens para tabela
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaReajuste[i]["ano_ref"];
+          tabela += (`</td>`);
+          tabela += (`<td>`);
+          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="number">`) + "%";
+          tabela += (`</td>`);
+          tabela += (`<td>
+          <button onclick="apagarReajuste(` + listaReajuste[i]["ano_ref"] + `)" class="btn btn-danger">
+          <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
+          </button>
+          </td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function mudaReajuste(valor) {
+  edicaoReajuste[valor].percentual = parseFloat(document.getElementById("percentual" + valor).value);
+  reajusteMudado[valor] = valor;
+}
+
+function editarReajuste() {
+  for (i = 0; i < listaReajuste.length; i++) {
+    if (reajusteMudado[i] != null) {
+      //transforma as informações em string para mandar
+      let corpo = JSON.stringify(edicaoReajuste[i]);
+      //função fetch para mandar
+      fetch(servidor + 'read/reajuste/' + listaReajuste[i]["ano_ref"] + '/' + meuCodigo, {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          //checar a resposta do pedido
+          //console.log(json);
+          window.location.replace("./gerenciaLote.html");
+        } else {
+          erros(response.status);
+        }
+      });
+    }
+  }
+}
+
+function novoReajuste() {
+
+  let infoReajuste = {
+    "cod_lote": parseInt(meuCodigo),
+    "ano_ref": "",
+    "percentual": "",
+  };
+
+  infoReajuste.ano_ref = parseInt(document.getElementById("ano_ref").value);
+  infoReajuste.percentual = parseFloat(document.getElementById("percentual").value);
+
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(infoReajuste);
+  //função fetch para mandar
+  fetch(servidor + 'read/reajuste', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function apagarReajuste(valor) {
+
+  //função fetch para deletar
+  fetch(servidor + 'read/reajuste/' + valor + "/" + meuLote, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 204) {
+      alert("Apagado com sucesso.");
+      window.location.replace("./gerenciaLote.html");
+    } else {
+      erros(response.status);
+    }
+    return response.json().then(function (json) {
+      console.log(json);
+    });
   });
 }

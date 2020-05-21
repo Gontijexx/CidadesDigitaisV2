@@ -320,11 +320,7 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      //checar o json
-      //response.json().then(function (json) {
-      //console.log(json);
-      //});
-      window.location.replace("./fiscalizacao.html");
+      location.reload();
     } else {
       erros(response.status);
     }

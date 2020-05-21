@@ -82,7 +82,9 @@ function previsao(valorCodigo) {
 
 //Itens de financeamento
 
-function itensFinanceamento(caminho,estrutura) {
+let listaItem = [];
+
+function itensFinanceamento(caminho, estrutura) {
 
   //cria o botão para editar
   document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Salvar Alterações em Itens</button>`);
@@ -106,6 +108,8 @@ function itensFinanceamento(caminho,estrutura) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
+        console.log(json)
+
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
         <th scope="col">Descrição</th>
@@ -116,27 +120,15 @@ function itensFinanceamento(caminho,estrutura) {
         </thead>`);
         tabela += (`<tbody>`);
 
+
         //cria uma lista apenas com os itens do grupo selecionado
         let j = 0;
         for (let i = 0; i < json.length; i++) {
-          if (json[i]["cod_ibge"] == meuCodigo) {
+          if (json[i][estrutura] == meuCodigo) {
             listaItem[j] = json[i];
             j++;
           }
         }
-
-        //estrutura
-
-        /*for (i = 0; i < json.length; i++) {
-          //captura itens para tabela
-          tabela += (`<tr>`);
-          for (j = 1; j < estrutura.length; j++) {
-            tabela += (`<td>`);
-            tabela += json[i][estrutura[j]];
-            tabela += (`</td>`);
-          }
-          tabela += (`</tr>`);
-        }*/
 
         for (i = 0; i < listaItem.length; i++) {
 
@@ -148,25 +140,19 @@ function itensFinanceamento(caminho,estrutura) {
           tabela += (`<td>`);
           tabela += listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `" onchange="mudaItem(` + i + `)" id="quantidade_previsto` + i + `" type="text">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" onchange="mudaItem(` + i + `)" id="quantidade` + i + `" type="number">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `" onchange="mudaItem(` + i + `)" id="quantidade_projeto_executivo` + i + `" type="text">`);
-          tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `" onchange="mudaItem(` + i + `)" id="quantidade_termo_instalacao` + i + `" type="text">`);
+          tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="quantidadevalor` + i + `" type="number">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
 
           edicaoItem[i] = {
-            "quantidade_previsto": listaItem[i]["quantidade_previsto"],
-            "quantidade_projeto_executivo": listaItem[i]["quantidade_projeto_executivo"],
-            "quantidade_termo_instalacao": listaItem[i]["quantidade_termo_instalacao"],
+            "quantidade": listaItem[i]["quantidade"],
+            "valor": listaItem[i]["valor"],
           };
         }
-
-
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
-
       });
     } else {
       erros(response.status);
@@ -177,7 +163,6 @@ function itensFinanceamento(caminho,estrutura) {
 function mudaItem(valor) {
   edicaoItem[valor].quantidade_previsto = parseInt(document.getElementById("quantidade_previsto" + valor).value);
   edicaoItem[valor].quantidade_projeto_executivo = parseInt(document.getElementById("quantidade_projeto_executivo" + valor).value);
-  edicaoItem[valor].quantidade_termo_instalacao = parseInt(document.getElementById("quantidade_termo_instalacao" + valor).value);
   itemMudado[valor] = valor;
 }
 
@@ -189,7 +174,7 @@ function editarItem() {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar
-      fetch(servidor + 'read/cditens/' + meuCD + '/' + meuItem[i] + '/' + meuTipo[i], {
+      fetch(servidor + 'read/' + caminho + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
         method: 'PUT',
         body: corpo,
         headers: {
@@ -205,7 +190,7 @@ function editarItem() {
         } else {
           //erros(response.status);
         }
-        window.location.replace("./gerenciaCd.html");
+        location.reload();
       });
     }
   }

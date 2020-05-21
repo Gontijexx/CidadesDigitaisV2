@@ -484,12 +484,9 @@ function enviarModulo() {
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       alert("Módulos inseridos com sucesso");
-      window.location.reload();
+      location.reload();
     } else {
       //erros(response.status);
     }
-    return response.json().then(function (json) {
-      console.log(json);
-    })
   });
 }

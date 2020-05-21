@@ -315,7 +315,7 @@ function enviar() {
       //response.json().then(function (json) {
       //console.log(json);
       //});
-      window.location.replace("./fatura.html");
+      location.reload();
     } else {
       erros(response.status);
     }

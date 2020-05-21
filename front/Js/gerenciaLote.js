@@ -335,7 +335,7 @@ function editarReajuste() {
         if (response.status == 200 || response.status == 201) {
           //checar a resposta do pedido
           //console.log(json);
-          window.location.replace("./gerenciaLote.html");
+          location.reload();
         } else {
           erros(response.status);
         }
@@ -388,7 +388,7 @@ function apagarReajuste(valor) {
     //tratamento dos erros
     if (response.status == 204) {
       alert("Apagado com sucesso.");
-      window.location.replace("./gerenciaLote.html");
+      location.reload();
     } else {
       erros(response.status);
     }

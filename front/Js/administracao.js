@@ -507,39 +507,6 @@ function visTipologia() {
 
 
 
-function mandar(caminho) {
-  //transforma as informações do token em json
-  let corpo = JSON.stringify(info);
-  //função fetch para mandar
-  fetch(servidor + 'read/' + caminho, {
-    method: 'POST',
-    body: corpo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //checar o status do pedido
-    //console.log(response);
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201 || response.status == 202) {
-      response.json().then(function (json) {
-        //console.log(json);
-      });
-      window.location.replace("./administracao.html");
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
-
-
-
-
-
-
 function visualizar(caminho, estrutura) {
   //função fetch para chamar os itens de previsão da tabela
   fetch(servidor + 'read/' + caminho, {
@@ -579,6 +546,39 @@ function visualizar(caminho, estrutura) {
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
       });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+
+
+
+
+function mandar(caminho) {
+  //transforma as informações do token em json
+  let corpo = JSON.stringify(info);
+  //função fetch para mandar
+  fetch(servidor + 'read/' + caminho, {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar o status do pedido
+    //console.log(response);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201 || response.status == 202) {
+      response.json().then(function (json) {
+        //console.log(json);
+      });
+      location.reload();
     } else {
       erros(response.status);
     }

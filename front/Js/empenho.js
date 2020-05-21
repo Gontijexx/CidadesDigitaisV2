@@ -271,11 +271,7 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      response.json().then(function (json) {
-      //checar o json
-      //console.log(json);
-      });
-      window.location.replace("./empenho.html");
+      location.reload();
     } else {
       //erros(response.status);
     }

@@ -384,10 +384,8 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201 || response.status == 202) {
-      response.json().then(function (json) {
-        //console.log(json);
-      });
-      window.location.replace("./cd.html");
+      alert("Cidade Digital criada com sucesso");
+      location.reload();
     } else {
       erros(response.status);
     }

@@ -47,22 +47,21 @@ func (server *Server) CreateFatura(w http.ResponseWriter, r *http.Request) {
 	logFatura := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct fatura referenciada (&struct)
-	err = json.Unmarshal(body, &fatura)
-	if err != nil {
+	if err = json.Unmarshal(body, &fatura); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	//	Validacao de estrutura
-	err = validation.Validator.Struct(fatura)
-	if err != nil {
+	if err = validation.Validator.Struct(fatura); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
 	}
 
 	//	SaveFatura eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
-	if err = fatura.SaveFatura(server.DB); err != nil {
+	faturaCreated, err := fatura.SaveFatura(server.DB)
+	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
 		return
@@ -76,10 +75,10 @@ func (server *Server) CreateFatura(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, fatura.NumNF))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, faturaCreated.NumNF))
 
 	//	Ao final retorna o Status 201 e o JSON da struct que foi criada
-	responses.JSON(w, http.StatusCreated, fatura)
+	responses.JSON(w, http.StatusCreated, faturaCreated)
 }
 
 /*  =========================
@@ -114,13 +113,14 @@ func (server *Server) GetFaturaByID(w http.ResponseWriter, r *http.Request) {
 	fatura := models.Fatura{}
 
 	//	Recebe o dado buscado no banco de dados
-	if err = fatura.FindFaturaByID(server.DB, uint32(numNF), uint32(codIbge)); err != nil {
+	faturaGotten, err := fatura.FindFaturaByID(server.DB, uint32(numNF), uint32(codIbge))
+	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return
 	}
 
 	//	Retorna o Status 200 e o JSON da struct buscada
-	responses.JSON(w, http.StatusOK, fatura)
+	responses.JSON(w, http.StatusOK, faturaGotten)
 }
 
 /*  =========================
@@ -214,13 +214,14 @@ func (server *Server) UpdateFatura(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Altera a fatura solicitada
-	if err = fatura.UpdateFatura(server.DB, uint32(numNF), uint32(codIbge)); err != nil {
+	updateFatura, err := fatura.UpdateFatura(server.DB, uint32(numNF), uint32(codIbge))
+	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] It couldn't update in database, %v\n", formattedError))
 		return
 	}
 
-	responses.JSON(w, http.StatusOK, fatura)
+	responses.JSON(w, http.StatusOK, updateFatura)
 }
 
 /*  =========================

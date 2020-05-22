@@ -13,6 +13,7 @@ type ItensPrevisaoEmpenho struct {
 	CodLote            uint32  `gorm:"foreign_key:CodLote;not null" json:"cod_lote"`
 	Valor              float32 `gorm:"default:null" json:"valor"`
 	Quantidade         float32 `gorm:"default:null" json:"quantidade"`
+	Descricao          string  `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================
@@ -22,13 +23,33 @@ type ItensPrevisaoEmpenho struct {
 func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindItensPrevisaoEmpenhoByID(db *gorm.DB, codPrevisaoEmpenho, codItem, codTipoItem uint32) (*ItensPrevisaoEmpenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", codPrevisaoEmpenho, codItem, codTipoItem).Take(&itensPrevisaoEmpenho).Error
+	err := db.Debug().Model(&ItensPrevisaoEmpenho{}).Where("cod_previsao_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", codPrevisaoEmpenho, codItem, codTipoItem).Take(&itensPrevisaoEmpenho).Error
 
 	if err != nil {
 		return &ItensPrevisaoEmpenho{}, err
 	}
 
 	return itensPrevisaoEmpenho, err
+}
+
+/*  =========================
+	FUNCAO LISTAR TODOS ITENS PREVISAO EMPENHO
+=========================  */
+
+func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindAllItensPrevisaoEmpenho(db *gorm.DB) (*[]ItensPrevisaoEmpenho, error) {
+
+	allItensPrevisaoEmpenho := []ItensPrevisaoEmpenho{}
+
+	// Busca todos elementos contidos no banco de dados
+	err := db.Debug().Table("itens_previsao_empenho").
+		Select("itens.descricao, itens_previsao_empenho.*").
+		Joins("JOIN itens ON itens_previsao_empenho.cod_item = itens.cod_item AND itens_previsao_empenho.cod_tipo_item = itens.cod_tipo_item").
+		Scan(&allItensPrevisaoEmpenho).Error
+	if err != nil {
+		return &[]ItensPrevisaoEmpenho{}, err
+	}
+
+	return &allItensPrevisaoEmpenho, err
 }
 
 /*  =========================

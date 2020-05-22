@@ -24,8 +24,7 @@ import (
 func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 18002)
-	if err != nil {
+	if err := config.AuthMod(w, r, 18002); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -69,13 +68,38 @@ func (server *Server) GetItensPrevisaoEmpenhoByID(w http.ResponseWriter, r *http
 }
 
 /*  =========================
+	FUNCAO LISTAR TODAS ITENS PREVISAO EMPENHO
+=========================  */
+
+func (server *Server) GetAllItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	if err := config.AuthMod(w, r, 18002); err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
+
+	//	allItensPrevisaoEmpenho armazena os dados buscados no banco de dados
+	allItensPrevisaoEmpenho, err := itensPrevisaoEmpenho.FindAllItensPrevisaoEmpenho(server.DB)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct buscada
+	responses.JSON(w, http.StatusOK, allItensPrevisaoEmpenho)
+}
+
+/*  =========================
 	FUNCAO EDITAR ITENS PREVISAO EMPENHO
 =========================  */
 
 func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
 
-	err := config.AuthMod(w, r, 18003)
-	if err != nil {
+	if err := config.AuthMod(w, r, 18003); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -120,15 +144,13 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
 	logItensPrevisaoEmpenho := models.Log{}
 
-	err = json.Unmarshal(body, &itensPrevisaoEmpenho)
-	if err != nil {
+	if err = json.Unmarshal(body, &itensPrevisaoEmpenho); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	//	Validacao de estrutura
-	err = validation.Validator.Struct(itensPrevisaoEmpenho)
-	if err != nil {
+	if err = validation.Validator.Struct(itensPrevisaoEmpenho); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return

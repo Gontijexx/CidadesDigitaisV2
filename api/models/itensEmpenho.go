@@ -14,7 +14,8 @@ type ItensEmpenho struct {
 	CodTipoItem        uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
 	CodPrevisaoEmpenho uint32  `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
 	Valor              float32 `gorm:"default:null" json:"valor"`
-	Quantidade         float32  `gorm:"default:null" json:"quantidade"`
+	Quantidade         float32 `gorm:"default:null" json:"quantidade"`
+	Descricao          string  `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================
@@ -39,7 +40,7 @@ func (itensEmpenho *ItensEmpenho) SaveItensEmpenho(db *gorm.DB) (*ItensEmpenho, 
 func (itensEmpenho *ItensEmpenho) FindItensEmpenhoByID(db *gorm.DB, idEmpenho, codItem, codTipoItem uint32) (*ItensEmpenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(ItensEmpenho{}).Where("id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", idEmpenho, codItem, codTipoItem).Take(&itensEmpenho).Error
+	err := db.Debug().Model(&ItensEmpenho{}).Where("id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", idEmpenho, codItem, codTipoItem).Take(&itensEmpenho).Error
 	if err != nil {
 		return &ItensEmpenho{}, err
 	}
@@ -56,7 +57,10 @@ func (itensEmpenho *ItensEmpenho) FindAllItensEmpenho(db *gorm.DB) (*[]ItensEmpe
 	allItensEmpenho := []ItensEmpenho{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&Entidade{}).Find(&allItensEmpenho).Error
+	err := db.Debug().Table("itens_empenho").
+		Select("itens.descricao, itens_empenho.*").
+		Joins("JOIN itens ON itens_empenho.cod_item = itens.cod_item AND itens_empenho.cod_tipo_item = itens.cod_tipo_item").
+		Scan(&allItensEmpenho).Error
 	if err != nil {
 		return &[]ItensEmpenho{}, err
 	}

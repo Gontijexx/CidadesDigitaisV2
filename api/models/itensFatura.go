@@ -16,6 +16,7 @@ type ItensFatura struct {
 	CodTipoItem uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
 	Valor       float32 `gorm:"default:null" json:"valor"`
 	Quantidade  float32 `gorm:"default:null" json:"quantidade"`
+	Descricao   string  `gorm:"default:null" json:"descricao"`
 }
 
 /*  =========================
@@ -40,7 +41,7 @@ func (itensFatura *ItensFatura) SaveItensFatura(db *gorm.DB) (*ItensFatura, erro
 func (itensFatura *ItensFatura) FindItensFaturaByID(db *gorm.DB, numNF, codIbge, idEmpenho, codItem, codTipoItem uint32) (*ItensFatura, error) {
 
 	//	Busca um elemento no banco de dados de acordo com suas chaves primarias
-	err := db.Debug().Model(ItensEmpenho{}).Where("num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", numNF, codIbge, idEmpenho, codItem, codTipoItem).Take(&itensFatura).Error
+	err := db.Debug().Model(&ItensFatura{}).Where("num_nf = ? AND cod_ibge = ? AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", numNF, codIbge, idEmpenho, codItem, codTipoItem).Take(&itensFatura).Error
 	if err != nil {
 		return &ItensFatura{}, err
 	}
@@ -57,7 +58,10 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB) (*[]ItensFatura,
 	allItensFatura := []ItensFatura{}
 
 	// Busca todos elementos contidos no banco de dados
-	err := db.Debug().Model(&ItensFatura{}).Find(&allItensFatura).Error
+	err := db.Debug().Table("itens_fatura").
+		Select("itens.descricao, itens_fatura.*").
+		Joins("JOIN itens ON itens_fatura.cod_item = itens.cod_item AND itens_fatura.cod_tipo_item = itens.cod_tipo_item").
+		Scan(&allItensFatura).Error
 	if err != nil {
 		return &[]ItensFatura{}, err
 	}

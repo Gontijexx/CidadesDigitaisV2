@@ -420,10 +420,13 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 		ROTAS EM ITENS PREVISAO EMPENHO
 	=========================	*/
 
+	//	LISTA ITENS PREVISAO EMPENHO
+	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllItensPrevisaoEmpenho))).Methods(http.MethodGet)
+
 	//	EDITA ITENS PREVISAO EMPENHO
 	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateItensPrevisaoEmpenho))).Methods(http.MethodPut)
 
-	//	LISTA ITENS PREVISAO EMPENHO
+	//	LISTA ITENS PREVISAO EMPENHO (cod_previsao_empenho, cod_item, cod_tipo_item)
 	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensPrevisaoEmpenhoByID))).Methods(http.MethodGet)
 
 	/*	=========================

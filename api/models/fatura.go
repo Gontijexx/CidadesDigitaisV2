@@ -20,24 +20,30 @@ type Fatura struct {
 	FUNCAO SALVAR FATURA
 =========================  */
 
-func (fatura *Fatura) SaveFatura(db *gorm.DB) error {
+func (fatura *Fatura) SaveFatura(db *gorm.DB) (*Fatura, error) {
 
 	//	Adiciona um novo elemento ao banco de dados
 	err := db.Debug().Create(&fatura).Error
+	if err != nil {
+		return &Fatura{}, err
+	}
 
-	return err
+	return fatura, err
 }
 
 /*  =========================
 	FUNCAO LISTAR FATURA POR ID
 =========================  */
 
-func (fatura *Fatura) FindFaturaByID(db *gorm.DB, numNF, codIbge uint32) error {
+func (fatura *Fatura) FindFaturaByID(db *gorm.DB, numNF, codIbge uint32) (*Fatura, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	err := db.Debug().Model(Fatura{}).Where("num_nf = ? AND cod_ibge = ?", numNF, codIbge).Take(&fatura).Error
+	if err != nil {
+		return &Fatura{}, err
+	}
 
-	return err
+	return fatura, err
 }
 
 /*  =========================
@@ -62,12 +68,20 @@ func (fatura *Fatura) FindAllFatura(db *gorm.DB) (*[]Fatura, error) {
 	FUNCAO EDITAR FATURA
 ========================   */
 
-func (fatura *Fatura) UpdateFatura(db *gorm.DB, numNF, codIbge uint32) error {
+func (fatura *Fatura) UpdateFatura(db *gorm.DB, numNF, codIbge uint32) (*Fatura, error) {
 
 	//	Permite a atualizacao dos campos indicados
 	db = db.Debug().Exec("UPDATE fatura SET dt_nf = ? WHERE num_nf = ? AND cod_ibge = ?", fatura.DtNf, numNF, codIbge)
+	if db.Error != nil {
+		return &Fatura{}, db.Error
+	}
+	//	Busca um elemento no banco de dados a partir de sua chave primaria
+	err := db.Debug().Model(&Assunto{}).Where("num_nf = ? AND cod_ibge = ?", numNF, codIbge).Take(&fatura).Error
+	if err != nil {
+		return &Fatura{}, err
+	}
 
-	return db.Error
+	return fatura, err
 }
 
 /*  =========================

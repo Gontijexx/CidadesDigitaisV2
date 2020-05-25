@@ -248,7 +248,7 @@ function pegarCNPJ() {
         for (i = 0; i < json.length; i++) {
           x[i + 1] += "<option>" + json[i].cnpj + "</option>";
         }
-        x.sort();
+        
         document.getElementById("cnpj").innerHTML = x;
         paginacao();
       });

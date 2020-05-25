@@ -188,7 +188,7 @@ function itensFinanceamento(caminho, estrutura) {
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="number">`);
           tabela += (`</td> <td>`);
-          tabela += (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
+          tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td>`);
           tabela += (`</tr>`);
 

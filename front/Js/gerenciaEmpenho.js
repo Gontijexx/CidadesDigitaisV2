@@ -18,7 +18,7 @@ function pegarPrevisao(){
         for (i = 0; i < json.length; i++) {
           x[i] += "<option>" + json[i]["cod_previsao_empenho"] + "</option>";
         }
-        x.sort();
+        
         document.getElementById("cod_previsao_empenho").innerHTML = x;
 
         //colocando valor original

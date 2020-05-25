@@ -27,7 +27,7 @@ function pegarEntidade(){
           // o valor pego é o cnpj, mas o campo mostra o nome da entidade
           x[i] += "<option value=" + json[i].cnpj + ">" + json[i].nome + "</option>";
         }
-        x.sort();
+        
 
         document.getElementById("cnpj").innerHTML = x;
 

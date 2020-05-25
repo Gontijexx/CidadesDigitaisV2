@@ -29,7 +29,7 @@ function enabler() {
       y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
     }
   }
-  y.sort();
+  
   document.getElementById("nome_municipio").innerHTML = y;
 }
 
@@ -65,7 +65,7 @@ function pegarMunicipio(){
         for (i = 0; i < j; i++) {
           x[i] += "<option>" + valorFinalUF[i] + "</option>";
         }
-        x.sort();
+        
         document.getElementById("uf").innerHTML = x;
         paginacao();
       });

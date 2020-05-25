@@ -65,7 +65,7 @@ function paginacao() {
         </thead>`);
         tabela += (`<tbody>`);
 
-        json.sort();
+        
         for (let i = comeco; i < fim && i < json.length; i++) {
           //captura itens para tabela
           tabela += (`<tr>`);
@@ -244,7 +244,7 @@ function pegarCD() {
         for (i = 0; i < ufCD.length; i++) {
           x[i+1] += "<option>" + ufCD[i].uf + "</option>";
         }
-        x.sort();
+        
         document.getElementById("uf").innerHTML = x;
       });
     } else {
@@ -276,7 +276,7 @@ function enabler() {
   for (i = 0; i < cidadesFinal.length; i++) {
     x[i+1] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
   }
-  x.sort();
+  
   document.getElementById("cod_ibge").innerHTML = x;
 }
 

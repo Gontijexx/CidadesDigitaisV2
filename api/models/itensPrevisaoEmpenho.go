@@ -1,19 +1,22 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 /*  =========================
 	STRUTC ITENS PREVISAO EMPENHO
 =========================  */
 
 type ItensPrevisaoEmpenho struct {
-	CodPrevisaoEmpenho uint32  `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
-	CodItem            uint32  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
-	CodTipoItem        uint32  `gorm:"primary_key;foreign_key:CodTipo_item;not null" json:"cod_tipo_item"`
-	CodLote            uint32  `gorm:"foreign_key:CodLote;not null" json:"cod_lote"`
-	Valor              float32 `gorm:"default:null" json:"valor"`
-	Quantidade         float32 `gorm:"default:null" json:"quantidade"`
-	Descricao          string  `gorm:"default:null" json:"descricao"`
+	CodPrevisaoEmpenho   uint32  `gorm:"primary_key;foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
+	CodItem              uint32  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
+	CodTipoItem          uint32  `gorm:"primary_key;foreign_key:CodTipo_item;not null" json:"cod_tipo_item"`
+	CodLote              uint32  `gorm:"foreign_key:CodLote;not null" json:"cod_lote"`
+	Valor                float32 `gorm:"default:null" json:"valor"`
+	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
+	Descricao            string  `gorm:"default:null" json:"descricao"`
+	QuantidadeDisponivel float64 `gorm:"default:null" json:"quantidade_disponivel"`
 }
 
 /*  =========================
@@ -40,11 +43,12 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindAllItensPrevisaoEmpenho(db
 
 	allItensPrevisaoEmpenho := []ItensPrevisaoEmpenho{}
 
-	// Busca todos elementos contidos no banco de dados
+	//	Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("itens_previsao_empenho").
 		Select("itens.descricao, itens_previsao_empenho.*").
-		Joins("JOIN itens ON itens_previsao_empenho.cod_item = itens.cod_item AND itens_previsao_empenho.cod_tipo_item = itens.cod_tipo_item").
+		Joins("JOIN itens ON itens_previsao_empenho.cod_item = itens.cod_item AND itens_previsao_empenho.cod_tipo_item = itens.cod_tipo_item ORDER BY cod_tipo_item, cod_item ASC").
 		Scan(&allItensPrevisaoEmpenho).Error
+
 	if err != nil {
 		return &[]ItensPrevisaoEmpenho{}, err
 	}
@@ -71,4 +75,18 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) UpdateItensPrevisaoEmpenho(db 
 	}
 
 	return itensPrevisaoEmpenho, err
+}
+
+/*  =========================
+	FUNCAO QUANTIDADE DISPONIVEL ITENS PREVISAO EMPENHO
+=========================  */
+
+func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) QuantidadeDisponivelItensPrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho, codItem, codTipoItem, codLote uint32) (*ItensPrevisaoEmpenho, error) {
+
+	//	Busca um elemento no banco de dados a partir de sua chave primaria
+	db.Debug().
+		Raw("SELECT (SELECT SUM(cd_itens.quantidade_termo_instalacao) AS quantidade_total_cd_itens FROM itens_previsao_empenho INNER JOIN cd ON itens_previsao_empenho.cod_lote = cd.cod_lote INNER JOIN cd_itens ON cd.cod_ibge = cd_itens.cod_ibge AND itens_previsao_empenho.cod_item = cd_itens.cod_item AND itens_previsao_empenho.cod_tipo_item = cd_itens.cod_tipo_item WHERE itens_previsao_empenho.cod_previsao_empenho = ? AND itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ?) - (SELECT SUM(itens_previsao_empenho.quantidade) AS total_quantidade_previsao_empenho FROM itens_previsao_empenho WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_lote = ?) AS quantidade_disponivel, itens.descricao, itens_previsao_empenho.* JOIN itens ON itens_previsao_empenho.cod_item = itens.cod_item AND itens_previsao_empenho.cod_tipo_item = itens.cod_tipo_item ORDER BY cod_tipo_item, cod_item ASC", codPrevisaoEmpenho, codItem, codTipoItem, codItem, codTipoItem, codLote).
+		Scan(&itensPrevisaoEmpenho)
+
+	return itensPrevisaoEmpenho, db.Error
 }

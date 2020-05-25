@@ -1,5 +1,5 @@
 //pega o CNPJ escolhido anteriormente
-let meuPrevisao = localStorage.getItem("cod_previsao_empenho");
+let meuCodigo = localStorage.getItem("cod_previsao_empenho");
 
 function pegarLote() {
   fetch(servidor + 'read/lote', {

@@ -1,5 +1,5 @@
 //pega o CNPJ escolhido anteriormente
-let meuFatura = localStorage.getItem("num_nf");
+let meuCodigo = localStorage.getItem("num_nf");
 let meuIBGE = localStorage.getItem("cod_ibge");
 let cidades = [];
 

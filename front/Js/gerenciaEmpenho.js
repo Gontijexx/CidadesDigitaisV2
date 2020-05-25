@@ -1,5 +1,5 @@
 //pega o CNPJ escolhido anteriormente
-let meuEmpenho = localStorage.getItem("id_empenho");
+let meuCodigo = localStorage.getItem("id_empenho");
 
 function pegarPrevisao(){
   fetch(servidor + 'read/previsaoempenho', {
@@ -64,7 +64,7 @@ function enviar() {
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch(servidor + 'read/empenho/' + meuEmpenho, {
+  fetch(servidor + 'read/empenho/' + meuCodigo, {
     method: 'PUT',
     body: corpo,
     headers: {

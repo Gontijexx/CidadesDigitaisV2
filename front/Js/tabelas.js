@@ -82,13 +82,61 @@ function previsao(valorCodigo) {
 
 //Itens de financeamento
 
-let listaItem = [];
+let listaItem = [],
+  meuItem = [],
+  meuTipo = [],
+  edicaoItem = [],
+  itemMudado = [];
 
 function itensFinanceamento(caminho, estrutura) {
 
   //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Salvar Alterações em Itens</button>`);
-  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Salvar Alterações em Itens</button>`);
+  // if(){
+  //   document.getElementById("editar").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
+  //   document.getElementById("editar2").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
+  // }
+  // else if(){
+  //   document.getElementById("editar").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
+  //   document.getElementById("editar2").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
+  // }
+  // else if(){
+  //   document.getElementById("editar").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
+  //   document.getElementById("editar2").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//PROBLEMA: NÃO CONSIGO COLOCAR ONCLICK DENTRO DO BOTÃO DE EDITAR
+//POSSIVEL SOLUÇÃO: fazer um if pras possibilidades
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   //função fetch para chamar itens da tabela
   fetch(servidor + 'read/' + caminho, {
@@ -108,18 +156,15 @@ function itensFinanceamento(caminho, estrutura) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        console.log(json)
-
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
-        <th scope="col">Descrição</th>
-        <th scope="col">Quantidade prevista</th>
-        <th scope="col">Quantidade do projeto executivo</th>
-        <th scope="col">Quantidade de termo de instalação </th>
+        <th style="width:40%" scope="col">Descrição</th>
+        <th style="width:20%" scope="col">Quantidade</th>
+        <th style="width:20%" scope="col">Valor</th>
+        <th style="width:20%" scope="col">Subtotal</th>
         </tr>
-        </thead>`);
+        </thead>`);0
         tabela += (`<tbody>`);
-
 
         //cria uma lista apenas com os itens do grupo selecionado
         let j = 0;
@@ -131,18 +176,19 @@ function itensFinanceamento(caminho, estrutura) {
         }
 
         for (i = 0; i < listaItem.length; i++) {
-
           //salva os valores para edição
-          meuItem[i] = listaItem[i]["cod_item"];
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
+          meuItem[i] = listaItem[i]["cod_item"];
 
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += listaItem[i]["descricao"];
+          tabela += listaItem[i]["cod_tipo_item"] + ' - ' + listaItem[i]["cod_item"] + ' - ' + listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
           tabela += (`<input value="` + listaItem[i]["quantidade"] + `" onchange="mudaItem(` + i + `)" id="quantidade` + i + `" type="number">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="quantidadevalor` + i + `" type="number">`);
+          tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="number">`);
+          tabela += (`</td> <td>`);
+          tabela += (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
           tabela += (`</td>`);
           tabela += (`</tr>`);
 
@@ -160,13 +206,13 @@ function itensFinanceamento(caminho, estrutura) {
   });
 }
 
-function mudaItem(valor) {
-  edicaoItem[valor].quantidade_previsto = parseInt(document.getElementById("quantidade_previsto" + valor).value);
-  edicaoItem[valor].quantidade_projeto_executivo = parseInt(document.getElementById("quantidade_projeto_executivo" + valor).value);
-  itemMudado[valor] = valor;
+function mudaItem(itemPego) {
+  edicaoItem[itemPego].quantidade = parseInt(document.getElementById("quantidade" + itemPego).value);
+  edicaoItem[itemPego].valor = parseInt(document.getElementById("valor" + itemPego).value);
+  itemMudado[itemPego] = itemPego;
 }
 
-function editarItem() {
+function editarItem(caminho) {
 
   for (let i = 0; i < listaItem.length; i++) {
 
@@ -174,7 +220,7 @@ function editarItem() {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar
-      fetch(servidor + 'read/' + caminho + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
+      fetch(servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
         method: 'PUT',
         body: corpo,
         headers: {

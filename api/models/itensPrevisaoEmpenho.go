@@ -81,12 +81,14 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) UpdateItensPrevisaoEmpenho(db 
 	FUNCAO QUANTIDADE DISPONIVEL ITENS PREVISAO EMPENHO
 =========================  */
 
-func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) QuantidadeDisponivelItensPrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho, codItem, codTipoItem, codLote uint32) (*ItensPrevisaoEmpenho, error) {
+func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) QuantidadeDisponivelItensPrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho, codItem, codTipoItem, codLote uint32) (*[]ItensPrevisaoEmpenho, error) {
+
+	allItensPrevisaoEmpenho := []ItensPrevisaoEmpenho{}
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
 	db.Debug().
-		Raw("SELECT (SELECT SUM(cd_itens.quantidade_termo_instalacao) AS quantidade_total_cd_itens FROM itens_previsao_empenho INNER JOIN cd ON itens_previsao_empenho.cod_lote = cd.cod_lote INNER JOIN cd_itens ON cd.cod_ibge = cd_itens.cod_ibge AND itens_previsao_empenho.cod_item = cd_itens.cod_item AND itens_previsao_empenho.cod_tipo_item = cd_itens.cod_tipo_item WHERE itens_previsao_empenho.cod_previsao_empenho = ? AND itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ?) - (SELECT SUM(itens_previsao_empenho.quantidade) AS total_quantidade_previsao_empenho FROM itens_previsao_empenho WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_lote = ?) AS quantidade_disponivel, itens.descricao, itens_previsao_empenho.* JOIN itens ON itens_previsao_empenho.cod_item = itens.cod_item AND itens_previsao_empenho.cod_tipo_item = itens.cod_tipo_item ORDER BY cod_tipo_item, cod_item ASC", codPrevisaoEmpenho, codItem, codTipoItem, codItem, codTipoItem, codLote).
-		Scan(&itensPrevisaoEmpenho)
+		Raw("SELECT (SELECT SUM(cd_itens.quantidade_termo_instalacao) AS quantidade_total_cd_itens FROM itens_previsao_empenho INNER JOIN lote ON itens_previsao_empenho.cod_lote = lote.cod_lote INNER JOIN cd ON lote.cod_lote = cd.cod_lote INNER JOIN cd_itens ON cd.cod_ibge = cd_itens.cod_ibge AND itens_previsao_empenho.cod_item = cd_itens.cod_item AND itens_previsao_empenho.cod_tipo_item = cd_itens.cod_tipo_item WHERE itens_previsao_empenho.cod_previsao_empenho = ? AND cd_itens.cod_item = ? AND cd_itens.cod_tipo_item = ?) - (SELECT SUM(itens_previsao_empenho.quantidade) AS total_quantidade_previsao_empenho FROM itens_previsao_empenho WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_lote = ?) AS quantidade_disponivel, itens.descricao, itens_previsao_empenho.*, lote.cod_lote FROM itens_previsao_empenho INNER JOIN itens ON itens_previsao_empenho.cod_item = itens.cod_item AND itens_previsao_empenho.cod_tipo_item = itens.cod_tipo_item INNER JOIN lote ON itens_previsao_empenho.cod_lote = lote.cod_lote WHERE itens_previsao_empenho.cod_previsao_empenho = ? AND itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ?  AND itens_previsao_empenho.cod_lote = ?", codPrevisaoEmpenho, codItem, codTipoItem, codItem, codTipoItem, codLote, codPrevisaoEmpenho, codItem, codTipoItem, codLote).
+		Scan(&allItensPrevisaoEmpenho)
 
-	return itensPrevisaoEmpenho, db.Error
+	return &allItensPrevisaoEmpenho, db.Error
 }

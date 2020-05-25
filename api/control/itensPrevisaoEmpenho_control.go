@@ -175,3 +175,59 @@ func (server *Server) UpdateItensPrevisaoEmpenho(w http.ResponseWriter, r *http.
 	//	Retorna o Status 200 e o JSON da struct alterada
 	responses.JSON(w, http.StatusOK, updateItensPrevisaoEmpenho)
 }
+
+/*  =========================
+	FUNCAO LISTAR ITENS PREVISAO EMPENHO POR ID
+=========================  */
+
+func (server *Server) GetQuantidadeDisponivelItensPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	if err := config.AuthMod(w, r, 18002); err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codPrevisaoEmpenho armazena a chave primaria da tabela itens_previsao_empenho
+	codPrevisaoEmpenho, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codItem armazena a chave primaria da tabela itens_previsao_empenho
+	codItem, err := strconv.ParseUint(vars["cod_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codTipoItem armazena a chave primaria da tabela itens_previsao_empenho
+	codTipoItem, err := strconv.ParseUint(vars["cod_tipo_item"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codLote armazena a chave primaria da tabela itens_previsao_empenho
+	codLote, err := strconv.ParseUint(vars["cod_lote"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	itensPrevisaoEmpenho := models.ItensPrevisaoEmpenho{}
+
+	//	itensPrevisaoEmpenhoGotten recebe o dado buscado no banco de dados
+	itensPrevisaoEmpenhoGotten, err := itensPrevisaoEmpenho.QuantidadeDisponivelItensPrevisaoEmpenho(server.DB, uint32(codPrevisaoEmpenho), uint32(codItem), uint32(codTipoItem), uint32(codLote))
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct buscada
+	responses.JSON(w, http.StatusOK, itensPrevisaoEmpenhoGotten)
+}

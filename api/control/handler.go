@@ -429,6 +429,8 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	LISTA ITENS PREVISAO EMPENHO (cod_previsao_empenho, cod_item, cod_tipo_item)
 	r.HandleFunc(config.ITENS_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensPrevisaoEmpenhoByID))).Methods(http.MethodGet)
 
+	r.HandleFunc("/read/itensprevisaoempenho/{cod_previsao_empenho}/{cod_item}/{cod_tipo_item}/{cod_lote}", middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetQuantidadeDisponivelItensPrevisaoEmpenho))).Methods(http.MethodGet)
+
 	/*	=========================
 		ROTAS EM ASSUNTO
 	=========================	*/

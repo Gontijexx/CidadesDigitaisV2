@@ -41,14 +41,14 @@ window.onload = function () {
         for (i = 0; i < j; i++) {
           x[i] += "<option>" + valorFinalUF[i] + "</option>";
         }
-        x.sort();
+        
         document.getElementById("uf").innerHTML = x;
 
         let y = [];
         for (i = 0; i < json.length; i++) {
           y[i] = "<option>" + json[i].nome_municipio + "</option>"
         }
-        y.sort();
+        
         document.getElementById("nome_municipio").innerHTML = y;
 
         //captura os elementos anteriores para visualizar na edição
@@ -77,7 +77,7 @@ function enabler() {
       y[i] = "<option>" + cidades[i].nome_municipio + "</option>"
     }
   }
-  y.sort();
+  
   document.getElementById("nome_municipio").innerHTML = y;
 }
 

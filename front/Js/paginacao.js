@@ -81,7 +81,7 @@ function paginacao() {
         // </thead>`);
         // tabela += (`<tbody>`);
 
-        // json.sort();
+        // 
         // for (let i = comeco; i < fim && i < json.length; i++) {
         //   //captura itens para tabela
         //   tabela += (`<tr>`);

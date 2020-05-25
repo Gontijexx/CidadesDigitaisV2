@@ -313,7 +313,7 @@ function pegarMunicipio() {
         for (i = 0; i < j; i++) {
           x[i + 1] += "<option>" + valorUF[i] + "</option>";
         }
-        x.sort();
+        
         document.getElementById("uf").innerHTML = x;
       });
     } else {
@@ -343,7 +343,7 @@ function enabler() {
   for (i = 0; i < cidadesFinal.length; i++) {
     x[i+1] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
   }
-  x.sort();
+  
   document.getElementById("cod_ibge").innerHTML = x;
 }
 

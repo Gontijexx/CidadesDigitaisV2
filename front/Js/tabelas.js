@@ -91,55 +91,21 @@ let listaItem = [],
 function itensFinanceamento(caminho, estrutura) {
 
   //cria o botão para editar
-  // if(){
-  //   document.getElementById("editar").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
-  //   document.getElementById("editar2").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
-  // }
-  // else if(){
-  //   document.getElementById("editar").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
-  //   document.getElementById("editar2").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
-  // }
-  // else if(){
-  //   document.getElementById("editar").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
-  //   document.getElementById("editar2").innerHTML = (`<button class="btn btn-success">Salvar Alterações em Itens</button>`);
-  // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//PROBLEMA: NÃO CONSIGO COLOCAR ONCLICK DENTRO DO BOTÃO DE EDITAR
-//POSSIVEL SOLUÇÃO: fazer um if pras possibilidades
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  if(caminho = "itensprevisaoempenho"){
+    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensprevisaoempenho')">Salvar Alterações em Itens</button>`);
+    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensprevisaoempenho')">Salvar Alterações em Itens</button>`);
+  }
+  else if(caminho = "itensempenho"){
+    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensempenho')">Salvar Alterações em Itens</button>`);
+    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensempenho')">Salvar Alterações em Itens</button>`);
+  }
+  else if(caminho = "itensfatura"){
+    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensfatura')">Salvar Alterações em Itens</button>`);
+    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensfatura')">Salvar Alterações em Itens</button>`);
+  }
+ 
   //função fetch para chamar itens da tabela
-  fetch(servidor + 'read/' + caminho, {
+  fetch(servidor + 'read/' + caminho + "/" + meuCodigo + "/" + meuCodigoSec, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -163,17 +129,14 @@ function itensFinanceamento(caminho, estrutura) {
         <th style="width:20%" scope="col">Valor</th>
         <th style="width:20%" scope="col">Subtotal</th>
         </tr>
-        </thead>`);0
+        </thead>`);
         tabela += (`<tbody>`);
 
-        //cria uma lista apenas com os itens do grupo selecionado
-        let j = 0;
-        for (let i = 0; i < json.length; i++) {
-          if (json[i][estrutura] == meuCodigo) {
-            listaItem[j] = json[i];
-            j++;
-          }
-        }
+        //armazenando para edição
+        listaItem = json;
+
+        //calculo do total
+        let total = 0;
 
         for (i = 0; i < listaItem.length; i++) {
           //salva os valores para edição
@@ -189,6 +152,8 @@ function itensFinanceamento(caminho, estrutura) {
           tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="number">`);
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
+          total = total + listaItem[i]["quantidade_disponivel"];
+          console.log(total);
           tabela += (`</td>`);
           tabela += (`</tr>`);
 
@@ -197,11 +162,30 @@ function itensFinanceamento(caminho, estrutura) {
             "valor": listaItem[i]["valor"],
           };
         }
+        tabela += (`<tr>`);
+
+        tabela += (`<td>`);
+        tabela += (`<p> Total: </p>`);
+        tabela += (`</td>`);
+
+        //espaços
+        tabela += (`<td>`);
+        tabela += (`</td>`);
+        tabela += (`<td>`);
+        tabela += (`</td>`);
+
+        //valor final
+        tabela += (`<td>`);
+        tabela += total;
+        tabela += (`</td>`);
+
+        tabela += (`</tr>`);
+
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
       });
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
 }
@@ -234,7 +218,7 @@ function editarItem(caminho) {
         if (response.status == 200 || response.status == 201) {
           location.reload();
         } else {
-          //erros(response.status);
+          erros(response.status);
         }
         location.reload();
       });

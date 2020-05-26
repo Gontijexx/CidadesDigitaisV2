@@ -1,31 +1,6 @@
 //pega o CNPJ escolhido anteriormente
 let meuCodigo = localStorage.getItem("cod_previsao_empenho");
-
-function pegarLote() {
-  fetch(servidor + 'read/lote', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //console.log(json);
-        let x = [];
-        for (i = 0; i < json.length; i++) {
-          x[i] += "<option value=" + json[i].cod_lote + ">" + json[i].cod_lote + "</option>";
-        }
-        document.getElementById("cod_lote").innerHTML = x;
-        document.getElementById("cod_lote").value = localStorage.getItem("cod_lote");
-        pegarNaturezaDespesa();
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
+let meuCodigoSec = localStorage.getItem("cod_lote");
 
 function pegarNaturezaDespesa() {
   fetch(servidor + 'read/naturezadespesa', {
@@ -45,6 +20,7 @@ function pegarNaturezaDespesa() {
           x[i] += "<option value=" + json[i].cod_natureza_despesa + ">" + json[i].cod_natureza_despesa + ' - ' + json[i].descricao + "</option>";
         }
         document.getElementById("cod_natureza_despesa").innerHTML = x;
+        //deixar com o valor inicial
         document.getElementById("cod_natureza_despesa").value = localStorage.getItem("cod_natureza_despesa");
       });
     } else {
@@ -55,11 +31,12 @@ function pegarNaturezaDespesa() {
 
 window.onload = function () {
 
-  //esta função preenche os campos de lote e natureza de despesa
-  pegarLote();
+  //esta função preenche o campo de natureza de despesa
+  pegarNaturezaDespesa();
 
   //preenche os campos
-  document.getElementById("cod_previsao_empenho").value = localStorage.getItem("cod_previsao_empenho");
+  document.getElementById("cod_previsao_empenho").value = meuCodigo;
+  document.getElementById("cod_lote").value = meuCodigoSec;
   document.getElementById("ano_referencia").value = localStorage.getItem("ano_referencia");
 
   document.getElementById("tipo").innerHTML = "<option value='o'>Original</option><option value='r'>Reajuste</option>";
@@ -76,14 +53,12 @@ function enviar() {
 
   //  JSON usado para mandar as informações no fetch
   let info = {
-    "cod_lote": "",
     "cod_natureza_despesa": "",
     "data": "",
     "tipo": "",
     "ano_referencia": "",
   };
 
-  info.cod_lote = parseInt(document.getElementById("cod_lote").value);
   info.cod_natureza_despesa = parseInt(document.getElementById("cod_natureza_despesa").value);
   info.data = document.getElementById("data").value;
   info.tipo = document.getElementById("tipo").value;
@@ -92,7 +67,7 @@ function enviar() {
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch(servidor + 'read/previsaoempenho/' + parseInt(meuPrevisao), {
+  fetch(servidor + 'read/previsaoempenho/' + parseInt(meuCodigo), {
     method: 'PUT',
     body: corpo,
     headers: {

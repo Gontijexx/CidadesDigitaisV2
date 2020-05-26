@@ -214,7 +214,7 @@ const (
 =========================  */
 
 const (
-	ITENS_EMPENHO_PATH    = "/read/itensempenho"
+	ITENS_EMPENHO_PATH    = "/read/itensempenho/{id_empenho}/{cod_previsao_empenho}"
 	ITENS_EMPENHO_ID_PATH = "/read/itensempenho/{id_empenho}/{cod_item}/{cod_tipo_item}"
 )
 

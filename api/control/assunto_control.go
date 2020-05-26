@@ -25,8 +25,7 @@ import (
 func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19001)
-	if err != nil {
+	if err := config.AuthMod(w, r, 19001); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -49,25 +48,15 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 	logAssunto := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct assunto referenciada (&struct)
-	err = json.Unmarshal(body, &assunto)
-	if err != nil {
+	if err = json.Unmarshal(body, &assunto); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	//	Validacao de estrutura
-	err = validation.Validator.Struct(assunto)
-	if err != nil {
+	if err = validation.Validator.Struct(assunto); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
-		return
-	}
-
-	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logAssunto.LogAssunto(server.DB, assunto.CodAssunto, "assunto", "i", tokenID)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 
@@ -76,6 +65,14 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logAssunto.LogAssunto(server.DB, assuntoCreated.CodAssunto, "assunto", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 
@@ -92,8 +89,7 @@ func (server *Server) CreateAssunto(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19002)
-	if err != nil {
+	if err := config.AuthMod(w, r, 19002); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -128,8 +124,7 @@ func (server *Server) GetAssuntoByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllAssunto(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19002)
-	if err != nil {
+	if err := config.AuthMod(w, r, 19002); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -155,8 +150,7 @@ func (server *Server) GetAllAssunto(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 19003)
-	if err != nil {
+	if err := config.AuthMod(w, r, 19003); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -187,14 +181,12 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 	assunto := models.Assunto{}
 	logAssunto := models.Log{}
 
-	err = json.Unmarshal(body, &assunto)
-	if err != nil {
+	if err = json.Unmarshal(body, &assunto); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	err = validation.Validator.Struct(assunto)
-	if err != nil {
+	if err = validation.Validator.Struct(assunto); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
@@ -227,8 +219,7 @@ func (server *Server) UpdateAssunto(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 19003)
-	if err != nil {
+	if err := config.AuthMod(w, r, 19003); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -262,8 +253,7 @@ func (server *Server) DeleteAssunto(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 	Para o caso da funcao 'delete' apenas o erro nos eh necessario
-	err = assunto.DeleteAssunto(server.DB, uint32(codAssunto))
-	if err != nil {
+	if err = assunto.DeleteAssunto(server.DB, uint32(codAssunto)); err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't delete in database , %v\n", formattedError))
 		return

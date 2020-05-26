@@ -1,8 +1,6 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
@@ -27,7 +25,7 @@ func (assunto *Assunto) SaveAssunto(db *gorm.DB) (*Assunto, error) {
 		return &Assunto{}, err
 	}
 
-	return assunto, nil
+	return assunto, err
 }
 
 /*  =========================
@@ -37,7 +35,7 @@ func (assunto *Assunto) SaveAssunto(db *gorm.DB) (*Assunto, error) {
 func (assunto *Assunto) FindAssuntoByID(db *gorm.DB, codAssunto uint32) (*Assunto, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Assunto{}).Where("cod_assunto = ?", codAssunto).Take(&assunto).Error
+	err := db.Debug().Model(&Assunto{}).Where("cod_assunto = ?", codAssunto).Take(&assunto).Error
 	if err != nil {
 		return &Assunto{}, err
 	}
@@ -91,13 +89,6 @@ func (assunto *Assunto) DeleteAssunto(db *gorm.DB, codAssunto uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Assunto{}).Where("cod_assunto = ?", codAssunto).Take(&Assunto{}).Delete(&Assunto{})
-
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return errors.New("Assunto not found")
-		}
-		return db.Error
-	}
 
 	return db.Error
 }

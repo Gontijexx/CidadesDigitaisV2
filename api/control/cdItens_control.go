@@ -24,8 +24,7 @@ import (
 func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 13022)
-	if err != nil {
+	if err := config.AuthMod(w, r, 13022); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -74,8 +73,7 @@ func (server *Server) GetCDItensByID(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllCDItens(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 13022)
-	if err != nil {
+	if err := config.AuthMod(w, r, 13022); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -100,8 +98,7 @@ func (server *Server) GetAllCDItens(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 13023)
-	if err != nil {
+	if err := config.AuthMod(w, r, 13023); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -146,14 +143,12 @@ func (server *Server) UpdateCDItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = json.Unmarshal(body, &cdItens)
-	if err != nil {
+	if err = json.Unmarshal(body, &cdItens); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	err = validation.Validator.Struct(cdItens)
-	if err != nil {
+	if err = validation.Validator.Struct(cdItens); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return

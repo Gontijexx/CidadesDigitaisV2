@@ -35,7 +35,7 @@ func (assunto *Assunto) SaveAssunto(db *gorm.DB) (*Assunto, error) {
 func (assunto *Assunto) FindAssuntoByID(db *gorm.DB, codAssunto uint32) (*Assunto, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Assunto{}).Where("cod_assunto = ?", codAssunto).Take(&assunto).Error
+	err := db.Debug().Model(&Assunto{}).Where("cod_assunto = ?", codAssunto).Take(&assunto).Error
 	if err != nil {
 		return &Assunto{}, err
 	}

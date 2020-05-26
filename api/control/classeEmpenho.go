@@ -24,8 +24,7 @@ import (
 func (server *Server) CreateClasseEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 21001)
-	if err != nil {
+	if err := config.AuthMod(w, r, 21001); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -49,25 +48,15 @@ func (server *Server) CreateClasseEmpenho(w http.ResponseWriter, r *http.Request
 	logClasseEmpenho := models.Log{}
 
 	//	Unmarshal analisa o JSON recebido e armazena na struct classe empenho referenciada (&struct)
-	err = json.Unmarshal(body, &classeEmpenho)
-	if err != nil {
+	if err = json.Unmarshal(body, &classeEmpenho); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
 	//	Validacao de estrutura
-	err = validation.Validator.Struct(classeEmpenho)
-	if err != nil {
+	if err = validation.Validator.Struct(classeEmpenho); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
-		return
-	}
-
-	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logClasseEmpenho.LogClasseEmpenho(server.DB, classeEmpenho.CodClasseEmpenho, "classe_empenho", "i", tokenID)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 
@@ -76,6 +65,14 @@ func (server *Server) CreateClasseEmpenho(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logClasseEmpenho.LogClasseEmpenho(server.DB, classeEmpenhoCreated.CodClasseEmpenho, "classe_empenho", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 
@@ -92,8 +89,7 @@ func (server *Server) CreateClasseEmpenho(w http.ResponseWriter, r *http.Request
 func (server *Server) GetClasseEmpenhoByID(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 21002)
-	if err != nil {
+	if err := config.AuthMod(w, r, 21002); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -128,8 +124,7 @@ func (server *Server) GetClasseEmpenhoByID(w http.ResponseWriter, r *http.Reques
 func (server *Server) GetAllClasseEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 21002)
-	if err != nil {
+	if err := config.AuthMod(w, r, 21002); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -155,8 +150,7 @@ func (server *Server) GetAllClasseEmpenho(w http.ResponseWriter, r *http.Request
 func (server *Server) UpdateClasseEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo
-	err := config.AuthMod(w, r, 21003)
-	if err != nil {
+	if err := config.AuthMod(w, r, 21003); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}
@@ -187,14 +181,12 @@ func (server *Server) UpdateClasseEmpenho(w http.ResponseWriter, r *http.Request
 	classeEmpenho := models.ClasseEmpenho{}
 	logClasseEmpenho := models.Log{}
 
-	err = json.Unmarshal(body, &classeEmpenho)
-	if err != nil {
+	if err = json.Unmarshal(body, &classeEmpenho); err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
-	err = validation.Validator.Struct(classeEmpenho)
-	if err != nil {
+	if err = validation.Validator.Struct(classeEmpenho); err != nil {
 		log.Printf("[WARN] invalid information, because, %v\n", fmt.Errorf("[FATAL] validation error!, %v\n", err))
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
@@ -227,8 +219,7 @@ func (server *Server) UpdateClasseEmpenho(w http.ResponseWriter, r *http.Request
 func (server *Server) DeleteClasseEmpenho(w http.ResponseWriter, r *http.Request) {
 
 	//	Autorizacao de Modulo, apenas quem tem permicao de edit pode deletar
-	err := config.AuthMod(w, r, 21003)
-	if err != nil {
+	if err := config.AuthMod(w, r, 21003); err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
 		return
 	}

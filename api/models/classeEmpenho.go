@@ -1,8 +1,6 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
@@ -37,7 +35,7 @@ func (classeEmpenho *ClasseEmpenho) SaveClasseEmpenho(db *gorm.DB) (*ClasseEmpen
 func (classeEmpenho *ClasseEmpenho) FindClasseEmpenhoByID(db *gorm.DB, codClasseEmpenho uint32) (*ClasseEmpenho, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(ClasseEmpenho{}).Where("cod_classe_empenho = ?", codClasseEmpenho).Take(&classeEmpenho).Error
+	err := db.Debug().Model(&ClasseEmpenho{}).Where("cod_classe_empenho = ?", codClasseEmpenho).Take(&classeEmpenho).Error
 	if err != nil {
 		return &ClasseEmpenho{}, err
 	}
@@ -84,19 +82,13 @@ func (classeEmpenho *ClasseEmpenho) UpdateClasseEmpenho(db *gorm.DB, codClasseEm
 }
 
 /*  =========================
-	FUNCAO DELETAR CLASSE EMPENHO POR ID
+	FUNCAO DELETAR CLASSE EMPENHO
 =========================  */
 
 func (classeEmpenho *ClasseEmpenho) DeleteClasseEmpenho(db *gorm.DB, codClasseEmpenho uint32) error {
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&ClasseEmpenho{}).Where("cod_classe_empenho = ?", codClasseEmpenho).Take(&ClasseEmpenho{}).Delete(&ClasseEmpenho{})
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return errors.New("Classe Empenho not found")
-		}
-		return db.Error
-	}
 
 	return db.Error
 }

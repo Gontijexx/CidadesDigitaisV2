@@ -486,7 +486,7 @@ function enviarModulo() {
       alert("Módulos inseridos com sucesso");
       location.reload();
     } else {
-      //erros(response.status);
+      erros(response.status);
     }
   });
 }

@@ -200,7 +200,7 @@ function editarItem() {
         if (response.status == 200 || response.status == 201) {
           location.reload();
         } else {
-          //erros(response.status);
+          erros(response.status);
         }
         window.location.replace("./gerenciaCd.html");
       });

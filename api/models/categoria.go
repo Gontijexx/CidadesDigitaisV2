@@ -1,8 +1,6 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
@@ -27,7 +25,7 @@ func (categoria *Categoria) SaveCategoria(db *gorm.DB) (*Categoria, error) {
 		return &Categoria{}, err
 	}
 
-	return categoria, nil
+	return categoria, err
 }
 
 /*  =========================
@@ -37,7 +35,7 @@ func (categoria *Categoria) SaveCategoria(db *gorm.DB) (*Categoria, error) {
 func (categoria *Categoria) FindCategoriaByID(db *gorm.DB, codCategoria uint32) (*Categoria, error) {
 
 	//	Busca um elemento no banco de dados a partir de sua chave primaria
-	err := db.Debug().Model(Categoria{}).Where("cod_categoria = ?", codCategoria).Take(&categoria).Error
+	err := db.Debug().Model(&Categoria{}).Where("cod_categoria = ?", codCategoria).Take(&categoria).Error
 	if err != nil {
 		return &Categoria{}, err
 	}
@@ -91,12 +89,6 @@ func (categoria *Categoria) DeleteCategoria(db *gorm.DB, codCategoria uint32) er
 
 	//	Deleta um elemento contido no banco de dados a partir de sua chave primaria
 	db = db.Debug().Model(&Categoria{}).Where("cod_categoria = ?", codCategoria).Take(&Categoria{}).Delete(&Categoria{})
-	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return errors.New("Categoria not found")
-		}
-		return db.Error
-	}
 
 	return db.Error
 }

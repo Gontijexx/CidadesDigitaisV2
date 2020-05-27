@@ -1,64 +1,27 @@
 //pega o CNPJ escolhido anteriormente
 let meuCodigo = localStorage.getItem("id_empenho");
-
-function pegarPrevisao(){
-  fetch(servidor + 'read/previsaoempenho', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //pegar o json
-        //console.log(json);
-        let x = [];
-        for (i = 0; i < json.length; i++) {
-          x[i] += "<option>" + json[i]["cod_previsao_empenho"] + "</option>";
-        }
-        
-        document.getElementById("cod_previsao_empenho").innerHTML = x;
-
-        //colocando valor original
-        document.getElementById("cod_previsao_empenho").value = localStorage.getItem("cod_previsao_empenho");
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
+let meuCodigoSec = localStorage.getItem("cod_previsao_empenho");
 
 window.onload = function () {
-
   //preenche os campos
-  this.document.getElementById("cod_empenho").value = localStorage.getItem("cod_empenho");
-
-  //esta função preenche o campo de lote
-  pegarPrevisao();
+  document.getElementById("cod_empenho").value = localStorage.getItem("cod_empenho");
+  document.getElementById("cod_previsao_empenho").value = meuCodigoSec;
 
   //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd
 
   let data1 = new Date(localStorage.getItem("data"));
   let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
   document.getElementById("data").value = dataFinal1;
-  
-  
 }
 
 function enviar() {
-
   //JSON usado para mandar as informações no fetch
   let info = {
     "cod_empenho": "",
-    "cod_previsao_empenho": "",
     "data": "",
   };
 
   info.cod_empenho = document.getElementById("cod_empenho").value;
-  info.cod_previsao_empenho = parseInt(document.getElementById("cod_previsao_empenho").value);
   info.data = document.getElementById("data").value;
 
   //transforma as informações em string para mandar

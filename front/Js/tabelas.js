@@ -88,18 +88,18 @@ let listaItem = [],
   edicaoItem = [],
   itemMudado = [];
 
-function itensFinanceamento(caminho, estrutura) {
+function itensFinanceamento(caminho) {
 
   //cria o botão para editar
-  if(caminho = "itensprevisaoempenho"){
+  if(caminho == "itensprevisaoempenho"){
     document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensprevisaoempenho')">Salvar Alterações em Itens</button>`);
     document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensprevisaoempenho')">Salvar Alterações em Itens</button>`);
   }
-  else if(caminho = "itensempenho"){
+  else if(caminho == "itensempenho"){
     document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensempenho')">Salvar Alterações em Itens</button>`);
     document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensempenho')">Salvar Alterações em Itens</button>`);
   }
-  else if(caminho = "itensfatura"){
+  else if(caminho == "itensfatura"){
     document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensfatura')">Salvar Alterações em Itens</button>`);
     document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensfatura')">Salvar Alterações em Itens</button>`);
   }
@@ -121,6 +121,8 @@ function itensFinanceamento(caminho, estrutura) {
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
+
+        console.log(meuCodigoSec)
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
@@ -153,7 +155,6 @@ function itensFinanceamento(caminho, estrutura) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           total = total + listaItem[i]["quantidade_disponivel"];
-          console.log(total);
           tabela += (`</td>`);
           tabela += (`</tr>`);
 
@@ -185,7 +186,7 @@ function itensFinanceamento(caminho, estrutura) {
         document.getElementById("tabela").innerHTML = tabela;
       });
     } else {
-      //erros(response.status);
+      erros(response.status);
     }
   });
 }

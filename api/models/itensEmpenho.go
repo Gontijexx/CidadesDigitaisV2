@@ -71,7 +71,7 @@ func (itensEmpenho *ItensEmpenho) FindAllItensEmpenho(db *gorm.DB, idEmpenho, co
 func (itensEmpenho *ItensEmpenho) UpdateItensEmpenho(db *gorm.DB, idEmpenho, codItem, codTipoItem uint32) (*ItensEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Exec("UPDATE itens_empenho SET cod_previsao_empenho =?, valor = ?, quantidade = ? WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", itensEmpenho.CodPrevisaoEmpenho, itensEmpenho.Valor, itensEmpenho.Quantidade, idEmpenho, codItem, codTipoItem)
+	db = db.Debug().Exec("UPDATE itens_empenho SET valor = ?, quantidade = ? WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?", itensEmpenho.Valor, itensEmpenho.Quantidade, idEmpenho, codItem, codTipoItem)
 	if db.Error != nil {
 		return &ItensEmpenho{}, db.Error
 	}

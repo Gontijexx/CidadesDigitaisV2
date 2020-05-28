@@ -73,7 +73,7 @@ func (previsaoEmpenho *PrevisaoEmpenho) FindAllPrevisaoEmpenho(db *gorm.DB) (*[]
 func (previsaoEmpenho *PrevisaoEmpenho) UpdatePrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint32) (*PrevisaoEmpenho, error) {
 
 	//	Permite a atualizacao dos campos indicados
-	db = db.Debug().Exec("UPDATE previsao_empenho SET cod_lote = ?, cod_natureza_despesa = ? ,data = ?, tipo = ?, ano_referencia = ? WHERE cod_previsao_empenho = ?", previsaoEmpenho.CodLote, previsaoEmpenho.CodNaturezaDespesa, previsaoEmpenho.Data, previsaoEmpenho.Tipo, previsaoEmpenho.AnoReferencia, codPrevisaoEmpenho)
+	db = db.Debug().Exec("UPDATE previsao_empenho SET data = ?, tipo = ?, ano_referencia = ? WHERE cod_previsao_empenho = ?", previsaoEmpenho.Data, previsaoEmpenho.Tipo, previsaoEmpenho.AnoReferencia, codPrevisaoEmpenho)
 	if db.Error != nil {
 		return &PrevisaoEmpenho{}, db.Error
 	}

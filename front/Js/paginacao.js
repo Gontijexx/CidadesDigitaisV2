@@ -54,14 +54,8 @@ function paginacao() {
         
         totalPaginas = json.length / porPagina;
 
-
-
-
-
         //edita isso pra ser separavel e pronto
-        //para mais tarde
-
-
+        
         // //para edição
         // previsaoTotal=json;
 

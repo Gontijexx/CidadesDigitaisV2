@@ -3,6 +3,11 @@ let meuCodigo = localStorage.getItem("num_nf");
 let meuIBGE = localStorage.getItem("cod_ibge");
 let cidades = [];
 
+
+//fazer parte criar item
+//fazer modal com seleção dos itens disponiveis
+//ao selecionar item, mostra as quantidades disponiveis, deixa o usuario preencher valor e quantidade
+
 window.onload = function () {
 
   //preenche os campos

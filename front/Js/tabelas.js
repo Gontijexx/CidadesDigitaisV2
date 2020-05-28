@@ -104,8 +104,15 @@ function itensFinanceamento(caminho) {
     document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensfatura')">Salvar Alterações em Itens</button>`);
   }
  
+  let caminhoFinal;
+  if(caminho=="itensfatura"){
+    caminhoFinal = servidor + 'read/' + caminho;
+  }
+  else{
+    caminhoFinal = servidor + 'read/' + caminho + "/" + meuCodigo + "/" + meuCodigoSec;
+  }
   //função fetch para chamar itens da tabela
-  fetch(servidor + 'read/' + caminho + "/" + meuCodigo + "/" + meuCodigoSec, {
+  fetch(caminhoFinal, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -121,8 +128,6 @@ function itensFinanceamento(caminho) {
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
-
-        console.log(meuCodigoSec)
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>

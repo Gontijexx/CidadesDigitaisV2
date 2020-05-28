@@ -227,7 +227,7 @@ function pegarPrevisao() {
       response.json().then(function (json) {
         //console.log(json);
         let x = [];
-        x[0] += "<option >Código do Lote da Previsão</option>";
+        x[0] += "<option >Código da Previsão</option>";
         for (i = 0; i < json.length; i++) {
           x[i+1] += "<option>" + json[i].cod_previsao_empenho + "</option>";
         }

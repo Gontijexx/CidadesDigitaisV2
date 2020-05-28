@@ -320,7 +320,7 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      location.reload();
+      location.window.replace="./gerenciaPrevisao.html";
     } else {
       erros(response.status);
     }

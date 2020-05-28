@@ -1,3 +1,5 @@
+//colocar fisc na frente do previsao
+
 //pega o CNPJ escolhido anteriormente
 let meuCodigo = localStorage.getItem("cod_previsao_empenho");
 let meuCodigoSec = localStorage.getItem("cod_lote");

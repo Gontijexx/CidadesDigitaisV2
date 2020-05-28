@@ -258,8 +258,9 @@ const (
 =========================	*/
 
 const (
-	ITENS_FATURA_PATH    = "/read/itensfatura"
-	ITENS_FATURA_ID_PATH = "/read/itensfatura/{num_nf}/{cod_ibge}/{id_empenho}/{cod_item}/{cod_tipo_item}"
+	ITENS_FATURA_PATH     = "/read/itensfatura"
+	ITENS_FATURA_GET_PATH = "/read/itensfatura/{num_nf}/{cod_ibge}"
+	ITENS_FATURA_ID_PATH  = "/read/itensfatura/{num_nf}/{cod_ibge}/{id_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*  =========================
@@ -277,7 +278,7 @@ const (
 
 const (
 	ITENS_PREVISAO_EMPENHO_PATH    = "/read/itensprevisaoempenho/{cod_previsao_empenho}/{cod_lote}"
-	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensprevisaoempenho/{cod_previsao_empenho}/{cod_item}/{cod_tipo_item}" 
+	ITENS_PREVISAO_EMPENHO_ID_PATH = "/read/itensprevisaoempenho/{cod_previsao_empenho}/{cod_item}/{cod_tipo_item}"
 )
 
 /*	=========================

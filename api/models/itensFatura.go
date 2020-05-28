@@ -9,14 +9,15 @@ import (
 =========================	*/
 
 type ItensFatura struct {
-	NumNF       uint32  `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
-	CodIbge     uint32  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
-	IDEmpenho   uint32  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
-	CodItem     uint32  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
-	CodTipoItem uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
-	Valor       float32 `gorm:"default:null" json:"valor"`
-	Quantidade  float32 `gorm:"default:null" json:"quantidade"`
-	Descricao   string  `gorm:"default:null" json:"descricao"`
+	NumNF                uint32  `gorm:"primary_key;foreign_key:NumNF;not null" json:"num_nf"`
+	CodIbge              uint32  `gorm:"primary_key;foreign_key:CodIbge;not null" json:"cod_ibge"`
+	IDEmpenho            uint32  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
+	CodItem              uint32  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
+	CodTipoItem          uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
+	Valor                float32 `gorm:"default:null" json:"valor"`
+	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
+	Descricao            string  `gorm:"default:null" json:"descricao"`
+	QuantidadeDisponivel float64 `gorm:"default:null" json:"quantidade_disponivel"`
 }
 
 /*  =========================
@@ -53,17 +54,27 @@ func (itensFatura *ItensFatura) FindItensFaturaByID(db *gorm.DB, numNF, codIbge,
 	FUNCAO LISTAR TODAS ITENS FATURA
 =========================  */
 
-func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB) (*[]ItensFatura, error) {
+func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge uint32) (*[]ItensFatura, error) {
 
 	allItensFatura := []ItensFatura{}
 
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("itens_fatura").
 		Select("itens.descricao, itens_fatura.*").
-		Joins("JOIN itens ON itens_fatura.cod_item = itens.cod_item AND itens_fatura.cod_tipo_item = itens.cod_tipo_item").
+		Joins("JOIN itens ON itens_fatura.cod_item = itens.cod_item AND itens_fatura.cod_tipo_item = itens.cod_tipo_item WHERE num_nf = ? AND cod_ibge = ? ORDER BY itens_fatura.cod_tipo_item, itens_fatura.cod_item", numNF, codIbge).
 		Scan(&allItensFatura).Error
 	if err != nil {
 		return &[]ItensFatura{}, err
+	}
+
+	for i, data := range allItensFatura {
+		//	Busca um elemento no banco de dados a partir de sua chave primaria
+		err := db.Debug().
+			Raw("SELECT (SELECT itens_empenho.quantidade AS quantidade_itens_empenho FROM itens_empenho WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_itens_fatura FROM itens_fatura WHERE itens_fatura.id_empenho = ? AND itens_fatura.cod_tipo_item = ? AND itens_fatura.cod_item = ?) AS quantidade_disponivel", data.IDEmpenho, data.CodTipoItem, data.CodItem, data.IDEmpenho, data.CodTipoItem, data.CodItem).
+			Scan(&allItensFatura[i]).Error
+		if err != nil {
+			return &[]ItensFatura{}, err
+		}
 	}
 
 	return &allItensFatura, err

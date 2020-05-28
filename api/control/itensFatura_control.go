@@ -159,8 +159,25 @@ func (server *Server) GetAllItensFatura(w http.ResponseWriter, r *http.Request) 
 
 	itensFatura := models.ItensFatura{}
 
+	// Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	numNF armazena a chave primaria da tabela itensFatura
+	numNF, err := strconv.ParseUint(vars["num_nf"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	codIbge armazena a chave primaria da tabela itensFatura
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
 	//	allItensFatura armazena os dados buscados no banco de dados
-	allItensFatura, err := itensFatura.FindAllItensFatura(server.DB)
+	allItensFatura, err := itensFatura.FindAllItensFatura(server.DB, uint32(numNF), uint32(codIbge))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))

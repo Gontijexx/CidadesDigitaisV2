@@ -369,8 +369,8 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA ITENS FATURA
 	r.HandleFunc(config.ITENS_FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateItensFatura))).Methods(http.MethodPost)
 
-	//	LISTA ITENS FATURA
-	r.HandleFunc(config.ITENS_FATURA_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllItensFatura))).Methods(http.MethodGet)
+	//	LISTA ITENS FATURA (num_nf, cod_ibge)
+	r.HandleFunc(config.ITENS_FATURA_GET_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetAllItensFatura))).Methods(http.MethodGet)
 
 	//	LISTA ITENS FATURA (num_nf, cod_ibge, id_empenho, cod_item, cod_tipo_item)
 	r.HandleFunc(config.ITENS_FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetItensFaturaByID))).Methods(http.MethodGet)

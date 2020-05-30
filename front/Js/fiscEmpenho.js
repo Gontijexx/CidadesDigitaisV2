@@ -2,29 +2,6 @@ window.onload = function () {
   paginacao();
 }
 
-//sistema de paginação
-let contador = 0;
-let porPagina = 5;
-let totalPaginas;
-
-
-function antes() {
-  contador--;
-  paginacao();
-}
-
-function depois() {
-  contador++;
-  paginacao();
-}
-
-//garantindo o limite de paginação
-
-function pagina(valor) {
-  contador = valor;
-  paginacao();
-}
-
 function paginacao() {
   porPagina = document.getElementById("quantos").value;
   let comeco = contador * porPagina;

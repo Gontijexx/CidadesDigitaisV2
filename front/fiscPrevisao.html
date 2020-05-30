@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Empenho</title>
+    <title>Previsão de Empenho</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -33,11 +33,14 @@
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <h2>Empenho</h2>
+                                    <h2>Previsão de Empenho</h2>
                                 </div>
                                 <div class="col-sm-8">
-                                    <a href="./empenhoVisualizar.html" class="btn btn-primary"><i class="material-icons">&#xE863;</i><span>Atualizar Lista</span></a>
-                                    <a href="#addEmployeeModal" class="btn btn-success" onclick="pegarPrevisao()" data-toggle="modal"><i class="material-icons">&#xE147;</i><span>Adicionar</span></a>
+                                    <a href="./previsaoVisualizar.html" class="btn btn-primary"><i
+                                            class="material-icons">&#xE863;</i><span>Atualizar Lista</span></a>
+                                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"
+                                        onclick="pegarLote();pegarNaturezaDespesa();"><i
+                                            class="material-icons">&#xE147;</i><span>Adicionar</span></a>
                                 </div>
                             </div>
                         </div>
@@ -74,9 +77,9 @@
                             <div class="hint-text" id="mostrando"></div>
                             <ul class="pagination" id="paginacao"></ul>
                         </div>
-                    <br><br><br>
+                        <br><br><br>
+                    </div>
                 </div>
-            </div>
         </section>
     </main>
 
@@ -86,7 +89,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h4 class="modal-title">Adicionar Empenho</h4>
+                    <h4 class="modal-title">Adicionar previsão de empenho</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -96,26 +99,36 @@
                                 <form class="multisteps-form__form" style="height: 300px;">
                                     <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
                                         data-animation="scaleIn">
-                                        <h3>Informações do Empenho</h3>
+                                        <h3 class="multisteps-form__title">Informações do Empenho</h3>
 
+                                        <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-12 mt-4">
-                                                    <input type="text" class="form-control" id="cod_empenho" maxlength="13" placeholder="Código de Empenho"></input>
+                                                <div class="col-12 col-sm-3 mt-4">
+                                                    <select type="text" class="form-control" id="cod_lote"
+                                                        maxlength="13"></select>
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
-                                                    <input type="date" class="form-control" id="data" placeholder="Data"></input>
+                                                    <input type="date" class="form-control data" id="data"></input>
+                                                </div>
+                                                <div class="col-12 col-sm-3 mt-4">
+                                                    <select type="text" class="form-control" id="tipo"></select>
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
-                                                    <select type="text" class="form-control" id="cod_previsao_empenho" maxlength="13"></select>
+                                                    <select type="text" class="form-control"
+                                                        id="cod_natureza_despesa"></select>
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input type="text" class="form-control" id="ano_referencia"
+                                                        placeholder="Ano de Referência"></input>
                                                 </div>
                                             </div>
-
+                                        </div>
                                         <div class="button-row d-flex mt-4">
                                             <button class="btn btn-primary multi-button ml-auto js-btn-next"
                                                 type="button" onclick="enviar()" title="Next">Cadastrar</button>
                                         </div>
                                     </div>
-                                </div>
+                            </div>
                             </form>
                         </div>
                     </div>
@@ -129,7 +142,8 @@
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 </body>
-<script src="./Js/fiscEmpenho.js"></script>
+<script src="./Js/fiscPrevisao.js"></script>
+<script src="./Js/paginacao.js"></script>
 <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 

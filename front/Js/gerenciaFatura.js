@@ -1,6 +1,6 @@
 //pega o CNPJ escolhido anteriormente
 let meuCodigo = localStorage.getItem("num_nf");
-let meuIBGE = localStorage.getItem("cod_ibge");
+let meuCodigoSec = localStorage.getItem("cod_ibge");
 let cidades = [];
 
 
@@ -37,7 +37,7 @@ function enviar() {
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch(servidor + 'read/fatura/' + meuFatura + '/' + meuIBGE, {
+  fetch(servidor + 'read/fatura/' + meuCodigo + '/' + meuCodigoSec, {
     method: 'PUT',
     body: corpo,
     headers: {
@@ -54,7 +54,7 @@ function enviar() {
       //response.json().then(function (json) {
       //console.log(json);
       //});
-      window.location.replace("./fatura.html");
+      window.location.replace("./fiscFatura.html");
     } else {
       erros(response.status);
     }

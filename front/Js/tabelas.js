@@ -76,10 +76,6 @@ function previsao(valorCodigo) {
 
 
 
-
-
-
-
 //Itens de financeamento
 
 let listaItem = [],
@@ -88,31 +84,23 @@ let listaItem = [],
   edicaoItem = [],
   itemMudado = [];
 
+//caso seja fatura
+let idEmpenho;
+
 function itensFinanceamento(caminho) {
 
-  //cria o botão para editar
-  if(caminho == "itensprevisaoempenho"){
-    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensprevisaoempenho')">Salvar Alterações em Itens</button>`);
-    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensprevisaoempenho')">Salvar Alterações em Itens</button>`);
+  if (caminho == "itensfatura") {
+    //cria o botão para editar
+    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('` + caminho + `')">Salvar Alterações em Itens</button> <button class="btn btn-success" data-toggle="modal" data-target="#adicionarFatura">Nova Fatura</button>`);
+    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('` + caminho + `')">Salvar Alterações em Itens</button> <button class="btn btn-success" data-toggle="modal" data-target="#adicionarFatura">Nova Fatura</button>`);
+  } else {
+    //cria o botão para editar
+    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('` + caminho + `')">Salvar Alterações em Itens</button>`);
+    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('` + caminho + `')">Salvar Alterações em Itens</button>`);
   }
-  else if(caminho == "itensempenho"){
-    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensempenho')">Salvar Alterações em Itens</button>`);
-    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensempenho')">Salvar Alterações em Itens</button>`);
-  }
-  else if(caminho == "itensfatura"){
-    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensfatura')">Salvar Alterações em Itens</button>`);
-    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('itensfatura')">Salvar Alterações em Itens</button>`);
-  }
- 
-  let caminhoFinal;
-  if(caminho=="itensfatura"){
-    caminhoFinal = servidor + 'read/' + caminho;
-  }
-  else{
-    caminhoFinal = servidor + 'read/' + caminho + "/" + meuCodigo + "/" + meuCodigoSec;
-  }
+
   //função fetch para chamar itens da tabela
-  fetch(caminhoFinal, {
+  fetch(servidor + 'read/' + caminho + "/" + meuCodigo + "/" + meuCodigoSec, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -128,22 +116,40 @@ function itensFinanceamento(caminho) {
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
+        let tabela;
 
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-        <tr>
-        <th style="width:40%" scope="col">Descrição</th>
-        <th style="width:20%" scope="col">Quantidade</th>
-        <th style="width:20%" scope="col">Valor</th>
-        <th style="width:20%" scope="col">Subtotal</th>
-        </tr>
-        </thead>`);
-        tabela += (`<tbody>`);
+        //mudanças feitas para fatura...
+        if (caminho == "itensfatura") {
+          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
+          <tr>
+          <th style="width:30%" scope="col">Descrição</th>
+          <th style="width:10%" scope="col">Empenho</th>
+          <th style="width:15%" scope="col">Quantidade Disponível</th>
+          <th style="width:15%" scope="col">Quantidade</th>
+          <th style="width:15%" scope="col">Valor</th>
+          <th style="width:15%" scope="col">Subtotal</th>
+          </tr>
+          </thead>`);
+          tabela += (`<tbody>`);
+        } else {
+          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
+          <tr>
+          <th style="width:40%" scope="col">Descrição</th>
+          <th style="width:15%" scope="col">Quantidade Disponível</th>
+          <th style="width:15%" scope="col">Quantidade</th>
+          <th style="width:15%" scope="col">Valor</th>
+          <th style="width:15%" scope="col">Subtotal</th>
+          </tr>
+          </thead>`);
+          tabela += (`<tbody>`);
+        }
 
         //armazenando para edição
         listaItem = json;
 
         //calculo do total
         let total = 0;
+        let totalFinal = 0;
 
         for (i = 0; i < listaItem.length; i++) {
           //salva os valores para edição
@@ -153,13 +159,23 @@ function itensFinanceamento(caminho) {
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += listaItem[i]["cod_tipo_item"] + '.' + listaItem[i]["cod_item"] + ' - ' + listaItem[i]["descricao"];
-          tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" onchange="mudaItem(` + i + `)" id="quantidade` + i + `" type="number">`);
-          tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="number">`);
+
+          //para fatura
+          if (caminho == "itensfatura") {
+            tabela += (`</td> <td>`);
+            tabela += listaItem[i]["id_empenho"];
+          }
+
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
-          total = total + listaItem[i]["quantidade_disponivel"];
+          tabela += (`</td> <td>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" onchange="mudaItem(` + i + `)" id="quantidade` + i + `" type="number"></input>`);
+          tabela += (`</td> <td>`);
+          tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="number"></input>`);
+          tabela += (`</td> <td>`);
+          total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
+          tabela += total;
+          totalFinal = totalFinal + total;
           tabela += (`</td>`);
           tabela += (`</tr>`);
 
@@ -179,10 +195,12 @@ function itensFinanceamento(caminho) {
         tabela += (`</td>`);
         tabela += (`<td>`);
         tabela += (`</td>`);
+        tabela += (`<td>`);
+        tabela += (`</td>`);
 
         //valor final
         tabela += (`<td>`);
-        tabela += total;
+        tabela += totalFinal;
         tabela += (`</td>`);
 
         tabela += (`</tr>`);
@@ -206,11 +224,18 @@ function editarItem(caminho) {
 
   for (let i = 0; i < listaItem.length; i++) {
 
+    let caminhoFinal;
+    if (caminho == "itensfatura") {
+      caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuCodigoSec + '/' + idEmpenho + '/' + meuItem[i] + '/' + meuTipo[i];
+    } else {
+      caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
+    }
+
     if (itemMudado[i] != null) {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar
-      fetch(servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
+      fetch(caminhoFinal, {
         method: 'PUT',
         body: corpo,
         headers: {
@@ -226,7 +251,6 @@ function editarItem(caminho) {
         } else {
           erros(response.status);
         }
-        location.reload();
       });
     }
   }

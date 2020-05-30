@@ -1,4 +1,7 @@
+//variaveis globais
 let previsaoTotal = [];
+
+
 
 window.onload = function () {
   paginacao();
@@ -6,26 +9,7 @@ window.onload = function () {
   document.getElementById("tipo").innerHTML = "<option value=''>Tipo</option><option value='o'>Original</option><option value='r'>Reajuste</option>";
 }
 
-//sistema de paginação
-let contador = 0;
-let porPagina = 5;
-let totalPaginas;
 
-function antes() {
-  contador--;
-  paginacao();
-}
-
-function depois() {
-  contador++;
-  paginacao();
-}
-
-//garantindo o limite de paginação
-function pagina(valor) {
-  contador = valor;
-  paginacao();
-}
 
 function paginacao() {
   porPagina = document.getElementById("quantos").value;
@@ -110,16 +94,23 @@ function paginacao() {
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
+
+
         //mostra quanto do total aparece na tela
         document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
         if (porPagina > json.length - comeco) {
           document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + json.length + " de " + json.length;
         }
 
-        //conta quantas paginas é necessário
+
+
+        //organizador de paginação
         let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
         //apenas aciona se precisar de paginação
         if (json.length > porPagina) {
+
+
+
           //caso seja apenas 10 paginas
           if (totalPaginas < 10) {
             for (i = 0; i < totalPaginas; i++) {
@@ -129,8 +120,12 @@ function paginacao() {
                 paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
               }
             }
-            //caso sejam mais de 10
-          } else {
+          }
+
+
+
+          //caso sejam mais de 10
+          else {
             //mostrar apenas inicio e fim
             if (contador == 0) {
               paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link btn active">1</a></li>`;
@@ -139,6 +134,9 @@ function paginacao() {
               paginas += `<li><a>...</a></li>`;
               paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
             }
+
+
+
             //opções do começo
             else if (contador == 1) {
               paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
@@ -165,6 +163,9 @@ function paginacao() {
               paginas += `<li><a>...</a></li>`;
               paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
             }
+
+
+
             //opções no final
             else if (contador == Math.floor(totalPaginas - 3)) {
               paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
@@ -209,8 +210,13 @@ function paginacao() {
             }
           }
         }
+
+
+
         paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
         document.getElementById("paginacao").innerHTML = paginas;
+
+
 
         //limite das paginas
         if (contador > 0) {
@@ -223,6 +229,8 @@ function paginacao() {
         } else {
           document.getElementById("proximo").style.visibility = "hidden";
         }
+
+
 
       });
     } else {
@@ -260,6 +268,8 @@ function pegarLote() {
   });
 }
 
+
+
 function pegarNaturezaDespesa() {
   fetch(servidor + 'read/naturezadespesa', {
     method: 'GET',
@@ -284,6 +294,7 @@ function pegarNaturezaDespesa() {
     }
   });
 }
+
 
 
 function enviar() {
@@ -333,9 +344,11 @@ function enviar() {
 function editarPrevisao(valor) {
   localStorage.setItem("cod_previsao_empenho", previsaoTotal[valor].cod_previsao_empenho);
   localStorage.setItem("cod_lote", previsaoTotal[valor].cod_lote);
-  localStorage.setItem("cod_natureza_despesa", previsaoTotal[valor].cod_natureza_despesa);
   localStorage.setItem("data", previsaoTotal[valor].data);
   localStorage.setItem("tipo", previsaoTotal[valor].tipo);
   localStorage.setItem("ano_referencia", previsaoTotal[valor].ano_referencia);
+
+  //para mostrar a descrição
+  localStorage.setItem("natureza_despesa", previsaoTotal[valor].natureza_despesa);
   window.location.href = "./gerenciaPrevisao.html";
 }

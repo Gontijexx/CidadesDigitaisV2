@@ -4,42 +4,13 @@
 let meuCodigo = localStorage.getItem("cod_previsao_empenho");
 let meuCodigoSec = localStorage.getItem("cod_lote");
 
-function pegarNaturezaDespesa() {
-  fetch(servidor + 'read/naturezadespesa', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      response.json().then(function (json) {
-        //console.log(json);
-        let x = [];
-        for (i = 0; i < json.length; i++) {
-          // o valor pego é o codigo, mas o campo mostra a descrição
-          x[i] += "<option value=" + json[i].cod_natureza_despesa + ">" + json[i].cod_natureza_despesa + ' - ' + json[i].descricao + "</option>";
-        }
-        document.getElementById("cod_natureza_despesa").innerHTML = x;
-        //deixar com o valor inicial
-        document.getElementById("cod_natureza_despesa").value = localStorage.getItem("cod_natureza_despesa");
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
 window.onload = function () {
-
-  //esta função preenche o campo de natureza de despesa
-  pegarNaturezaDespesa();
 
   //preenche os campos
   document.getElementById("cod_previsao_empenho").value = meuCodigo;
   document.getElementById("cod_lote").value = meuCodigoSec;
   document.getElementById("ano_referencia").value = localStorage.getItem("ano_referencia");
+  document.getElementById("cod_natureza_despesa").value = localStorage.getItem("natureza_despesa");
 
   document.getElementById("tipo").innerHTML = "<option value='o'>Original</option><option value='r'>Reajuste</option>";
   document.getElementById("tipo").value = localStorage.getItem("tipo");
@@ -55,13 +26,11 @@ function enviar() {
 
   //  JSON usado para mandar as informações no fetch
   let info = {
-    "cod_natureza_despesa": "",
     "data": "",
     "tipo": "",
     "ano_referencia": "",
   };
 
-  info.cod_natureza_despesa = parseInt(document.getElementById("cod_natureza_despesa").value);
   info.data = document.getElementById("data").value;
   info.tipo = document.getElementById("tipo").value;
   info.ano_referencia = parseInt(document.getElementById("ano_referencia").value);
@@ -86,7 +55,7 @@ function enviar() {
       //response.json().then(function (json) {
       //console.log(json);
       //});
-      window.location.replace("./previsao.html");
+      window.location.replace("./fiscPrevisao.html");
     } else {
       erros(response.status);
     }

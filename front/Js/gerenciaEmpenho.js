@@ -44,7 +44,7 @@ function enviar() {
       //response.json().then(function (json) {
       //console.log(json);
       //});
-      window.location.replace("./empenho.html");
+      window.location.replace("./fiscEmpenho.html");
     } else {
       erros(response.status);
     }

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Visualizar Fatura</title>
+    <title>Empenho</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -33,11 +33,11 @@
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <h2>Visualizar Lista de Fatura</h2>
+                                    <h2>Empenho</h2>
                                 </div>
                                 <div class="col-sm-8">
-                                    <a href="./faturaVisualizar.html" class="btn btn-primary"><i class="material-icons">&#xE863;</i><span>Atualizar Lista</span></a>
-                                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i><span>Adicionar</span></a>
+                                    <a href="./empenhoVisualizar.html" class="btn btn-primary"><i class="material-icons">&#xE863;</i><span>Atualizar Lista</span></a>
+                                    <a href="#addEmployeeModal" class="btn btn-success" onclick="pegarPrevisao()" data-toggle="modal"><i class="material-icons">&#xE147;</i><span>Adicionar</span></a>
                                 </div>
                             </div>
                         </div>
@@ -86,28 +86,27 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h4 class="modal-title">Adicionar Fatura</h4>
+                    <h4 class="modal-title">Adicionar Empenho</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="multisteps-form">
                         <div class="row">
                             <div class="col-12 col-lg-12 m-auto">
-                                <form style="height: 300px;">
-                                    <div class="shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
+                                <form class="multisteps-form__form" style="height: 300px;">
+                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
+                                        data-animation="scaleIn">
+                                        <h3>Informações do Empenho</h3>
 
                                             <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-6 mt-4">
-                                                    <input type="text" class="form-control" id="num_nf" placeholder="Número da Fatura"></input>
+                                                <div class="col-12 col-sm-12 mt-4">
+                                                    <input type="text" class="form-control" id="cod_empenho" maxlength="13" placeholder="Código de Empenho"></input>
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
-                                                    <select type="text" class="form-control" id="uf" onclick="enabler()"></select>
+                                                    <input type="date" class="form-control" id="data" placeholder="Data"></input>
                                                 </div>
                                                 <div class="col-12 col-sm-6 mt-4">
-                                                    <select type="text" class="form-control" id="cod_ibge" disabled></select>
-                                                </div>
-                                                <div class="col-12 col-sm-6 mt-4">
-                                                    <input type="date" class="form-control" id="dt_nf"></input>
+                                                    <select type="text" class="form-control" id="cod_previsao_empenho" maxlength="13"></select>
                                                 </div>
                                             </div>
 
@@ -130,7 +129,8 @@
         <script height="100%" width="100%" src="./Js/menu.js"></script>
     </div>
 </body>
-<script src="./Js/fiscFatura.js"></script>
+<script src="./Js/fiscEmpenho.js"></script>
+<script src="./Js/paginacao.js"></script>
 <script src="./Js/modernizr.js"></script> <!-- Modernizr -->
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 

@@ -19,6 +19,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.2.0/vanilla-masker.min.js"></script>
+
 </head>
 
 <body>
@@ -35,7 +37,8 @@
                                     <h2 class="text-align:center">Gerenciar <b>Lote</b></h2>
                                 </div>
                                 <div class="col-sm-8">
-                                    <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i> <span>Atualizar Listas</span></a>
+                                    <a href="#" class="btn btn-primary"><i class="material-icons">&#xE863;</i>
+                                        <span>Atualizar Listas</span></a>
                                 </div>
                             </div>
                         </div>
@@ -89,8 +92,8 @@
                                 class="btn btn-primary">Reajuste</button>
                             <button onclick="empenho()" type="button" style="background-color:#959595"
                                 class="btn btn-primary">Empenho</button>
-                            <button onclick="previsao(localStorage.getItem('cod_lote'))" type="button" style="background-color:#959595"
-                                class="btn btn-primary">Previsao Empenho</button>
+                            <button onclick="previsao(localStorage.getItem('cod_lote'))" type="button"
+                                style="background-color:#959595" class="btn btn-primary">Previsao Empenho</button>
                             <button onclick="itensLote()" type="button" style="background-color:#959595"
                                 class="btn btn-primary">Itens</button>
                         </div>
@@ -138,16 +141,17 @@
 
                                                 <div class="col-12 col-sm-12">
                                                     <input class="multisteps-form__input form-control" type="number"
-                                                        name="cod_lote1" value="" id="cod_lote1"/>
+                                                        name="cod_lote1" value="" id="cod_lote1" />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="number"
-                                                    placeholder="Ano de Referência" name="ano_ref" id="ano_ref" />
+                                                        min="1900" placeholder="Ano de Referência" name="ano_ref"
+                                                        id="ano_ref" />
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
-                                                    <input class="multisteps-form__input form-control" type="number"
-                                                        placeholder="Percentual de Reajuste" name="percentual"
-                                                        id="percentual" />
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        data-js="reajusteMask" placeholder="Percentual de Reajuste"
+                                                        name="percentual" id="percentual" />
                                                 </div>
                                             </div>
 
@@ -174,6 +178,30 @@
 
 <script src="./Js/gerenciaLote.js"></script>
 <script src="./Js/tabelas.js"></script>
+
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
+<script>
+    const masks = {
+        reajusteMask(value) {
+            JSON.parse(value)
+            console.log(value)
+            
+           
+         return value
+        }
+    }
+
+    
+
+    document.querySelectorAll('input').forEach(($input) => {
+        const field = $input.dataset.js
+        console.log(field)
+
+        $input.addEventListener('input', (e) => {
+            e.target.value = masks[field](e.target.value)
+            console.log(e.target.value)
+        }, false)
+    })
+</script>
 
 </html>

@@ -2,12 +2,6 @@
 let meuCodigo = localStorage.getItem("cod_lote");
 document.getElementById("cod_lote").value = meuCodigo;
 
-//cuida de lote_itens
-let edicaoItem = [];
-let listaItem = [];
-let meuItem = [];
-let meuTipo = [];
-let itemMudado = [];
 
 function pegarEntidade(){
   fetch(servidor + 'read/entidadeget', {
@@ -294,7 +288,7 @@ function reajuste() {
           tabela += listaReajuste[i]["ano_ref"];
           tabela += (`</td>`);
           tabela += (`<td>`);
-          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="number">`) + "%";
+          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="text"` + `data-js="reajusteMask">`) + "%";
           tabela += (`</td>`);
           tabela += (`<td>
           <button onclick="apagarReajuste(` + listaReajuste[i]["ano_ref"] + `)" class="btn btn-danger">
@@ -378,7 +372,7 @@ function novoReajuste() {
 function apagarReajuste(valor) {
 
   //função fetch para deletar
-  fetch(servidor + 'read/reajuste/' + valor + "/" + meuLote, {
+  fetch(servidor + 'read/reajuste/' + valor + "/" + meuCodigo, {
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + meuToken

@@ -1,24 +1,8 @@
 //capturar itens para mandar no gerenciaEstrutura
-let entTotal = [];
+let jsonFinal = [];
 //pega o JSON de municípios para uso em "adicionar entidades"
 let cidades = [];
 document.getElementById("nome_municipio").disabled = true;
-
-
-//JSON usado para mandar as informações no fetch
-let info = {
-  "cnpj": " ",
-  "nome": " ",
-  "endereco": " ",
-  "numero": " ",
-  "bairro": " ",
-  "cep": " ",
-  "nome_municipio": " ",
-  "uf": " ",
-  "observacao": " "
-};
-
-
 
 function enabler() {
   let uf1 = document.getElementById("uf").value;
@@ -75,34 +59,8 @@ function pegarMunicipio(){
   });
 }
 
-
-
 window.onload = function () {
   this.pegarMunicipio();
-}
-
-
-
-//sistema de paginação
-let contador = 0;
-let porPagina = 5;
-let totalPaginas;
-
-function antes() {
-  contador--;
-  paginacao();
-}
-
-function depois() {
-  contador++;
-  paginacao();
-}
-
-//garantindo o limite de paginação
-
-function pagina(valor) {
-  contador = valor;
-  paginacao();
 }
 
 function paginacao() {
@@ -141,7 +99,6 @@ function paginacao() {
         tabela += (`<tbody> <tr>`);
 
         for (let i = comeco; i < fim && i < json.length; i++) {
-          entTotal[i] = json[i];
           tabela += (`<td>`);
           tabela += json[i]["cnpj"];
           tabela += (`</td> <td>`);
@@ -171,129 +128,7 @@ function paginacao() {
         tabela += (`</tr> </tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        totalPaginas = json.length / porPagina;
-
-        //mostra quanto do total aparece na tela
-        document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
-        if (porPagina > json.length - comeco) {
-          document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + json.length + " de " + json.length;
-        }
-
-        //conta quantas paginas é necessário
-        let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
-        //apenas aciona se precisar de paginação
-        if (json.length > porPagina) {
-          //caso seja apenas 10 paginas
-          if(totalPaginas<10){
-            for (i = 0; i < totalPaginas; i++) {
-              if(contador==i){
-                paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link btn active">` + (i + 1) + `</a></li>`;
-              }
-              else{
-                paginas += `<li class="page-item" id="page` + i + `"><a href="#" onclick="pagina(` + i + `)" class="page-link">` + (i + 1) + `</a></li>`;
-              }
-            }
-            //caso sejam mais de 10
-          } else{
-            //mostrar apenas inicio e fim
-            if(contador==0){
-              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link btn active">1</a></li>`;
-              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
-              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
-            }
-            //opções do começo
-            else if(contador==1){
-              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
-              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link btn active">2</a></li>`;
-              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
-              paginas += `<li class="page-item" id="page3"><a href="#" onclick="pagina(3)" class="page-link">4</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
-            }
-            else if(contador==2){
-              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
-              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
-              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link btn active">3</a></li>`;
-              paginas += `<li class="page-item" id="page3"><a href="#" onclick="pagina(3)" class="page-link">4</a></li>`;
-              paginas += `<li class="page-item" id="page4"><a href="#" onclick="pagina(4)" class="page-link">5</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
-            }
-            else if(contador==3){
-              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
-              paginas += `<li class="page-item" id="page1"><a href="#" onclick="pagina(1)" class="page-link">2</a></li>`;
-              paginas += `<li class="page-item" id="page2"><a href="#" onclick="pagina(2)" class="page-link">3</a></li>`;
-              paginas += `<li class="page-item" id="page3"><a href="#" onclick="pagina(3)" class="page-link btn active">4</a></li>`;
-              paginas += `<li class="page-item" id="page4"><a href="#" onclick="pagina(4)" class="page-link">5</a></li>`;
-              paginas += `<li class="page-item" id="page5"><a href="#" onclick="pagina(5)" class="page-link">6</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
-            }
-            //opções no final
-            else if(contador==Math.floor(totalPaginas-3)){
-              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-5) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-5) + `)" class="page-link">` + Math.floor(totalPaginas - 4) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-4) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-4) + `)" class="page-link">` + Math.floor(totalPaginas - 3) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-3) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-3) + `)" class="page-link btn active">` + Math.floor(totalPaginas - 2) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
-            }
-            else if(contador==Math.floor(totalPaginas-2)){
-              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-4) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-4) + `)" class="page-link">` + Math.floor(totalPaginas - 3) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-3) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-3) + `)" class="page-link">` + Math.floor(totalPaginas - 2) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link btn active">` + Math.floor(totalPaginas - 1) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
-            }
-            else if(contador==Math.floor(totalPaginas-1)){
-              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-3) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-3) + `)" class="page-link">` + Math.floor(totalPaginas - 2) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link btn active">` + Math.floor(totalPaginas) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
-            }
-            else if(contador==Math.floor(totalPaginas)){
-              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-2) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-2) + `)" class="page-link">` + Math.floor(totalPaginas - 1) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + Math.floor(totalPaginas-1) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas-1) + `)" class="page-link">` + Math.floor(totalPaginas) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link btn active">` + Math.floor(totalPaginas + 1) + `</a></li>`;
-            }
-            else{
-              paginas += `<li class="page-item" id="page0"><a href="#" onclick="pagina(0)" class="page-link">1</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` + (contador-2) + `"><a href="#" onclick="pagina(` + (contador-2) + `)" class="page-link">` + (contador-1) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + (contador-1) + `"><a href="#" onclick="pagina(` + (contador-1) + `)" class="page-link">` + contador + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + contador + `"><a href="#" onclick="pagina(` + contador + `)" class="page-link btn active">` + (contador+ 1) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + (contador+1) + `"><a href="#" onclick="pagina(` + (contador+1) + `)" class="page-link">` + (contador+2) + `</a></li>`;
-              paginas += `<li class="page-item" id="page` + (contador+2) + `"><a href="#" onclick="pagina(` + (contador+2) + `)" class="page-link">` + (contador+3) + `</a></li>`;
-              paginas += `<li><a>...</a></li>`;
-              paginas += `<li class="page-item" id="page` +  Math.floor(totalPaginas) + `"><a href="#" onclick="pagina(` + Math.floor(totalPaginas) + `)" class="page-link">` + Math.floor(totalPaginas + 1) + `</a></li>`;
-            }
-          }
-        }
-        paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
-        document.getElementById("paginacao").innerHTML = paginas;
-
-        //limite das paginas
-        if (contador > 0) {
-          document.getElementById("anterior").style.visibility = "visible";
-        } else {
-          document.getElementById("anterior").style.visibility = "hidden";
-        }
-        if (fim<json.length) {
-          document.getElementById("proximo").style.visibility = "visible";
-        } else {
-          document.getElementById("proximo").style.visibility = "hidden";
-        }
-
+        paginasOrganizadas(json,comeco,fim);
       });
     } else {
       erros(response.status);
@@ -304,6 +139,19 @@ function paginacao() {
 
 
 function enviar() {
+
+  //estrutura usada para mandar o JSON no fetch
+  let info = {
+    "cnpj": " ",
+    "nome": " ",
+    "endereco": " ",
+    "numero": " ",
+    "bairro": " ",
+    "cep": " ",
+    "nome_municipio": " ",
+    "uf": " ",
+    "observacao": " "
+  };
 
   let a = document.getElementById("cnpj");
   info.cnpj = a.value;
@@ -346,14 +194,14 @@ function enviar() {
 
 //leva para o editor da entidade selecionada
 function editarEntidade(valor) {
-  localStorage.setItem("cnpj", entTotal[valor].cnpj);
-  localStorage.setItem("nome", entTotal[valor].nome);
-  localStorage.setItem("endereco", entTotal[valor].endereco);
-  localStorage.setItem("numero", entTotal[valor].numero);
-  localStorage.setItem("bairro", entTotal[valor].bairro);
-  localStorage.setItem("cep", entTotal[valor].cep);
-  localStorage.setItem("uf", entTotal[valor].uf);
-  localStorage.setItem("nome_municipio", entTotal[valor].nome_municipio);
-  localStorage.setItem("observacao", entTotal[valor].observacao);
+  localStorage.setItem("cnpj", jsonFinal[valor].cnpj);
+  localStorage.setItem("nome", jsonFinal[valor].nome);
+  localStorage.setItem("endereco", jsonFinal[valor].endereco);
+  localStorage.setItem("numero", jsonFinal[valor].numero);
+  localStorage.setItem("bairro", jsonFinal[valor].bairro);
+  localStorage.setItem("cep", jsonFinal[valor].cep);
+  localStorage.setItem("uf", jsonFinal[valor].uf);
+  localStorage.setItem("nome_municipio", jsonFinal[valor].nome_municipio);
+  localStorage.setItem("observacao", jsonFinal[valor].observacao);
   window.location.href = "./gerenciaEntidade.html";
 }

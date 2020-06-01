@@ -91,8 +91,8 @@ function itensFinanceamento(caminho) {
 
   if (caminho == "itensfatura") {
     //cria o botão para editar
-    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('` + caminho + `')">Salvar Alterações em Itens</button> <button class="btn btn-success" data-toggle="modal" data-target="#adicionarFatura">Nova Fatura</button>`);
-    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('` + caminho + `')">Salvar Alterações em Itens</button> <button class="btn btn-success" data-toggle="modal" data-target="#adicionarFatura">Nova Fatura</button>`);
+    document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('` + caminho + `')">Salvar Alterações em Itens</button> <button class="btn btn-success" data-toggle="modal" data-target="#adicionarItensFatura">Nova Fatura</button>`);
+    document.getElementById("editar2").innerHTML = (`<button class="btn btn-success" onclick="editarItem('` + caminho + `')">Salvar Alterações em Itens</button> <button class="btn btn-success" data-toggle="modal" data-target="#adicionarItensFatura">Nova Fatura</button>`);
   } else {
     //cria o botão para editar
     document.getElementById("editar").innerHTML = (`<button class="btn btn-success" onclick="editarItem('` + caminho + `')">Salvar Alterações em Itens</button>`);
@@ -117,6 +117,9 @@ function itensFinanceamento(caminho) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
         let tabela;
+
+        //testar o json
+        console.log(json);
 
         //mudanças feitas para fatura...
         if (caminho == "itensfatura") {
@@ -197,6 +200,12 @@ function itensFinanceamento(caminho) {
         tabela += (`</td>`);
         tabela += (`<td>`);
         tabela += (`</td>`);
+
+        //para fatura
+        if (caminho == "itensfatura") {
+          tabela += (`<td>`);
+          tabela += (`</td>`);
+        }
 
         //valor final
         tabela += (`<td>`);

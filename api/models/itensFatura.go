@@ -70,7 +70,7 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge u
 	for i, data := range allItensFatura {
 		//	Busca um elemento no banco de dados a partir de sua chave primaria
 		err := db.Debug().
-			Raw("SELECT (SELECT itens_empenho.quantidade AS quantidade_itens_empenho FROM itens_empenho WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_itens_fatura FROM itens_fatura WHERE itens_fatura.id_empenho = ? AND itens_fatura.cod_tipo_item = ? AND itens_fatura.cod_item = ?) AS quantidade_disponivel", data.IDEmpenho, data.CodTipoItem, data.CodItem, data.IDEmpenho, data.CodTipoItem, data.CodItem).
+			Raw("SELECT (SELECT SUM(itens_empenho.quantidade) AS quantidade_itens_empenho FROM itens_empenho WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_itens_fatura FROM itens_fatura WHERE itens_fatura.id_empenho = ? AND itens_fatura.cod_tipo_item = ? AND itens_fatura.cod_item = ?) AS quantidade_disponivel", data.IDEmpenho, data.CodTipoItem, data.CodItem, data.IDEmpenho, data.CodTipoItem, data.CodItem).
 			Scan(&allItensFatura[i]).Error
 		if err != nil {
 			return &[]ItensFatura{}, err

@@ -1,6 +1,5 @@
 //Fazer Tabela
 let jsonFinal = [];
-let meuLote;
 
 //pega o JSON de municípios para uso na tabela e para adcionar "CD"s
 let cidades = [];

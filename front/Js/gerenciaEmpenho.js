@@ -5,6 +5,25 @@ let meuCodigoSec = localStorage.getItem("cod_previsao_empenho");
 window.onload = function () {
   //preenche os campos
   document.getElementById("cod_empenho").value = localStorage.getItem("cod_empenho");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  //adiciona a descrição e o tipo dessa previsão
   document.getElementById("cod_previsao_empenho").value = meuCodigoSec;
 
   //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd

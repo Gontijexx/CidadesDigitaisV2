@@ -3,6 +3,50 @@ let jsonFinal = [];
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//remodelar tabela de adicionar
+//tornar quantidade float
+//checar subtotal sobre valores estranhos
+//adicionar subjanela de empenho para cada previsao (mesmas colunas menos natureza) e faz hiperlinks
+
+
+
 window.onload = function () {
   paginacao();
   //altera o campo tipos como pedido, pode alterar aqui se necessário
@@ -47,40 +91,50 @@ function paginacao() {
         tabela += (`<tbody>`);
         
         for (let i = comeco; i < fim && i < json.length; i++) {
-          //captura itens para tabela
-          tabela += (`<tr>`);
-          tabela += (`<td>`);
-          tabela += json[i]["cod_previsao_empenho"];
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          tabela += json[i]["cod_lote"];
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          tabela += json[i]["natureza_despesa"];
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          if(json[i]["tipo"]=="o"){
-            tabela += "Original";
+
+          //filtragem em uma página, para melhor filtragem preciso de mais testes
+          let filtro = document.getElementById("filtro").value;
+          let estrutura = new RegExp(filtro,"i");//só botar o valor pesquisado aqui
+          let filtragem = JSON.stringify(json[i]);
+          if(filtragem.search(estrutura)>=0){
+            //captura itens para tabela
+            tabela += (`<tr>`);
+            tabela += (`<td>`);
+            tabela += json[i]["cod_previsao_empenho"];
+            tabela += (`</td>`);
+            tabela += (`<td>`);
+            tabela += json[i]["cod_lote"];
+            tabela += (`</td>`);
+            tabela += (`<td>`);
+            tabela += json[i]["natureza_despesa"];
+            tabela += (`</td>`);
+            tabela += (`<td>`);
+            if(json[i]["tipo"]=="o"){
+              tabela += "Original";
+            }
+            else if(json[i]["tipo"]=="r"){
+              tabela += "Reajuste";
+            }
+            tabela += (`</td>`);
+            tabela += (`<td>`);
+            let data1 = new Date(json[i]["data"]);
+            let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
+            tabela += dataFinal1;
+            tabela += (`</td>`);
+            tabela += (`<td>`);
+            tabela += json[i]["ano_referencia"];
+            tabela += (`</td>`);
+            tabela += (`<td> 
+            <span class="d-flex">
+            <button onclick="editarPrevisao(` + i + `)" class="btn btn-success">
+            <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
+            </button>
+            </td>`);
+            tabela += (`</tr>`);
           }
-          else if(json[i]["tipo"]=="r"){
-            tabela += "Reajuste";
+          else{
+            console.log("retirado");
           }
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          let data1 = new Date(json[i]["data"]);
-          let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
-          tabela += dataFinal1;
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          tabela += json[i]["ano_referencia"];
-          tabela += (`</td>`);
-          tabela += (`<td> 
-          <span class="d-flex">
-          <button onclick="editarPrevisao(` + i + `)" class="btn btn-success">
-          <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
-          </button>
-          </td>`);
-          tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -139,7 +193,7 @@ function pegarNaturezaDespesa() {
         let x = [];
         for (i = 0; i < json.length; i++) {
           // o valor pego é o codigo, mas o campo mostra a descrição
-          x[i] += "<option value=" + json[i].cod_natureza_despesa + ">" + json[i].descricao + "</option>";
+          x[i] += "<option value=" + json[i].cod_natureza_despesa + ">" + json[i].cod_natureza_despesa + " - " + json[i].descricao + "</option>";
         }
         document.getElementById("cod_natureza_despesa").innerHTML = x;
       });

@@ -2,6 +2,49 @@
 let jsonFinal = [];
 let cidades = [];
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//nova subjanela para pagamento com todos os pagamentos relacionados e faz hiperlinks
+//remodelar fatura
+
 window.onload = function () {
   paginacao();
   pegarCD();

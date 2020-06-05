@@ -1,5 +1,43 @@
 let jsonFinal;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//nova janela fatura com mesmo formato de fatura e faz hiperlinks
+//pegar natureza de despesa daqui e adicionar a previsao, junto com sua descricao
+//remodela a janela para ficar mais bem ditribuida
+//adicionar natureza de despesa na tabela tbm
+//adicionar tipo de previsão de empenho
+
 window.onload = function () {
   paginacao();
 }

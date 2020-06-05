@@ -1,5 +1,5 @@
 //até agora só foi adaptado para lote
-//objetivo de pegar todas as tabelas de
+//objetivo de pegar todas as tabelas das subjanelas
 //adapte para CD João. Use administracao.js como exemplo
 
 
@@ -76,6 +76,10 @@ function previsao(valorCodigo) {
 
 
 
+
+
+
+
 //Itens de financeamento
 
 let listaItem = [],
@@ -116,14 +120,15 @@ function itensFinanceamento(caminho) {
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
-        let tabela;
 
         //testar o json
         console.log(json);
 
+        let tabela;
+
         //mudanças feitas para fatura...
         if (caminho == "itensfatura") {
-          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
+          tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:30%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
@@ -133,9 +138,8 @@ function itensFinanceamento(caminho) {
           <th style="width:15%" scope="col">Subtotal</th>
           </tr>
           </thead>`);
-          tabela += (`<tbody>`);
         } else {
-          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
+          tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:40%" scope="col">Descrição</th>
           <th style="width:15%" scope="col">Quantidade Disponível</th>
@@ -144,7 +148,6 @@ function itensFinanceamento(caminho) {
           <th style="width:15%" scope="col">Subtotal</th>
           </tr>
           </thead>`);
-          tabela += (`<tbody>`);
         }
 
         //armazenando para edição
@@ -153,6 +156,9 @@ function itensFinanceamento(caminho) {
         //calculo do total
         let total = 0;
         let totalFinal = 0;
+
+        //criando corpo da tabela
+        tabela += (`<tbody>`);
 
         for (i = 0; i < listaItem.length; i++) {
           //salva os valores para edição
@@ -224,8 +230,8 @@ function itensFinanceamento(caminho) {
 }
 
 function mudaItem(itemPego) {
-  edicaoItem[itemPego].quantidade = parseInt(document.getElementById("quantidade" + itemPego).value);
-  edicaoItem[itemPego].valor = parseInt(document.getElementById("valor" + itemPego).value);
+  edicaoItem[itemPego].quantidade = parseFloat(document.getElementById("quantidade" + itemPego).value);
+  edicaoItem[itemPego].valor = parseFloat(document.getElementById("valor" + itemPego).value);
   itemMudado[itemPego] = itemPego;
 }
 

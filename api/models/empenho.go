@@ -11,6 +11,9 @@ type Empenho struct {
 	CodPrevisaoEmpenho uint32 `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
 	CodEmpenho         string `gorm:"not null;size:13" json:"cod_empenho"`
 	CodLote            uint32 `gorm:"default:null" json:"cod_lote"`
+	CodNaturezaDespesa uint32 `gorm:"default:null" json:"cod_natureza_despesa"`
+	Descricao          string `gorm:"default:null" json:"descricao"`
+	Tipo               string `gorm:"default:null" json:"tipo"`
 	Data               string `gorm:"default:null" json:"data"`
 	Contador           uint32 `gorm:"default:null" json:"contador"`
 }
@@ -54,8 +57,10 @@ func (empenho *Empenho) FindAllEmpenho(db *gorm.DB) (*[]Empenho, error) {
 	allEmpenho := []Empenho{}
 
 	//	Busca todos elementos contidos no banco de dados
-	err := db.Debug().Table("empenho").Select("previsao_empenho.cod_lote, empenho.*").
-		Joins("JOIN previsao_empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho ORDER BY empenho.id_empenho ASC").Scan(&allEmpenho).Error
+	err := db.Debug().Table("empenho").Select("previsao_empenho.cod_lote, previsao_empenho.tipo, previsao_empenho.cod_natureza_despesa, natureza_despesa.descricao, empenho.*").
+		Joins("JOIN previsao_empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho").
+		Joins("JOIN natureza_despesa ON previsao_empenho.cod_natureza_despesa = natureza_despesa.cod_natureza_despesa ORDER BY empenho.id_empenho ASC").
+		Scan(&allEmpenho).Error
 	if err != nil {
 		return &[]Empenho{}, err
 	}

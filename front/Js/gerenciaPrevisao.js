@@ -1,5 +1,3 @@
-//colocar fisc na frente do previsao
-
 //pega o CNPJ escolhido anteriormente
 let meuCodigo = localStorage.getItem("cod_previsao_empenho");
 let meuCodigoSec = localStorage.getItem("cod_lote");
@@ -46,18 +44,13 @@ function enviar() {
     },
   }).then(function (response) {
 
-    //checar o status do pedido
-    //console.log(response);
-
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      //checar o json
-      //response.json().then(function (json) {
-      //console.log(json);
-      //});
       window.location.replace("./fiscPrevisao.html");
     } else {
       erros(response.status);
     }
   });
 }
+
+//adicionar subjanela de empenho para cada previsao (mesmas colunas menos natureza) e faz hiperlinks

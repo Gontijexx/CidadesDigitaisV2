@@ -2,49 +2,6 @@
 let jsonFinal = [];
 let cidades = [];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//nova subjanela para pagamento com todos os pagamentos relacionados e faz hiperlinks
-//remodelar fatura
-
 window.onload = function () {
   paginacao();
   pegarCD();
@@ -70,6 +27,8 @@ function paginacao() {
     if (response.status == 200) {
 
       response.json().then(function (json) {
+
+        //console.log(json)
         
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
@@ -210,15 +169,8 @@ function enviar() {
     },
   }).then(function (response) {
 
-    //checar o status do pedido
-    //console.log(response);
-
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      //checar o json
-      //response.json().then(function (json) {
-      //console.log(json);
-      //});
       location.reload();
     } else {
       erros(response.status);

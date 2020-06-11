@@ -3,11 +3,6 @@ let meuCodigo = localStorage.getItem("num_nf");
 let meuCodigoSec = localStorage.getItem("cod_ibge");
 let cidades = [];
 
-
-//fazer parte criar item
-//fazer modal com seleção dos itens disponiveis
-//ao selecionar item, mostra as quantidades disponiveis, deixa o usuario preencher valor e quantidade
-
 window.onload = function () {
 
   //preenche os campos
@@ -22,7 +17,9 @@ window.onload = function () {
   document.getElementById("dt_nf").value = dataFinal1;
 }
 
-
+//fazer parte criar item
+//fazer modal com seleção dos itens disponiveis
+//ao selecionar item, mostra as quantidades disponiveis, deixa o usuario preencher valor e quantidade
 
 function enviar() {
 
@@ -50,13 +47,11 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      //checar o json
-      //response.json().then(function (json) {
-      //console.log(json);
-      //});
       window.location.replace("./fiscFatura.html");
     } else {
       erros(response.status);
     }
   });
 }
+
+//nova subjanela para pagamento com todos os pagamentos relacionados e faz hiperlinks

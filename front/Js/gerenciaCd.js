@@ -1,10 +1,3 @@
-//estruturas para as tabelas de Itens
-let listaItem = [];
-let meuItem = [];
-let meuTipo = [];
-let edicaoItem = [];
-let itemMudado = [];
-
 //JSON usado para mandar as informações no fetch
 let info = {
   "cod_ibge": " ",

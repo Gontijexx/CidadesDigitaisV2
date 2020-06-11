@@ -1,59 +1,12 @@
 //variaveis globais
 let jsonFinal = [];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//remodelar tabela de adicionar
-//tornar quantidade float
-//checar subtotal sobre valores estranhos
-//adicionar subjanela de empenho para cada previsao (mesmas colunas menos natureza) e faz hiperlinks
-
-
-
+//preciso checar subtotal sobre valores estranhos
 window.onload = function () {
   paginacao();
   //altera o campo tipos como pedido, pode alterar aqui se necessário
   document.getElementById("tipo").innerHTML = "<option value=''>Tipo</option><option value='o'>Original</option><option value='r'>Reajuste</option>";
 }
-
-
 
 function paginacao() {
   porPagina = document.getElementById("quantos").value;
@@ -67,9 +20,6 @@ function paginacao() {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
-    //checar os status de pedidos
-    //console.log(response)
 
     //tratamento dos erros
     if (response.status == 200) {
@@ -89,14 +39,14 @@ function paginacao() {
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
-        
-        for (let i = comeco; i < fim && i < json.length; i++) {
 
-          //filtragem em uma página, para melhor filtragem preciso de mais testes
-          let filtro = document.getElementById("filtro").value;
-          let estrutura = new RegExp(filtro,"i");//só botar o valor pesquisado aqui
-          let filtragem = JSON.stringify(json[i]);
-          if(filtragem.search(estrutura)>=0){
+        // //filtragem em uma página, para melhor filtragem precisa pegar o json e substituir por pesquisa
+        // let filtro = document.getElementById("filtro").value;
+        // let estrutura = new RegExp(filtro,"i");//só botar o valor pesquisado aqui
+        // let filtragem = JSON.stringify(json[i]["cod_previsao_empenho"]+json[i]["cod_lote"]+json[i]["tipo"]+json[i]["ano_referencia"]+json[i]["data"]+json[i]["natureza_despesa"]);
+        // console.log(filtragem);
+
+        for (let i = comeco; i < fim && i < json.length; i++) {
             //captura itens para tabela
             tabela += (`<tr>`);
             tabela += (`<td>`);
@@ -131,10 +81,6 @@ function paginacao() {
             </button>
             </td>`);
             tabela += (`</tr>`);
-          }
-          else{
-            console.log("retirado");
-          }
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -176,8 +122,6 @@ function pegarLote() {
   });
 }
 
-
-
 function pegarNaturezaDespesa() {
   fetch(servidor + 'read/naturezadespesa', {
     method: 'GET',
@@ -202,8 +146,6 @@ function pegarNaturezaDespesa() {
     }
   });
 }
-
-
 
 function enviar() {
 
@@ -233,9 +175,6 @@ function enviar() {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
-    //checar o status do pedido
-    //console.log(response);
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {

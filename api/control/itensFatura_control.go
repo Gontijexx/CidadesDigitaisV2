@@ -366,3 +366,34 @@ func (server *Server) DeleteItensFatura(w http.ResponseWriter, r *http.Request) 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")
 }
+
+/*  =========================
+	FUNCAO LISTAR TODAS ITENS FATURA DISPONIVEIS
+=========================  */
+
+func (server *Server) GetItensFaturaDisponiveis(w http.ResponseWriter, r *http.Request) {
+
+	itensEmpenho := models.ItensEmpenho{}
+
+	// Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codIbge armazena a chave primaria da tabela itensFatura
+	codIbge, err := strconv.ParseUint(vars["cod_ibge"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	itensFaturaGotten recebe o dado buscado no banco de dados
+	itensFaturaGotten, err := itensEmpenho.FindItensFaturaDisponiveis(server.DB, uint32(codIbge))
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
+		return
+	}
+
+	bytes, _ := json.Marshal(itensFaturaGotten)
+
+	w.Write(bytes)
+}

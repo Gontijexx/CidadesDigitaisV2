@@ -93,44 +93,46 @@
                     <h4 class="modal-title">Adicionar previsão de empenho</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div class="modal-body">
-                    <div class="multisteps-form">
-                        <div class="row">
-                            <div class="col-12 col-lg-12 m-auto">
-                                <form class="multisteps-form__form" style="height: 300px;">
-                                    <div class="multisteps-form__panel shadow p-4 rounded bg-white js-active"
-                                        data-animation="scaleIn">
-                                        <h3 class="multisteps-form__title">Informações do Empenho</h3>
 
-                                        <div class="multisteps-form__content">
-                                            <div class="form-row mt-4">
-                                                <div class="col-12 col-sm-3 mt-4">
-                                                    <select type="text" class="form-control" id="cod_lote"
-                                                        maxlength="13"></select>
-                                                </div>
-                                                <div class="col-12 col-sm-6 mt-4">
-                                                    <input type="date" class="form-control data" id="data"></input>
-                                                </div>
-                                                <div class="col-12 col-sm-3 mt-4">
-                                                    <select type="text" class="form-control" id="tipo"></select>
-                                                </div>
-                                                <div class="col-12 col-sm-6 mt-4">
-                                                    <select type="text" class="form-control"
-                                                        id="cod_natureza_despesa"></select>
-                                                </div>
-                                                <div class="col-12 col-sm-6 mt-4">
-                                                    <input type="text" class="form-control" id="ano_referencia"
-                                                        placeholder="Ano de Referência"></input>
-                                                </div>
+                <div class="modal-body">
+                    <div class="form">
+                        <div class="row">
+                            <div class="col-lg-12 m-auto">
+
+                                <form style="height: 300px;">
+                                    <div class="shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
+
+                                        <div class="form-row">
+
+                                            <div class="col-12 col-sm-6">
+                                                <select type="text" class="form-control" id="cod_lote"
+                                                    maxlength="13"></select>
                                             </div>
+                                            <div class="col-12 col-sm-6">
+                                                <select type="text" class="form-control" id="tipo"></select>
+                                            </div>
+                                            <div class="col-12 col-sm-12 mt-4">
+                                                <select type="text" class="form-control"
+                                                    id="cod_natureza_despesa"></select>
+                                            </div>
+                                            <div class="col-12 col-sm-6 mt-4">
+                                                <input type="date" class="form-control data" id="data"></input>
+                                            </div>
+                                            <div class="col-12 col-sm-6 mt-4">
+                                                <input type="text" class="form-control" id="ano_referencia"
+                                                    placeholder="Ano de Referência"></input>
+                                            </div>
+                                            <div class="button-row d-flex mt-4">
+                                                <button class="btn btn-primary multi-button ml-auto js-btn-next"
+                                                    type="button" onclick="enviar()" title="Next">Cadastrar</button>
+                                            </div>
+
                                         </div>
-                                        <div class="button-row d-flex mt-4">
-                                            <button class="btn btn-primary multi-button ml-auto js-btn-next"
-                                                type="button" onclick="enviar()" title="Next">Cadastrar</button>
-                                        </div>
+
                                     </div>
-                            </div>
+                                </div>
                             </form>
+
                         </div>
                     </div>
                 </div>

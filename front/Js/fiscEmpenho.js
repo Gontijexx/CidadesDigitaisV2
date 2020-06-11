@@ -6,35 +6,6 @@ let jsonFinal;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//nova janela fatura com mesmo formato de fatura e faz hiperlinks
-//pegar natureza de despesa daqui e adicionar a previsao, junto com sua descricao
-//remodela a janela para ficar mais bem ditribuida
 //adicionar natureza de despesa na tabela tbm
 //adicionar tipo de previsão de empenho
 
@@ -60,13 +31,17 @@ function paginacao() {
 
     //tratamento dos erros
     if (response.status == 200) {
-
+      
       response.json().then(function (json) {
+
+        //console.log(json)
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
-        <th style="width:40%" scope="col">Código de Empenho</th>
-        <th style="width:30%" scope="col">Código do Lote</th>
+        <th style="width:25%" scope="col">Código de Empenho</th>
+        <th style="width:25%" scope="col">Natureza de Despesa</th>
+        <th style="width:10%" scope="col">Tipo</th>
+        <th style="width:10%" scope="col">Código do Lote</th>
         <th style="width:20%" scope="col">Data</th>
         <th style="width:10%" scope="col">Opções</th>
         </tr>
@@ -79,6 +54,17 @@ function paginacao() {
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += json[i]["cod_empenho"];
+          tabela += (`</td>`);
+          tabela += (`<td>`);
+          tabela += json[i]["cod_previsao_empenho"] + " - " + json[i]["natureza_despesa"] + " - " + json[i]["descricao"];
+          tabela += (`</td>`);
+          tabela += (`<td>`);
+          if(json[i]["tipo"]=="o"){
+            tabela += "Original";
+          }
+          else if(json[i]["tipo"]=="r"){
+            tabela += "Reajuste";
+          }
           tabela += (`</td>`);
           tabela += (`<td>`);
           tabela += json[i]["cod_lote"];
@@ -150,9 +136,6 @@ function enviar() {
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
-
-  //console.log(corpo);
-  
   //função fetch para mandar
   fetch(servidor + 'read/empenho', {
     method: 'POST',
@@ -161,9 +144,6 @@ function enviar() {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-
-    //checar o status do pedido
-    //console.log(response);
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
@@ -174,13 +154,14 @@ function enviar() {
   });
 }
 
-
-
 //leva para o editor do campo selecionado
 function editarEmpenho(valor) {
   localStorage.setItem("id_empenho", jsonFinal[valor].id_empenho);
   localStorage.setItem("cod_empenho", jsonFinal[valor].cod_empenho);
   localStorage.setItem("cod_previsao_empenho", jsonFinal[valor].cod_previsao_empenho);
+  localStorage.setItem("natureza_despesa", jsonFinal[valor].natureza_despesa);
+  localStorage.setItem("descricao", jsonFinal[valor].descricao);
+  localStorage.setItem("tipo", jsonFinal[valor].tipo);
   localStorage.setItem("data", jsonFinal[valor].data);
   window.location.href = "./gerenciaEmpenho.html";
 }

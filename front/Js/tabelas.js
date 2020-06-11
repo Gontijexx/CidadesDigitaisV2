@@ -1,12 +1,9 @@
-//até agora só foi adaptado para lote
-//objetivo de pegar todas as tabelas das subjanelas
-//adapte para CD João. Use administracao.js como exemplo
-
-
+//adapte para CD João. Use administracao.js como exemplo se necessário
+//previsaoSub ainda não funciona em gerenciaCd
 
 //tabela pra previsão de empenho:
 
-function previsao(valorCodigo) {
+function previsaoSub(valorCodigo) {
 
   document.getElementById("editar").innerHTML = (`<br>`);
   document.getElementById("editar2").innerHTML = (`<br>`);
@@ -18,11 +15,9 @@ function previsao(valorCodigo) {
       'Authorization': 'Bearer ' + meuToken
     },
   }).then(function (response) {
-    //checar os status de pedidos
-    //console.log(response)
+    
     //tratamento dos erros
     if (response.status == 200) {
-      //console.log(response.statusText);
 
       //pegar o json que possui a tabela
       response.json().then(function (json) {
@@ -76,7 +71,213 @@ function previsao(valorCodigo) {
 
 
 
+//tabela pra empenho:
 
+function empenhoSub(valorCodigo) {
+
+  document.getElementById("editar").innerHTML = (`<br>`);
+  document.getElementById("editar2").innerHTML = (`<br>`);
+
+  //função fetch para chamar os itens de empenho da tabela
+  fetch(servidor + 'read/empenho', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+          <tr>
+          <th style="width:15%" scope="col">Código de Empenho</th>
+          <th style="width:40%" scope="col">Natureza da despesa</th>
+          <th style="width:10%" scope="col">Tipo</th>
+          <th style="width:20%" scope="col">Data</th>
+          <th style="width:15%" scope="col">Ano de Referência</th>
+          </tr>
+          </thead>`);
+        tabela += (`<tbody>`);
+
+        let j = 0;
+        let listaPrevisao = [];
+        for (let i = 0; i < json.length; i++) {
+          if (valorCodigo == meuCodigo) {
+            listaPrevisao[j] = json[i];
+            j++;
+          }
+        }
+
+        for (i = 0; i < listaPrevisao.length; i++) {
+          //captura itens para tabela
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaPrevisao[i]["cod_previsao_empenho"];
+          tabela += (`</td><td>`);
+          tabela += listaPrevisao[i]["natureza_despesa"];
+          tabela += (`</td><td>`);
+          tabela += listaPrevisao[i]["tipo"];
+          tabela += (`</td><td>`);
+          let data1 = new Date(listaPrevisao[i]["data"]);
+          let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
+          tabela += dataFinal1;
+          tabela += (`</td><td>`);
+          tabela += listaPrevisao[i]["ano_referencia"];
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+//tabela pra fatura:
+
+function previsao(valorCodigo) {
+
+  document.getElementById("editar").innerHTML = (`<br>`);
+  document.getElementById("editar2").innerHTML = (`<br>`);
+
+  //função fetch para chamar os itens de previsão da tabela
+  fetch(servidor + 'read/previsaoempenho', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    
+    //tratamento dos erros
+    if (response.status == 200) {
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+          <tr>
+          <th style="width:15%" scope="col">Código de Previsão de Empenho</th>
+          <th style="width:40%" scope="col">Natureza da despesa</th>
+          <th style="width:10%" scope="col">Tipo</th>
+          <th style="width:20%" scope="col">Data</th>
+          <th style="width:15%" scope="col">Ano de Referência</th>
+          </tr>
+          </thead>`);
+        tabela += (`<tbody>`);
+
+        let j = 0;
+        let listaPrevisao = [];
+        for (let i = 0; i < json.length; i++) {
+          if (valorCodigo == meuCodigo) {
+            listaPrevisao[j] = json[i];
+            j++;
+          }
+        }
+
+        for (i = 0; i < listaPrevisao.length; i++) {
+          //captura itens para tabela
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaPrevisao[i]["cod_previsao_empenho"];
+          tabela += (`</td><td>`);
+          tabela += listaPrevisao[i]["natureza_despesa"];
+          tabela += (`</td><td>`);
+          tabela += listaPrevisao[i]["tipo"];
+          tabela += (`</td><td>`);
+          let data1 = new Date(listaPrevisao[i]["data"]);
+          let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
+          tabela += dataFinal1;
+          tabela += (`</td><td>`);
+          tabela += listaPrevisao[i]["ano_referencia"];
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+//tabela pra pagamento:
+
+function previsao(valorCodigo) {
+
+  document.getElementById("editar").innerHTML = (`<br>`);
+  document.getElementById("editar2").innerHTML = (`<br>`);
+
+  //função fetch para chamar os itens de previsão da tabela
+  fetch(servidor + 'read/previsaoempenho', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+    
+    //tratamento dos erros
+    if (response.status == 200) {
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+          <tr>
+          <th style="width:15%" scope="col">Código de Previsão de Empenho</th>
+          <th style="width:40%" scope="col">Natureza da despesa</th>
+          <th style="width:10%" scope="col">Tipo</th>
+          <th style="width:20%" scope="col">Data</th>
+          <th style="width:15%" scope="col">Ano de Referência</th>
+          </tr>
+          </thead>`);
+        tabela += (`<tbody>`);
+
+        let j = 0;
+        let listaPrevisao = [];
+        for (let i = 0; i < json.length; i++) {
+          if (valorCodigo == meuCodigo) {
+            listaPrevisao[j] = json[i];
+            j++;
+          }
+        }
+
+        for (i = 0; i < listaPrevisao.length; i++) {
+          //captura itens para tabela
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaPrevisao[i]["cod_previsao_empenho"];
+          tabela += (`</td><td>`);
+          tabela += listaPrevisao[i]["natureza_despesa"];
+          tabela += (`</td><td>`);
+          tabela += listaPrevisao[i]["tipo"];
+          tabela += (`</td><td>`);
+          let data1 = new Date(listaPrevisao[i]["data"]);
+          let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
+          tabela += dataFinal1;
+          tabela += (`</td><td>`);
+          tabela += listaPrevisao[i]["ano_referencia"];
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
 
 
 
@@ -88,8 +289,8 @@ let listaItem = [],
   edicaoItem = [],
   itemMudado = [];
 
-//caso seja fatura
-let idEmpenho;
+//caso itensfatura seja o selecionado
+let meuEmpenho = [];
 
 function itensFinanceamento(caminho) {
 
@@ -122,7 +323,7 @@ function itensFinanceamento(caminho) {
       response.json().then(function (json) {
 
         //testar o json
-        console.log(json);
+        //console.log(json);
 
         let tabela;
 
@@ -173,6 +374,7 @@ function itensFinanceamento(caminho) {
           if (caminho == "itensfatura") {
             tabela += (`</td> <td>`);
             tabela += listaItem[i]["id_empenho"];
+            meuEmpenho[i] = listaItem[i]["id_empenho"];
           }
 
           tabela += (`</td> <td>`);
@@ -241,7 +443,7 @@ function editarItem(caminho) {
 
     let caminhoFinal;
     if (caminho == "itensfatura") {
-      caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuCodigoSec + '/' + idEmpenho + '/' + meuItem[i] + '/' + meuTipo[i];
+      caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuCodigoSec + '/' + meuEmpenho[i] + '/' + meuItem[i] + '/' + meuTipo[i];
     } else {
       caminhoFinal = servidor + 'read/' + caminho + '/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i];
     }

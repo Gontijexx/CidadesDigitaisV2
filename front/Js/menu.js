@@ -47,20 +47,20 @@ if (setupTime == null) {
 	}
 }
 
-//adcionar as classes depois
-$(document).ready(function () {
-	$('.cep').mask('00000-000');
-	$('.telefone').mask('(00) 00000-0000');
-	$('.cpf').mask('000.000.000-00', {
-		reverse: true
-	});
-	$('.cnpj').mask('00.000.000/0000-00', {
-		reverse: true
-	});
-	$('.preco').mask('0.000.000.000,00', {
-		reverse: true
-	});
-});
+// //adcionar as classes depois
+// $(document).ready(function () {
+// 	$('.cep').mask('00000-000');
+// 	$('.telefone').mask('(00) 00000-0000');
+// 	$('.cpf').mask('000.000.000-00', {
+// 		reverse: true
+// 	});
+// 	$('.cnpj').mask('00.000.000/0000-00', {
+// 		reverse: true
+// 	});
+// 	$('.preco').mask('0.000.000.000,00', {
+// 		reverse: true
+// 	});
+// });
 
 //para definir o ip do servidor (ou algo do tipo, podem corrigir)
 let servidor = "http://localhost:8080/";

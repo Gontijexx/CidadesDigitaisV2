@@ -6,28 +6,17 @@ window.onload = function () {
   //preenche os campos
   document.getElementById("cod_empenho").value = localStorage.getItem("cod_empenho");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  //adiciona a descrição e o tipo dessa previsão
-  document.getElementById("cod_previsao_empenho").value = meuCodigoSec;
+  //adiciona a descrição e o tipo à previsão e coloca no local
+  let tipo=localStorage.getItem("tipo");
+  if(tipo=="o"){
+    tipo="Original";
+  }
+  else{
+    tipo=="Reajuste";
+  }
+  document.getElementById("cod_previsao_empenho").value = meuCodigoSec + " - " + localStorage.getItem("descricao") + " - " + tipo;
 
   //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd
-
   let data1 = new Date(localStorage.getItem("data"));
   let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
   document.getElementById("data").value = dataFinal1;
@@ -59,13 +48,11 @@ function enviar() {
 
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
-      //checar o json
-      //response.json().then(function (json) {
-      //console.log(json);
-      //});
       window.location.replace("./fiscEmpenho.html");
     } else {
       erros(response.status);
     }
   });
 }
+
+//nova janela fatura com mesmo formato de fatura e faz hiperlinks

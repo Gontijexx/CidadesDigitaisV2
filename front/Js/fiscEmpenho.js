@@ -1,14 +1,5 @@
 let jsonFinal;
 
-
-
-
-
-
-
-//adicionar natureza de despesa na tabela tbm
-//adicionar tipo de previsão de empenho
-
 window.onload = function () {
   paginacao();
 }
@@ -34,7 +25,7 @@ function paginacao() {
       
       response.json().then(function (json) {
 
-        //console.log(json)
+        console.log(json)
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
@@ -56,7 +47,7 @@ function paginacao() {
           tabela += json[i]["cod_empenho"];
           tabela += (`</td>`);
           tabela += (`<td>`);
-          tabela += json[i]["cod_previsao_empenho"] + " - " + json[i]["natureza_despesa"] + " - " + json[i]["descricao"];
+          tabela += json[i]["cod_previsao_empenho"] + " - " + json[i]["cod_natureza_despesa"] + " - " + json[i]["descricao"];
           tabela += (`</td>`);
           tabela += (`<td>`);
           if(json[i]["tipo"]=="o"){
@@ -109,7 +100,7 @@ function pegarPrevisao() {
       response.json().then(function (json) {
         //console.log(json);
         let x = [];
-        x[0] += "<option >Código da Previsão</option>";
+        x[0] += "<option >Código de Previsão de Empenho</option>";
         for (i = 0; i < json.length; i++) {
           x[i+1] += "<option>" + json[i].cod_previsao_empenho + "</option>";
         }

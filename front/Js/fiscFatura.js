@@ -75,6 +75,10 @@ function paginacao() {
 
 
 function pegarCD() {
+
+  document.getElementById("cod_ibge").innerHTML = "<option value='A'>Cidade</option>";
+  document.getElementById("cod_ibge").disable = true;
+
   fetch(servidor + 'read/cd', {
     method: 'GET',
     headers: {
@@ -119,7 +123,7 @@ function pegarCD() {
 
 
 function enabler() {
-  document.getElementById("cod_ibge").disabled = false;
+  document.getElementById("cod_ibge").disable = false;
 
   //variaveis
   let uf = document.getElementById("uf");

@@ -2,6 +2,8 @@
 let meuCodigo = localStorage.getItem("id_empenho");
 let meuCodigoSec = localStorage.getItem("cod_previsao_empenho");
 
+//colocar natureza de despesa como campo para chamar as opções de previsão no FiscEmpenho de adição
+
 window.onload = function () {
   //preenche os campos
   document.getElementById("cod_empenho").value = localStorage.getItem("cod_empenho");

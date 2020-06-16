@@ -15,6 +15,7 @@ type ItensEmpenho struct {
 	CodPrevisaoEmpenho   uint32  `gorm:"foreign_key:CodPrevisaoEmpenho;not null" json:"cod_previsao_empenho"`
 	Valor                float32 `gorm:"default:null" json:"valor"`
 	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
+	Tipo                 string  `gorm:"default:null" json:"tipo"`
 	Descricao            string  `gorm:"default:null" json:"descricao"`
 	QuantidadeDisponivel float64 `gorm:"default:null" json:"quantidade_disponivel"`
 }

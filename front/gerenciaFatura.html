@@ -69,7 +69,7 @@
                         </form>
 
                         <div class="p-4 form-group col-sm-3">
-                            <button onclick="pagamentoSub()" type="button" style="background-color:#959595" class="btn btn-primary">Pagamento</button>
+                            <button onclick="pagamentoSub(meuCodigo)" type="button" style="background-color:#959595" class="btn btn-primary">Pagamento</button>
                             <button onclick="itensFinanceamento('itensfatura')" type="button" style="background-color:#959595" class="btn btn-primary">Itens</button>
                         </div>
 
@@ -113,12 +113,23 @@
                                         <div class="multisteps-form__content">
                                             <div class="form-row mt-4">
 
-                                                <div class="col-12 col-sm-12 mt-4">
-                                                    <select class="multisteps-form__input form-control" type="number" name="item_disponivel" value="" id="item_disponivel"></select>
+                                                <div class="col-12 col-sm-6">
+                                                    <select class="multisteps-form__input form-control" name="tipo" id="tipo" onclick="enabler1()"></select>
                                                 </div>
-                                                <div id="">
-                                                <div class="col-12 col-sm-12 mt-4">
-                                                    <input class="multisteps-form__input form-control" type="number" name="valor" placeholder="valor" id="valor">
+                                                <div class="col-12 col-sm-6">
+                                                    <select class="multisteps-form__input form-control" name="cod_empenho" id="cod_empenho" onclick="enabler2()"></select>
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <select class="multisteps-form__input form-control" name="item_disponivel" id="item_disponivel"></select>
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input class="multisteps-form__input form-control" name="Quantidade Disponivel" placeholder="Quantidade Disponivel" id="quantidade_disponivel" readonly>
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input class="multisteps-form__input form-control" type="number" name="quantidade" placeholder="Quantidade" id="quantidade">
+                                                </div>
+                                                <div class="col-12 col-sm-6 mt-4">
+                                                    <input class="multisteps-form__input form-control" type="number" name="valor" placeholder="Valor" id="valor">
                                                 </div>
                                             </div>
 

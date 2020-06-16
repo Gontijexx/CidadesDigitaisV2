@@ -15,11 +15,31 @@ window.onload = function () {
   let data1 = new Date(localStorage.getItem("dt_nf"));
   let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
   document.getElementById("dt_nf").value = dataFinal1;
+
+  adicionarItensFatura();
 }
 
-//fazer parte criar item
-//fazer modal com seleção dos itens disponiveis
+function adicionarItensFatura(){
+  fetch(servidor + 'read/itensfatura/' + meuCodigoSec, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      return response.json().then(function (json) {
+        console.log(json);
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
 //ao selecionar item, mostra as quantidades disponiveis, deixa o usuario preencher valor e quantidade
+//colocar em vermelho o disponivel se for negativo
 
 function enviar() {
 
@@ -34,7 +54,7 @@ function enviar() {
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
   //função fetch para mandar
-  fetch(servidor + 'read/fatura/' + meuCodigo + '/' + meuCodigoSec, {
+  fetch(servidor + 'read/fatura/', {
     method: 'PUT',
     body: corpo,
     headers: {
@@ -53,5 +73,3 @@ function enviar() {
     }
   });
 }
-
-//nova subjanela para pagamento com todos os pagamentos relacionados e faz hiperlinks

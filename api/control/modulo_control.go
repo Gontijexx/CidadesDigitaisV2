@@ -56,19 +56,19 @@ func (server *Server) CreateModulo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logModulo.LogModulo(server.DB, modulo.CodModulo, "modulo", "i", tokenID)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
-		return
-	}
-
 	//	SaveModulo eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	moduloCreated, err := modulo.SaveModulo(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logModulo.LogModulo(server.DB, moduloCreated.CodModulo, "modulo", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 

@@ -68,7 +68,7 @@ func (server *Server) CreateFatura(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logFatura.LogFatura(server.DB, fatura.NumNF, fatura.CodIbge, "fatura", "i", tokenID)
+	err = logFatura.LogFatura(server.DB, faturaCreated.NumNF, faturaCreated.CodIbge, "fatura", "i", tokenID)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))

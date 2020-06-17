@@ -63,19 +63,19 @@ func (server *Server) CreateItens(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Parametros de entrada(nome_server, chave_primaria, chave_primeario nome_tabela, operacao, id_usuario)
-	err = logItens.LogItens(server.DB, itens.CodItem, itens.CodTipoItem, "itens", "i", tokenID)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
-		return
-	}
-
 	//	SaveItens eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	itensCreated, err := itens.SaveItens(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primeario nome_tabela, operacao, id_usuario)
+	err = logItens.LogItens(server.DB, itensCreated.CodItem, itensCreated.CodTipoItem, "itens", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 

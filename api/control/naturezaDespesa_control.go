@@ -63,19 +63,19 @@ func (server *Server) CreateNaturezaDespesa(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logNaturezaDespesa.LogNaturezaDespesa(server.DB, naturezaDespesa.CodNaturezaDespesa, "natureza_despesa", "i", tokenID)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
-		return
-	}
-
 	//	SaveNaturezaDespesa eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	naturezaDespesaCreated, err := naturezaDespesa.SaveNaturezaDespesa(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logNaturezaDespesa.LogNaturezaDespesa(server.DB, naturezaDespesaCreated.CodNaturezaDespesa, "natureza_despesa", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 

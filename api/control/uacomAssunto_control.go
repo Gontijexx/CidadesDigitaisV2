@@ -56,19 +56,19 @@ func (server *Server) CreateUacomAssunto(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logUacomAssunto.LogUacomAssunto(server.DB, uacomAssunto.CodIbge, uacomAssunto.Data, uacomAssunto.CodAssunto, "uacom_assunto", "i", tokenID)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
-		return
-	}
-
 	//	SaveUacomAssunto eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	uacomAssuntoCreated, err := uacomAssunto.SaveUacomAssunto(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logUacomAssunto.LogUacomAssunto(server.DB, uacomAssuntoCreated.CodIbge, uacomAssuntoCreated.Data, uacomAssuntoCreated.CodAssunto, "uacom_assunto", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 

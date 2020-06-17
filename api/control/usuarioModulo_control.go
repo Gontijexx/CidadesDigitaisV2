@@ -54,21 +54,22 @@ func (server *Server) CreateUsuarioModulo(w http.ResponseWriter, r *http.Request
 
 		for _, data := range usuarioModulo {
 
+			//	SaveModulo salva as informacoes contidas em 'data' no banco de dados
+			usuarioModuloCreated, err := data.SaveUsuarioModulo(server.DB)
+			if err != nil {
+				formattedError := config.FormatError(err.Error())
+				responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+				return
+			}
+
 			//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
-			err = logUsuarioModulo.LogUsuarioModulo(server.DB, data.CodUsuario, data.CodModulo, "usuario_modulo", "i", tokenID)
+			err = logUsuarioModulo.LogUsuarioModulo(server.DB, usuarioModuloCreated.CodUsuario, usuarioModuloCreated.CodModulo, "usuario_modulo", "i", tokenID)
 			if err != nil {
 				formattedError := config.FormatError(err.Error())
 				responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 				return
 			}
 
-			//	SaveModulo salva as informacoes contidas em 'data' no banco de dados
-			_, err := data.SaveUsuarioModulo(server.DB)
-			if err != nil {
-				formattedError := config.FormatError(err.Error())
-				responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
-				return
-			}
 		}
 		<-ch
 	}()

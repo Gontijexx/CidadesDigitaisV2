@@ -59,19 +59,19 @@ func (server *Server) CreateTipologia(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logTipologia.LogTipologia(server.DB, tipologia.CodTipologia, "tipologia", "i", tokenID)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
-		return
-	}
-
 	//	SaveTipologia eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	tipologiaCreated, err := tipologia.SaveTipologia(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logTipologia.LogTipologia(server.DB, tipologiaCreated.CodTipologia, "tipologia", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 

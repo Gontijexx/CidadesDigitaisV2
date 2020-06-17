@@ -60,19 +60,19 @@ func (server *Server) CreateItensFatura(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, chave_primaria, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
-	err = logItensFatura.LogItensFatura(server.DB, itensFatura.NumNF, itensFatura.CodIbge, itensFatura.IDEmpenho, itensFatura.CodItem, itensFatura.CodTipoItem, "itens_fatura", "i", tokenID)
-	if err != nil {
-		formattedError := config.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
-		return
-	}
-
 	//	SaveItensFatura eh o metodo que faz a conexao com banco de dados e salva os dados recebidos
 	itensFaturaCreated, err := itensFatura.SaveItensFatura(server.DB)
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save in database, %v\n", formattedError))
+		return
+	}
+
+	//	Parametros de entrada(nome_server, chave_primaria, chave_primaria, chave_primaria, chave_primaria, chave_primaria, nome_tabela, operacao, id_usuario)
+	err = logItensFatura.LogItensFatura(server.DB, itensFaturaCreated.NumNF, itensFaturaCreated.CodIbge, itensFaturaCreated.IDEmpenho, itensFaturaCreated.CodItem, itensFaturaCreated.CodTipoItem, "itens_fatura", "i", tokenID)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't save log in database, %v\n", formattedError))
 		return
 	}
 

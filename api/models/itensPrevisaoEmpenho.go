@@ -16,7 +16,7 @@ type ItensPrevisaoEmpenho struct {
 	Valor                float32 `gorm:"default:null" json:"valor"`
 	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
 	Descricao            string  `gorm:"default:null" json:"descricao"`
-	QuantidadeDisponivel float64 `gorm:"default:null" json:"quantidade_disponivel"`
+	QuantidadeDisponivel float32 `gorm:"default:null" json:"quantidade_disponivel"`
 }
 
 /*  =========================
@@ -55,7 +55,7 @@ func (itensPrevisaoEmpenho *ItensPrevisaoEmpenho) FindAllItensPrevisaoEmpenho(db
 	for i, data := range allItensPrevisaoEmpenho {
 		//	Busca um elemento no banco de dados a partir de sua chave primaria
 		err := db.Debug().
-			Raw("SELECT (SELECT SUM(cd_itens.quantidade_termo_instalacao) AS quantidade_total_cd_itens FROM itens_previsao_empenho INNER JOIN cd ON itens_previsao_empenho.cod_lote = cd.cod_lote INNER JOIN cd_itens ON cd.cod_ibge = cd_itens.cod_ibge AND itens_previsao_empenho.cod_item = cd_itens.cod_item AND itens_previsao_empenho.cod_tipo_item = cd_itens.cod_tipo_item WHERE itens_previsao_empenho.cod_previsao_empenho = ? AND itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ?) - (SELECT SUM(itens_previsao_empenho.quantidade) AS total_quantidade_previsao_empenho FROM itens_previsao_empenho INNER JOIN previsao_empenho ON itens_previsao_empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho AND itens_previsao_empenho.cod_lote = previsao_empenho.cod_lote WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_lote = ? AND previsao_empenho.tipo = 'o') AS quantidade_disponivel", codPrevisaoEmpenho, data.CodItem, data.CodTipoItem, data.CodItem, data.CodTipoItem, codLote).
+			Raw("SELECT ROUND((SELECT SUM(cd_itens.quantidade_termo_instalacao) AS quantidade_total_cd_itens FROM itens_previsao_empenho INNER JOIN cd ON itens_previsao_empenho.cod_lote = cd.cod_lote INNER JOIN cd_itens ON cd.cod_ibge = cd_itens.cod_ibge AND itens_previsao_empenho.cod_item = cd_itens.cod_item AND itens_previsao_empenho.cod_tipo_item = cd_itens.cod_tipo_item WHERE itens_previsao_empenho.cod_previsao_empenho = ? AND itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ?) - (SELECT SUM(itens_previsao_empenho.quantidade) AS total_quantidade_previsao_empenho FROM itens_previsao_empenho INNER JOIN previsao_empenho ON itens_previsao_empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho AND itens_previsao_empenho.cod_lote = previsao_empenho.cod_lote WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_lote = ? AND previsao_empenho.tipo = 'o'), 2) AS quantidade_disponivel", codPrevisaoEmpenho, data.CodItem, data.CodTipoItem, data.CodItem, data.CodTipoItem, codLote).
 			Scan(&allItensPrevisaoEmpenho[i]).Error
 		if err != nil {
 			return &[]ItensPrevisaoEmpenho{}, err

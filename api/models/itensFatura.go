@@ -18,7 +18,7 @@ type ItensFatura struct {
 	Valor                float32 `gorm:"default:null" json:"valor"`
 	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
 	Descricao            string  `gorm:"default:null" json:"descricao"`
-	QuantidadeDisponivel float64 `gorm:"default:null" json:"quantidade_disponivel"`
+	QuantidadeDisponivel float32 `gorm:"default:null" json:"quantidade_disponivel"`
 }
 
 /*  =========================
@@ -73,7 +73,7 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge u
 	for i, data := range allItensFatura {
 		//	Busca um elemento no banco de dados a partir de sua chave primaria
 		err := db.Debug().
-			Raw("SELECT (SELECT SUM(itens_empenho.quantidade) AS quantidade_itens_empenho FROM itens_empenho WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_itens_fatura FROM itens_fatura WHERE itens_fatura.id_empenho = ? AND itens_fatura.cod_tipo_item = ? AND itens_fatura.cod_item = ?) AS quantidade_disponivel", data.IDEmpenho, data.CodTipoItem, data.CodItem, data.IDEmpenho, data.CodTipoItem, data.CodItem).
+			Raw("SELECT ROUND((SELECT SUM(itens_empenho.quantidade) AS quantidade_itens_empenho FROM itens_empenho WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_itens_fatura FROM itens_fatura WHERE itens_fatura.id_empenho = ? AND itens_fatura.cod_tipo_item = ? AND itens_fatura.cod_item = ?), 2) AS quantidade_disponivel", data.IDEmpenho, data.CodTipoItem, data.CodItem, data.IDEmpenho, data.CodTipoItem, data.CodItem).
 			Scan(&allItensFatura[i]).Error
 		if err != nil {
 			return &[]ItensFatura{}, err

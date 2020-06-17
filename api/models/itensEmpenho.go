@@ -17,7 +17,7 @@ type ItensEmpenho struct {
 	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
 	Tipo                 string  `gorm:"default:null" json:"tipo"`
 	Descricao            string  `gorm:"default:null" json:"descricao"`
-	QuantidadeDisponivel float64 `gorm:"default:null" json:"quantidade_disponivel"`
+	QuantidadeDisponivel float32 `gorm:"default:null" json:"quantidade_disponivel"`
 }
 
 /*  =========================
@@ -55,7 +55,7 @@ func (itensEmpenho *ItensEmpenho) FindAllItensEmpenho(db *gorm.DB, idEmpenho, co
 	for i, data := range allItensEmpenho {
 		//	Busca um elemento no banco de dados a partir de sua chave primaria
 		err := db.Debug().
-			Raw("SELECT (SELECT SUM(itens_previsao_empenho.quantidade) AS quantidade_previsao_empenho FROM itens_previsao_empenho WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_previsao_empenho = ?) - (SELECT SUM(itens_empenho.quantidade) AS quantidade_empenho FROM itens_empenho WHERE itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_previsao_empenho = ?) AS quantidade_disponivel", data.CodItem, data.CodTipoItem, codPrevisaoEmpenho, data.CodItem, data.CodTipoItem, codPrevisaoEmpenho).
+			Raw("SELECT ROUND((SELECT SUM(itens_previsao_empenho.quantidade) AS quantidade_previsao_empenho FROM itens_previsao_empenho WHERE itens_previsao_empenho.cod_item = ? AND itens_previsao_empenho.cod_tipo_item = ? AND itens_previsao_empenho.cod_previsao_empenho = ?) - (SELECT SUM(itens_empenho.quantidade) AS quantidade_empenho FROM itens_empenho WHERE itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_previsao_empenho = ?), 2) AS quantidade_disponivel", data.CodItem, data.CodTipoItem, codPrevisaoEmpenho, data.CodItem, data.CodTipoItem, codPrevisaoEmpenho).
 			Scan(&allItensEmpenho[i]).Error
 		if err != nil {
 			return &[]ItensEmpenho{}, err
@@ -83,6 +83,6 @@ func (itensEmpenho *ItensEmpenho) UpdateItensEmpenho(db *gorm.DB, idEmpenho, cod
 		return &ItensEmpenho{}, err
 	}
 
-	// retorna o elemento que foi alterado
+	//	Retorna o elemento que foi alterado
 	return itensEmpenho, err
 }

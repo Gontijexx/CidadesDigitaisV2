@@ -162,9 +162,9 @@ function faturaSub(valorCodigo) {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
-          <th style="width:15%" scope="col">Código de Fatura</th>
-          <th style="width:10%" scope="col">Município</th>
-          <th style="width:20%" scope="col">Data</th>
+          <th style="width:20%" scope="col">Código de Fatura</th>
+          <th style="width:50%" scope="col">Município</th>
+          <th style="width:30%" scope="col">Data</th>
           </tr>
           </thead>`);
         tabela += (`<tbody>`);
@@ -210,7 +210,7 @@ function pagamentoSub(valorCodigo) {
   document.getElementById("editar2").innerHTML = (`<br>`);
 
   //função fetch para chamar os itens de previsão da tabela
-  fetch(servidor + 'read/previsaoempenho', {
+  fetch(servidor + 'read/otb', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -227,11 +227,8 @@ function pagamentoSub(valorCodigo) {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
-          <th style="width:15%" scope="col">Código de Previsão de Empenho</th>
-          <th style="width:40%" scope="col">Natureza da despesa</th>
-          <th style="width:10%" scope="col">Tipo</th>
-          <th style="width:20%" scope="col">Data</th>
-          <th style="width:15%" scope="col">Ano de Referência</th>
+          <th style="width:50%" scope="col">Código de Pagamento</th>
+          <th style="width:50%" scope="col">Data de Pagamento</th>
           </tr>
           </thead>`);
         tabela += (`<tbody>`);
@@ -248,17 +245,9 @@ function pagamentoSub(valorCodigo) {
           //captura itens para tabela
           tabela += (`<a href="#"><tr>`);
           tabela += (`<td>`);
-          tabela += listaFinal[i]["cod_previsao_empenho"];
+          tabela += listaFinal[i]["cod_otb"];
           tabela += (`</td><td>`);
-          tabela += listaFinal[i]["natureza_despesa"];
-          tabela += (`</td><td>`);
-          tabela += listaFinal[i]["tipo"];
-          tabela += (`</td><td>`);
-          let data1 = new Date(listaFinal[i]["data"]);
-          let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
-          tabela += dataFinal1;
-          tabela += (`</td><td>`);
-          tabela += listaFinal[i]["ano_referencia"];
+          tabela += listaFinal[i]["dt_pgto"];
           tabela += (`</td>`);
           tabela += (`</tr></a>`);
         }
@@ -365,7 +354,7 @@ function itensFinanceamento(caminho) {
           //para fatura
           if (caminho == "itensfatura") {
             tabela += (`</td> <td>`);
-            tabela += listaItem[i]["id_empenho"];
+            tabela += "listaItem[i]['cod_empenho'] avisa o alexandre pra mandar";
             meuEmpenho[i] = listaItem[i]["id_empenho"];
           }
 

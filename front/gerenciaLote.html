@@ -144,13 +144,13 @@
                                                         name="cod_lote1" value="" id="cod_lote1">
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
-                                                    <input class="multisteps-form__input form-control" type="number"
-                                                        min="1900" placeholder="Ano de Referência" name="ano_ref"
+                                                    <input class="multisteps-form__input form-control" type="number" data-js="numberOnly"
+                                                        min="2014" placeholder="Ano de Referência" name="ano_ref"
                                                         id="ano_ref">
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
                                                     <input class="multisteps-form__input form-control" type="text"
-                                                        data-js="reajusteMask" placeholder="Percentual de Reajuste"
+                                                        data-js="porcentagem" placeholder="Percentual de Reajuste"
                                                         name="percentual" id="percentual">
                                                 </div>
                                             </div>
@@ -180,28 +180,6 @@
 <script src="./Js/tabelas.js"></script>
 
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
-<script>
-    const masks = {
-        reajusteMask(value) {
-            JSON.parse(value)
-            console.log(value)
-            
-           
-         return value
-        }
-    }
-
-    
-
-    document.querySelectorAll('input').forEach(($input) => {
-        const field = $input.dataset.js
-        console.log(field)
-
-        $input.addEventListener('input', (e) => {
-            e.target.value = masks[field](e.target.value)
-            console.log(e.target.value)
-        }, false)
-    })
-</script>
+<script src="./Js/mask.js"></script>
 
 </html>

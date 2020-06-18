@@ -1,15 +1,28 @@
 const masks = {
-    reajusteMask(value){
-        console.log(value)
-        VMasker.toPattern(value, "999.999.999-99");
+    porcentagem(value) {
+        console.log(value)        
         return value
+            .replace(/\D/g, '')
+            .replace(/(\d+?$)/, '$1%')
+            .replace(/(%\d)\d+?$/, '$1')
+    },
+    numberOnly(value) {
+        console.log(value)
+        return value
+        .replace(/\D/g,'')
     }
+
+    
 }
+
+
 
 document.querySelectorAll('input').forEach(($input) => {
     const field = $input.dataset.js
-        
+    console.log(field)
+
     $input.addEventListener('input', (e) => {
-        e.target.value =  masks[field](e.target.value)
+        e.target.value = masks[field](e.target.value)
+        console.log(e.target.value)
     }, false)
 })

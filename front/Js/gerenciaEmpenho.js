@@ -56,5 +56,3 @@ function enviar() {
     }
   });
 }
-
-//nova janela fatura com mesmo formato de fatura e faz hiperlinks

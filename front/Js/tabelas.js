@@ -1,5 +1,5 @@
 //adapte para CD João. Use administracao.js como exemplo se necessário
-//previsaoSub ainda não funciona em gerenciaCd
+//previsaoSub ainda não funciona em gerenciaCd?
 
 //variavel usada nas subtabelas:
 let listaFinal = [];
@@ -40,7 +40,7 @@ function previsaoSub(valorCodigo) {
 
         let j = 0;
         for (let i = 0; i < json.length; i++) {
-          if (valorCodigo == meuCodigo) {
+          if (valorCodigo == json[i]["cod_lote"]) {
             listaFinal[j] = json[i];
             j++;
           }
@@ -108,7 +108,7 @@ function empenhoSub(valorCodigo) {
 
         let j = 0;
         for (let i = 0; i < json.length; i++) {
-          if (valorCodigo == meuCodigo) {
+          if (valorCodigo == json[i]["cod_previsao_empenho"]) {
             listaFinal[j] = json[i];
             j++;
           }
@@ -171,7 +171,7 @@ function faturaSub(valorCodigo) {
 
         let j = 0;
         for (let i = 0; i < json.length; i++) {
-          if (valorCodigo == meuCodigo) {
+          if (valorCodigo == json[i]["id_empenho"]) {
             listaFinal[j] = json[i];
             j++;
           }
@@ -181,12 +181,9 @@ function faturaSub(valorCodigo) {
           //captura itens para tabela
           tabela += (`<a href="#"><tr>`);
           tabela += (`<td>`);
-          tabela += listaFinal[i]["cod_previsao_empenho"];
+          tabela += listaFinal[i]["num_nf"]; //está sendo enviado assim por algum motivo
           tabela += (`</td><td>`);
-
-          //colocar município e talz
-          tabela += listaFinal[i]["tipo"];
-
+          tabela += listaFinal[i]["nome_municipio"] + " - " + listaFinal[i]["uf"] + " - " + listaFinal[i]["cod_ibge"];
           tabela += (`</td><td>`);
           let data1 = new Date(listaFinal[i]["dt_nf"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
@@ -241,7 +238,7 @@ function pagamentoSub(valorCodigo) {
 
         let j = 0;
         for (let i = 0; i < json.length; i++) {
-          if (valorCodigo == meuCodigo) {
+          if (valorCodigo == json[i]["num_nf"]) {
             listaFinal[j] = json[i];
             j++;
           }

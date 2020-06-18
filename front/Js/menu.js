@@ -73,7 +73,7 @@ function erros(value) {
 	if (value == 400) {
 		window.location.href = "./errors/400.html";
 	} else if (value == 401) {
-		window.location.href = "./errors/401.html";
+		window.location.replace("./errors/401.html");
 	} else if (value == 403) {
 		window.location.href = "./errors/403.html";
 	} else if (value == 404) {

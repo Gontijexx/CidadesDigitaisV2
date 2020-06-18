@@ -175,3 +175,48 @@ function enviar() {
     }
   });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//fazer os outros parecidos com esse para simplificar
+
+function novoItensFatura(){
+
+  // JSON usado para mandar as informações no fetch
+  let info = {
+    "id_empenho": parseInt(document.getElementById("id_empenho").value),
+    "quantidade_disponivel": parseInt(document.getElementById("quantidade_disponivel").value),
+    "quantidade": parseInt(document.getElementById("quantidade").value),
+    "valor": document.getElementById("valor").value,
+  };
+
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(info);
+  //função fetch para mandar
+  fetch(servidor + 'read/itensfatura', {
+    method: 'POST',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}

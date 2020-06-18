@@ -52,5 +52,3 @@ function enviar() {
     }
   });
 }
-
-//adicionar subjanela de empenho para cada previsao (mesmas colunas menos natureza) e faz hiperlinks

@@ -76,7 +76,7 @@ function paginacao() {
 
 function pegarCD() {
 
-  document.getElementById("cod_ibge").innerHTML = "<option value='A'>Cidade</option>";
+  document.getElementById("cod_ibge").innerHTML = "<option value=''>Cidade</option>";
   document.getElementById("cod_ibge").disable = true;
 
   fetch(servidor + 'read/cd', {
@@ -95,19 +95,19 @@ function pegarCD() {
         let x = [];
         let ufCD = [];
 
-        //para usar em enabler()
+        //variavel alterada para usar em enabler()
         cidades=json;
 
         //para tirar repetições
         for(i=0; i<json.length;i++){
-          if(i != 0 && json[i].uf != json[i-1].uf){
+          if(json[i-1] != undefined && json[i].uf != json[i-1].uf){
             ufCD[j] = json[i];
             j++;
           }
         }
 
         //preenche "uf"
-        x[0] = "<option value='A'>Estado</option>";
+        x[0] = "<option value=''>Estado</option>";
         for (i = 0; i < ufCD.length; i++) {
           x[i+1] += "<option>" + ufCD[i].uf + "</option>";
         }
@@ -130,7 +130,7 @@ function enabler() {
   let i, j = 0;
   let x = [], cidadesFinal = [];
 
-  //para tirar repetições
+  //para filtrar
   for (i = 0; i < cidades.length; i++) {
     if (cidades[i].uf == uf.value) {
       cidadesFinal[j] = cidades[i];
@@ -139,7 +139,7 @@ function enabler() {
   }
 
   //preenche "cod_ibge"
-  x[0] = "<option value='A'>Cidade</option>";
+  x[0] = "<option value=''>Cidade</option>";
   for (i = 0; i < cidadesFinal.length; i++) {
     x[i+1] = "<option value=" + cidadesFinal[i].cod_ibge + ">" + cidadesFinal[i].nome_municipio + "</option>";
   }

@@ -24,14 +24,10 @@ function enviar() {
 
   //  JSON usado para mandar as informações no fetch
   let info = {
-    "data": "",
-    "tipo": "",
-    "ano_referencia": "",
+    "data": document.getElementById("data").value,
+    "tipo": document.getElementById("tipo").value,
+    "ano_referencia": parseInt(document.getElementById("ano_referencia").value),
   };
-
-  info.data = document.getElementById("data").value;
-  info.tipo = document.getElementById("tipo").value;
-  info.ano_referencia = parseInt(document.getElementById("ano_referencia").value);
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);

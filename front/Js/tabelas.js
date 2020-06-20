@@ -308,7 +308,7 @@ function itensFinanceamento(caminho) {
 
         let tabela;
 
-        //mudanças feitas para fatura...
+        //mudanças feitas para fatura funcionar
         if (caminho == "itensfatura") {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
@@ -354,7 +354,7 @@ function itensFinanceamento(caminho) {
           //para fatura
           if (caminho == "itensfatura") {
             tabela += (`</td> <td>`);
-            tabela += "listaItem[i]['cod_empenho'] avisa o alexandre pra mandar";
+            tabela += listaItem[i]["cod_empenho"];
             meuEmpenho[i] = listaItem[i]["id_empenho"];
           }
 
@@ -453,3 +453,9 @@ function editarItem(caminho) {
     }
   }
 }
+
+
+
+
+
+//hiperlinks direcio0na para dentro de gerenciaCoisa

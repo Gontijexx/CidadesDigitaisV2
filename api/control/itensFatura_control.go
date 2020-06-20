@@ -23,11 +23,11 @@ import (
 
 func (server *Server) CreateItensFatura(w http.ResponseWriter, r *http.Request) {
 
-	//	Autorizacao de Modulo
-	if err := config.AuthMod(w, r, 17021); err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
-		return
-	}
+	// //	Autorizacao de Modulo
+	// if err := config.AuthMod(w, r, 17021); err != nil {
+	// 	responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+	// 	return
+	// }
 
 	//	O metodo ReadAll le toda a request ate encontrar algum erro, se nao encontrar erro o leitura para em EOF
 	body, err := ioutil.ReadAll(r.Body)

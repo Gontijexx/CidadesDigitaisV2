@@ -104,9 +104,11 @@ function enabler2(){
 
   //preenche "itens disponiveis"
   x[0] = "<option value='A'>Item Selecionado</option>";
+  //precisa juntar os valores para pegar ambos
   for (i = 0; i < itemFinal.length; i++) {
-    x[i+1] = "<option value=" + itemFinal[i].cod_item + ">" + itemFinal[i].cod_tipo_item + "." + itemFinal[i].cod_item + " - " + itemFinal[i].descricao + "</option>";
+    x[i+1] = "<option value='"+ itemFinal[i].cod_item + " " + itemFinal[i].cod_tipo_item + "'>" + itemFinal[i].cod_tipo_item + "." + itemFinal[i].cod_item + " - " + itemFinal[i].descricao + "</option>";
   }
+
 
   document.getElementById("itens_disponiveis").innerHTML = x;
 }
@@ -118,28 +120,40 @@ function enabler3(){
   //variaveis
   let tipo = document.getElementById("tipo");
   let empenho = document.getElementById("id_empenho");
-  let item = document.getElementById("itens_disponiveis");
+
+  //spliting para pegar o valor de itens puro
+  let stringValores = document.getElementById("itens_disponiveis").value;
+  let valoresJuntos = stringValores.split(" ");
+
+  //valor usado no filtro
+  let item = valoresJuntos[0];
+  console.log(valoresJuntos[0])
   let i, quantidade_disponivel="", quantidade="", valor="";
 
   //para filtrar apenas
   for (i = 0; i < itemSelecionado.length; i++) {
-    if (itemSelecionado[i].id_empenho == empenho.value && itemSelecionado[i].tipo == tipo.value && itemSelecionado[i].cod_item == item.value) {
+    if (itemSelecionado[i].id_empenho == empenho.value && itemSelecionado[i].tipo == tipo.value && itemSelecionado[i].cod_item == item) {
       quantidade_disponivel += itemSelecionado[i].quantidade_disponivel;
       quantidade += itemSelecionado[i].quantidade;
       valor += itemSelecionado[i].valor;
     }
   }
 
+  //colocar os valores nos campos
   document.getElementById("quantidade_disponivel").value = quantidade_disponivel;
   document.getElementById("quantidade").value = quantidade;
   document.getElementById("valor").value = valor;
 
+  //mudar cor se necessario
+  if(quantidade_disponivel < 0){
+    document.getElementById("quantidade_disponivel").style.color = "red";
+  }
+  else{
+    document.getElementById("quantidade_disponivel").style.color = "black";
+  }
+
   document.getElementById("quantidade_disponivel").disabled = true;
 }
-
-
-
-//colocar em vermelho a quantidade disponivel se for negativo
 
 
 
@@ -147,11 +161,8 @@ function enviar() {
 
   //estrutura usada para mandar as informações no fetch
   let info = {
-    "dt_nf": "",
+    "dt_nf": document.getElementById("dt_nf").value,
   };
-
-  //capturando o valor
-  info.dt_nf = document.getElementById("dt_nf").value;
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
@@ -178,27 +189,21 @@ function enviar() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-//fazer os outros parecidos com esse para simplificar
-
 function novoItensFatura(){
+
+  //trata os valores de itens disponiveis
+  let stringValores = document.getElementById("itens_disponiveis").value;
+  let valoresJuntos = stringValores.split(" ");
 
   // JSON usado para mandar as informações no fetch
   let info = {
+    "num_nf": parseInt(meuCodigo),
+    "cod_ibge": parseInt(meuCodigoSec),
     "id_empenho": parseInt(document.getElementById("id_empenho").value),
-    "quantidade_disponivel": parseInt(document.getElementById("quantidade_disponivel").value),
-    "quantidade": parseInt(document.getElementById("quantidade").value),
-    "valor": document.getElementById("valor").value,
+    "cod_item": parseInt(valoresJuntos[0]),
+    "cod_tipo_item": parseInt(valoresJuntos[1]),
+    "quantidade": parseFloat(document.getElementById("quantidade").value),
+    "valor": parseFloat(document.getElementById("valor").value),
   };
 
   //transforma as informações em string para mandar

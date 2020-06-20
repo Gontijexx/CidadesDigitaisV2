@@ -14,6 +14,7 @@ type ItensFatura struct {
 	IDEmpenho            uint32  `gorm:"primary_key;foreign_key:IDEmpenho;not null" json:"id_empenho"`
 	CodItem              uint32  `gorm:"primary_key;foreign_key:CodItem;not null" json:"cod_item"`
 	CodTipoItem          uint32  `gorm:"primary_key;foreign_key:CodTipoItem;not null" json:"cod_tipo_item"`
+	CodEmpenho           string  `gorm:"not null;size:13" json:"cod_empenho"`
 	Tipo                 string  `gorm:"default:null" json:"tipo"`
 	Valor                float32 `gorm:"default:null" json:"valor"`
 	Quantidade           float32 `gorm:"default:null" json:"quantidade"`
@@ -61,7 +62,7 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge u
 
 	// Busca todos elementos contidos no banco de dados
 	err := db.Debug().Table("itens_fatura").
-		Select("previsao_empenho.tipo, itens.descricao, itens_fatura.*").
+		Select("empenho.cod_empenho, previsao_empenho.tipo, itens.descricao, itens_fatura.*").
 		Joins("JOIN empenho ON itens_fatura.id_empenho = empenho.id_empenho").
 		Joins("JOIN previsao_empenho ON empenho.cod_previsao_empenho = previsao_empenho.cod_previsao_empenho").
 		Joins("JOIN itens ON itens_fatura.cod_item = itens.cod_item AND itens_fatura.cod_tipo_item = itens.cod_tipo_item WHERE num_nf = ? AND cod_ibge = ? ORDER BY itens_fatura.cod_tipo_item, itens_fatura.cod_item", numNF, codIbge).
@@ -124,7 +125,7 @@ func (itensEmpenho *ItensEmpenho) FindItensFaturaDisponiveis(db *gorm.DB, codIbg
 
 	allItensEmpenho := []ItensEmpenho{}
 
-	err := db.Table("previsao_empenho").
+	err := db.Debug().Table("previsao_empenho").
 		Select("previsao_empenho.tipo, itens_empenho.*").
 		Joins("JOIN itens_empenho on previsao_empenho.cod_previsao_empenho = itens_empenho.cod_previsao_empenho WHERE previsao_empenho.tipo = 'o' AND previsao_empenho.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?) ORDER BY id_empenho, cod_tipo_item, cod_item", codIbge).
 		Scan(&allItensEmpenho).Error
@@ -134,7 +135,7 @@ func (itensEmpenho *ItensEmpenho) FindItensFaturaDisponiveis(db *gorm.DB, codIbg
 
 	for i, data := range allItensEmpenho {
 		//	Busca um elemento no banco de dados a partir de sua chave primaria
-		err := db.Debug().
+		err := db.
 			Raw("SELECT ROUND((SELECT itens_empenho.quantidade FROM itens_empenho WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_fatura FROM fatura INNER JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge WHERE fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd where cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?), 2) AS quantidade_disponivel, itens.descricao AS descricao FROM itens_empenho INNER JOIN itens ON itens_empenho.cod_item = itens.cod_item AND itens_empenho.cod_tipo_item = itens.cod_tipo_item WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ?", data.IDEmpenho, data.CodItem, data.CodTipoItem, codIbge, data.IDEmpenho, data.CodItem, data.CodTipoItem, data.IDEmpenho, data.CodItem, data.CodTipoItem).
 			Scan(&allItensEmpenho[i]).Error
 		if err != nil {

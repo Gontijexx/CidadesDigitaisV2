@@ -14,7 +14,7 @@ window.onload = function () {
     tipo="Original";
   }
   else{
-    tipo=="Reajuste";
+    tipo="Reajuste";
   }
   document.getElementById("cod_previsao_empenho").value = meuCodigoSec + " - " + localStorage.getItem("descricao") + " - " + tipo;
 
@@ -27,12 +27,9 @@ window.onload = function () {
 function enviar() {
   //JSON usado para mandar as informações no fetch
   let info = {
-    "cod_empenho": "",
-    "data": "",
+    "cod_empenho": document.getElementById("cod_empenho").value,
+    "data": document.getElementById("data").value,
   };
-
-  info.cod_empenho = document.getElementById("cod_empenho").value;
-  info.data = document.getElementById("data").value;
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);

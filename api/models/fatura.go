@@ -95,3 +95,26 @@ func (fatura *Fatura) DeleteFatura(db *gorm.DB, numNF, codIbge uint32) error {
 
 	return db.Error
 }
+
+/*  =========================
+	FUNCAO LISTAR FATURA POR ID_EMPENHO
+=========================  */
+
+func (fatura *Fatura) FindFaturaIDEmpenho(db *gorm.DB, idEmpenho uint32) (*[]Fatura, error) {
+
+	allFatura := []Fatura{}
+
+	err := db.Debug().Table("fatura").
+		Select("fatura.*").
+		Joins("JOIN itens_fatura ON itens_fatura.num_nf = fatura.num_nf AND itens_fatura.cod_ibge = fatura.cod_ibge").
+		Joins("JOIN empenho ON itens_fatura.id_empenho = empenho.id_empenho").
+		Where("empenho.id_empenho = ?", idEmpenho).
+		Group("fatura.num_nf, fatura.cod_ibge").
+		Order("fatura.num_nf, fatura.cod_ibge").
+		Scan(&allFatura).Error
+	if err != nil {
+		return &[]Fatura{}, err
+	}
+
+	return &allFatura, err
+}

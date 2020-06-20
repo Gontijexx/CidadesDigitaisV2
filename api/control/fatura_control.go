@@ -195,7 +195,7 @@ func (server *Server) UpdateFatura(w http.ResponseWriter, r *http.Request) {
 	logFatura := models.Log{}
 
 	if err = json.Unmarshal(body, &fatura); err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATEL] ERROR: 422, %v\n", err))
+		responses.ERROR(w, http.StatusUnprocessableEntity, fmt.Errorf("[FATAL] ERROR: 422, %v\n", err))
 		return
 	}
 
@@ -282,4 +282,39 @@ func (server *Server) DeleteFatura(w http.ResponseWriter, r *http.Request) {
 
 	//	Retorna o Status 204, indicando que a informacao foi deletada
 	responses.JSON(w, http.StatusNoContent, "")
+}
+
+/*  =========================
+	FUNCAO LISTAR FATURA POR ID EMPENHO
+=========================  */
+
+func (server *Server) GetFaturaByIDEmpenho(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	if err := config.AuthMod(w, r, 17002); err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	idEmpenho armazena a chave primaria da tabela fatura
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	fatura := models.Fatura{}
+
+	//	Recebe o dado buscado no banco de dados
+	faturaGotten, err := fatura.FindFaturaIDEmpenho(server.DB, uint32(idEmpenho))
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct buscada
+	responses.JSON(w, http.StatusOK, faturaGotten)
 }

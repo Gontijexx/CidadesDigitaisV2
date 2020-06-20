@@ -356,6 +356,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	EDITA FATURA (num_nf, cod_ibge)
 	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateFatura))).Methods(http.MethodPut)
 
+	//	LISTA FATURA (id_empenho)
+	r.HandleFunc(config.FATURA_ID_EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaByIDEmpenho))).Methods(http.MethodGet)
+
 	//	LISTA FATURA (num_nf, cod_ibge)
 	r.HandleFunc(config.FATURA_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetFaturaByID))).Methods(http.MethodGet)
 

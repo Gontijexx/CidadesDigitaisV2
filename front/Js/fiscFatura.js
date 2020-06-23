@@ -42,38 +42,10 @@ function paginacao() {
 
 
         //sistema de filtragem:
-
-        //variaveis:
-
-        let filtro = document.getElementById("filtro").value;
-        let j=0, filtragem;
         let filtrado = [];
-        let estrutura = new RegExp(filtro,"i");
+        filtrado = filtro(json,["num_nf","nome_municipio","uf","cod_ibge","dt_nf"]);
 
-        //sistema:
 
-        for(i=0;i<json.length;i++){
-
-          //caso haja filtro
-          if(filtro == ""){
-            filtrado[j] = json[i];
-            j++;
-          }
-
-          //caso não haja
-          else{
-            filtragem = JSON.stringify(json[i]["num_nf"]+json[i]["nome_municipio"]+json[i]["uf"]+json[i]["cod_ibge"]+json[i]["dt_nf"]);
-
-            //a verdadeira filtragem
-            if(filtragem.search(estrutura) >= 0){
-              filtrado[j] = json[i];
-              j++;
-            }
-          }
-
-        }
-
-        
         for (let i = comeco; i < fim && i < filtrado.length; i++) {
           //captura itens para tabela
           tabela += (`<tr>`);

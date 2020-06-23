@@ -158,7 +158,7 @@ function faturaSub(valorCodigo) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        //console.log(json);
+        console.log(json);
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
@@ -169,13 +169,13 @@ function faturaSub(valorCodigo) {
           </thead>`);
         tabela += (`<tbody>`);
 
-        let j = 0;
-        for (let i = 0; i < json.length; i++) {
-          if (valorCodigo == json[i]["id_empenho"]) {
-            listaFinal[j] = json[i];
-            j++;
-          }
-        }
+        // let j = 0;
+        // for (let i = 0; i < json.length; i++) {
+        //   if (valorCodigo == json[i]["id_empenho"]) {
+        //     listaFinal[j] = json[i];
+        //     j++;
+        //   }
+        // }
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela

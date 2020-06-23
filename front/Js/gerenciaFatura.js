@@ -78,7 +78,7 @@ function enabler1(){
   for (i = 0; i < empenhoFinal.length; i++) {
 
     //mudar para cod_empenho quando possivel
-    x[i+1] = "<option value=" + empenhoFinal[i].id_empenho + ">" + empenhoFinal[i].id_empenho + "</option>";
+    x[i+1] = "<option value=" + empenhoFinal[i].id_empenho + ">" + empenhoFinal[i].cod_empenho + "</option>";
   }
 
   document.getElementById("id_empenho").innerHTML = x;
@@ -148,6 +148,7 @@ function enabler3(){
   if(quantidade_disponivel < 0){
     document.getElementById("quantidade_disponivel").style.color = "red";
   }
+
   else{
     document.getElementById("quantidade_disponivel").style.color = "black";
   }

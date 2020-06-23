@@ -29,11 +29,8 @@ function pagina(valor) {
 //função que organiza o sistema com paginas
 function paginasOrganizadas(json,comeco,fim){
 
-  //pegar o json
+  //checar o json
   //console.log(json);
-
-  //para edição
-  jsonFinal=json;
 
   //mostra quanto do total aparece na tela
   document.getElementById("mostrando").innerHTML = "Mostrando " + (comeco + 1) + " a " + fim + " de " + json.length;
@@ -153,4 +150,59 @@ function paginasOrganizadas(json,comeco,fim){
   } else {
     document.getElementById("proximo").style.visibility = "hidden";
   }
+}
+
+
+
+
+
+//sistema de filtragem:
+
+function filtro(json,linhaFiltrada){
+
+  //variaveis:
+
+  let filtragemFinal = [];
+  let filtro = document.getElementById("filtro").value;
+  let j=0, filtragem;
+  let estrutura = new RegExp(filtro,"i");
+
+  //sistema:
+
+  console.log(filtro);
+
+  for(i=0;i<json.length;i++){
+
+    //caso não haja filtro
+    if(filtro == ""){
+      filtragemFinal[j] = json[i];
+      j++;
+    }
+
+    //caso haja filtro
+    else{
+      //reiniciando variavel filtragem
+      filtragem = "";
+
+      //parte criada para poder colocar todos os campos de uma linha dentro da variavel que será pesquisada
+      for(k=0;k<linhaFiltrada.length;k++){
+        filtragem += JSON.stringify(json[i][linhaFiltrada[k]]);
+      }
+      //parte criada para arrumar o valor do tipo quando ele existe
+      if(json[i]["tipo"]=="o"){
+        filtragem += "Original";
+      }
+      else if(json[i]["tipo"]=="r"){
+        filtragem += "Reajuste";
+      }
+
+      //a filtragem em si
+      if(filtragem.search(estrutura) >= 0){
+        filtragemFinal[j] = json[i];
+        j++;
+      }
+    }
+
+  }
+  return filtragemFinal;
 }

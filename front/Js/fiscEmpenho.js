@@ -1,3 +1,4 @@
+//variaveis globais
 let jsonFinal;
 
 window.onload = function () {
@@ -39,47 +40,12 @@ function paginacao() {
         </thead>`);
         tabela += (`<tbody>`);
 
+
         //sistema de filtragem:
-
-        //variaveis:
-
-        let filtro = document.getElementById("filtro").value;
-        let j=0, filtragem;
         let filtrado = [];
-        let estrutura = new RegExp(filtro,"i");
+        filtrado = filtro(json,["cod_previsao_empenho","cod_empenho","cod_natureza_despesa","descricao","cod_lote","data"]);
 
-        //sistema:
 
-        for(i=0;i<json.length;i++){
-
-          //caso haja filtro
-          if(filtro == ""){
-            filtrado[j] = json[i];
-            j++;
-          }
-
-          //caso não haja
-          else{
-            filtragem = JSON.stringify(json[i]["cod_previsao_empenho"]+json[i]["cod_empenho"]+json[i]["cod_natureza_despesa"]+json[i]["descricao"]+json[i]["cod_lote"]+json[i]["data"]);
-
-            //arrumar o valor do tipo
-            if(json[i]["tipo"]=="o"){
-              filtragem += "Original";
-            }
-            else{
-              filtragem += "Reajuste";
-            }
-
-            //a verdadeira filtragem
-            if(filtragem.search(estrutura) >= 0){
-              filtrado[j] = json[i];
-              j++;
-            }
-          }
-
-        }
-
-        
         for (let i = comeco; i < fim && i < filtrado.length; i++) {
           //captura itens para tabela
           tabela += (`<tr>`);

@@ -27,6 +27,8 @@ function paginacao() {
 
       response.json().then(function (json) {
 
+        //console.log(json);
+
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
         <th style="width:10%" scope="col">Código de Previsão de Empenho</th>
@@ -41,45 +43,9 @@ function paginacao() {
         tabela += (`<tbody>`);
 
         //sistema de filtragem:
-
-        //variaveis:
-
-        let filtro = document.getElementById("filtro").value;
-        let j=0, filtragem;
         let filtrado = [];
-        let estrutura = new RegExp(filtro,"i");
+        filtrado = filtro(json,["cod_previsao_empenho","cod_lote","ano_referencia","data","natureza_despesa"]);
 
-        //sistema:
-
-        for(i=0;i<json.length;i++){
-
-          //caso haja filtro
-          if(filtro == ""){
-            filtrado[j] = json[i];
-            j++;
-          }
-
-          //caso não haja
-          else{
-            filtragem = JSON.stringify(json[i]["cod_previsao_empenho"]+json[i]["cod_lote"]+json[i]["ano_referencia"]+json[i]["data"]+json[i]["natureza_despesa"]);
-
-            //arrumar o valor do tipo
-            if(json[i]["tipo"]=="o"){
-              filtragem += "Original";
-            }
-            else{
-              filtragem += "Reajuste";
-            }
-
-            //a verdadeira filtragem
-            if(filtragem.search(estrutura) >= 0){
-              filtrado[j] = json[i];
-              j++;
-            }
-          }
-
-        }
-        
         for (let i = comeco; i < fim && i < filtrado.length; i++) {
             //captura itens para tabela
             tabela += (`<tr>`);

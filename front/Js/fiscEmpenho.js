@@ -25,43 +25,83 @@ function paginacao() {
       
       response.json().then(function (json) {
 
-        console.log(json)
+        //console.log(json)
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
-        <th style="width:25%" scope="col">Código de Empenho</th>
-        <th style="width:25%" scope="col">Natureza de Despesa</th>
+        <th style="width:15%" scope="col">Código de Empenho</th>
+        <th style="width:10%" scope="col">Lote</th>
+        <th style="width:40%" scope="col">Natureza de Despesa/Previsão de Empenho</th>
         <th style="width:10%" scope="col">Tipo</th>
-        <th style="width:10%" scope="col">Código do Lote</th>
-        <th style="width:20%" scope="col">Data</th>
+        <th style="width:15%" scope="col">Data</th>
         <th style="width:10%" scope="col">Opções</th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
 
+        //sistema de filtragem:
+
+        //variaveis:
+
+        let filtro = document.getElementById("filtro").value;
+        let j=0, filtragem;
+        let filtrado = [];
+        let estrutura = new RegExp(filtro,"i");
+
+        //sistema:
+
+        for(i=0;i<json.length;i++){
+
+          //caso haja filtro
+          if(filtro == ""){
+            filtrado[j] = json[i];
+            j++;
+          }
+
+          //caso não haja
+          else{
+            filtragem = JSON.stringify(json[i]["cod_previsao_empenho"]+json[i]["cod_empenho"]+json[i]["cod_natureza_despesa"]+json[i]["descricao"]+json[i]["cod_lote"]+json[i]["data"]);
+
+            //arrumar o valor do tipo
+            if(json[i]["tipo"]=="o"){
+              filtragem += "Original";
+            }
+            else{
+              filtragem += "Reajuste";
+            }
+
+            //a verdadeira filtragem
+            if(filtragem.search(estrutura) >= 0){
+              filtrado[j] = json[i];
+              j++;
+            }
+          }
+
+        }
+
         
-        for (let i = comeco; i < fim && i < json.length; i++) {
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += json[i]["cod_empenho"];
+          tabela += filtrado[i]["cod_empenho"];
           tabela += (`</td>`);
           tabela += (`<td>`);
-          tabela += json[i]["cod_previsao_empenho"] + " - " + json[i]["cod_natureza_despesa"] + " - " + json[i]["descricao"];
+          tabela += filtrado[i]["cod_lote"];
           tabela += (`</td>`);
           tabela += (`<td>`);
-          if(json[i]["tipo"]=="o"){
+          tabela += filtrado[i]["cod_natureza_despesa"] + " - " + filtrado[i]["descricao"] + " - " + filtrado[i]["cod_previsao_empenho"];
+          tabela += (`</td>`);
+          tabela += (`<td>`);
+          if(filtrado[i]["tipo"]=="o"){
             tabela += "Original";
           }
-          else if(json[i]["tipo"]=="r"){
+          else if(filtrado[i]["tipo"]=="r"){
             tabela += "Reajuste";
           }
           tabela += (`</td>`);
           tabela += (`<td>`);
-          tabela += json[i]["cod_lote"];
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          let data1 = new Date(json[i]["data"]);
+          let data1 = new Date(filtrado[i]["data"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
           tabela += (`</td>`);
@@ -76,7 +116,7 @@ function paginacao() {
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        paginasOrganizadas(json,comeco,fim);
+        paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
       erros(response.status);
@@ -88,7 +128,7 @@ function paginacao() {
 
 //no botão de adicionar
 function pegarPrevisao() {
-  fetch(servidor + 'read/previsaoempenho', {
+  fetch(servidor + 'read/naturezadespesa', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -100,9 +140,53 @@ function pegarPrevisao() {
       response.json().then(function (json) {
         //console.log(json);
         let x = [];
-        x[0] += "<option >Código de Previsão de Empenho</option>";
+        x[0] += "<option value=''>Natureza de Despesa</option>";
         for (i = 0; i < json.length; i++) {
-          x[i+1] += "<option>" + json[i].cod_previsao_empenho + "</option>";
+          x[i] += "<option value='" + json[i].cod_natureza_despesa + "'>" + json[i].descricao + "</option>";
+        }
+        document.getElementById("cod_natureza_despesa").innerHTML = x;
+
+        //define valor
+        document.getElementById("cod_previsao_empenho").innerHTML = "<option>Código de Previsão de Empenho</option>";
+        document.getElementById("cod_previsao_empenho").disabled = true;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+function enabler() {
+
+  //ativa o campo
+  document.getElementById("cod_previsao_empenho").disabled = false;
+
+  fetch(servidor + 'read/previsaoempenho', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      response.json().then(function (json) {
+        //console.log(json);
+        let j = 0;
+        let natureza = document.getElementById("cod_natureza_despesa").value;
+        let listaPrevisao = [];
+        for (let i = 0; i < json.length; i++) {
+          if (natureza == json[i]["cod_natureza_despesa"]) {
+            listaPrevisao[j] = json[i];
+            j++;
+          }
+        }
+
+        let x = [];
+        x[0] += "<option >Código de Previsão de Empenho</option>";
+        for (i = 0; i < listaPrevisao.length; i++) {
+          x[i+1] += "<option>" + listaPrevisao[i].cod_previsao_empenho + "</option>";
         }
         document.getElementById("cod_previsao_empenho").innerHTML = x;
       });

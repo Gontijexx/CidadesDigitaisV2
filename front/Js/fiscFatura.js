@@ -40,16 +40,49 @@ function paginacao() {
         </thead>`);
         tabela += (`<tbody>`);
 
+
+        //sistema de filtragem:
+
+        //variaveis:
+
+        let filtro = document.getElementById("filtro").value;
+        let j=0, filtragem;
+        let filtrado = [];
+        let estrutura = new RegExp(filtro,"i");
+
+        //sistema:
+
+        for(i=0;i<json.length;i++){
+
+          //caso haja filtro
+          if(filtro == ""){
+            filtrado[j] = json[i];
+            j++;
+          }
+
+          //caso não haja
+          else{
+            filtragem = JSON.stringify(json[i]["num_nf"]+json[i]["nome_municipio"]+json[i]["uf"]+json[i]["cod_ibge"]+json[i]["dt_nf"]);
+
+            //a verdadeira filtragem
+            if(filtragem.search(estrutura) >= 0){
+              filtrado[j] = json[i];
+              j++;
+            }
+          }
+
+        }
+
         
-        for (let i = comeco; i < fim && i < json.length; i++) {
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += json[i]["num_nf"]; //está sendo enviado assim por algum motivo
+          tabela += filtrado[i]["num_nf"]; //está sendo enviado assim por algum motivo
           tabela += (`</td><td>`);
-          tabela += json[i]["nome_municipio"] + " - " + json[i]["uf"] + " - " + json[i]["cod_ibge"];
+          tabela += filtrado[i]["nome_municipio"] + " - " + filtrado[i]["uf"] + " - " + filtrado[i]["cod_ibge"];
           tabela += (`</td><td>`);
-          let data1 = new Date(json[i]["dt_nf"]);
+          let data1 = new Date(filtrado[i]["dt_nf"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
           tabela += (`</td>`);
@@ -64,7 +97,7 @@ function paginacao() {
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        paginasOrganizadas(json,comeco,fim);
+        paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
       erros(response.status);

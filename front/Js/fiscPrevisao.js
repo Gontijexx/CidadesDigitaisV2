@@ -40,39 +40,73 @@ function paginacao() {
         </thead>`);
         tabela += (`<tbody>`);
 
-        // //filtragem em uma página, para melhor filtragem precisa pegar o json e substituir por pesquisa
-        // let filtro = document.getElementById("filtro").value;
-        // let estrutura = new RegExp(filtro,"i");//só botar o valor pesquisado aqui
-        // let filtragem = JSON.stringify(json[i]["cod_previsao_empenho"]+json[i]["cod_lote"]+json[i]["tipo"]+json[i]["ano_referencia"]+json[i]["data"]+json[i]["natureza_despesa"]);
-        // console.log(filtragem);
+        //sistema de filtragem:
 
-        for (let i = comeco; i < fim && i < json.length; i++) {
+        //variaveis:
+
+        let filtro = document.getElementById("filtro").value;
+        let j=0, filtragem;
+        let filtrado = [];
+        let estrutura = new RegExp(filtro,"i");
+
+        //sistema:
+
+        for(i=0;i<json.length;i++){
+
+          //caso haja filtro
+          if(filtro == ""){
+            filtrado[j] = json[i];
+            j++;
+          }
+
+          //caso não haja
+          else{
+            filtragem = JSON.stringify(json[i]["cod_previsao_empenho"]+json[i]["cod_lote"]+json[i]["ano_referencia"]+json[i]["data"]+json[i]["natureza_despesa"]);
+
+            //arrumar o valor do tipo
+            if(json[i]["tipo"]=="o"){
+              filtragem += "Original";
+            }
+            else{
+              filtragem += "Reajuste";
+            }
+
+            //a verdadeira filtragem
+            if(filtragem.search(estrutura) >= 0){
+              filtrado[j] = json[i];
+              j++;
+            }
+          }
+
+        }
+        
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
             //captura itens para tabela
             tabela += (`<tr>`);
             tabela += (`<td>`);
-            tabela += json[i]["cod_previsao_empenho"];
+            tabela += filtrado[i]["cod_previsao_empenho"];
             tabela += (`</td>`);
             tabela += (`<td>`);
-            tabela += json[i]["cod_lote"];
+            tabela += filtrado[i]["cod_lote"];
             tabela += (`</td>`);
             tabela += (`<td>`);
-            tabela += json[i]["natureza_despesa"];
+            tabela += filtrado[i]["natureza_despesa"];
             tabela += (`</td>`);
             tabela += (`<td>`);
-            if(json[i]["tipo"]=="o"){
+            if(filtrado[i]["tipo"]=="o"){
               tabela += "Original";
             }
-            else if(json[i]["tipo"]=="r"){
+            else{
               tabela += "Reajuste";
             }
             tabela += (`</td>`);
             tabela += (`<td>`);
-            let data1 = new Date(json[i]["data"]);
+            let data1 = new Date(filtrado[i]["data"]);
             let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
             tabela += dataFinal1;
             tabela += (`</td>`);
             tabela += (`<td>`);
-            tabela += json[i]["ano_referencia"];
+            tabela += filtrado[i]["ano_referencia"];
             tabela += (`</td>`);
             tabela += (`<td> 
             <span class="d-flex">
@@ -85,7 +119,7 @@ function paginacao() {
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        paginasOrganizadas(json,comeco,fim);
+        paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
       erros(response.status);

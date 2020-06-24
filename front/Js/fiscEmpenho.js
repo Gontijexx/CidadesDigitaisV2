@@ -44,6 +44,7 @@ function paginacao() {
         //sistema de filtragem:
         let filtrado = [];
         filtrado = filtro(json,["cod_previsao_empenho","cod_empenho","cod_natureza_despesa","descricao","cod_lote","data"]);
+        jsonFinal=filtrado;
 
 
         for (let i = comeco; i < fim && i < filtrado.length; i++) {
@@ -138,7 +139,7 @@ function enabler() {
     //tratamento dos erros
     if (response.status == 200) {
       response.json().then(function (json) {
-        //console.log(json);
+        console.log(json);
         let j = 0;
         let natureza = document.getElementById("cod_natureza_despesa").value;
         let listaPrevisao = [];

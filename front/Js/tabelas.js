@@ -48,7 +48,7 @@ function previsaoSub(valorCodigo) {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<a href="#"><tr>`);
+          tabela += (`<tr onclick="redirecionar(` + i + "," + "'previsao'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_previsao_empenho"];
           tabela += (`</td><td>`);
@@ -62,7 +62,7 @@ function previsaoSub(valorCodigo) {
           tabela += (`</td><td>`);
           tabela += listaFinal[i]["ano_referencia"];
           tabela += (`</td>`);
-          tabela += (`</tr></a>`);
+          tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -116,7 +116,7 @@ function empenhoSub(valorCodigo) {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<a href="#"><tr>`);
+          tabela += (`<tr onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_empenho"];
           tabela += (`</td><td>`);
@@ -124,7 +124,7 @@ function empenhoSub(valorCodigo) {
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
           tabela += (`</td>`);
-          tabela += (`</tr></a>`);
+          tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -139,13 +139,13 @@ function empenhoSub(valorCodigo) {
 
 //tabela pra fatura:
 
-function faturaSub(valorCodigo) {
+function faturaSub() {
 
   document.getElementById("editar").innerHTML = (`<br>`);
   document.getElementById("editar2").innerHTML = (`<br>`);
 
   //função fetch para chamar os itens de previsão da tabela
-  fetch(servidor + 'read/fatura', {
+  fetch(servidor + 'read/fatura/' + meuCodigo, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -158,7 +158,7 @@ function faturaSub(valorCodigo) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        console.log(json);
+        //console.log(json);
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
@@ -169,17 +169,16 @@ function faturaSub(valorCodigo) {
           </thead>`);
         tabela += (`<tbody>`);
 
-        // let j = 0;
-        // for (let i = 0; i < json.length; i++) {
-        //   if (valorCodigo == json[i]["id_empenho"]) {
-        //     listaFinal[j] = json[i];
-        //     j++;
-        //   }
-        // }
+        let j = 0;
+        for (let i = 0; i < json.length; i++) {
+          listaFinal[j] = json[i];
+          j++;
+        // usar "if (valorCodigo == json[i][algo]) {}" para outros casos
+        }
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<a href="#"><tr>`);
+          tabela += (`<tr onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["num_nf"]; //está sendo enviado assim por algum motivo
           tabela += (`</td><td>`);
@@ -189,7 +188,7 @@ function faturaSub(valorCodigo) {
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
           tabela += (`</td>`);
-          tabela += (`</tr></a>`);
+          tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -235,21 +234,21 @@ function pagamentoSub(valorCodigo) {
 
         let j = 0;
         for (let i = 0; i < json.length; i++) {
-          if (valorCodigo == json[i]["num_nf"]) {
+        //  if (valorCodigo == json[i]["num_nf"]) {
             listaFinal[j] = json[i];
             j++;
-          }
+        //  }
         }
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<a href="#"><tr>`);
+          tabela += (`<tr onclick="redirecionar(` + i + "," + "'pagamento'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_otb"];
           tabela += (`</td><td>`);
           tabela += listaFinal[i]["dt_pgto"];
           tabela += (`</td>`);
-          tabela += (`</tr></a>`);
+          tabela += (`</tr>`);
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -258,6 +257,45 @@ function pagamentoSub(valorCodigo) {
       erros(response.status);
     }
   });
+}
+
+
+//função necessaria para o funcionamento dos links nas subtabelas
+function redirecionar(valor, caminhoFinal){
+  if(caminhoFinal == "previsao"){
+    localStorage.setItem("cod_previsao_empenho", listaFinal[valor].cod_previsao_empenho);
+    localStorage.setItem("cod_lote", listaFinal[valor].cod_lote);
+    localStorage.setItem("data", listaFinal[valor].data);
+    localStorage.setItem("tipo", listaFinal[valor].tipo);
+    localStorage.setItem("ano_referencia", listaFinal[valor].ano_referencia);
+
+    //para mostrar a descrição
+    localStorage.setItem("natureza_despesa", listaFinal[valor].natureza_despesa);
+    window.location.href = "./gerenciaPrevisao.html";
+  }
+  else if(caminhoFinal == "empenho"){
+    localStorage.setItem("id_empenho", listaFinal[valor].id_empenho);
+    localStorage.setItem("cod_empenho", listaFinal[valor].cod_empenho);
+    localStorage.setItem("cod_previsao_empenho", listaFinal[valor].cod_previsao_empenho);
+    localStorage.setItem("natureza_despesa", listaFinal[valor].natureza_despesa);
+    localStorage.setItem("descricao", listaFinal[valor].descricao);
+    localStorage.setItem("tipo", listaFinal[valor].tipo);
+    localStorage.setItem("data", listaFinal[valor].data);
+    window.location.href = "./gerenciaEmpenho.html";
+  }
+  else if(caminhoFinal == "fatura"){
+    localStorage.setItem("num_nf", listaFinal[valor]["num_nf"]);
+    localStorage.setItem("cod_ibge", listaFinal[valor]["cod_ibge"]);
+    localStorage.setItem("dt_nf", listaFinal[valor]["dt_nf"]);
+    localStorage.setItem("uf", listaFinal[valor]["uf"]);
+    localStorage.setItem("nome_municipio", listaFinal[valor]["nome_municipio"]);
+    window.location.href = "./gerenciaFatura.html";
+    
+  }
+  // else if(caminhoFinal == "pagamento"){
+    
+  //   window.location.href = "./gerenciaPagamento.html";
+  // }
 }
 
 

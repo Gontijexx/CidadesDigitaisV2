@@ -44,6 +44,7 @@ function paginacao() {
         //sistema de filtragem:
         let filtrado = [];
         filtrado = filtro(json,["num_nf","nome_municipio","uf","cod_ibge","dt_nf"]);
+        jsonFinal=filtrado;
 
 
         for (let i = comeco; i < fim && i < filtrado.length; i++) {

@@ -45,6 +45,7 @@ function paginacao() {
         //sistema de filtragem:
         let filtrado = [];
         filtrado = filtro(json,["cod_previsao_empenho","cod_lote","ano_referencia","data","natureza_despesa"]);
+        jsonFinal=filtrado;
 
         for (let i = comeco; i < fim && i < filtrado.length; i++) {
             //captura itens para tabela

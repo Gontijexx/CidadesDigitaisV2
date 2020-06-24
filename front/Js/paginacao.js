@@ -160,6 +160,7 @@ function paginasOrganizadas(json,comeco,fim){
 
 function filtro(json,linhaFiltrada){
 
+
   //variaveis:
 
   let filtragemFinal = [];

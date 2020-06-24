@@ -40,16 +40,22 @@ function paginacao() {
         </thead>`);
         tabela += (`<tbody>`);
 
-        
-        for (let i = comeco; i < fim && i < json.length; i++) {
+
+        //sistema de filtragem:
+        let filtrado = [];
+        filtrado = filtro(json,["num_nf","nome_municipio","uf","cod_ibge","dt_nf"]);
+        jsonFinal=filtrado;
+
+
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += json[i]["num_nf"]; //está sendo enviado assim por algum motivo
+          tabela += filtrado[i]["num_nf"]; //está sendo enviado assim por algum motivo
           tabela += (`</td><td>`);
-          tabela += json[i]["nome_municipio"] + " - " + json[i]["uf"] + " - " + json[i]["cod_ibge"];
+          tabela += filtrado[i]["nome_municipio"] + " - " + filtrado[i]["uf"] + " - " + filtrado[i]["cod_ibge"];
           tabela += (`</td><td>`);
-          let data1 = new Date(json[i]["dt_nf"]);
+          let data1 = new Date(filtrado[i]["dt_nf"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
           tabela += (`</td>`);
@@ -64,7 +70,7 @@ function paginacao() {
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        paginasOrganizadas(json,comeco,fim);
+        paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
       erros(response.status);

@@ -105,7 +105,8 @@ func (fatura *Fatura) FindFaturaIDEmpenho(db *gorm.DB, idEmpenho uint32) (*[]Fat
 	allFatura := []Fatura{}
 
 	err := db.Debug().Table("fatura").
-		Select("fatura.*").
+		Select("fatura.*, municipio.nome_municipio, municipio.uf").
+		Joins("JOIN municipio ON fatura.cod_ibge = municipio.cod_ibge").
 		Joins("JOIN itens_fatura ON itens_fatura.num_nf = fatura.num_nf AND itens_fatura.cod_ibge = fatura.cod_ibge").
 		Joins("JOIN empenho ON itens_fatura.id_empenho = empenho.id_empenho").
 		Where("empenho.id_empenho = ?", idEmpenho).

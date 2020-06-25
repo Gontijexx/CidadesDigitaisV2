@@ -368,10 +368,10 @@ func (server *Server) DeleteItensFatura(w http.ResponseWriter, r *http.Request) 
 }
 
 /*  =========================
-	FUNCAO LISTAR TODAS ITENS FATURA DISPONIVEIS
+	FUNCAO LISTAR TODAS ITENS FATURA ORIGINAL DISPONIVEIS
 =========================  */
 
-func (server *Server) GetItensFaturaDisponiveis(w http.ResponseWriter, r *http.Request) {
+func (server *Server) GetItensFaturaOriginalDisponiveis(w http.ResponseWriter, r *http.Request) {
 
 	itensEmpenho := models.ItensEmpenho{}
 
@@ -385,15 +385,67 @@ func (server *Server) GetItensFaturaDisponiveis(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	//	itensFaturaGotten recebe o dado buscado no banco de dados
-	itensFaturaGotten, err := itensEmpenho.FindItensFaturaDisponiveis(server.DB, uint32(codIbge))
+	//	itensEmpenhoGotten recebe o dado buscado no banco de dados
+	itensEmpenhoGotten, err := itensEmpenho.FindItensFaturaDisponiveisOriginal(server.DB, uint32(codIbge))
 	if err != nil {
 		formattedError := config.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
 		return
 	}
 
-	bytes, _ := json.Marshal(itensFaturaGotten)
+	bytes, _ := json.Marshal(itensEmpenhoGotten)
+
+	w.Write(bytes)
+}
+
+/*  =========================
+	FUNCAO LISTAR TODAS ID EMPENHO REAJUSTE
+=========================  */
+
+func (server *Server) GetIDEmpenho(w http.ResponseWriter, r *http.Request) {
+
+	itensEmpenho := models.ItensEmpenho{}
+
+	//	itensEmpenhoGotten recebe o dado buscado no banco de dados
+	itensEmpenhoGotten, err := itensEmpenho.FindIDEmpenhoReajuste(server.DB)
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
+		return
+	}
+
+	bytes, _ := json.Marshal(itensEmpenhoGotten)
+
+	w.Write(bytes)
+}
+
+/*  =========================
+	FUNCAO LISTAR TODAS ITENS FATURA REAJUSTE DISPONIVEIS
+=========================  */
+
+func (server *Server) GetItensFaturaReajusteDisponiveis(w http.ResponseWriter, r *http.Request) {
+
+	itensEmpenho := models.ItensEmpenho{}
+
+	// Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	idEmpenho armazena a chave primaria da tabela itensFatura
+	idEmpenho, err := strconv.ParseUint(vars["id_empenho"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	//	itensEmpenhoGotten recebe o dado buscado no banco de dados
+	itensEmpenhoGotten, err := itensEmpenho.FindItensFaturaDisponiveisReajuste(server.DB, uint32(idEmpenho))
+	if err != nil {
+		formattedError := config.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, fmt.Errorf("[FATAL] it couldn't find in database, %v\n", formattedError))
+		return
+	}
+
+	bytes, _ := json.Marshal(itensEmpenhoGotten)
 
 	w.Write(bytes)
 }

@@ -73,11 +73,20 @@ func (itensFatura *ItensFatura) FindAllItensFatura(db *gorm.DB, numNF, codIbge u
 
 	for i, data := range allItensFatura {
 		//	Busca um elemento no banco de dados a partir de sua chave primaria
-		err := db.Debug().
-			Raw("SELECT ROUND((SELECT SUM(itens_empenho.quantidade) AS quantidade_itens_empenho FROM itens_empenho WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_tipo_item = ? AND itens_empenho.cod_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_itens_fatura FROM itens_fatura WHERE itens_fatura.id_empenho = ? AND itens_fatura.cod_tipo_item = ? AND itens_fatura.cod_item = ?), 2) AS quantidade_disponivel", data.IDEmpenho, data.CodTipoItem, data.CodItem, data.IDEmpenho, data.CodTipoItem, data.CodItem).
-			Scan(&allItensFatura[i]).Error
-		if err != nil {
-			return &[]ItensFatura{}, err
+		if allItensFatura[i].Tipo == "o" {
+			err := db.Debug().
+				Raw("SELECT ROUND((SELECT itens_empenho.quantidade FROM itens_empenho WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_fatura FROM fatura INNER JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge WHERE fatura.cod_ibge IN (SELECT cd.cod_ibge FROM cd where cd.cod_lote = (SELECT cd.cod_lote FROM cd WHERE cd.cod_ibge = ?)) AND id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?), 2) AS quantidade_disponivel, itens.descricao AS descricao, empenho.cod_empenho FROM itens_empenho INNER JOIN itens ON itens_empenho.cod_item = itens.cod_item AND itens_empenho.cod_tipo_item = itens.cod_tipo_item INNER JOIN empenho ON itens_empenho.id_empenho = empenho.id_empenho WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ?", data.IDEmpenho, data.CodItem, data.CodTipoItem, data.CodIbge, data.IDEmpenho, data.CodItem, data.CodTipoItem, data.IDEmpenho, data.CodItem, data.CodTipoItem).
+				Scan(&allItensFatura[i]).Error
+			if err != nil {
+				return &[]ItensFatura{}, err
+			}
+		} else {
+			err := db.Debug().
+				Raw("SELECT ROUND((SELECT itens_empenho.quantidade FROM itens_empenho WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?) - (SELECT SUM(itens_fatura.quantidade) AS quantidade_fatura FROM fatura INNER JOIN itens_fatura ON fatura.num_nf = itens_fatura.num_nf AND fatura.cod_ibge = itens_fatura.cod_ibge WHERE id_empenho = ? AND cod_item = ? AND cod_tipo_item = ?), 2) AS quantidade_disponivel, itens.descricao AS descricao FROM itens_empenho INNER JOIN itens ON itens_empenho.cod_item = itens.cod_item AND itens_empenho.cod_tipo_item = itens.cod_tipo_item WHERE itens_empenho.id_empenho = ? AND itens_empenho.cod_item = ? AND itens_empenho.cod_tipo_item = ?", data.IDEmpenho, data.CodItem, data.CodTipoItem, data.IDEmpenho, data.CodItem, data.CodTipoItem, data.IDEmpenho, data.CodItem, data.CodTipoItem).
+				Scan(&allItensFatura[i]).Error
+			if err != nil {
+				return &[]ItensFatura{}, err
+			}
 		}
 	}
 

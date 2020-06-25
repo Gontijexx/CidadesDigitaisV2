@@ -51,7 +51,7 @@ function paginacao() {
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += filtrado[i]["num_nf"]; //está sendo enviado assim por algum motivo
+          tabela += filtrado[i]["num_nf"];
           tabela += (`</td><td>`);
           tabela += filtrado[i]["nome_municipio"] + " - " + filtrado[i]["uf"] + " - " + filtrado[i]["cod_ibge"];
           tabela += (`</td><td>`);

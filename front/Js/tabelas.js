@@ -180,7 +180,7 @@ function faturaSub() {
           //captura itens para tabela
           tabela += (`<tr onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
           tabela += (`<td>`);
-          tabela += listaFinal[i]["num_nf"]; //está sendo enviado assim por algum motivo
+          tabela += listaFinal[i]["num_nf"];
           tabela += (`</td><td>`);
           tabela += listaFinal[i]["nome_municipio"] + " - " + listaFinal[i]["uf"] + " - " + listaFinal[i]["cod_ibge"];
           tabela += (`</td><td>`);
@@ -292,10 +292,11 @@ function redirecionar(valor, caminhoFinal){
     window.location.href = "./gerenciaFatura.html";
     
   }
-  // else if(caminhoFinal == "pagamento"){
-    
-  //   window.location.href = "./gerenciaPagamento.html";
-  // }
+  else if(caminhoFinal == "pagamento"){
+    localStorage.setItem("cod_otb", listaFinal[valor]["cod_otb"]);
+    localStorage.setItem("dt_pgto", listaFinal[valor]["dt_pgto"]);
+    window.location.href = "./gerenciaPagamento.html";
+  }
 }
 
 
@@ -352,6 +353,7 @@ function itensFinanceamento(caminho) {
           <tr>
           <th style="width:30%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
+          <th style="width:50%" scope="col">Tipo</th>
           <th style="width:15%" scope="col">Quantidade Disponível</th>
           <th style="width:15%" scope="col">Quantidade</th>
           <th style="width:15%" scope="col">Valor</th>
@@ -393,6 +395,13 @@ function itensFinanceamento(caminho) {
           if (caminho == "itensfatura") {
             tabela += (`</td> <td>`);
             tabela += listaItem[i]["cod_empenho"];
+            tabela += (`</td><td>`);
+            if(listaItem[i]["tipo"]=="o"){
+              tabela += "Original";
+            }
+            else{
+              tabela += "Reajuste";
+            }
             meuEmpenho[i] = listaItem[i]["id_empenho"];
           }
 
@@ -430,6 +439,8 @@ function itensFinanceamento(caminho) {
 
         //para fatura
         if (caminho == "itensfatura") {
+          tabela += (`<td>`);
+          tabela += (`</td>`);
           tabela += (`<td>`);
           tabela += (`</td>`);
         }

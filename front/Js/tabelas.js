@@ -48,7 +48,7 @@ function previsaoSub(valorCodigo) {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr onclick="redirecionar(` + i + "," + "'previsao'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'previsao'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_previsao_empenho"];
           tabela += (`</td><td>`);
@@ -116,7 +116,7 @@ function empenhoSub(valorCodigo) {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_empenho"];
           tabela += (`</td><td>`);
@@ -178,7 +178,7 @@ function faturaSub() {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["num_nf"];
           tabela += (`</td><td>`);
@@ -242,7 +242,7 @@ function pagamentoSub(valorCodigo) {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr onclick="redirecionar(` + i + "," + "'pagamento'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'pagamento'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_otb"];
           tabela += (`</td><td>`);
@@ -301,6 +301,10 @@ function redirecionar(valor, caminhoFinal){
 
 
 
+
+
+
+
 //Itens de financeamento
 
 let listaItem = [],
@@ -351,23 +355,23 @@ function itensFinanceamento(caminho) {
         if (caminho == "itensfatura") {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
-          <th style="width:30%" scope="col">Descrição</th>
+          <th style="width:40%" scope="col">Descrição</th>
           <th style="width:10%" scope="col">Empenho</th>
-          <th style="width:50%" scope="col">Tipo</th>
-          <th style="width:15%" scope="col">Quantidade Disponível</th>
-          <th style="width:15%" scope="col">Quantidade</th>
-          <th style="width:15%" scope="col">Valor</th>
-          <th style="width:15%" scope="col">Subtotal</th>
+          <th style="width:10%" scope="col">Tipo</th>
+          <th style="width:10%" scope="col">Quantidade Disponível</th>
+          <th style="width:10%" scope="col">Quantidade</th>
+          <th style="width:10%" scope="col">Valor</th>
+          <th style="width:10%" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         } else {
           tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
-          <th style="width:40%" scope="col">Descrição</th>
-          <th style="width:15%" scope="col">Quantidade Disponível</th>
-          <th style="width:15%" scope="col">Quantidade</th>
-          <th style="width:15%" scope="col">Valor</th>
-          <th style="width:15%" scope="col">Subtotal</th>
+          <th style="width:60%" scope="col">Descrição</th>
+          <th style="width:10%" scope="col">Quantidade Disponível</th>
+          <th style="width:10%" scope="col">Quantidade</th>
+          <th style="width:10%" scope="col">Valor</th>
+          <th style="width:10%" scope="col">Subtotal</th>
           </tr>
           </thead>`);
         }
@@ -408,9 +412,9 @@ function itensFinanceamento(caminho) {
           tabela += (`</td> <td>`);
           tabela += listaItem[i]["quantidade_disponivel"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" onchange="mudaItem(` + i + `)" id="quantidade` + i + `" type="number"></input>`);
+          tabela += (`<input value="` + listaItem[i]["quantidade"] + `" onchange="mudaItem(` + i + `)" id="quantidade` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="number"></input>`);
+          tabela += (`<input value="` + listaItem[i]["valor"] + `" onchange="mudaItem(` + i + `)" id="valor` + i + `" type="text" size="10"></input>`);
           tabela += (`</td> <td>`);
           total = (listaItem[i]["quantidade"] * listaItem[i]["valor"]);
           tabela += total;
@@ -502,9 +506,3 @@ function editarItem(caminho) {
     }
   }
 }
-
-
-
-
-
-//hiperlinks direcio0na para dentro de gerenciaCoisa

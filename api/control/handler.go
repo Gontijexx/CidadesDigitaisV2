@@ -292,6 +292,9 @@ func (s *Server) CreateHandler() (r *mux.Router) {
 	//	SALVA EMPENHO
 	r.HandleFunc(config.EMPENHO_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.CreateEmpenho))).Methods(http.MethodPost)
 
+	//	LISTA EMPENHO (cod_previsao_empenho)
+	r.HandleFunc(config.EMPENHO_COD_PREVISAO_EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.GetEmpenhoByCodPrevisaoEmpenho))).Methods(http.MethodGet)
+
 	//	EDITA EMPENHO (id_empenho)
 	r.HandleFunc(config.EMPENHO_ID_PATH, middlewares.SetMiddleJSON(middlewares.SetMiddleAuth(s.UpdateEmpenho))).Methods(http.MethodPut)
 

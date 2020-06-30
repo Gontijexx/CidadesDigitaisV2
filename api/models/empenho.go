@@ -107,3 +107,23 @@ func (empenho *Empenho) DeleteEmpenho(db *gorm.DB, idEmpenho uint) (error) {
 }
 
 */
+
+/*  =========================
+	FUNCAO LISTAR EMPENHO POR COD PREVISAO EMPENHO
+=========================  */
+
+func (empenho *Empenho) FindEmpenhoCodPrevisaoEmpenho(db *gorm.DB, codPrevisaoEmpenho uint32) (*[]Empenho, error) {
+
+	allEmpenho := []Empenho{}
+
+	err := db.Debug().Table("empenho").
+		Select("empenho.*").
+		Where("empenho.cod_previsao_empenho = ?", codPrevisaoEmpenho).
+		Order("empenho.id_empenho").
+		Scan(&allEmpenho).Error
+	if err != nil {
+		return &[]Empenho{}, err
+	}
+
+	return &allEmpenho, err
+}

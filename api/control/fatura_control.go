@@ -309,7 +309,7 @@ func (server *Server) GetFaturaByIDEmpenho(w http.ResponseWriter, r *http.Reques
 	fatura := models.Fatura{}
 
 	//	Recebe o dado buscado no banco de dados
-	faturaGotten, err := fatura.FindFaturaIDEmpenho(server.DB, uint32(idEmpenho))
+	faturaGotten, err := fatura.FindFaturaByIDEmpenho(server.DB, uint32(idEmpenho))
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
 		return

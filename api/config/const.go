@@ -205,8 +205,9 @@ const (
 =========================  */
 
 const (
-	EMPENHO_PATH    = "/read/empenho"
-	EMPENHO_ID_PATH = "/read/empenho/{id_empenho}"
+	EMPENHO_PATH                         = "/read/empenho"
+	EMPENHO_ID_PATH                      = "/read/empenho/{id_empenho}"
+	EMPENHO_COD_PREVISAO_EMPENHO_ID_PATH = "/read/empenhocodprevisaoempenho/{cod_previsao_empenho}"
 )
 
 /*  =========================

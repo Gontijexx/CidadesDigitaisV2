@@ -273,3 +273,38 @@ func (server *Server) DeleteEmpenho(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusNoContent, "")
 }
 */
+
+/*  =========================
+	FUNCAO LISTAR FATURA POR ID EMPENHO
+=========================  */
+
+func (server *Server) GetEmpenhoByCodPrevisaoEmpenho(w http.ResponseWriter, r *http.Request) {
+
+	//	Autorizacao de Modulo
+	if err := config.AuthMod(w, r, 15002); err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, fmt.Errorf("[FATAL] Unauthorized"))
+		return
+	}
+
+	//	Vars retorna as variaveis de rota
+	vars := mux.Vars(r)
+
+	//	codPrevisaoEmpenho armazena a chave primaria da tabela fatura
+	codPrevisaoEmpenho, err := strconv.ParseUint(vars["cod_previsao_empenho"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't parse the variable, %v\n", err))
+		return
+	}
+
+	empenho := models.Empenho{}
+
+	//	Recebe o dado buscado no banco de dados
+	empenhoGotten, err := empenho.FindEmpenhoCodPrevisaoEmpenho(server.DB, uint32(codPrevisaoEmpenho))
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, fmt.Errorf("[FATAL] It couldn't find by ID, %v\n", err))
+		return
+	}
+
+	//	Retorna o Status 200 e o JSON da struct buscada
+	responses.JSON(w, http.StatusOK, empenhoGotten)
+}

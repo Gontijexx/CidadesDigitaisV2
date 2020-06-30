@@ -100,7 +100,7 @@ func (fatura *Fatura) DeleteFatura(db *gorm.DB, numNF, codIbge uint32) error {
 	FUNCAO LISTAR FATURA POR ID_EMPENHO
 =========================  */
 
-func (fatura *Fatura) FindFaturaIDEmpenho(db *gorm.DB, idEmpenho uint32) (*[]Fatura, error) {
+func (fatura *Fatura) FindFaturaByIDEmpenho(db *gorm.DB, idEmpenho uint32) (*[]Fatura, error) {
 
 	allFatura := []Fatura{}
 

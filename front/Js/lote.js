@@ -20,6 +20,8 @@ function paginacao() {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
+        jsonFinal=json;
+
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th scope="col">Lote</th>

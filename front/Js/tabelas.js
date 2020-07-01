@@ -1,5 +1,3 @@
-//adapte para CD João. Use administracao.js como exemplo se necessário
-//previsaoSub ainda não funciona em gerenciaCd?
 
 //variavel usada nas subtabelas:
 let listaFinal = [];
@@ -48,7 +46,7 @@ function previsaoSub(valorCodigo) {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'previsao'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'previsao'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_previsao_empenho"];
           tabela += (`</td><td>`);
@@ -83,7 +81,7 @@ function empenhoSub(valorCodigo) {
   document.getElementById("editar2").innerHTML = (`<br>`);
 
   //função fetch para chamar os itens de empenho da tabela
-  fetch(servidor + 'read/empenho', {
+  fetch(servidor + 'read/empenhocodprevisaoempenho/' + meuCodigo, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -116,7 +114,7 @@ function empenhoSub(valorCodigo) {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_empenho"];
           tabela += (`</td><td>`);
@@ -178,7 +176,7 @@ function faturaSub() {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["num_nf"];
           tabela += (`</td><td>`);
@@ -242,7 +240,7 @@ function pagamentoSub(valorCodigo) {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'pagamento'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'pagamento'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_otb"];
           tabela += (`</td><td>`);
@@ -296,6 +294,21 @@ function redirecionar(valor, caminhoFinal){
     localStorage.setItem("cod_otb", listaFinal[valor]["cod_otb"]);
     localStorage.setItem("dt_pgto", listaFinal[valor]["dt_pgto"]);
     window.location.href = "./gerenciaPagamento.html";
+  }
+}
+
+
+
+function sublinhar(valor,tamanho){
+  for(i=0;i<tamanho;i++){
+    if(i==valor){
+      document.getElementById("linha"+i).style.color = "blue";
+      document.getElementById("linha"+i).style.textDecoration = "underline";
+    }
+    else{
+      document.getElementById("linha"+i).style.color = "black";
+      document.getElementById("linha"+i).style.textDecoration = "none";
+    }
   }
 }
 

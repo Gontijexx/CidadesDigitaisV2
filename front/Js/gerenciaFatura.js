@@ -2,6 +2,7 @@
 let meuCodigo = localStorage.getItem("num_nf");
 let meuCodigoSec = localStorage.getItem("cod_ibge");
 let itemSelecionado = [];
+let itemReajuste = [];
 
 
 
@@ -24,35 +25,16 @@ window.onload = function () {
 
 
 function adicionarItensFatura(){
-  fetch(servidor + 'read/itensfatura/' + meuCodigoSec, {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
 
-    //tratamento dos erros
-    if (response.status == 200) {
-      return response.json().then(function (json) {
-        //console.log(json);
+  //criando labels dentro do campo
+  document.getElementById("tipo").innerHTML = "<option value=''>Tipo</option><option value='o'>Original</option><option value='r'>Reajuste</option>";
+  document.getElementById("id_empenho").innerHTML = "<option value=''>Empenho</option>";
+  document.getElementById("itens_disponiveis").innerHTML = "<option value=''>Item Selecionado</option>";
 
-        //variavel alterada para usar em enabler()
-        itemSelecionado=json;
-
-        //criando labels dentro do campo
-        document.getElementById("tipo").innerHTML = "<option value=''>Tipo</option><option value='o'>Original</option><option value='r'>Reajuste</option>";
-        document.getElementById("id_empenho").innerHTML = "<option value=''>Empenho</option>";
-        document.getElementById("itens_disponiveis").innerHTML = "<option value=''>Item Selecionado</option>";
-
-        //garantindo que os campos não sejam usados antes do preciso
-        document.getElementById("id_empenho").disabled = true;
-        document.getElementById("itens_disponiveis").disabled = true;
-        document.getElementById("quantidade_disponivel").disabled = true;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
+  //garantindo que os campos não sejam usados antes do preciso
+  document.getElementById("id_empenho").disabled = true;
+  document.getElementById("itens_disponiveis").disabled = true;
+  document.getElementById("quantidade_disponivel").disabled = true;
 }
 
 
@@ -61,13 +43,21 @@ function enabler1(){
   document.getElementById("id_empenho").disabled = false;
 
   //variaveis
-  let tipo = document.getElementById("tipo");
+  let tipo = document.getElementById("tipo").value;
   let i, j = 0;
   let x = [], empenhoFinal = [];
 
+  //filtro entre reajuste e original
+  if(tipo=="o"){
+    original();
+  }
+  else if(tipo=="r"){
+    reajuste();
+  }
+
   //para filtrar e tirar repetições
   for (i = 0; i < itemSelecionado.length; i++) {
-    if (itemSelecionado[i].tipo == tipo.value && itemSelecionado[i-1] != undefined && itemSelecionado[i].id_empenho != itemSelecionado[i-1].id_empenho) {
+    if (itemSelecionado[i-1] != undefined && itemSelecionado[i].id_empenho != itemSelecionado[i-1].id_empenho) {
       empenhoFinal[j] = itemSelecionado[i];
       j++;
     }
@@ -84,22 +74,76 @@ function enabler1(){
   document.getElementById("id_empenho").innerHTML = x;
 }
 
+function original(){
+  fetch(servidor + 'read/itensfatura/' + meuCodigoSec, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      return response.json().then(function (json) {
+        //console.log(json);
+
+        //variavel alterada para usar em enabler()
+        itemSelecionado=json;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+//função separada pelo back
+function reajuste(){
+  fetch(servidor + 'read/itensfaturaidempenho', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      return response.json().then(function (json) {
+        //console.log(json);
+
+        //variavel alterada para usar em enabler()
+        itemSelecionado=json;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
 function enabler2(){
 
   document.getElementById("itens_disponiveis").disabled = false;
 
   //variaveis
-  let tipo = document.getElementById("tipo");
-  let empenho = document.getElementById("id_empenho");
+  let tipo = document.getElementById("tipo").value;
+  let empenho = document.getElementById("id_empenho").value;
   let i, j = 0;
   let x = [], itemFinal = [];
 
-  //para filtrar apenas
-  for (i = 0; i < itemSelecionado.length; i++) {
-    if (itemSelecionado[i].id_empenho == empenho.value && itemSelecionado[i].tipo == tipo.value) {
-      itemFinal[j] = itemSelecionado[i];
-      j++;
+  if(tipo=="o"){
+    //para filtrar apenas
+    for (i = 0; i < itemSelecionado.length; i++) {
+      if (itemSelecionado[i].id_empenho == empenho) {
+        itemFinal[j] = itemSelecionado[i];
+        j++;
+      }
     }
+  }
+
+  else if(tipo=="r"){
+    itensReajuste(empenho);
+    itemFinal = itemReajuste;
   }
 
   //preenche "itens disponiveis"
@@ -109,9 +153,33 @@ function enabler2(){
     x[i+1] = "<option value='"+ itemFinal[i].cod_item + " " + itemFinal[i].cod_tipo_item + "'>" + itemFinal[i].cod_tipo_item + "." + itemFinal[i].cod_item + " - " + itemFinal[i].descricao + "</option>";
   }
 
-
   document.getElementById("itens_disponiveis").innerHTML = x;
 }
+
+//função separada pelo back
+function itensReajuste(caminho){
+  fetch(servidor + 'read/itensfaturareajuste/' + caminho , {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      return response.json().then(function (json) {
+        console.log(json);
+
+        //variavel alterada para usar em enabler()
+        itemReajuste=json;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
 
 function enabler3(){
 
@@ -127,15 +195,27 @@ function enabler3(){
 
   //valor usado no filtro
   let item = valoresJuntos[0];
-  console.log(valoresJuntos[0])
   let i, quantidade_disponivel="", quantidade="", valor="";
 
-  //para filtrar apenas
-  for (i = 0; i < itemSelecionado.length; i++) {
-    if (itemSelecionado[i].id_empenho == empenho.value && itemSelecionado[i].tipo == tipo.value && itemSelecionado[i].cod_item == item) {
-      quantidade_disponivel += itemSelecionado[i].quantidade_disponivel;
-      quantidade += itemSelecionado[i].quantidade;
-      valor += itemSelecionado[i].valor;
+  if(tipo=="o"){
+    //para filtrar apenas
+    for (i = 0; i < itemSelecionado.length; i++) {
+      if (itemSelecionado[i].id_empenho == empenho.value && itemSelecionado[i].cod_item == item) {
+        quantidade_disponivel += itemSelecionado[i].quantidade_disponivel;
+        quantidade += itemSelecionado[i].quantidade;
+        valor += itemSelecionado[i].valor;
+      }
+    }
+  }
+
+  else if(tipo=="r"){
+    //para filtrar apenas
+    for (i = 0; i < itemReajuste.length; i++) {
+      if (itemReajuste[i].cod_item == item) {
+        quantidade_disponivel += itemReajuste[i].quantidade_disponivel;
+        quantidade += itemReajuste[i].quantidade;
+        valor += itemReajuste[i].valor;
+      }
     }
   }
 

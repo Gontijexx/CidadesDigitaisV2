@@ -114,10 +114,10 @@ function itens() {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
         <tr>
-        <th scope="col">Descrição</th>
-        <th scope="col">Quantidade prevista</th>
-        <th scope="col">Quantidade do projeto executivo</th>
-        <th scope="col">Quantidade de termo de instalação </th>
+        <th style="width:40%" scope="col">Descrição</th>
+        <th style="width:20%" scope="col">Quantidade prevista</th>
+        <th style="width:20%" scope="col">Quantidade do projeto executivo</th>
+        <th style="width:20%" scope="col">Quantidade de termo de instalação </th>
         </tr>
         </thead>`);
         tabela += (`<tbody>`);
@@ -140,11 +140,11 @@ function itens() {
           tabela += (`<td>`);
           tabela += listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `" onchange="mudaItem(` + i + `)" id="quantidade_previsto` + i + `" type="text">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `" onchange="mudaItem(` + i + `)" id="quantidade_previsto` + i + `" type="text" size="15">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `" onchange="mudaItem(` + i + `)" id="quantidade_projeto_executivo` + i + `" type="text">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `" onchange="mudaItem(` + i + `)" id="quantidade_projeto_executivo` + i + `" type="text" size="15">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `" onchange="mudaItem(` + i + `)" id="quantidade_termo_instalacao` + i + `" type="text">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `" onchange="mudaItem(` + i + `)" id="quantidade_termo_instalacao` + i + `" type="text" size="15">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
 

@@ -1,28 +1,9 @@
-const masks = {
-    porcentagem(value) {
-        console.log(value)        
-        return value
-            .replace(/\D/g, '')
-            .replace(/(\d+?$)/, '$1%')
-            .replace(/(%\d)\d+?$/, '$1')
-    },
-    numberOnly(value) {
-        console.log(value)
-        return value
-        .replace(/\D/g,'')
-    }
-
-    
-}
-
-
-
-document.querySelectorAll('input').forEach(($input) => {
-    const field = $input.dataset.js
-    console.log(field)
-
-    $input.addEventListener('input', (e) => {
-        e.target.value = masks[field](e.target.value)
-        console.log(e.target.value)
-    }, false)
-})
+$(document).ready(function(){
+    $('.data').mask('00/00/0000');
+    $('.cep').mask('00000-000');
+    $('.numero').mask('00000-0000');
+    $('.numero_ddd').mask('(00) 00000-0000');
+    $('.cpf').mask('000.000.000-00', {reverse: true});
+    $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
+    $('.preco').mask('R$ 000.000.000.000.000,00', {reverse: true});
+});

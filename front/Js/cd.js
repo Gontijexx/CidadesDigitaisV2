@@ -29,9 +29,6 @@ function paginacao() {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
         
-        //para edição
-        jsonFinal=json;
-
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th scope="col">Código IBGE do Município</th>
@@ -46,24 +43,31 @@ function paginacao() {
             </thead>`);
         tabela += (`<tbody>`);
 
-        for (let i = comeco; i < fim && i < json.length; i++) {
+        //sistema de filtragem:
+        let filtrado = [];
+        filtrado = filtro(json,["cod_ibge","cod_lote","os_pe","data_pe","os_imp","data_imp"]);
+
+        //para edição
+        jsonFinal=filtrado;
+
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
           tabela += (`<tr>`);
           tabela += (`<td>`);
-          tabela += json[i]["cod_ibge"];
+          tabela += filtrado[i]["cod_ibge"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["nome_municipio"] + ` - ` + json[i]["uf"];
+          tabela += filtrado[i]["nome_municipio"] + ` - ` + filtrado[i]["uf"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["cod_lote"];
+          tabela += filtrado[i]["cod_lote"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["os_pe"];
+          tabela += filtrado[i]["os_pe"];
           tabela += (`</td> <td>`);
-          let data1 = new Date(json[i]["data_pe"]);
+          let data1 = new Date(filtrado[i]["data_pe"]);
           let dataf1 = String(data1.getDate()).padStart(2, '0') + '/' + String(data1.getMonth() + 1).padStart(2, '0') + '/' + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataf1;
           tabela += (`</td> <td>`);
-          tabela += json[i]["os_imp"];
+          tabela += filtrado[i]["os_imp"];
           tabela += (`</td> <td>`);
-          let data2 = new Date(json[i]["data_imp"]);
+          let data2 = new Date(filtrado[i]["data_imp"]);
           let dataf2 = String(data2.getDate()).padStart(2, '0') + '/' + String(data2.getMonth() + 1).padStart(2, '0') + '/' + String(data2.getFullYear()).padStart(4, '0');
           tabela += dataf2;
           tabela += (`</td> <td> 
@@ -78,7 +82,7 @@ function paginacao() {
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        paginasOrganizadas(json,comeco,fim);
+        paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
       erros(response.status);

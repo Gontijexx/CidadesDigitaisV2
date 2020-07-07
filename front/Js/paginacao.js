@@ -24,6 +24,12 @@ function pagina(valor) {
   paginacao();
 }
 
+//parte do projeto para escolher a pagina
+// function selecionarPagina(){
+//   contador = document.getElementById("selectPagina").value;
+//   paginacao();
+// }
+
 
 
 //função que organiza o sistema com paginas
@@ -42,7 +48,14 @@ function paginasOrganizadas(json,comeco,fim){
 
   //organizador de paginação
   totalPaginas = Math.floor((json.length-1) / porPagina);
+
+  //primeira pagina
   let paginas = `<li id="anterior" class="page-item" ><a href="#" class="page-link" onclick="antes()">Anterior</a></li>`;
+
+  //escolha de pagina
+  //projeto inacabado
+  //paginas += `<input id="selectPagina" placeholder="Pagina"></input><button type="button" class="btn btn-primary" onclick="selecionarPagina()"><i class="fa fa-search"></i></button>`;
+
   //apenas aciona se precisar de paginação
   if (json.length > porPagina) {
     //caso seja apenas 10 paginas
@@ -134,7 +147,10 @@ function paginasOrganizadas(json,comeco,fim){
       }
     }
   }
+
+  //proxima pagina
   paginas += `<li id="proximo" class="page-item" ><a href="#" class="page-link" onclick="depois()">Próximo</a></li>`;
+
   document.getElementById("paginacao").innerHTML = paginas;
 
 
@@ -160,7 +176,6 @@ function paginasOrganizadas(json,comeco,fim){
 
 function filtro(json,linhaFiltrada){
 
-
   //variaveis:
 
   let filtragemFinal = [];
@@ -169,8 +184,6 @@ function filtro(json,linhaFiltrada){
   let estrutura = new RegExp(filtro,"i");
 
   //sistema:
-
-  console.log(filtro);
 
   for(i=0;i<json.length;i++){
 

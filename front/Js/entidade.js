@@ -1,5 +1,6 @@
 //capturar itens para mandar no gerenciaEstrutura
 let jsonFinal = [];
+
 //pega o JSON de municípios para uso em "adicionar entidades"
 let cidades = [];
 document.getElementById("nome_municipio").disabled = true;
@@ -98,25 +99,32 @@ function paginacao() {
             </thead>`);
         tabela += (`<tbody> <tr>`);
 
-        for (let i = comeco; i < fim && i < json.length; i++) {
+        //sistema de filtragem:
+        let filtrado = [];
+        filtrado = filtro(json,["cnpj","nome","endereco","bairro","cep","uf","nome_municipio","observacao"]);
+
+        //para edição
+        jsonFinal=filtrado;
+
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
           tabela += (`<td>`);
-          tabela += json[i]["cnpj"];
+          tabela += filtrado[i]["cnpj"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["nome"]
+          tabela += filtrado[i]["nome"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["endereco"]
+          tabela += filtrado[i]["endereco"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["numero"]
+          tabela += filtrado[i]["numero"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["bairro"]
+          tabela += filtrado[i]["bairro"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["cep"]
+          tabela += filtrado[i]["cep"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["uf"]
+          tabela += filtrado[i]["uf"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["nome_municipio"]
+          tabela += filtrado[i]["nome_municipio"]
           tabela += (`</td> <td>`);
-          tabela += json[i]["observacao"]
+          tabela += filtrado[i]["observacao"]
           tabela += (`</td> <td> 
                 <span class="d-flex">
                 <button onclick="editarEntidade(` + i + `)" class="btn btn-success">
@@ -128,7 +136,7 @@ function paginacao() {
         tabela += (`</tr> </tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        paginasOrganizadas(json,comeco,fim);
+        paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
       erros(response.status);

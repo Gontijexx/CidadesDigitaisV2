@@ -1,59 +1,70 @@
 <!--
 
-  parte joao/daniel/sla?
-
-CD - Itens: 
+CD - Itens:  FOCO
 *Criar coluna Descrição: Ex: 10.3 - Cabo de fibra
 Ordenar esta coluna primeiro, por cod_tipo_item e depois por cod_item
 *Sai as outras duas colunas
 *Alterar nome do botão "editar" para "Salvar Alterações em Itens"
 
-CD - Prev. Empenho:
+CD - Prev. Empenho: FOCO
 *Na coluna "natureza despesa" concatenar cod_natureza_despesa com descrição
 Ex: 449051 - Software
-* Na coluna "tipo": Colocar original ou reajuste 
+* Na coluna "tipo": Colocar original ou reajuste
 * Fazer um hyperlink nas linhas para ir até o registro em "fiscalização -> previsão de empenho"
 
 CD - Empenho:
-    Implementar, parecido com prev. empenho
-    
+    Implementar, parecido com prev. empenho FOCO
+
 CD - Fatura:
-    Implementar
-    
+    Implementar FOCO
+
+
+
+
+
+
+
 Lote - Editar:
-    As datas não estão sendo recuperadas
-    (não prioritario) editar data de reajuste não tem ano, só mês e dia.
-    
+    As datas não estão sendo recuperadas FOCO
+    misterio ainda
+
+    (não prioritario) editar data de reajuste não tem ano, só mês e dia. VV
+    ainda precisa de mascara para ser totalmente resolvido
+    problema é a data precisar de ano para funcionar direito
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Lote - Itens:
-    Alterar nome da coluna para descrição
+    Alterar nome da coluna para descrição VV
     Consertar campo de valor, com máscara, não permitr caracter etc.
-    
-    Lote - Prev. Empenho:
-*Na coluna "natureza despesa" concatenar cod_natureza_despesa com descrição
-Ex: 449051 - Software
-* Na coluna "tipo": Colocar original ou reajuste 
-* Fazer um hyperlink nas linhas para ir até oregistro em "fiscalização -> previsão de empenho"
-    
+
+Lote - Prev. Empenho:
+    *Na coluna "natureza despesa" concatenar cod_natureza_despesa com descrição
+    Ex: 449051 - Software VV
+    * Na coluna "tipo": Colocar original ou reajuste VV
+    * Fazer um hyperlink nas linhas para ir até o registro em "fiscalização -> previsão de empenho" VV
+
 Lote - Empenho:
-    Implementar, parecido com prev. empenho
-    
+    Implementar, parecido com prev. empenho VV
+
 Lote - Reajuste:
-    Confirmação de apagar reajuste
+    Confirmação de apagar  VV
     Mascara de porcentagem
 
- -->
-
-
-
-<!-- paginação estar ligado a redirecionar pagina (posso pular) -->
-
-<!-- fazer os fetchs de reajuste (mais dificil do que eu pensei) -->
-
-<!-- checar com o alexandre se existem caminhos para sujanelas como fatura VVV -->
-<!-- fazer mouseover nos links e sublinhar como link VVV -->
-<!-- colocar as imagens como links completos para ser possivel criar uma nova aba VVV -->
-<!-- concertar tamanhos em itensfatura (preciso dar um jeito nos campos de texto) VVV -->
-<!-- colocar label nos campos de adicionar fatura VVV -->
+-->
 
 
 
@@ -121,70 +132,8 @@ Lote - Reajuste:
 
 
 
-<!--
-futuros botões para apagar:
-(entidade não usa)
-(JOÃO, USA ISSO AQUI)
-javascript:
-
-//apaga a entidade selecionada
-function apagarEntidade(valor) {
-
-  //função fetch para mandar
-  fetch(servidor + 'read/entidade/' + entQuery[valor].cnpj, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 204) {
-      alert("Apagado com sucesso.");
-      window.location.replace("./entidade.html");
-    } else {
-      erros(response.status);
-    }
-    return response.json().then(function (json) {
-      console.log(json);
-    });
-  });
-}
-
-resto:
-
-<button onclick="apagarEntidade(` + i + `)" class="btn btn-danger">
-<i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
-</button>
-
-<!- Delete Modal HTML ->
-<div id="deleteEmployeeModal" class="modal fade">
-  <div class="modal-dialog modal-confirm">
-      <div class="modal-content">
-          <div class="modal-header">
-              <div class="icon-box">
-                  <i class="material-icons">&#xE5CD;</i>
-              </div>
-              <h4 class="modal-title">Esta certo disso?</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          </div>
-          <div class="modal-body">
-              <p>Deseja realmente excluir esses registros? Este processo não pode ser desfeito.
-              </p>
-          </div>
-          <div style="width:100%; text-align: center;" class="modal-footer">
-              <button type="button" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-danger" onclick="enviar()">Deletar</button>
-          </div>
-      </div>
-  </div>
-</div>
--->
-
-
-
 <!-- 
-tratamento de todos os erros até agora(base): 
+padrão do tratamento de todos os erros até agora: 
 
 if (response.status == 200) {
 window.location.replace("./entidade.html");

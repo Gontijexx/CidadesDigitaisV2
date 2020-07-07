@@ -2,7 +2,6 @@
 let meuCodigo = localStorage.getItem("num_nf");
 let meuCodigoSec = localStorage.getItem("cod_ibge");
 let itemSelecionado = [];
-let itemReajuste = [];
 
 
 
@@ -40,12 +39,9 @@ function adicionarItensFatura(){
 
 
 function enabler1(){
-  document.getElementById("id_empenho").disabled = false;
 
-  //variaveis
+  //unica variavel necessária aqui
   let tipo = document.getElementById("tipo").value;
-  let i, j = 0;
-  let x = [], empenhoFinal = [];
 
   //filtro entre reajuste e original
   if(tipo=="o"){
@@ -54,24 +50,6 @@ function enabler1(){
   else if(tipo=="r"){
     reajuste();
   }
-
-  //para filtrar e tirar repetições
-  for (i = 0; i < itemSelecionado.length; i++) {
-    if (itemSelecionado[i-1] != undefined && itemSelecionado[i].id_empenho != itemSelecionado[i-1].id_empenho) {
-      empenhoFinal[j] = itemSelecionado[i];
-      j++;
-    }
-  }
-
-  //preenche "id_empenho"
-  x[0] = "<option value=''>Empenho</option>";
-  for (i = 0; i < empenhoFinal.length; i++) {
-
-    //mudar para cod_empenho quando possivel
-    x[i+1] = "<option value=" + empenhoFinal[i].id_empenho + ">" + empenhoFinal[i].cod_empenho + "</option>";
-  }
-
-  document.getElementById("id_empenho").innerHTML = x;
 }
 
 function original(){
@@ -89,6 +67,8 @@ function original(){
 
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
+        
+        continuacaoEnabler1();
       });
     } else {
       erros(response.status);
@@ -112,11 +92,41 @@ function reajuste(){
 
         //variavel alterada para usar em enabler()
         itemSelecionado=json;
+        
+        continuacaoEnabler1();
       });
     } else {
       erros(response.status);
     }
   });
+}
+
+function continuacaoEnabler1(){
+
+  document.getElementById("id_empenho").disabled = false;
+
+  //variaveis
+  let i, j = 0;
+  let x = [], empenhoFinal = [];
+
+
+  //para filtrar e tirar repetições
+  for (i = 0; i < itemSelecionado.length; i++) {
+    if (itemSelecionado[i-1] != undefined && itemSelecionado[i].id_empenho != itemSelecionado[i-1].id_empenho) {
+      empenhoFinal[j] = itemSelecionado[i];
+      j++;
+    }
+  }
+
+  //preenche "id_empenho"
+  x[0] = "<option value=''>Empenho</option>";
+  for (i = 0; i < empenhoFinal.length; i++) {
+
+    //mudar para cod_empenho quando possivel
+    x[i+1] = "<option value=" + empenhoFinal[i].id_empenho + ">" + empenhoFinal[i].cod_empenho + "</option>";
+  }
+
+  document.getElementById("id_empenho").innerHTML = x;
 }
 
 
@@ -143,7 +153,7 @@ function enabler2(){
 
   else if(tipo=="r"){
     itensReajuste(empenho);
-    itemFinal = itemReajuste;
+    itemFinal = itemSelecionado;
   }
 
   //preenche "itens disponiveis"
@@ -171,7 +181,7 @@ function itensReajuste(caminho){
         console.log(json);
 
         //variavel alterada para usar em enabler()
-        itemReajuste=json;
+        itemSelecionado=json;
       });
     } else {
       erros(response.status);
@@ -186,8 +196,7 @@ function enabler3(){
   document.getElementById("quantidade_disponivel").disabled = false;
 
   //variaveis
-  let tipo = document.getElementById("tipo");
-  let empenho = document.getElementById("id_empenho");
+  let empenho = document.getElementById("id_empenho").value;
 
   //spliting para pegar o valor de itens puro
   let stringValores = document.getElementById("itens_disponiveis").value;
@@ -197,25 +206,11 @@ function enabler3(){
   let item = valoresJuntos[0];
   let i, quantidade_disponivel="", quantidade="", valor="";
 
-  if(tipo=="o"){
-    //para filtrar apenas
-    for (i = 0; i < itemSelecionado.length; i++) {
-      if (itemSelecionado[i].id_empenho == empenho.value && itemSelecionado[i].cod_item == item) {
-        quantidade_disponivel += itemSelecionado[i].quantidade_disponivel;
-        quantidade += itemSelecionado[i].quantidade;
-        valor += itemSelecionado[i].valor;
-      }
-    }
-  }
-
-  else if(tipo=="r"){
-    //para filtrar apenas
-    for (i = 0; i < itemReajuste.length; i++) {
-      if (itemReajuste[i].cod_item == item) {
-        quantidade_disponivel += itemReajuste[i].quantidade_disponivel;
-        quantidade += itemReajuste[i].quantidade;
-        valor += itemReajuste[i].valor;
-      }
+  for (i = 0; i < itemSelecionado.length; i++) {
+    if (itemSelecionado[i].cod_item == item && itemSelecionado[i].id_empenho == empenho) {
+      quantidade_disponivel += itemSelecionado[i].quantidade_disponivel;
+      quantidade += itemSelecionado[i].quantidade;
+      valor += itemSelecionado[i].valor;
     }
   }
 
@@ -235,39 +230,6 @@ function enabler3(){
 
   document.getElementById("quantidade_disponivel").disabled = true;
 }
-
-
-
-function enviar() {
-
-  //estrutura usada para mandar as informações no fetch
-  let info = {
-    "dt_nf": document.getElementById("dt_nf").value,
-  };
-
-  //transforma as informações em string para mandar
-  let corpo = JSON.stringify(info);
-  //função fetch para mandar
-  fetch(servidor + 'read/fatura/', {
-    method: 'PUT',
-    body: corpo,
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //checar o status do pedido
-    //console.log(response);
-
-    //tratamento dos erros
-    if (response.status == 200 || response.status == 201) {
-      window.location.replace("./fiscFatura.html");
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
 
 
 function novoItensFatura(){
@@ -301,6 +263,38 @@ function novoItensFatura(){
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       location.reload();
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+
+
+function enviar() {
+
+  //estrutura usada para mandar as informações no fetch
+  let info = {
+    "dt_nf": document.getElementById("dt_nf").value,
+  };
+
+  //transforma as informações em string para mandar
+  let corpo = JSON.stringify(info);
+  //função fetch para mandar
+  fetch(servidor + 'read/fatura/', {
+    method: 'PUT',
+    body: corpo,
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //checar o status do pedido
+    //console.log(response);
+
+    //tratamento dos erros
+    if (response.status == 200 || response.status == 201) {
+      window.location.replace("./fiscFatura.html");
     } else {
       erros(response.status);
     }

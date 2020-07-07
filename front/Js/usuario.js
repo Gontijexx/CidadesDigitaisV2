@@ -30,9 +30,6 @@ function paginacao() {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        //para edição
-        jsonFinal=json;
-
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th scope="col">Código</th>
@@ -69,32 +66,40 @@ function paginacao() {
             jsonDeStatus = json;
           }
         }
-        for (let i = comeco; i < fim && i < jsonDeStatus.length; i++) {
-          userTotal[i] = jsonDeStatus[i];
+
+        //sistema de filtragem:
+        let filtrado = [];
+        filtrado = filtro(jsonDeStatus,["cod_usuario","nome","email","login","status"]);
+
+        //para edição
+        jsonFinal=filtrado;
+
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
+          userTotal[i] = filtrado[i];
           tabela += (`<tr> <td>`);
-          tabela += jsonDeStatus[i]["cod_usuario"];
+          tabela += filtrado[i]["cod_usuario"];
           tabela += (`</td> <td>`);
-          tabela += jsonDeStatus[i]["nome"]
+          tabela += filtrado[i]["nome"]
           tabela += (`</td> <td>`);
-          tabela += jsonDeStatus[i]["email"]
+          tabela += filtrado[i]["email"]
           tabela += (`</td> <td>`);
-          tabela += jsonDeStatus[i]["login"]
+          tabela += filtrado[i]["login"]
           tabela += (`</td> <td>`);
-          tabela += jsonDeStatus[i]["status"]
+          tabela += filtrado[i]["status"]
           tabela += (`</td> <td> 
                 <span class="d-flex">
                 <button onclick="editarUsuario(` + i + `)" class="btn btn-success">
                 <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
                 </button>
                 </span> </td> </tr>`);
-          if (jsonDeStatus[i]["login"] == userLogado) {
-            localStorage.setItem("codigoLogado", jsonDeStatus[i]["cod_usuario"]);
+          if (filtrado[i]["login"] == userLogado) {
+            localStorage.setItem("codigoLogado", filtrado[i]["cod_usuario"]);
           }
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        paginasOrganizadas(json,comeco,fim);
+        paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
       erros(response.status);

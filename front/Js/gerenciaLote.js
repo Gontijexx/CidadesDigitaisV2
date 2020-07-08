@@ -230,7 +230,10 @@ function novoReajuste() {
   };
 
   infoReajuste.ano_ref = parseInt(document.getElementById("ano_ref").value);
-  infoReajuste.percentual = parseFloat(document.getElementById("percentual").value);
+  // infoReajuste.percentual = parseFloat(document.getElementById("percentual").value);
+
+  //transforma número com porcentagem e transforma em decimal para o banco
+  infoReajuste.percentual = (parseFloat(document.getElementById("percentual").value)/100);
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(infoReajuste);

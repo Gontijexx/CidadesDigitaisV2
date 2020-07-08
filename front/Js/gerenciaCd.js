@@ -1,39 +1,27 @@
-//JSON usado para mandar as informações no fetch
-let info = {
-  "cod_ibge": " ",
-  "cod_lote": " ",
-  "os_pe": " ",
-  "data_pe": " ",
-  "os_imp": " ",
-  "data_imp": " ",
-};
-
 //usado para mostrar a cidade selecionada
 let meuMunicipio = localStorage.getItem("nome_municipio");
 let meuUF = localStorage.getItem("uf");
 
-
 //pega os valores corretos das variaveis
 let meuCodigo = localStorage.getItem("cod_ibge");
 let meuLote = localStorage.getItem("cod_lote");
-let os_pe1 = localStorage.getItem("os_pe");
-let os_imp1 = localStorage.getItem("os_imp");
-
-//estes campos precisam de adaptações para serem aceitos com o padrão yyyy-MM-dd
-
-let data1 = new Date(localStorage.getItem("data_pe"));
-let data2 = new Date(localStorage.getItem("data_imp"));
-
-let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
-let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
 
 window.onload = function () {
 
-  // inserindo os valores no html
+  // inserindo os valores nos campos
   document.getElementById("nome_municipio").value = meuMunicipio + " - " + meuUF;
   document.getElementById("cod_lote").value = meuLote;
-  document.getElementById("os_pe").value = os_pe1;
-  document.getElementById("os_imp").value = os_imp1;
+  document.getElementById("os_pe").value = localStorage.getItem("os_pe");
+  document.getElementById("os_imp").value = localStorage.getItem("os_imp");
+
+  //estes campos precisam de adaptações para serem aceitos com o padrão yyyy-MM-dd
+
+  let data1 = new Date(localStorage.getItem("data_pe"));
+  let data2 = new Date(localStorage.getItem("data_imp"));
+
+  let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
+  let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
+
   document.getElementById("data_pe").value = dataFinal1;
   document.getElementById("data_imp").value = dataFinal2;
 
@@ -42,16 +30,15 @@ window.onload = function () {
 
 function enviar() {
 
-  info.cod_ibge = parseInt(meuCodigo);
-  info.cod_lote = parseInt(meuLote.value);
-  let os_pe1 = document.getElementById("os_pe");
-  info.os_pe = os_pe1.value;
-  let data_pe1 = document.getElementById("data_pe");
-  info.data_pe = data_pe1.value;
-  let os_imp1 = document.getElementById("os_imp");
-  info.os_imp = os_imp1.value;
-  let data_imp1 = document.getElementById("data_imp");
-  info.data_imp = data_imp1.value;
+  //JSON usado para mandar as informações no fetch
+  let info = {
+    "cod_ibge": parseInt(meuCodigo),
+    "cod_lote": parseInt(meuLote),
+    "os_pe": document.getElementById("os_pe").value,
+    "data_pe": document.getElementById("data_pe").value,
+    "os_imp": document.getElementById("os_imp").value,
+    "data_imp": document.getElementById("data_imp").value,
+  };
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);

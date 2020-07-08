@@ -31,14 +31,14 @@ function paginacao() {
         
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
-            <th scope="col">Código IBGE do Município</th>
-            <th scope="col">Município</th>
-            <th scope="col">Código Lote</th>
-            <th scope="col">O.S. Projeto Executivo</th>
-            <th scope="col">Data de Projeto Executivo</th>
-            <th scope="col">O.S. Implementação</th>
-            <th scope="col">Data de Implementação</th>
-            <th scope="col">Opções</th>
+            <th style="width:15%" scope="col">Código IBGE do Município</th>
+            <th style="width:25%" scope="col">Município</th>
+            <th style="width:10%" scope="col">Lote</th>
+            <th style="width:10%" scope="col">O.S. Projeto Executivo</th>
+            <th style="width:10%" scope="col">Data de Projeto Executivo</th>
+            <th style="width:10%" scope="col">O.S. Implementação</th>
+            <th style="width:10%" scope="col">Data de Implementação</th>
+            <th style="width:10%" scope="col">Opções</th>
             </tr>
             </thead>`);
         tabela += (`<tbody>`);

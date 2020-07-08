@@ -2,7 +2,7 @@
 let meuCodigo = localStorage.getItem("cod_lote");
 document.getElementById("cod_lote").value = meuCodigo;
 
-function pegarEntidade(){
+function pegarEntidade() {
   fetch(servidor + 'read/entidadeget', {
     method: 'GET',
     headers: {
@@ -20,7 +20,7 @@ function pegarEntidade(){
           // o valor pego é o cnpj, mas o campo mostra o nome da entidade
           x[i] += "<option value=" + json[i].cnpj + ">" + json[i].nome + "</option>";
         }
-        
+
 
         document.getElementById("cnpj").innerHTML = x;
 
@@ -93,7 +93,7 @@ function enviar() {
     if (response.status == 200 || response.status == 201) {
       //checar o json
       response.json().then(function (json) {
-      console.log(json);
+        console.log(json);
       });
       window.location.replace("./lote.html");
     } else {
@@ -171,7 +171,7 @@ function reajuste() {
           tabela += listaReajuste[i]["ano_ref"];
           tabela += (`</td>`);
           tabela += (`<td>`);
-          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="text"` + `data-js="porcentagem">`);
+          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="text"` + `data-js="porcentagem" size="50">`);
           tabela += (`</td>`);
           tabela += (`<td>
           <button onclick=" apagado =` + listaReajuste[i]["ano_ref"] + `" class="btn btn-danger" data-toggle="modal" data-target="#deletarReajuste">

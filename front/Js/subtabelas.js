@@ -1,5 +1,3 @@
-//adapte para CD João. Use administracao.js como exemplo se necessário
-//previsaoSub ainda não funciona em gerenciaCd?
 
 //variavel usada nas subtabelas:
 let listaFinal = [];
@@ -29,10 +27,10 @@ function previsaoSub(valorCodigo) {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
-          <th style="width:15%" scope="col">Código de Previsão de Empenho</th>
+          <th style="width:25%" scope="col">Previsão de Empenho</th>
           <th style="width:40%" scope="col">Natureza da despesa</th>
           <th style="width:10%" scope="col">Tipo</th>
-          <th style="width:20%" scope="col">Data</th>
+          <th style="width:10%" scope="col">Data</th>
           <th style="width:15%" scope="col">Ano de Referência</th>
           </tr>
           </thead>`);
@@ -40,21 +38,36 @@ function previsaoSub(valorCodigo) {
 
         let j = 0;
         for (let i = 0; i < json.length; i++) {
-          if (valorCodigo == json[i]["cod_lote"]) {
-            listaFinal[j] = json[i];
-            j++;
+
+          //valorCodigo define se é no html de Lote (1) ou de Cidades Digitais (2)
+          if(valorCodigo=='1'){
+            if (meuCodigo == json[i]["cod_lote"]) {
+              listaFinal[j] = json[i];
+              j++;
+            }
+          }
+          else if(valorCodigo=='2'){
+            if (meuLote == json[i]["cod_lote"]) {
+              listaFinal[j] = json[i];
+              j++;
+            }
           }
         }
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'previsao'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'previsao'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_previsao_empenho"];
           tabela += (`</td><td>`);
           tabela += listaFinal[i]["natureza_despesa"];
           tabela += (`</td><td>`);
-          tabela += listaFinal[i]["tipo"];
+          if(listaFinal[i]["tipo"]=="o"){
+            tabela += "Original";
+          }
+          else{
+            tabela += "Reajuste";
+          }
           tabela += (`</td><td>`);
           let data1 = new Date(listaFinal[i]["data"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
@@ -82,8 +95,20 @@ function empenhoSub(valorCodigo) {
   document.getElementById("editar").innerHTML = (`<br>`);
   document.getElementById("editar2").innerHTML = (`<br>`);
 
+  //filtro de subtabelas pelo codigo escolhido (1 para previsao, 2 para lote, 3 para CD)
+  let caminhoEmpenho;
+
+  if(valorCodigo=='1'){
+    caminhoEmpenho = 'read/empenhocodprevisaoempenho/' + meuCodigo;
+  }
+
+  //caso não seja em previsão
+  else if(valorCodigo=='2' || valorCodigo=='3'){
+    caminhoEmpenho = 'read/empenho';
+  }
+
   //função fetch para chamar os itens de empenho da tabela
-  fetch(servidor + 'read/empenho', {
+  fetch(servidor + caminhoEmpenho, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -98,28 +123,77 @@ function empenhoSub(valorCodigo) {
 
         //console.log(json);
 
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+        let tabela = "";
+        if(valorCodigo=='1'){
+          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
           <tr>
           <th style="width:50%" scope="col">Código de Empenho</th>
           <th style="width:50%" scope="col">Data</th>
           </tr>
           </thead>`);
+        }
+
+        //caso não seja em previsão
+        else if(valorCodigo=='2' || valorCodigo=='3'){
+          tabela += (`<thead style="background: #4b5366; color:white; font-size:15px">
+          <tr>
+          <th style="width:20%" scope="col">Código de Empenho</th>
+          <th style="width:40%" scope="col">Natureza de Despesa</th>
+          <th style="width:15%" scope="col">Tipo</th>
+          <th style="width:25%" scope="col">Data</th>
+          </tr>
+          </thead>`);
+        }
         tabela += (`<tbody>`);
 
         let j = 0;
         for (let i = 0; i < json.length; i++) {
-          if (valorCodigo == json[i]["cod_previsao_empenho"]) {
-            listaFinal[j] = json[i];
-            j++;
+
+          if(valorCodigo=='1'){
+            if (meuCodigo == json[i]["cod_previsao_empenho"]) {
+              listaFinal[j] = json[i];
+              j++;
+            }
+          }
+
+          else if(valorCodigo=='2'){
+            if (meuCodigo == json[i]["cod_lote"]) {
+              listaFinal[j] = json[i];
+              j++;
+            }
+          }
+
+          else if(valorCodigo=='3'){
+            if (meuLote == json[i]["cod_lote"]) {
+              listaFinal[j] = json[i];
+              j++;
+            }
           }
         }
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'empenho'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_empenho"];
-          tabela += (`</td><td>`);
+          tabela += (`</td>`);
+
+          //caso não seja em previsão
+          if(valorCodigo=='2' || valorCodigo=='3'){
+            tabela += (`<td>`);
+            tabela += listaFinal[i]["cod_natureza_despesa"] + " - " + listaFinal[i]["descricao"];
+            tabela += (`</td>`);
+            tabela += (`<td>`);
+            if(listaFinal[i]["tipo"]=="o"){
+              tabela += "Original";
+            }
+            else{
+              tabela += "Reajuste";
+            }
+            tabela += (`</td>`);
+          }
+
+          tabela += (`<td>`);
           let data1 = new Date(listaFinal[i]["data"]);
           let dataFinal1 = String(data1.getDate()).padStart(2, '0') + "/" + String(data1.getMonth() + 1).padStart(2, '0') + "/" + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataFinal1;
@@ -130,7 +204,7 @@ function empenhoSub(valorCodigo) {
         document.getElementById("tabela").innerHTML = tabela;
       });
     } else {
-      erros(response.status);
+      //erros(response.status);
     }
   });
 }
@@ -139,13 +213,25 @@ function empenhoSub(valorCodigo) {
 
 //tabela pra fatura:
 
-function faturaSub() {
+function faturaSub(valorCodigo) {
 
   document.getElementById("editar").innerHTML = (`<br>`);
   document.getElementById("editar2").innerHTML = (`<br>`);
 
+  //filtro de subtabelas pelo codigo escolhido (1 para empenho, 2 para CD)
+  let caminhoFatura;
+
+  if(valorCodigo=='1'){
+    caminhoFatura = 'read/fatura/' + meuCodigo;
+  }
+
+  //caso não seja em empenho
+  else if(valorCodigo=='2'){
+    caminhoFatura = 'read/fatura';
+  }
+
   //função fetch para chamar os itens de previsão da tabela
-  fetch(servidor + 'read/fatura/' + meuCodigo, {
+  fetch(servidor + caminhoFatura, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + meuToken
@@ -173,12 +259,11 @@ function faturaSub() {
         for (let i = 0; i < json.length; i++) {
           listaFinal[j] = json[i];
           j++;
-        // usar "if (valorCodigo == json[i][algo]) {}" para outros casos
         }
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'fatura'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["num_nf"];
           tabela += (`</td><td>`);
@@ -242,7 +327,7 @@ function pagamentoSub(valorCodigo) {
 
         for (i = 0; i < listaFinal.length; i++) {
           //captura itens para tabela
-          tabela += (`<tr style="cursor:pointer" onclick="redirecionar(` + i + "," + "'pagamento'" + `)">`);
+          tabela += (`<tr style="cursor:pointer" id="linha` + i + `" onmouseover="sublinhar(` + i + "," + json.length + `)" onclick="redirecionar(` + i + "," + "'pagamento'" + `)">`);
           tabela += (`<td>`);
           tabela += listaFinal[i]["cod_otb"];
           tabela += (`</td><td>`);
@@ -258,6 +343,7 @@ function pagamentoSub(valorCodigo) {
     }
   });
 }
+
 
 
 //função necessaria para o funcionamento dos links nas subtabelas
@@ -299,7 +385,125 @@ function redirecionar(valor, caminhoFinal){
   }
 }
 
+//função decorativa para facilitar a vizualização do link
+function sublinhar(valor,tamanho){
+  for(i=0;i<tamanho;i++){
+    if(i==valor){
+      document.getElementById("linha"+i).style.color = "blue";
+      document.getElementById("linha"+i).style.textDecoration = "underline";
+    }
+    else if(document.getElementById("linha"+i).style.color == "blue"){
+      document.getElementById("linha"+i).style.color = "black";
+      document.getElementById("linha"+i).style.textDecoration = "none";
+    }
+  }
+}
 
+
+
+
+
+//lote itens
+
+function itensLote() {
+
+  //cria o botão para editar
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemLote()" class="btn btn-success">Salvar Alterações</button>`);
+  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemLote()" class="btn btn-success">Salvar Alterações</button>`);
+
+  //função fetch para chamar itens da tabela
+  fetch(servidor + 'read/loteitens', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + meuToken
+    },
+  }).then(function (response) {
+
+    //tratamento dos erros
+    if (response.status == 200) {
+      //console.log(response.statusText);
+
+      //pegar o json que possui a tabela
+      response.json().then(function (json) {
+
+        let j = 0;
+        //cria uma lista apenas com os itens do lote selecionado
+        for (let i = 0; i < json.length; i++) {
+          if (json[i]["cod_lote"] == meuCodigo) {
+            listaItem[j] = json[i];
+            j++;
+          }
+        }
+
+        //cria o cabeçalho da tabela
+        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
+                <tr>
+                <th style="width:50%" scope="col">Descrição</th>
+                <th style="width:50%" scope="col">Valor</th>
+                </tr>
+                </thead>`);
+        tabela += (`<tbody>`);
+
+        for (i = 0; i < listaItem.length; i++) {
+
+          //salva os valores para edição
+          meuItem[i] = listaItem[i]["cod_item"];
+          meuTipo[i] = listaItem[i]["cod_tipo_item"];
+
+          //cria json para edição
+          edicaoItem[i] = {
+            "preco": "",
+          };
+
+          //captura itens para tabela
+          tabela += (`<tr>`);
+          tabela += (`<td>`);
+          tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + listaItem[i]["descricao"];
+          tabela += (`</td> <td>`);
+          tabela += "R$ " + (`<input value="` + listaItem[i]["preco"] + `" onchange="mudaItemLote(` + i + `)" id="preco` + i + `" type="text" class="preco">`);
+          tabela += (`</td>`);
+          tabela += (`</tr>`);
+        }
+        tabela += (`</tbody>`);
+        document.getElementById("tabela").innerHTML = tabela;
+      });
+    } else {
+      erros(response.status);
+    }
+  });
+}
+
+function mudaItemLote(valor) {
+  edicaoItem[valor].preco = parseFloat(document.getElementById("preco" + valor).value);
+  itemMudado[valor] = valor;
+}
+
+function editarItemLote() {
+  for (i = 0; i < listaItem.length; i++) {
+    if (itemMudado[i] != null) {
+      //transforma as informações em string para mandar
+      let corpo = JSON.stringify(edicaoItem[i]);
+      //função fetch para mandar
+      fetch(servidor + 'read/loteitens/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
+        method: 'PUT',
+        body: corpo,
+        headers: {
+          'Authorization': 'Bearer ' + meuToken
+        },
+      }).then(function (response) {
+        //checar o status do pedido
+        //console.log(response.statusText);
+
+        //tratamento dos erros
+        if (response.status == 200 || response.status == 201) {
+          location.reload();
+        } else {
+          erros(response.status);
+        }
+      });
+    }
+  }
+}
 
 
 

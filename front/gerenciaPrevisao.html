@@ -84,9 +84,11 @@
                             </div>
                         </form>
 
-                        <div class="p-4 form-group col-lg-3">
-                            <button onclick="empenhoSub(meuCodigo)" type="button" style="background-color:#959595" class="btn btn-primary">Empenho</button>
-                            <button onclick="itensFinanceamento('itensprevisaoempenho')" type="button" style="background-color:#959595" class="btn btn-primary">Itens</button>
+                        <div class="col-md-12">
+                            <div class="form-row">
+                                <button onclick="itensFinanceamento('itensprevisaoempenho')" type="button" style="background-color:#959595" class="btn btn-primary">Itens</button>
+                                <button onclick="empenhoSub('1')" type="button" style="background-color:#959595" class="btn btn-primary">Empenho</button>
+                            </div>
                         </div>
 
                         <div class="p-4 form-group" style="overflow-x:auto;">
@@ -110,7 +112,7 @@
 
 </body>
 <script src="./Js/gerenciaPrevisao.js"></script>
-<script src="./Js/tabelas.js"></script>
+<script src="./Js/subtabelas.js"></script>
 <script src="./Js/main.js"></script> <!-- Resource jQuery -->
 
 </html>

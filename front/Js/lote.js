@@ -22,41 +22,48 @@ function paginacao() {
 
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
-            <th scope="col">Lote</th>
-            <th scope="col">Entidade - CNPJ</th>
-            <th scope="col">Contrato</th>
-            <th scope="col">Data de Inicio</th>
-            <th scope="col">Data Final</th>
-            <th scope="col">Data de Reajuste</th>
-            <th scope="col">Opções</th>
+            <th style="width:10%" scope="col">Lote</th>
+            <th style="width:20%" scope="col">Entidade - CNPJ</th>
+            <th style="width:15%" scope="col">Contrato</th>
+            <th style="width:15%" scope="col">Data de Inicio</th>
+            <th style="width:15%" scope="col">Data Final</th>
+            <th style="width:15%" scope="col">Data de Reajuste</th>
+            <th style="width:10%" scope="col">Opções</th>
             </tr>
             </thead>`);
         tabela += (`<tbody>`);
 
-        for (let i = comeco; i < fim && i < json.length; i++) {
+        //sistema de filtragem:
+        let filtrado = [];
+        filtrado = filtro(json,["cnpj","nome","endereco","bairro","cep","uf","nome_municipio","observacao"]);
+
+        //para edição
+        jsonFinal=filtrado;
+
+        for (let i = comeco; i < fim && i < filtrado.length; i++) {
           tabela += (`<tr><td>`);
-          tabela += json[i]["cod_lote"];
+          tabela += filtrado[i]["cod_lote"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["nome"] + " - " + json[i]["cnpj"];
+          tabela += filtrado[i]["nome"] + " - " + filtrado[i]["cnpj"];
           tabela += (`</td> <td>`);
-          tabela += json[i]["contrato"];
+          tabela += filtrado[i]["contrato"];
           tabela += (`</td> <td>`);
 
-          let data1 = new Date(json[i]["dt_inicio_vig"]);
+          let data1 = new Date(filtrado[i]["dt_inicio_vig"]);
           let dataf1 = String(data1.getDate()).padStart(2, '0') + '/' + String(data1.getMonth() + 1).padStart(2, '0') + '/' + String(data1.getFullYear()).padStart(4, '0');
           tabela += dataf1;
           tabela += (`</td> <td>`);
 
-          let data2 = new Date(json[i]["dt_final_vig"]);
+          let data2 = new Date(filtrado[i]["dt_final_vig"]);
           let dataf2 = String(data2.getDate()).padStart(2, '0') + '/' + String(data2.getMonth() + 1).padStart(2, '0') + '/' + String(data2.getFullYear()).padStart(4, '0');
           tabela += dataf2;
           tabela += (`</td> <td>`);
 
-          let data3 = new Date(json[i]["dt_reajuste"]);
-          let dataf3 = String(data3.getDate()).padStart(2, '0') + '/' + String(data3.getMonth() + 1).padStart(2, '0') + '/' + String(data3.getFullYear()).padStart(4, '0');
+          let data3 = new Date(filtrado[i]["dt_reajuste"]);
+          let dataf3 = String(data3.getDate()).padStart(2, '0') + '/' + String(data3.getMonth() + 1).padStart(2, '0');
           tabela += dataf3;
 
-          tabela += (`</td><td> 
+          tabela += (`</td><td>
                   <span class="d-flex">
                   <button onclick="editarLote(` + i + `)" class="btn btn-success">
                   <i class="material-icons"data-toggle="tooltip" title="Edit">&#xE254;</i>
@@ -66,7 +73,7 @@ function paginacao() {
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
 
-        paginasOrganizadas(json,comeco,fim);
+        paginasOrganizadas(filtrado,comeco,fim);
       });
     } else {
       erros(response.status);
@@ -165,5 +172,6 @@ function editarLote(valor) {
   localStorage.setItem("dt_inicio_vig", jsonFinal[valor].dt_inicio_vig);
   localStorage.setItem("dt_final_vig", jsonFinal[valor].dt_final_vig);
   localStorage.setItem("dt_reajuste", jsonFinal[valor].dt_reajuste);
+  console.log(jsonFinal[valor].dt_inicio_vig + " " + jsonFinal[valor].dt_final_vig + " " + jsonFinal[valor].dt_reajuste);
   window.location.href = "./gerenciaLote.html";
 }

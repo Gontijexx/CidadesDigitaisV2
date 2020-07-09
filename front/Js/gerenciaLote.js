@@ -2,8 +2,7 @@
 let meuCodigo = localStorage.getItem("cod_lote");
 document.getElementById("cod_lote").value = meuCodigo;
 
-
-function pegarEntidade(){
+function pegarEntidade() {
   fetch(servidor + 'read/entidadeget', {
     method: 'GET',
     headers: {
@@ -21,7 +20,7 @@ function pegarEntidade(){
           // o valor pego é o cnpj, mas o campo mostra o nome da entidade
           x[i] += "<option value=" + json[i].cnpj + ">" + json[i].nome + "</option>";
         }
-        
+
 
         document.getElementById("cnpj").innerHTML = x;
 
@@ -34,12 +33,10 @@ function pegarEntidade(){
   });
 }
 
-
 window.onload = function () {
 
   //preenche os campos
-  let contrato1 = document.getElementById("contrato");
-  contrato1.value = localStorage.getItem("contrato");
+  document.getElementById("contrato").value = localStorage.getItem("contrato");
 
   //estes campos precisam de adaptações para serem aceitos, como yyyy-MM-dd
 
@@ -51,9 +48,9 @@ window.onload = function () {
   let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
   let dataFinal3 = String(data3.getFullYear()).padStart(4, '0') + "-" + String(data3.getMonth() + 1).padStart(2, '0') + "-" + String(data3.getDate()).padStart(2, '0');
 
-  document.getElementById("dt_inicio_vig").innerHTML = dataFinal1;
-  document.getElementById("dt_final_vig").innerHTML = dataFinal2;
-  document.getElementById("dt_reajuste").innerHTML = dataFinal3;
+  document.getElementById("dt_inicio_vig").value = dataFinal1;
+  document.getElementById("dt_final_vig").value = dataFinal2;
+  document.getElementById("dt_reajuste").value = dataFinal3;
 
   //esta função preenche o campo de lote
   pegarEntidade();
@@ -95,129 +92,15 @@ function enviar() {
     //tratamento dos erros
     if (response.status == 200 || response.status == 201) {
       //checar o json
-      //response.json().then(function (json) {
-      //console.log(json);
-      //});
+      response.json().then(function (json) {
+        console.log(json);
+      });
       window.location.replace("./lote.html");
     } else {
       erros(response.status);
     }
   });
 }
-
-
-
-
-
-
-
-//lote itens
-
-function itensLote() {
-
-  //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemLote()" class="btn btn-success">Salvar Alterações</button>`);
-  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemLote()" class="btn btn-success">Salvar Alterações</button>`);
-
-  //função fetch para chamar itens da tabela
-  fetch(servidor + 'read/loteitens', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + meuToken
-    },
-  }).then(function (response) {
-
-    //tratamento dos erros
-    if (response.status == 200) {
-      //console.log(response.statusText);
-
-      //pegar o json que possui a tabela
-      response.json().then(function (json) {
-
-        let j = 0;
-        //cria uma lista apenas com os itens do lote selecionado
-        for (let i = 0; i < json.length; i++) {
-          if (json[i]["cod_lote"] == meuCodigo) {
-            listaItem[j] = json[i];
-            j++;
-          }
-        }
-
-        //cria o cabeçalho da tabela
-        let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
-                <tr>
-                <th scope="col">Código do Item, Tipo de Item e Descrição do item</th>
-                <th scope="col">Valor</th>
-                </tr>
-                </thead>`);
-        tabela += (`<tbody>`);
-
-        for (i = 0; i < listaItem.length; i++) {
-
-          //salva os valores para edição
-          meuItem[i] = listaItem[i]["cod_item"];
-          meuTipo[i] = listaItem[i]["cod_tipo_item"];
-
-          //cria json para edição
-          edicaoItem[i] = {
-            "preco": "",
-          };
-
-          //captura itens para tabela
-          tabela += (`<tr>`);
-          tabela += (`<td>`);
-          tabela += listaItem[i]["cod_item"] + "." + listaItem[i]["cod_tipo_item"] + " - " + listaItem[i]["descricao"];
-          tabela += (`</td> <td>`);
-          tabela += "R$ " + (`<input value="` + listaItem[i]["preco"] + `" onchange="mudaItemLote(` + i + `)" id="preco` + i + `" type="text" class="preco">`);
-          tabela += (`</td>`);
-          tabela += (`</tr>`);
-        }
-        tabela += (`</tbody>`);
-        document.getElementById("tabela").innerHTML = tabela;
-      });
-    } else {
-      erros(response.status);
-    }
-  });
-}
-
-function mudaItemLote(valor) {
-  edicaoItem[valor].preco = parseFloat(document.getElementById("preco" + valor).value);
-  itemMudado[valor] = valor;
-}
-
-function editarItemLote() {
-  for (i = 0; i < listaItem.length; i++) {
-    if (itemMudado[i] != null) {
-      //transforma as informações em string para mandar
-      let corpo = JSON.stringify(edicaoItem[i]);
-      //função fetch para mandar
-      fetch(servidor + 'read/loteitens/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
-        method: 'PUT',
-        body: corpo,
-        headers: {
-          'Authorization': 'Bearer ' + meuToken
-        },
-      }).then(function (response) {
-        //checar o status do pedido
-        //console.log(response.statusText);
-
-        //tratamento dos erros
-        if (response.status == 200 || response.status == 201) {
-          location.reload();
-        } else {
-          erros(response.status);
-        }
-      });
-    }
-  }
-}
-
-
-
-
-
-
 
 //lote reajustes
 
@@ -226,6 +109,7 @@ let listaReajuste = [];
 let edicaoReajuste = [];
 let meuAno = [];
 let reajusteMudado = [];
+let apagado;
 
 function reajuste() {
 
@@ -287,10 +171,10 @@ function reajuste() {
           tabela += listaReajuste[i]["ano_ref"];
           tabela += (`</td>`);
           tabela += (`<td>`);
-          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="text"` + `data-js="porcentagem">`);
+          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="text"` + `data-js="porcentagem" size="50">`);
           tabela += (`</td>`);
           tabela += (`<td>
-          <button onclick="apagarReajuste(` + listaReajuste[i]["ano_ref"] + `)" class="btn btn-danger">
+          <button onclick=" apagado =` + listaReajuste[i]["ano_ref"] + `" class="btn btn-danger" data-toggle="modal" data-target="#deletarReajuste">
           <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
           </button>
           </td>`);
@@ -346,7 +230,10 @@ function novoReajuste() {
   };
 
   infoReajuste.ano_ref = parseInt(document.getElementById("ano_ref").value);
-  infoReajuste.percentual = parseFloat(document.getElementById("percentual").value);
+  // infoReajuste.percentual = parseFloat(document.getElementById("percentual").value);
+
+  //transforma número com porcentagem e transforma em decimal para o banco
+  infoReajuste.percentual = (parseFloat(document.getElementById("percentual").value)/100);
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(infoReajuste);
@@ -368,10 +255,10 @@ function novoReajuste() {
   });
 }
 
-function apagarReajuste(valor) {
+function apagarReajuste() {
 
   //função fetch para deletar
-  fetch(servidor + 'read/reajuste/' + valor + "/" + meuCodigo, {
+  fetch(servidor + 'read/reajuste/' + apagado + "/" + meuCodigo, {
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + meuToken

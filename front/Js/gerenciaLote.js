@@ -171,7 +171,7 @@ function reajuste() {
           tabela += listaReajuste[i]["ano_ref"];
           tabela += (`</td>`);
           tabela += (`<td>`);
-          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="text"` + `data-js="porcentagem" size="50">`);
+          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="text"` + `data-js="porcentagem" size="50"> %`);
           tabela += (`</td>`);
           tabela += (`<td>
           <button onclick=" apagado =` + listaReajuste[i]["ano_ref"] + `" class="btn btn-danger" data-toggle="modal" data-target="#deletarReajuste">
@@ -230,10 +230,7 @@ function novoReajuste() {
   };
 
   infoReajuste.ano_ref = parseInt(document.getElementById("ano_ref").value);
-  // infoReajuste.percentual = parseFloat(document.getElementById("percentual").value);
-
-  //transforma número com porcentagem e transforma em decimal para o banco
-  infoReajuste.percentual = (parseFloat(document.getElementById("percentual").value)/100);
+  infoReajuste.percentual = parseFloat(document.getElementById("percentual").value);
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(infoReajuste);

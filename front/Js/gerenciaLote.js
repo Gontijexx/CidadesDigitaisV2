@@ -173,7 +173,7 @@ function reajuste() {
           tabela += listaReajuste[i]["ano_ref"];
           tabela += (`</td>`);
           tabela += (`<td>`);
-          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="text"` + `data-js="porcentagem" size="50"> %`);
+          tabela += (`<input class="percentual" value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)"  id="percentual` + i + `" type="text" size="50">`);
           tabela += (`</td>`);
           tabela += (`<td>
           <button onclick=" apagado =` + listaReajuste[i]["ano_ref"] + `" class="btn btn-danger" data-toggle="modal" data-target="#deletarReajuste">
@@ -184,6 +184,13 @@ function reajuste() {
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
+
+        //Máscara da porcentagem feita separadamente para tabela
+
+        $(document).ready(function(){
+          $('.percentual').inputmask('999.99%', {reverse: true, numericInput:true, placeholder:"0"});
+        });
+        
       });
     } else {
       erros(response.status);

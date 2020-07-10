@@ -450,11 +450,6 @@ function itensLote() {
           meuItem[i] = listaItem[i]["cod_item"];
           meuTipo[i] = listaItem[i]["cod_tipo_item"];
 
-          //cria json para edição
-          edicaoItem[i] = {
-            "preco": "",
-          };
-
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
@@ -473,14 +468,15 @@ function itensLote() {
   });
 }
 
-function mudaItemLote(valor) {
-  edicaoItem[valor].preco = parseFloat(document.getElementById("preco" + valor).value);
-  itemMudado[valor] = valor;
-}
-
 function editarItemLote() {
   for (i = 0; i < listaItem.length; i++) {
-    if (itemMudado[i] != null) {
+
+    //cria json para edição
+    edicaoItem[i] = {
+      "preco": parseFloat(document.getElementById("preco" + valor).value),
+    };
+
+    if (edicaoItem[i][preco] != listaItem[i]["preco"]) {
       //transforma as informações em string para mandar
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar

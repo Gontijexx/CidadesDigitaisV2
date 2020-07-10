@@ -78,8 +78,8 @@ function enviar() {
 function itens() {
 
   //cria o botão para editar
-  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Salvar Alterações em Itens</button>`);
-  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItem()" class="btn btn-success">Salvar Alterações em Itens</button>`);
+  document.getElementById("editar").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
+  document.getElementById("editar2").innerHTML = (`<button id="editar" onclick="editarItemCD()" class="btn btn-success">Salvar Alterações em Itens</button>`);
 
   //função fetch para chamar itens da tabela
   fetch(servidor + 'read/cditens', {
@@ -127,19 +127,13 @@ function itens() {
           tabela += (`<td>`);
           tabela += listaItem[i]["descricao"];
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `" onchange="mudaItem(` + i + `)" id="quantidade_previsto` + i + `" type="text" size="15">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_previsto"] + `" id="quantidade_previsto` + i + `" type="text" size="15">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `" onchange="mudaItem(` + i + `)" id="quantidade_projeto_executivo` + i + `" type="text" size="15">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_projeto_executivo"] + `" id="quantidade_projeto_executivo` + i + `" type="text" size="15">`);
           tabela += (`</td> <td>`);
-          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `" onchange="mudaItem(` + i + `)" id="quantidade_termo_instalacao` + i + `" type="text" size="15">`);
+          tabela += (`<input value="` + listaItem[i]["quantidade_termo_instalacao"] + `" id="quantidade_termo_instalacao` + i + `" type="text" size="15">`);
           tabela += (`</td>`);
           tabela += (`</tr>`);
-
-          edicaoItem[i] = {
-            "quantidade_previsto": listaItem[i]["quantidade_previsto"],
-            "quantidade_projeto_executivo": listaItem[i]["quantidade_projeto_executivo"],
-            "quantidade_termo_instalacao": listaItem[i]["quantidade_termo_instalacao"],
-          };
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
@@ -151,22 +145,21 @@ function itens() {
   });
 }
 
-function mudaItem(valor) {
-  edicaoItem[valor].quantidade_previsto = parseInt(document.getElementById("quantidade_previsto" + valor).value);
-  edicaoItem[valor].quantidade_projeto_executivo = parseInt(document.getElementById("quantidade_projeto_executivo" + valor).value);
-  edicaoItem[valor].quantidade_termo_instalacao = parseInt(document.getElementById("quantidade_termo_instalacao" + valor).value);
-  itemMudado[valor] = valor;
-}
-
-function editarItem() {
+function editarItemCD() {
 
   for (let i = 0; i < listaItem.length; i++) {
 
-    if (itemMudado[i] != null) {
+    edicaoItem[i] = {
+      "quantidade_previsto": parseInt(document.getElementById("quantidade_previsto" + i).value),
+      "quantidade_projeto_executivo": parseInt(document.getElementById("quantidade_projeto_executivo" + i).value),
+      "quantidade_termo_instalacao": parseInt(document.getElementById("quantidade_termo_instalacao" + i).value),
+    };
+
+    if (edicaoItem[i]["quantidade_previsto"] != listaItem[i]["quantidade_previsto"] || edicaoItem[i]["quantidade_projeto_executivo"] != listaItem[i]["quantidade_projeto_executivo"] || edicaoItem[i]["quantidade_termo_instalacao"] != listaItem[i]["quantidade_termo_instalacao"]) {
       //transforma as informações do token em json
       let corpo = JSON.stringify(edicaoItem[i]);
       //função fetch para mandar
-      fetch(servidor + 'read/cditens/' + meuCD + '/' + meuItem[i] + '/' + meuTipo[i], {
+      fetch(servidor + 'read/cditens/' + meuCodigo + '/' + meuItem[i] + '/' + meuTipo[i], {
         method: 'PUT',
         body: corpo,
         headers: {
@@ -174,7 +167,7 @@ function editarItem() {
         },
       }).then(function (response) {
         //checar o status do pedido
-        //console.log(response.statusText);
+        console.log(response.statusText);
 
         //tratamento dos erros
         if (response.status == 200 || response.status == 201) {

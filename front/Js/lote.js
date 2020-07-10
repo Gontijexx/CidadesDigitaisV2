@@ -59,9 +59,10 @@ function paginacao() {
           tabela += dataf2;
           tabela += (`</td> <td>`);
 
-          let data3 = new Date(filtrado[i]["dt_reajuste"]);
-          let dataf3 = String(data3.getDate()).padStart(2, '0') + '/' + String(data3.getMonth() + 1).padStart(2, '0');
-          tabela += dataf3;
+          //let data3 = new Date(filtrado[i]["dt_reajuste"]);
+          //let dataf3 = String(data3.getDate()).padStart(2, '0') + '/' + String(data3.getMonth() + 1).padStart(2, '0');
+          //usar mascara para pegar apenas o que precisa
+          tabela += filtrado[i]["dt_reajuste"];
 
           tabela += (`</td><td>
                   <span class="d-flex">

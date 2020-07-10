@@ -42,15 +42,17 @@ window.onload = function () {
 
   let data1 = new Date(localStorage.getItem("dt_inicio_vig"));
   let data2 = new Date(localStorage.getItem("dt_final_vig"));
-  let data3 = new Date(localStorage.getItem("dt_reajuste"));
+  //let data3 = new Date(localStorage.getItem("dt_reajuste"));
 
   let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
   let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
-  let dataFinal3 = String(data3.getFullYear()).padStart(4, '0') + "-" + String(data3.getMonth() + 1).padStart(2, '0') + "-" + String(data3.getDate()).padStart(2, '0');
+  //let dataFinal3 = String(data3.getFullYear()).padStart(4, '0') + "-" + String(data3.getMonth() + 1).padStart(2, '0') + "-" + String(data3.getDate()).padStart(2, '0');
 
   document.getElementById("dt_inicio_vig").value = dataFinal1;
   document.getElementById("dt_final_vig").value = dataFinal2;
-  document.getElementById("dt_reajuste").value = dataFinal3;
+
+  //tambêm precisa de mascara
+  document.getElementById("dt_reajuste").value = localStorage.getItem("dt_reajuste");
 
   //esta função preenche o campo de lote
   pegarEntidade();

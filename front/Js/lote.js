@@ -20,6 +20,9 @@ function paginacao() {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
+        //para ser usado no campo abaixo
+        mascara();
+
         let tabela = (`<thead style="background: #4b5366; color:white; font-size:15px">
             <tr>
             <th style="width:10%" scope="col">Lote</th>
@@ -47,22 +50,30 @@ function paginacao() {
           tabela += filtrado[i]["nome"] + " - " + filtrado[i]["cnpj"];
           tabela += (`</td> <td>`);
           tabela += filtrado[i]["contrato"];
-          tabela += (`</td> <td>`);
+          tabela += (`</td> <td class="data">`);
 
-          let data1 = new Date(filtrado[i]["dt_inicio_vig"]);
-          let dataf1 = String(data1.getDate()).padStart(2, '0') + '/' + String(data1.getMonth() + 1).padStart(2, '0') + '/' + String(data1.getFullYear()).padStart(4, '0');
-          tabela += dataf1;
-          tabela += (`</td> <td>`);
+          //organizado junto à mascara
+          //mesma lógica de gerenciaLote
 
-          let data2 = new Date(filtrado[i]["dt_final_vig"]);
-          let dataf2 = String(data2.getDate()).padStart(2, '0') + '/' + String(data2.getMonth() + 1).padStart(2, '0') + '/' + String(data2.getFullYear()).padStart(4, '0');
-          tabela += dataf2;
-          tabela += (`</td> <td>`);
+          let data1 = filtrado[i]["dt_inicio_vig"];
+          let dataSeparada1 = data1.split("-");
+          let dataEspecial1 = dataSeparada1[2].split("T");
 
-          //let data3 = new Date(filtrado[i]["dt_reajuste"]);
-          //let dataf3 = String(data3.getDate()).padStart(2, '0') + '/' + String(data3.getMonth() + 1).padStart(2, '0');
-          //usar mascara para pegar apenas o que precisa
-          tabela += filtrado[i]["dt_reajuste"];
+          tabela += dataEspecial1[0] + dataSeparada1[1] + dataSeparada1[0];
+          tabela += (`</td> <td class="data">`);
+
+          let data2 = filtrado[i]["dt_final_vig"];
+          let dataSeparada2 = data2.split("-");
+          let dataEspecial2 = dataSeparada2[2].split("T");
+
+          tabela += dataEspecial2[0] + dataSeparada2[1] + dataSeparada2[0];
+          tabela += (`</td> <td class="data2">`);
+
+          let data3 = filtrado[i]["dt_reajuste"];
+          let dataSeparada3 = data3.split("-");
+          let dataEspecial3 = dataSeparada3[2].split("T");
+
+          tabela += dataEspecial3[0] + dataSeparada3[1];
 
           tabela += (`</td><td>
                   <span class="d-flex">
@@ -121,26 +132,13 @@ function enviar() {
 
   //estrutura usada para mandar o JSON no fetch
   let info = {
-    "cod_lote": "",
-    "cnpj": "",
-    "contrato": "",
-    "dt_inicio_vig": "",
-    "dt_final_vig": "",
-    "dt_reajuste": ""
+    "cod_lote": parseFloat(document.getElementById("cod_lote").value),
+    "cnpj": document.getElementById("cnpj").value,
+    "contrato": document.getElementById("contrato").value,
+    "dt_inicio_vig": document.getElementById("dt_inicio_vig").value,
+    "dt_final_vig": document.getElementById("dt_final_vig").value,
+    "dt_reajuste": document.getElementById("dt_reajuste").value,
   };
-
-  let a = document.getElementById("cod_lote");
-  info.cod_lote = parseFloat(a.value);
-  let b = document.getElementById("cnpj");
-  info.cnpj = b.value;
-  let c = document.getElementById("contrato");
-  info.contrato = c.value;
-  let d = document.getElementById("dt_inicio_vig");
-  info.dt_inicio_vig = d.value;
-  let e = document.getElementById("dt_final_vig");
-  info.dt_final_vig = e.value;
-  let f = document.getElementById("dt_reajuste");
-  info.dt_reajuste = f.value;
 
   //transforma as informações do token em json
   let corpo = JSON.stringify(info);
@@ -173,6 +171,5 @@ function editarLote(valor) {
   localStorage.setItem("dt_inicio_vig", jsonFinal[valor].dt_inicio_vig);
   localStorage.setItem("dt_final_vig", jsonFinal[valor].dt_final_vig);
   localStorage.setItem("dt_reajuste", jsonFinal[valor].dt_reajuste);
-  console.log(jsonFinal[valor].dt_inicio_vig + " " + jsonFinal[valor].dt_final_vig + " " + jsonFinal[valor].dt_reajuste);
   window.location.href = "./gerenciaLote.html";
 }

@@ -6,6 +6,10 @@ Ordenar esta coluna primeiro, por cod_tipo_item e depois por cod_item VV
 *Sai as outras duas colunas VV
 *Alterar nome do botão "editar" para "Salvar Alterações em Itens" VV
 
+fazer botão voltar a funcionar VV (ainda modularizei)
+
+mascaras de int para q1 e float para q2 e q3
+
 CD - Prev. Empenho: VV
 *Na coluna "natureza despesa" concatenar cod_natureza_despesa com descrição
 Ex: 449051 - Software
@@ -18,22 +22,14 @@ CD - Empenho:
 CD - Fatura:
     Implementar VV
 
-
-
-
-    checar qual o filtro com o Thiago
-
-
-
-    
-
 Lote - Editar:
     As datas não estão sendo recuperadas VV
 
-    (não prioritario) editar data de reajuste não tem ano, só mês e dia. FOCO
-    ainda precisa de mascara para ser totalmente resolvido
-    problema é a data precisar de ano para funcionar direito
+    (não prioritario) editar data de reajuste não tem ano, só mês e dia. VV
+    ainda precisa de mascara para ser totalmente resolvido VV
+    problema é a data precisar de ano para funcionar direito VV
 
+    mecher em reajuste (por causa do date provavelmente) VV
 
 Lote - Itens:
     Alterar nome da coluna para descrição VV
@@ -53,8 +49,6 @@ Lote - Reajuste:
     Mascara de porcentagem VV
 
 -->
-
-
 
 
 
@@ -120,7 +114,8 @@ Lote - Reajuste:
 
 
 
-<!-- 
+<!--
+
 padrão do tratamento de todos os erros até agora: 
 
 if (response.status == 200) {
@@ -151,4 +146,6 @@ window.location.replace("./errors/500.html");
 window.location.replace("./errors/504.html");
 } else {
 alert("ERRO DESCONHECIDO");
+}
+
 -->

@@ -20,7 +20,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.2.0/vanilla-masker.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
 </head>
 
 <body>
@@ -63,17 +63,17 @@
 
                                 <div class="form-group col-md-4">
                                     <label for="dt_inicio_vig">Data de Inicio:</label>
-                                    <input type="text" class="form-control" id="dt_inicio_vig">
+                                    <input type="text" class="form-control data" id="dt_inicio_vig">
                                 </div>
 
                                 <div class="form-group col-md-4">
                                     <label for="dt_final_vig">Data Final:</label>
-                                    <input type="text" class="form-control" id="dt_final_vig">
+                                    <input type="text" class="form-control data" id="dt_final_vig">
                                 </div>
 
                                 <div class="form-group col-md-4">
                                     <label for="dt_reajuste">Data de Reajuste:</label>
-                                    <input type="text" class="form-control" id="dt_reajuste">
+                                    <input type="text" class="form-control data2" id="dt_reajuste">
                                 </div>
 
 
@@ -151,8 +151,7 @@
                                                         id="ano_ref">
                                                 </div>
                                                 <div class="col-12 col-sm-12 mt-4">
-                                                    <input class="multisteps-form__input form-control pecent" type="text"
-                                                        data-js="porcentagem" placeholder="Percentual de Reajuste"
+                                                    <input class="multisteps-form__input form-control percentual" type="text" placeholder="000.00%"
                                                         name="percentual" id="percentual">
                                                 </div>
                                             </div>

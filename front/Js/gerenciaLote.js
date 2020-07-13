@@ -35,22 +35,36 @@ function pegarEntidade() {
 
 window.onload = function () {
 
+  mascara();
+
   //preenche os campos
   document.getElementById("contrato").value = localStorage.getItem("contrato");
 
-  //estes campos precisam de adaptações para serem aceitos, como yyyy-MM-dd
+  //estes campos precisam de adaptações para a mascara
 
-  let data1 = new Date(localStorage.getItem("dt_inicio_vig"));
-  let data2 = new Date(localStorage.getItem("dt_final_vig"));
-  let data3 = new Date(localStorage.getItem("dt_reajuste"));
+  //exemplo:
+  //primeiro separar o valor inicial em uma variavel
+  let data1 = localStorage.getItem("dt_inicio_vig");
+  //depois utilizar split
+  let dataSeparada1 = data1.split("-");
+  //por fim, retirar o horario que aparece normalmente junto ao formato de data
+  let dataEspecial1 = dataSeparada1[2].split("T");
 
-  let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
-  let dataFinal2 = String(data2.getFullYear()).padStart(4, '0') + "-" + String(data2.getMonth() + 1).padStart(2, '0') + "-" + String(data2.getDate()).padStart(2, '0');
-  let dataFinal3 = String(data3.getFullYear()).padStart(4, '0') + "-" + String(data3.getMonth() + 1).padStart(2, '0') + "-" + String(data3.getDate()).padStart(2, '0');
+  //o mesmo se aplica nos outros 2
 
-  document.getElementById("dt_inicio_vig").value = dataFinal1;
-  document.getElementById("dt_final_vig").value = dataFinal2;
-  document.getElementById("dt_reajuste").value = dataFinal3;
+  let data2 = localStorage.getItem("dt_final_vig");
+  let dataSeparada2 = data2.split("-");
+  let dataEspecial2 = dataSeparada2[2].split("T");
+
+  let data3 = localStorage.getItem("dt_reajuste");
+  let dataSeparada3 = data3.split("-");
+  let dataEspecial3 = dataSeparada3[2].split("T");
+
+  //colocar os valores nos campos necessarios
+
+  document.getElementById("dt_inicio_vig").value = dataEspecial1[0] + dataSeparada1[1] + dataSeparada1[0];
+  document.getElementById("dt_final_vig").value = dataEspecial2[0] + dataSeparada2[1] + dataSeparada2[0];
+  document.getElementById("dt_reajuste").value = dataEspecial3[0] + dataSeparada3[1];
 
   //esta função preenche o campo de lote
   pegarEntidade();
@@ -58,22 +72,30 @@ window.onload = function () {
 
 function enviar() {
 
+  let data1 = document.getElementById("dt_inicio_vig").value;
+  let dataSeparada1 = data1.split("");
+  //formato de data original (retirando mascara)
+  let dataFinal1 = dataSeparada1[6] + dataSeparada1[7] + dataSeparada1[8] + dataSeparada1[9] + "-" + dataSeparada1[3] + dataSeparada1[4] + "-" + dataSeparada1[0] + dataSeparada1[1];
+
+  let data2 = document.getElementById("dt_final_vig").value;
+  let dataSeparada2 = data2.split("");
+  //formato de data original (retirando mascara)
+  let dataFinal2 = dataSeparada2[6] + dataSeparada2[7] + dataSeparada2[8] + dataSeparada2[9] + "-" + dataSeparada2[3] + dataSeparada2[4] + "-" + dataSeparada2[0] + dataSeparada2[1];
+
+  let data3 = document.getElementById("dt_reajuste").value;
+  let dataSeparada3 = data3.split("");
+  //formato de data original (retirando mascara)
+  let dataFinal3 = "0000-" + dataSeparada3[3] + dataSeparada3[4] + "-" + dataSeparada3[0] + dataSeparada3[1];
+
   //JSON usado para mandar as informações no fetch
   let info = {
-    "cod_lote": "",
-    "cnpj": "",
-    "contrato": "",
-    "dt_inicio_vig": "",
-    "dt_final_vig": "",
-    "dt_reajuste": "",
+    "cod_lote": parseFloat(document.getElementById("cod_lote").value),
+    "cnpj": document.getElementById("cnpj").value,
+    "contrato": document.getElementById("contrato").value,
+    "dt_inicio_vig": dataFinal1,
+    "dt_final_vig": dataFinal2,
+    "dt_reajuste": dataFinal3,
   };
-
-  info.cod_lote = parseFloat(document.getElementById("cod_lote").value);
-  info.cnpj = document.getElementById("cnpj").value;
-  info.contrato = document.getElementById("contrato").value;
-  info.dt_inicio_vig = document.getElementById("dt_inicio_vig").value;
-  info.dt_final_vig = document.getElementById("dt_final_vig").value;
-  info.dt_reajuste = document.getElementById("dt_reajuste").value;
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(info);
@@ -160,20 +182,13 @@ function reajuste() {
           //salva os valores para edição
           meuAno[i] = listaReajuste[i]["ano_ref"];
 
-          //cria json para edição
-          edicaoReajuste[i] = {
-            "percentual": "",
-          };
-
           //captura itens para tabela
           tabela += (`<tr>`);
           tabela += (`<td>`);
           tabela += listaReajuste[i]["ano_ref"];
-          tabela += (`</td>`);
-          tabela += (`<td>`);
-          tabela += (`<input value="` + listaReajuste[i]["percentual"] + `" onchange="mudaReajuste(` + i + `)" id="percentual` + i + `" type="text"` + `data-js="porcentagem" size="50"> %`);
-          tabela += (`</td>`);
-          tabela += (`<td>
+          tabela += (`</td> <td>`);
+          tabela += (`<input class="percentual" value="` + (listaReajuste[i]["percentual"])*100 + `" id="percentual` + i + `" type="text">`);
+          tabela += (`</td> <td>
           <button onclick=" apagado =` + listaReajuste[i]["ano_ref"] + `" class="btn btn-danger" data-toggle="modal" data-target="#deletarReajuste">
           <i class="material-icons"data-toggle="tooltip" title="Delete">&#xE872;</i>
           </button>
@@ -182,6 +197,9 @@ function reajuste() {
         }
         tabela += (`</tbody>`);
         document.getElementById("tabela").innerHTML = tabela;
+
+        //Máscara colocada separadamente para tabela
+        mascara();
       });
     } else {
       erros(response.status);
@@ -189,14 +207,25 @@ function reajuste() {
   });
 }
 
-function mudaReajuste(valor) {
-  edicaoReajuste[valor].percentual = parseFloat(document.getElementById("percentual" + valor).value);
-  reajusteMudado[valor] = valor;
-}
-
 function editarReajuste() {
+
+  //para organizar a mascara
+  let percent,percent2,percent3,percent4;
+
   for (i = 0; i < listaReajuste.length; i++) {
-    if (reajusteMudado[i] != null) {
+
+    //ajustar percentual:
+    percent = document.getElementById("percentual" +i).value;
+    percent2 = percent.split(".");
+    percent3 = percent2[1].split("%");
+    percent4 = (percent2[0] + percent3[0])/100;
+    
+    //cria json para edição
+    edicaoReajuste[i] = {
+      "percentual": parseFloat(percent4),
+    }
+
+    if (edicaoReajuste[i]["percentual"] != listaReajuste[i]["percentual"]) {
       //transforma as informações em string para mandar
       let corpo = JSON.stringify(edicaoReajuste[i]);
       //função fetch para mandar
@@ -223,14 +252,15 @@ function editarReajuste() {
 
 function novoReajuste() {
 
+  //ajustar percentual:
+  let percent = document.getElementById("percentual").value;
+  let percent2 = percent.split("%");
+
   let infoReajuste = {
     "cod_lote": parseInt(meuCodigo),
-    "ano_ref": "",
-    "percentual": "",
+    "ano_ref": parseInt(document.getElementById("ano_ref").value),
+    "percentual": parseFloat(percent2[0]),
   };
-
-  infoReajuste.ano_ref = parseInt(document.getElementById("ano_ref").value);
-  infoReajuste.percentual = parseFloat(document.getElementById("percentual").value);
 
   //transforma as informações em string para mandar
   let corpo = JSON.stringify(infoReajuste);
@@ -264,7 +294,7 @@ function apagarReajuste() {
 
     //tratamento dos erros
     if (response.status == 204) {
-      alert("Apagado com sucesso.");
+      //alert("Apagado com sucesso.");
       location.reload();
     } else {
       erros(response.status);

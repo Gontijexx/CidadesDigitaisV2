@@ -121,7 +121,7 @@ function empenhoSub(valorCodigo) {
       //pegar o json que possui a tabela
       response.json().then(function (json) {
 
-        //console.log(json);
+        console.log(json);
 
         let tabela = "";
         if(valorCodigo=='1'){
@@ -363,8 +363,9 @@ function redirecionar(valor, caminhoFinal){
     localStorage.setItem("id_empenho", listaFinal[valor].id_empenho);
     localStorage.setItem("cod_empenho", listaFinal[valor].cod_empenho);
     localStorage.setItem("cod_previsao_empenho", listaFinal[valor].cod_previsao_empenho);
-    localStorage.setItem("natureza_despesa", listaFinal[valor].natureza_despesa);
+    localStorage.setItem("cod_natureza_despesa", listaFinal[valor].cod_natureza_despesa);
     localStorage.setItem("descricao", listaFinal[valor].descricao);
+    console.log(listaFinal[valor].descricao);
     localStorage.setItem("tipo", listaFinal[valor].tipo);
     localStorage.setItem("data", listaFinal[valor].data);
     window.location.href = "./gerenciaEmpenho.html";

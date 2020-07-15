@@ -4,27 +4,37 @@ let meuCodigoSec = localStorage.getItem("cod_lote");
 
 window.onload = function () {
 
+  mascara();
+
   //preenche os campos
   document.getElementById("cod_previsao_empenho").value = meuCodigo;
   document.getElementById("cod_lote").value = meuCodigoSec;
   document.getElementById("ano_referencia").value = localStorage.getItem("ano_referencia");
+  //é parte de um join
   document.getElementById("cod_natureza_despesa").value = localStorage.getItem("natureza_despesa");
 
   document.getElementById("tipo").innerHTML = "<option value='o'>Original</option><option value='r'>Reajuste</option>";
   document.getElementById("tipo").value = localStorage.getItem("tipo");
 
   //este campo precisa de adaptação para ser aceito, como yyyy-MM-dd
-  let data1 = new Date(localStorage.getItem("data"));
-  let dataFinal1 = String(data1.getFullYear()).padStart(4, '0') + "-" + String(data1.getMonth() + 1).padStart(2, '0') + "-" + String(data1.getDate()).padStart(2, '0');
-  document.getElementById("data").value = dataFinal1;
+
+  let data = localStorage.getItem("data");
+  let dataSeparada = data.split("-");
+  let dataEspecial = dataSeparada[2].split("T");
+  document.getElementById("data").value = dataEspecial[0]+dataSeparada[1]+dataSeparada[0];
 
 }
 
 function enviar() {
 
+  let data = document.getElementById("data").value;
+  let dataSeparada = data.split("");
+  //formato de data original (retirando mascara)
+  let dataFinal = dataSeparada[6] + dataSeparada[7] + dataSeparada[8] + dataSeparada[9] + "-" + dataSeparada[3] + dataSeparada[4] + "-" + dataSeparada[0] + dataSeparada[1];
+
   //  JSON usado para mandar as informações no fetch
   let info = {
-    "data": document.getElementById("data").value,
+    "data": dataFinal,
     "tipo": document.getElementById("tipo").value,
     "ano_referencia": parseInt(document.getElementById("ano_referencia").value),
   };

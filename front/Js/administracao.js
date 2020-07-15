@@ -531,7 +531,7 @@ function visualizar(caminho, estrutura) {
         </thead>`);
         tabela += (`<tbody>`);
 
-        console.log(json);
+        //console.log(json);
 
         for (i = 0; i < json.length; i++) {
           //captura itens para tabela

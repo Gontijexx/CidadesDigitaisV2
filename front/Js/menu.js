@@ -47,6 +47,10 @@ if (setupTime == null) {
 	}
 }
 
+
+
+//global
+
 //para definir o ip do servidor (ou algo do tipo, podem corrigir)
 let servidor = "http://localhost:8080/";
 
